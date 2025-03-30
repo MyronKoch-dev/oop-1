@@ -27,6 +27,8 @@ interface ChatMessagesProps {
     messagesEndRef?: RefObject<HTMLDivElement | null> // Optional ref passed from parent for scrolling
     latestInteractiveMessageId?: string | null // ID of the most recent message with options
     highlightedButtonIndex?: number | null // Index of button to highlight (for keyboard shortcut feedback)
+    multiSelectedLanguages?: string[] // Array of selected language values for Question 4
+    currentQuestionIndex?: number | null // Current question index for context-specific behavior
 }
 
 // Add a utility function to detect and render URLs as clickable links
@@ -74,6 +76,8 @@ export function ChatMessages({
     messagesEndRef, // Accept the potentially null-containing ref
     latestInteractiveMessageId = null, // Default to null if not provided
     highlightedButtonIndex = null, // Default to null if not provided
+    multiSelectedLanguages = [], // Default to empty array if not provided
+    currentQuestionIndex = null, // Default to null if not provided
 }: ChatMessagesProps) {
     // Internal ref used only if messagesEndRef is not provided by the parent
     const internalScrollRef = useRef<HTMLDivElement>(null);
@@ -139,10 +143,21 @@ export function ChatMessages({
                                         {message.options.map((option, index) => {
                                             // Determine if this message has the latest interactive options
                                             const isActiveMessage = message.id === latestInteractiveMessageId;
-                                            // Buttons should be disabled if:
-                                            // 1. This isn't the latest message with options, OR
-                                            // 2. This is the active message BUT any button has been selected
-                                            const isDisabled = !isActiveMessage || (isActiveMessage && selectedButtonValue !== null);
+
+                                            // Special handling for Question 4 (Languages)
+                                            const isLanguageQuestion = currentQuestionIndex === 3 && isActiveMessage;
+
+                                            // For Q4, a button is "selected" if it's in the multiSelectedLanguages array
+                                            const isSelected = isLanguageQuestion
+                                                ? multiSelectedLanguages.includes(option.value)
+                                                : selectedButtonValue === option.value;
+
+                                            // Button disabled state depends on the question type
+                                            // For Q4 (multi-select), buttons remain enabled until submission
+                                            // For other questions, disable all buttons once any is selected
+                                            const isDisabled = isLanguageQuestion
+                                                ? false // Never disable for multi-select question
+                                                : !isActiveMessage || (isActiveMessage && selectedButtonValue !== null);
 
                                             // Styling classes for disabled buttons
                                             const disabledClasses = !isActiveMessage ? "opacity-70 cursor-not-allowed" : "";
@@ -157,7 +172,7 @@ export function ChatMessages({
                                             return (
                                                 <Button
                                                     key={option.value}
-                                                    variant={selectedButtonValue === option.value ? "default" : "outline"}
+                                                    variant={isSelected ? "default" : "outline"}
                                                     size="sm"
                                                     onClick={() => onButtonClick(option.value)}
                                                     disabled={isDisabled}

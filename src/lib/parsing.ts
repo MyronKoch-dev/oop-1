@@ -76,15 +76,15 @@ export function parseLanguages(
     } else if (typeof rawResponse === 'object' && rawResponse?.buttonValue) {
         // If single button selected
         selectedLanguages.push(rawResponse.buttonValue);
+    } else if (typeof rawResponse === 'string') {
+        // If string value (less common)
+        selectedLanguages.push(rawResponse);
     } else if (rawResponse === null || rawResponse === undefined) {
         // No primary selection made
         console.log("Parsing Languages: No primary language selection received.");
     } else {
-        // Unexpected rawResponse type (e.g., string) - log warning
+        // Unexpected rawResponse type - log warning
         console.warn("Parsing Languages: Received unexpected rawResponse type:", rawResponse);
-        // Optionally try to handle string if it matches a valid language?
-        // Or assume it was meant for 'Other' if otherTextResponse is absent?
-        // Safest: Ignore unexpected type for primary selection for now.
     }
 
     // Filter selected languages against the valid list from buttons
@@ -94,19 +94,18 @@ export function parseLanguages(
     const trimmedOtherText = otherTextResponse?.trim();
     if (trimmedOtherText) {
         currentData.other_languages = trimmedOtherText;
-        // Decision: Do NOT add 'Other' to the main languages array.
-        // Keep selected languages and other text separate.
     }
 
-    // Ensure languages array is null if empty, for consistency? Or empty array?
-    // Let's stick with empty array [] if nothing selected, null if parsing failed entirely (unlikely here).
+    // Ensure languages array is null if empty, for consistency
     if (currentData.languages.length === 0) {
         console.log("Parsing Languages: No standard languages selected.");
         // currentData.languages = null; // Optional: Set to null instead of [] if preferred
     }
 
-
-    console.log('Parsed Languages Result:', { l: currentData.languages, o: currentData.other_languages });
+    console.log('Parsed Languages Result:', {
+        languages: currentData.languages,
+        other_languages: currentData.other_languages
+    });
 }
 
 

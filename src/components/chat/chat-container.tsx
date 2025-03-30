@@ -54,6 +54,7 @@ export function ChatContainer({
     const [inputMode, setInputMode] = useState<InputMode>("text")
     const [conditionalText, setConditionalText] = useState("")
     const [selectedButtonValue, setSelectedButtonValue] = useState<string | null>(null)
+    const [multiSelectedLanguages, setMultiSelectedLanguages] = useState<string[]>([])
     const [sessionId, setSessionId] = useState<string | null>(null)
     const [inputDisabled, setInputDisabled] = useState(false)
     const [isProcessing, setIsProcessing] = useState(false)
@@ -260,6 +261,7 @@ export function ChatContainer({
                 setConditionalText("")
                 setConditionalTextVisible(false)
                 setSelectedButtonValue(null)
+                setMultiSelectedLanguages([])
 
                 // Set up conditional text if applicable
                 if (data.conditionalTextInputLabel) {
@@ -305,6 +307,21 @@ export function ChatContainer({
 
     const handleButtonSelect = async (value: string) => {
         if (isProcessing || !sessionId) return
+
+        // Special handling for Question 4 (Programming Languages) - enables multi-select
+        if (currentQuestionIndex === 3) {
+            // Toggle selection: if already selected, remove it; otherwise, add it
+            setMultiSelectedLanguages(prev => {
+                if (prev.includes(value)) {
+                    return prev.filter(lang => lang !== value);
+                } else {
+                    return [...prev, value];
+                }
+            });
+
+            // Don't proceed with API call yet - wait for confirmation button
+            return;
+        }
 
         setSelectedButtonValue(value)
 
@@ -426,6 +443,7 @@ export function ChatContainer({
                 setConditionalTextVisible(false)
                 setShowConditionalInput(false)
                 setSelectedButtonValue(null)
+                setMultiSelectedLanguages([])
 
                 // Set up conditional text if applicable
                 if (data.conditionalTextInputLabel) {
@@ -582,6 +600,7 @@ export function ChatContainer({
                     setConditionalTextVisible(false);
                     setShowConditionalInput(false);
                     setSelectedButtonValue(null);
+                    setMultiSelectedLanguages([])
 
                     // Set up conditional text if applicable
                     if (data.conditionalTextInputLabel) {
@@ -627,6 +646,162 @@ export function ChatContainer({
 
         submitConditionalResponse();
     }
+
+    // New handler for confirming multiple language selections
+    const handleConfirmLanguages = async () => {
+        if (isProcessing || !sessionId || multiSelectedLanguages.length === 0) return;
+
+        // Add user message showing selected languages
+        setMessages((prev) => [
+            ...prev,
+            {
+                id: generateMessageId("user"),
+                role: "user",
+                content: `Selected languages: ${multiSelectedLanguages.join(', ')}${conditionalText ? ` | Other: ${conditionalText}` : ''}`,
+            },
+        ]);
+
+        // Add loading message
+        setMessages((prev) => [
+            ...prev,
+            {
+                id: generateMessageId("assistant"),
+                role: "assistant",
+                content: "Thinking...",
+                isLoading: true,
+            },
+        ]);
+
+        setIsProcessing(true);
+        setInputDisabled(true);
+
+        try {
+            const payload = {
+                sessionId,
+                response: multiSelectedLanguages,
+                conditionalText: conditionalText || undefined,
+            };
+
+            const response = await fetch("/api/onboarding/message", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to send message: ${response.status} ${response.statusText}`);
+            }
+
+            const data: OnboardingResponsePayload = await response.json();
+
+            // Remove the loading message
+            setMessages((prev) => prev.slice(0, -1));
+
+            // Handle error if present
+            if (data.error) {
+                setMessages((prev) => [
+                    ...prev,
+                    {
+                        id: generateMessageId("assistant"),
+                        role: "assistant",
+                        content: data.error || "An error occurred",
+                    },
+                ]);
+
+                // If flow should halt, disable input
+                if (data.haltFlow) {
+                    setInputDisabled(true);
+                }
+            }
+            // Handle final result
+            else if (data.isFinalQuestion && data.finalResult) {
+                setMessages((prev) => [
+                    ...prev,
+                    {
+                        id: generateMessageId("assistant"),
+                        role: "assistant",
+                        content: `Based on your responses, I recommend the "${data.finalResult?.recommendedPath}" path for you.`,
+                    },
+                    {
+                        id: generateMessageId("assistant"),
+                        role: "assistant",
+                        content: `You can get started here: ${data.finalResult?.recommendedPathUrl}`,
+                    },
+                    {
+                        id: generateMessageId("assistant"),
+                        role: "assistant",
+                        content: "Thank you for completing the onboarding process!",
+                    },
+                ]);
+                setInputDisabled(true);
+                setIsComplete(true);
+                setCurrentQuestionIndex(TOTAL_STEPS);
+            }
+            // Handle next question
+            else if (data.nextQuestion) {
+                setMessages((prev) => [
+                    ...prev,
+                    {
+                        id: generateMessageId("assistant"),
+                        role: "assistant",
+                        content: data.nextQuestion || "Let's continue",
+                        options: data.options,
+                    },
+                ]);
+
+                setCurrentQuestionIndex(data.currentQuestionIndex);
+                setInputMode(data.inputMode || "text");
+
+                // Reset selection states
+                setConditionalText("");
+                setConditionalTextVisible(false);
+                setShowConditionalInput(false);
+                setSelectedButtonValue(null);
+                setMultiSelectedLanguages([]); // Reset multi-select state
+
+                // Set up conditional text if applicable
+                if (data.conditionalTextInputLabel) {
+                    setConditionalTextVisible(false);
+                    setConditionalTriggerValue(data.conditionalTriggerValue || null);
+                    setConditionalTextInputLabel(data.conditionalTextInputLabel);
+                }
+            }
+
+            // If we got a new session ID (session expired), update it
+            if (data.newSessionId) {
+                setSessionId(data.newSessionId);
+            }
+        } catch (error) {
+            const errorMessage = error instanceof Error
+                ? error.message
+                : "Error processing your selections. Please try again.";
+            console.error("Error submitting language selections:", errorMessage);
+
+            // Remove the loading message
+            setMessages((prev) => prev.slice(0, -1));
+
+            setMessages((prev) => [
+                ...prev,
+                {
+                    id: generateMessageId("assistant"),
+                    role: "assistant",
+                    content: "Sorry, there was an error processing your selections. Please try again.",
+                },
+            ]);
+        } finally {
+            setIsProcessing(false);
+            if (!isComplete) {
+                setInputDisabled(false);
+                // Add short delay before attempting to refocus
+                setTimeout(() => {
+                    // Trigger a re-render to focus the input
+                    setInputMode(prev => prev);
+                }, 100);
+            }
+        }
+    };
 
     useEffect(() => {
         // Update showConditionalInput whenever conditionalTextVisible changes
@@ -714,6 +889,8 @@ export function ChatContainer({
                     className="h-full overflow-auto"
                     latestInteractiveMessageId={latestInteractiveMsgId}
                     highlightedButtonIndex={highlightedButtonIndex}
+                    multiSelectedLanguages={multiSelectedLanguages}
+                    currentQuestionIndex={currentQuestionIndex}
                 />
             </div>
 
@@ -735,6 +912,8 @@ export function ChatContainer({
                         currentQuestionIndex={currentQuestionIndex}
                         conditionalTextInputLabel={conditionalTextInputLabel}
                         className={conditionalTextVisible ? "max-h-[200px] overflow-y-auto" : ""}
+                        showConfirmButton={currentQuestionIndex === 3 && multiSelectedLanguages.length > 0}
+                        onConfirmLanguages={handleConfirmLanguages}
                     />
                 )}
             </div>

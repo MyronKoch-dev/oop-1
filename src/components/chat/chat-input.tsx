@@ -25,6 +25,8 @@ interface ChatInputProps {
     onConditionalTextSubmit?: () => void
     currentQuestionIndex?: number | null
     conditionalTextInputLabel?: string
+    showConfirmButton?: boolean
+    onConfirmLanguages?: () => void
 }
 
 export function ChatInput({
@@ -44,6 +46,8 @@ export function ChatInput({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     currentQuestionIndex,
     conditionalTextInputLabel,
+    showConfirmButton = false,
+    onConfirmLanguages
 }: ChatInputProps) {
     const [message, setMessage] = useState("")
     const inputRef = useRef<HTMLInputElement>(null)
@@ -132,6 +136,22 @@ export function ChatInput({
 
     return (
         <div className={`border-t border-gray-200 p-4 bg-white z-10 ${className}`}>
+            {showConfirmButton && (
+                <div className="mb-4">
+                    <Button
+                        onClick={onConfirmLanguages}
+                        disabled={disabled}
+                        className="w-full"
+                        variant="default"
+                    >
+                        Confirm Language Selections
+                    </Button>
+                    <p className="text-xs text-center text-muted-foreground mt-1">
+                        Select multiple languages and click above to confirm
+                    </p>
+                </div>
+            )}
+
             {showConditionalInput && (
                 <div className="mb-4 max-h-[150px] overflow-y-auto">
                     <Label htmlFor="conditional-input" className="block text-sm font-medium mb-1">
@@ -163,7 +183,7 @@ export function ChatInput({
                 </div>
             )}
 
-            {!hideMainInput && (
+            {!hideMainInput && !showConfirmButton && (
                 <div className="flex items-center space-x-2">
                     <Input
                         ref={inputRef}
