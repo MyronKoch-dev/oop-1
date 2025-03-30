@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, type KeyboardEvent, type ChangeEvent } from "react"
+import { useState, useRef, useEffect, type KeyboardEvent, type ChangeEvent } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -24,6 +24,7 @@ interface ChatInputProps {
     setConditionalText?: (text: string) => void
     onConditionalTextSubmit?: () => void
     currentQuestionIndex?: number | null
+    conditionalTextInputLabel?: string
 }
 
 export function ChatInput({
@@ -42,8 +43,48 @@ export function ChatInput({
     onConditionalTextSubmit,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     currentQuestionIndex,
+    conditionalTextInputLabel,
 }: ChatInputProps) {
     const [message, setMessage] = useState("")
+    const inputRef = useRef<HTMLInputElement>(null)
+    const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+    // Variable declarations - moved up before they're used in useEffect
+    const showConditionalInput = conditionalTextVisible || isConditionalVisible
+    const hideMainInput = showConditionalInput && inputMode === "conditionalText"
+    const isMainInputDisabled = disabled || (inputMode === "buttons" && !showConditionalInput)
+    const displayLabel = conditionalTextInputLabel || conditionalLabel
+
+    // Effect to focus main input when appropriate
+    useEffect(() => {
+        if (!disabled && !showConditionalInput && inputRef.current) {
+            inputRef.current.focus()
+        }
+    }, [disabled, inputMode, showConditionalInput])
+
+    // Update the useEffect for conditional text focus
+    useEffect(() => {
+        if (showConditionalInput && !disabled && textareaRef.current) {
+            // Short delay to ensure the element is fully rendered
+            setTimeout(() => {
+                if (textareaRef.current) {
+                    textareaRef.current.focus();
+                    // Place cursor at the end of existing text
+                    const length = textareaRef.current.value.length;
+                    textareaRef.current.setSelectionRange(length, length);
+                }
+            }, 50);
+        }
+    }, [showConditionalInput, disabled, conditionalText]);
+
+    // Add an effect to handle focus changes when input mode changes
+    useEffect(() => {
+        if (showConditionalInput && !disabled && textareaRef.current) {
+            textareaRef.current.focus();
+        } else if (!showConditionalInput && !disabled && !hideMainInput && inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [inputMode, disabled, showConditionalInput, hideMainInput]);
 
     const handleMessageChange = (e: ChangeEvent<HTMLInputElement>) => {
         setMessage(e.target.value)
@@ -78,54 +119,67 @@ export function ChatInput({
         }
     }
 
-    // Determine if the main input should be disabled
-    // In buttons mode, we might want to disable the text input
-    const isMainInputDisabled = disabled || (inputMode === "buttons" && !isConditionalVisible)
-
-    // Use conditionalTextVisible prop if provided, otherwise fall back to isConditionalVisible
-    const showConditionalInput = conditionalTextVisible || isConditionalVisible
+    const handleConditionalKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === "Enter" && !e.shiftKey && !disabled && conditionalText.trim()) {
+            e.preventDefault()
+            handleConditionalSubmit()
+        }
+        else if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && !disabled && conditionalText.trim()) {
+            e.preventDefault()
+            handleConditionalSubmit()
+        }
+    }
 
     return (
-        <div className={`border-t border-gray-200 p-4 bg-white ${className}`}>
-            {/* Conditional Text Input (shown when conditionalTextVisible/isConditionalVisible is true) */}
+        <div className={`border-t border-gray-200 p-4 bg-white z-10 ${className}`}>
             {showConditionalInput && (
-                <div className="mb-4">
+                <div className="mb-4 max-h-[150px] overflow-y-auto">
                     <Label htmlFor="conditional-input" className="block text-sm font-medium mb-1">
-                        {conditionalLabel}
+                        {displayLabel}
                     </Label>
                     <div className="flex flex-col space-y-2">
                         <Textarea
                             id="conditional-input"
+                            ref={textareaRef}
                             value={conditionalText}
                             onChange={handleConditionalChange}
+                            onKeyDown={handleConditionalKeyDown}
                             placeholder="Type additional details here..."
-                            className="min-h-[80px] resize-none"
+                            className="min-h-[80px] max-h-[120px] resize-none"
                             disabled={disabled}
                         />
-                        {onConditionalTextSubmit && (
-                            <Button onClick={handleConditionalSubmit} disabled={disabled || !conditionalText.trim()}>
-                                Submit Details
-                            </Button>
-                        )}
+                        <p className="text-xs text-muted-foreground text-center">
+                            Press Enter to submit or Shift+Enter for a new line
+                        </p>
+                        <Button
+                            onClick={handleConditionalSubmit}
+                            disabled={disabled || !conditionalText.trim()}
+                            className="w-full sticky bottom-0"
+                            type="submit"
+                        >
+                            Submit Details
+                        </Button>
                     </div>
                 </div>
             )}
 
-            {/* Main Text Input (always visible) */}
-            <div className="flex items-center space-x-2">
-                <Input
-                    value={message}
-                    onChange={handleMessageChange}
-                    onKeyDown={handleKeyDown}
-                    placeholder={placeholder}
-                    disabled={isMainInputDisabled}
-                    className="flex-1"
-                />
-                <Button onClick={handleSendMessage} disabled={isMainInputDisabled || !message.trim()} size="icon" type="submit">
-                    <Send className="h-4 w-4" />
-                    <span className="sr-only">Send message</span>
-                </Button>
-            </div>
+            {!hideMainInput && (
+                <div className="flex items-center space-x-2">
+                    <Input
+                        ref={inputRef}
+                        value={message}
+                        onChange={handleMessageChange}
+                        onKeyDown={handleKeyDown}
+                        placeholder={placeholder}
+                        disabled={isMainInputDisabled}
+                        className="flex-1"
+                    />
+                    <Button onClick={handleSendMessage} disabled={isMainInputDisabled || !message.trim()} size="icon" type="submit">
+                        <Send className="h-4 w-4" />
+                        <span className="sr-only">Send message</span>
+                    </Button>
+                </div>
+            )}
         </div>
     )
 }

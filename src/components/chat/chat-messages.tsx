@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button" // Assuming Shadcn setup created
 import { Card } from "@/components/ui/card"     // Assuming Shadcn setup created this
 import { ScrollArea } from "@/components/ui/scroll-area" // Assuming Shadcn setup created this
 import { Bot, User } from "lucide-react" // Ensure lucide-react is installed
+import React from "react"
 
 // Defines the structure for a single message in the chat history
 export interface ChatMessage {
@@ -26,6 +27,43 @@ interface ChatMessagesProps {
     // FIX: Changed RefObject<HTMLDivElement> to RefObject<HTMLDivElement | null>
     messagesEndRef?: RefObject<HTMLDivElement | null> // Optional ref passed from parent for scrolling
 }
+
+// Add a utility function to detect and render URLs as clickable links
+const renderMessageContent = (content: string) => {
+    // Improved URL regex pattern that handles most common URL formats
+    const urlPattern = /(https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g;
+
+    // If no URLs found, return the content as is
+    if (!content.match(urlPattern)) {
+        return <p className="text-sm whitespace-pre-wrap">{content}</p>;
+    }
+
+    // Split the content by URLs
+    const parts = content.split(urlPattern);
+    // Match all URLs
+    const urls = content.match(urlPattern) || [];
+
+    // Combine parts and URLs
+    return (
+        <p className="text-sm whitespace-pre-wrap">
+            {parts.map((part, i) => (
+                <React.Fragment key={i}>
+                    {part}
+                    {urls[i] && (
+                        <a
+                            href={urls[i]}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:underline"
+                        >
+                            {urls[i]}
+                        </a>
+                    )}
+                </React.Fragment>
+            ))}
+        </p>
+    );
+};
 
 export function ChatMessages({
     messages,
@@ -80,8 +118,8 @@ export function ChatMessages({
                                     className={`p-3 ${message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted text-foreground" // Different card styles
                                         } ${message.isLoading ? "animate-pulse" : ""}`} // Add pulse animation if loading
                                 >
-                                    {/* Display message content */}
-                                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                                    {/* Display message content with clickable links */}
+                                    {renderMessageContent(message.content)}
                                 </Card>
 
                                 {/* Render buttons if options are provided for an assistant message */}
@@ -93,8 +131,8 @@ export function ChatMessages({
                                                 variant={selectedButtonValue === option.value ? "default" : "outline"} // Style selected button differently
                                                 size="sm"
                                                 onClick={() => onButtonClick(option.value)} // Call parent handler on click
-                                                // Disable all buttons once one is selected (optional UX)
-                                                disabled={selectedButtonValue !== null}
+                                                // Only disable the button if it's been selected
+                                                disabled={selectedButtonValue === option.value}
                                                 className="text-left h-auto py-1.5" // Adjust button styling
                                             >
                                                 {option.label}
@@ -107,7 +145,7 @@ export function ChatMessages({
                     </div>
                 ))}
                 {/* Empty div at the end to attach the scroll ref */}
-                <div ref={scrollRef} />
+                <div ref={scrollRef} className="h-4 w-full" /> {/* Add min-height to ensure scrolling */}
             </div>
         </ScrollArea>
     );

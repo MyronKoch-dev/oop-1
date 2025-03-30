@@ -15,8 +15,14 @@ export function ChatHeader({
     totalSteps = 12, // Default to 12 steps for your questionnaire
     className = "",
 }: ChatHeaderProps) {
-    // Calculate progress percentage
-    const progressPercentage = Math.min(Math.round((currentStep / totalSteps) * 100), 100)
+    // Ensure currentStep doesn't exceed totalSteps and calculate progress percentage
+    const normalizedStep = Math.min(currentStep, totalSteps);
+    const progressPercentage = Math.min(Math.round((normalizedStep / totalSteps) * 100), 100);
+
+    // Show "Complete" instead of step number when at 100%
+    const stepText = progressPercentage === 100
+        ? "Complete"
+        : `Step ${normalizedStep} of ${totalSteps}`;
 
     return (
         <div className={`border-b border-gray-200 p-4 bg-white ${className}`}>
@@ -28,7 +34,7 @@ export function ChatHeader({
                 <Progress value={progressPercentage} className="h-2" />
                 <div className="flex justify-between mt-1 text-xs text-muted-foreground">
                     <span>
-                        Step {currentStep} of {totalSteps}
+                        {stepText}
                     </span>
                     <span>{progressPercentage}% complete</span>
                 </div>
