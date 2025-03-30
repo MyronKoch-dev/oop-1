@@ -24,7 +24,7 @@ const questions: QuestionDetail[] = [
     // Index 0
     {
         index: 0,
-        text: "What’s your full name?",
+        text: "What's your full name?",
         inputMode: 'text',
         isOptional: false, // Assuming name is desired
     },
@@ -40,7 +40,7 @@ const questions: QuestionDetail[] = [
     // Index 2
     {
         index: 2,
-        text: "Do you have a Telegram, GitHub, or X (Twitter) handle? Provide them if available, like: `Telegram: @myhandle, GitHub: myhandle, X: @myhandle`",
+        text: "Please provide your handles (optional). Use the format `Platform: handle`, separated by commas if multiple. Example: `Telegram: @myhandle, GitHub: MyGitHubUser, X: @MyTwitter`",
         inputMode: 'text',
         isOptional: true, // Handles are optional
         validationHint: 'handles', // Signal for handle parsing
@@ -74,7 +74,7 @@ const questions: QuestionDetail[] = [
         inputMode: 'conditionalText', // Buttons, with text if 'Yes'
         options: [
             { label: "1. Yes", value: "Yes" },
-            { label: "2. No, but I’m curious!", value: "No - curious" },
+            { label: "2. No, but I'm curious!", value: "No - curious" },
             { label: "3. No experience", value: "No experience" },
         ],
         conditionalTriggerValue: "Yes",
@@ -97,7 +97,7 @@ const questions: QuestionDetail[] = [
     // Index 6 (Q7)
     {
         index: 6,
-        text: "How familiar are you with Andromeda’s tools?",
+        text: "How familiar are you with Andromeda's tools?",
         inputMode: 'buttons',
         options: [
             { label: "1. Very familiar", value: "Very familiar" },
@@ -125,7 +125,7 @@ const questions: QuestionDetail[] = [
         text: "Have you ever participated in a hackathon?",
         inputMode: 'buttons',
         options: [
-            { label: "1. Yes—and I’ve won! 🏆", value: "Winner" },
+            { label: "1. Yes—and I've won! 🏆", value: "Winner" },
             { label: "2. Yes—as a participant", value: "Participant" },
             { label: "3. Not yet", value: "Not yet" }, // Changed value slightly for clarity
         ],
@@ -134,7 +134,7 @@ const questions: QuestionDetail[] = [
     // Index 9 (Q10)
     {
         index: 9,
-        text: "What’s your main goal here?",
+        text: "What's your main goal here?",
         inputMode: 'buttons',
         options: [
             { label: "1. Build apps/dApps", value: "Build apps/dApps" },

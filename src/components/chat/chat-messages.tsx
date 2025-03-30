@@ -24,8 +24,9 @@ interface ChatMessagesProps {
     onButtonClick: (value: string) => void // Callback when a message button is clicked
     selectedButtonValue?: string | null // Optional: Track which button was selected (if needed for styling)
     className?: string // Optional additional CSS classes
-    // FIX: Changed RefObject<HTMLDivElement> to RefObject<HTMLDivElement | null>
     messagesEndRef?: RefObject<HTMLDivElement | null> // Optional ref passed from parent for scrolling
+    latestInteractiveMessageId?: string | null // ID of the most recent message with options
+    highlightedButtonIndex?: number | null // Index of button to highlight (for keyboard shortcut feedback)
 }
 
 // Add a utility function to detect and render URLs as clickable links
@@ -71,6 +72,8 @@ export function ChatMessages({
     selectedButtonValue = null, // Default to null if not provided
     className = "",
     messagesEndRef, // Accept the potentially null-containing ref
+    latestInteractiveMessageId = null, // Default to null if not provided
+    highlightedButtonIndex = null, // Default to null if not provided
 }: ChatMessagesProps) {
     // Internal ref used only if messagesEndRef is not provided by the parent
     const internalScrollRef = useRef<HTMLDivElement>(null);
@@ -79,17 +82,25 @@ export function ChatMessages({
 
     // Effect to scroll to the bottom whenever the messages array changes
     useEffect(() => {
-        // Check if the ref is attached to an element before scrolling
+        // Immediate scroll for initial load
         if (scrollRef.current) {
-            scrollRef.current.scrollIntoView({ behavior: "smooth" });
+            scrollRef.current.scrollIntoView({ behavior: "auto" });
         }
-        // Dependency array ensures this runs when messages update or the ref itself changes
+
+        // Small delay to ensure scrolling works after DOM updates (especially for dynamic content)
+        const timeoutId = setTimeout(() => {
+            if (scrollRef.current) {
+                scrollRef.current.scrollIntoView({ behavior: "smooth" });
+            }
+        }, 100);
+
+        return () => clearTimeout(timeoutId);
     }, [messages, scrollRef]);
 
     return (
         // Use Shadcn ScrollArea for the main message list container
-        <ScrollArea className={`flex-1 p-4 ${className}`}>
-            <div className="space-y-4">
+        <ScrollArea className={`h-full w-full p-4 ${className}`}>
+            <div className="space-y-4 pb-2">
                 {/* Map over the messages array to render each message */}
                 {messages.map((message) => (
                     <div
@@ -125,19 +136,37 @@ export function ChatMessages({
                                 {/* Render buttons if options are provided for an assistant message */}
                                 {message.role === 'assistant' && message.options && message.options.length > 0 && (
                                     <div className="flex flex-wrap gap-2 pt-1">
-                                        {message.options.map((option) => (
-                                            <Button
-                                                key={option.value}
-                                                variant={selectedButtonValue === option.value ? "default" : "outline"} // Style selected button differently
-                                                size="sm"
-                                                onClick={() => onButtonClick(option.value)} // Call parent handler on click
-                                                // Only disable the button if it's been selected
-                                                disabled={selectedButtonValue === option.value}
-                                                className="text-left h-auto py-1.5" // Adjust button styling
-                                            >
-                                                {option.label}
-                                            </Button>
-                                        ))}
+                                        {message.options.map((option, index) => {
+                                            // Determine if this message has the latest interactive options
+                                            const isActiveMessage = message.id === latestInteractiveMessageId;
+                                            // Buttons should be disabled if:
+                                            // 1. This isn't the latest message with options, OR
+                                            // 2. This is the active message BUT any button has been selected
+                                            const isDisabled = !isActiveMessage || (isActiveMessage && selectedButtonValue !== null);
+
+                                            // Styling classes for disabled buttons
+                                            const disabledClasses = !isActiveMessage ? "opacity-70 cursor-not-allowed" : "";
+
+                                            // Check if this button is currently highlighted via keyboard
+                                            const isHighlighted = isActiveMessage &&
+                                                highlightedButtonIndex === index;
+
+                                            // Apply highlight style if this button is being pressed via keyboard
+                                            const highlightClasses = isHighlighted ? "ring-2 ring-offset-1 ring-blue-500" : "";
+
+                                            return (
+                                                <Button
+                                                    key={option.value}
+                                                    variant={selectedButtonValue === option.value ? "default" : "outline"}
+                                                    size="sm"
+                                                    onClick={() => onButtonClick(option.value)}
+                                                    disabled={isDisabled}
+                                                    className={`text-left h-auto py-1.5 ${disabledClasses} ${highlightClasses}`}
+                                                >
+                                                    {option.label}
+                                                </Button>
+                                            );
+                                        })}
                                     </div>
                                 )}
                             </div>

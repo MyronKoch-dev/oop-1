@@ -20,19 +20,35 @@ export function parseHandles(rawResponse: string | undefined | null, currentData
         return; // Optional field, empty/null input is valid, results in null fields
     }
 
-    // Case-insensitive regex, allows for variations in spacing and optional @ for Telegram/X
-    // Extracts the value *after* the platform name and colon/space
-    const telegramMatch = rawResponse.match(/Telegram:\s*(@?\S+)/i);
-    const githubMatch = rawResponse.match(/GitHub:\s*(\S+)/i);
-    // Match 'X:' or 'Twitter:' for robustness
-    const xMatch = rawResponse.match(/(?:X|Twitter):\s*(@?\S+)/i);
+    // Define simpler patterns: Look for Platform Name + Separator + Handle OR @Handle + Separator + Platform Name
+    // Capture Group 1: Handle | Capture Group 2: Handle
+    const telegramRegex = /(?:Telegram(?:[\s:]+))([@\w.-]+)|([@\w.-]+)(?:\s+(?:on|for)\s+Telegram)/i;
+    const githubRegex = /(?:GitHub|Github)(?:[\s:]+)([\w.-]+)|([\w.-]+)(?:\s+(?:on|for)\s+(?:GitHub|Github))/i; // GitHub doesn't usually have @
+    const xTwitterRegex = /(?:X|Twitter)(?:[\s:]+)([@\w.-]+)|([@\w.-]+)(?:\s+(?:on|for)\s+(?:X|Twitter))/i;
 
-    // Assign trimmed value if match found, otherwise keep as null
-    if (telegramMatch?.[1]) currentData.telegram = telegramMatch[1].trim();
-    if (githubMatch?.[1]) currentData.github = githubMatch[1].trim();
-    if (xMatch?.[1]) currentData.x = xMatch[1].trim();
+    const telegramMatch = rawResponse.match(telegramRegex);
+    const githubMatch = rawResponse.match(githubRegex);
+    const xMatch = rawResponse.match(xTwitterRegex);
 
-    console.log('Parsed Handles Result:', { t: currentData.telegram, g: currentData.github, x: currentData.x });
+    // Use the captured group (either group 1 or 2 depending on which part matched)
+    const rawTele = telegramMatch ? (telegramMatch[1] || telegramMatch[2]) : null;
+    const rawGit = githubMatch ? (githubMatch[1] || githubMatch[2]) : null;
+    const rawX = xMatch ? (xMatch[1] || xMatch[2]) : null;
+
+    // Clean and assign
+    if (rawTele) {
+        currentData.telegram = rawTele.trim().replace(/[.,;]$/, '');
+        if (!currentData.telegram.startsWith('@')) currentData.telegram = '@' + currentData.telegram;
+    }
+    if (rawGit) {
+        currentData.github = rawGit.trim().replace(/[.,;]$/, '').replace(/^@/, ''); // Remove leading @
+    }
+    if (rawX) {
+        currentData.x = rawX.trim().replace(/[.,;]$/, '');
+        if (!currentData.x.startsWith('@')) currentData.x = '@' + currentData.x;
+    }
+
+    console.log('Parsed Handles (Simplified):', { t: currentData.telegram, g: currentData.github, x: currentData.x });
 }
 
 /**

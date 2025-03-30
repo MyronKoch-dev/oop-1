@@ -71,8 +71,14 @@ export function ChatContainer({
 
     // Scroll to bottom when messages change
     useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-    }, [messages])
+        // Let the ChatMessages component handle scrolling
+        // This is a backup scroll mechanism in case the ScrollArea doesn't work properly
+        const timeoutId = setTimeout(() => {
+            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        }, 150); // Slightly longer timeout than in ChatMessages
+
+        return () => clearTimeout(timeoutId);
+    }, [messages]);
 
     // Start the conversation by fetching the first question
     useEffect(() => {
@@ -635,24 +641,84 @@ export function ChatContainer({
         }
     }, [showConditionalInput])
 
+    // Find the latest message with options to determine which buttons should be active
+    const latestInteractiveMsgId = messages
+        .filter(msg => msg.role === 'assistant' && msg.options && msg.options.length > 0)
+        .pop()?.id || null;
+
+    // Get the current options from the latest interactive message
+    const currentOptions = messages
+        .find(msg => msg.id === latestInteractiveMsgId)?.options || [];
+
+    // State to track which button is being highlighted via keyboard
+    const [highlightedButtonIndex, setHighlightedButtonIndex] = useState<number | null>(null);
+
+    // Add keyboard shortcut handling for number keys 1-9
+    useEffect(() => {
+        // Only enable keyboard shortcuts when we have options to select
+        // and the input isn't disabled
+        if ((inputMode === 'buttons' || inputMode === 'conditionalText') &&
+            currentOptions.length > 0 &&
+            !inputDisabled &&
+            !isProcessing) {
+
+            const handleKeyDown = (event: KeyboardEvent) => {
+                // Check if key press is a number between 1-9
+                if (/^[1-9]$/.test(event.key)) {
+                    // Convert key to zero-based index (1 -> 0, 2 -> 1, etc.)
+                    const optionIndex = parseInt(event.key) - 1;
+
+                    // Check if this index exists in our options
+                    if (optionIndex >= 0 && optionIndex < currentOptions.length) {
+                        // Prevent default behavior (like scrolling)
+                        event.preventDefault();
+
+                        // Provide visual feedback by highlighting the button briefly
+                        setHighlightedButtonIndex(optionIndex);
+
+                        // Clear the highlight after a short delay
+                        setTimeout(() => {
+                            setHighlightedButtonIndex(null);
+                        }, 200);
+
+                        // Get the selected option and trigger the button selection
+                        const selectedOption = currentOptions[optionIndex];
+                        handleButtonSelect(selectedOption.value);
+                    }
+                }
+            };
+
+            // Add the event listener
+            document.addEventListener('keydown', handleKeyDown);
+
+            // Clean up function - remove event listener when component unmounts
+            // or when dependencies change
+            return () => {
+                document.removeEventListener('keydown', handleKeyDown);
+            };
+        }
+    }, [inputMode, currentOptions, inputDisabled, isProcessing, handleButtonSelect]);
+
     return (
         <div
-            className={`flex flex-col h-[600px] bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 ${className}`}
+            className={`flex flex-col h-[600px] max-h-[80vh] bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 ${className}`}
         >
             <ChatHeader title={title} subtitle={subtitle} currentStep={currentQuestionIndex || 0} totalSteps={TOTAL_STEPS} />
 
-            <div className={`flex-1 overflow-hidden relative ${showConditionalInput ? "pb-4" : ""}`}>
+            <div className={`flex-1 overflow-hidden relative`}>
                 <ChatMessages
                     messages={messages}
                     onButtonClick={handleButtonSelect}
                     selectedButtonValue={selectedButtonValue}
                     messagesEndRef={messagesEndRef}
-                    className={showConditionalInput ? "pb-20" : ""}
+                    className="h-full overflow-auto"
+                    latestInteractiveMessageId={latestInteractiveMsgId}
+                    highlightedButtonIndex={highlightedButtonIndex}
                 />
             </div>
 
             <div
-                className={`relative transition-all duration-200 ${showConditionalInput ? "flex-shrink-0 max-h-[250px] overflow-visible" : ""}`}
+                className={`relative transition-all duration-200 ${showConditionalInput ? "flex-shrink-0 max-h-[250px]" : "flex-shrink-0"}`}
                 ref={conditionalInputRef}
             >
                 {!isComplete && (
