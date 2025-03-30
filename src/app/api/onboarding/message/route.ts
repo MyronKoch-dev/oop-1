@@ -257,11 +257,15 @@ export async function POST(request: NextRequest) {
         }
 
         // --- 5. Save Updated Session State ---
-        await updateSession(currentSessionId, currentSessionState);
+        if (!isNewSession) {
+            await updateSession(currentSessionId, currentSessionState);
+        }
 
         // --- 6. Return Next Question Details ---
         const responsePayload: OnboardingResponsePayload = {
             sessionId: currentSessionId,
+            // Conditionally add newSessionId if it's a new session
+            ...(isNewSession && { newSessionId: currentSessionId }),
             currentQuestionIndex: nextQuestionIndex,
             nextQuestion: nextQuestionDetail.text,
             inputMode: nextQuestionDetail.inputMode,
