@@ -32,7 +32,7 @@ interface ChatMessagesProps {
     currentQuestionIndex?: number | null // Current question index for context-specific behavior
 }
 
-// Add a utility function to detect and render URLs as clickable links
+// Modify the renderMessageContent function to handle dark theme
 const renderMessageContent = (content: string) => {
     // Improved URL regex pattern that handles most common URL formats
     const urlPattern = /(https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g;
@@ -64,7 +64,7 @@ const renderMessageContent = (content: string) => {
                                 href={urls[i]}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-blue-600 hover:underline"
+                                className="text-blue-400 hover:text-blue-300 hover:underline"
                             >
                                 {urls[i]}
                             </a>
@@ -115,8 +115,8 @@ export function ChatMessages({
     };
 
     return (
-        // Use Shadcn ScrollArea for the main message list container
-        <ScrollArea className={`h-full w-full p-4 ${className}`}>
+        // Use Shadcn ScrollArea for the main message list container with dark theme
+        <ScrollArea className={`h-full w-full p-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] ${className}`}>
             <div className="space-y-4 pb-2">
                 {/* Map over the messages array to render each message */}
                 {messages.map((message) => (
@@ -131,19 +131,19 @@ export function ChatMessages({
                         >
                             {/* Avatar for user/bot */}
                             <Avatar
-                                className={`h-8 w-8 ${message.role === "user" ? "bg-primary" : "bg-muted" // Different background colors
+                                className={`h-8 w-8 ${message.role === "user" ? "bg-blue-500 dark:bg-blue-500" : "bg-[#2a2a2a] dark:bg-[#2a2a2a]" // Different background colors
                                     }`}
                             >
                                 {message.role === "user" ? (
-                                    <User className="h-4 w-4 text-primary-foreground" />
+                                    <User className="h-4 w-4 text-white dark:text-white" />
                                 ) : (
-                                    <Bot className="h-4 w-4 text-foreground" />
+                                    <Bot className="h-4 w-4 text-white dark:text-white" />
                                 )}
                             </Avatar>
                             {/* Container for message content and options */}
                             <div className="space-y-2">
                                 <Card
-                                    className={`p-3 ${message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted text-foreground" // Different card styles
+                                    className={`p-3 ${message.role === "user" ? "bg-blue-600 dark:bg-blue-600 text-white" : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white" // Different card styles
                                         } ${message.isLoading ? "animate-pulse" : ""}`} // Add pulse animation if loading
                                 >
                                     {/* Display message content with clickable links */}
@@ -154,7 +154,7 @@ export function ChatMessages({
                                         <div className="mt-3">
                                             <Button
                                                 variant="default"
-                                                className="w-full flex items-center justify-center gap-2"
+                                                className="w-full flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white"
                                                 asChild
                                             >
                                                 <a
@@ -212,7 +212,7 @@ export function ChatMessages({
                                                     size="sm"
                                                     onClick={() => onButtonClick(option.value)}
                                                     disabled={isDisabled}
-                                                    className={`text-left h-auto py-1.5 ${disabledClasses} ${highlightClasses}`}
+                                                    className={`text-left h-auto py-1.5 ${isSelected ? "bg-blue-600 dark:bg-blue-600 text-white" : "bg-[#2a2a2a] dark:bg-[#2a2a2a] border-[#444444] dark:border-[#444444] text-white hover:bg-[#333333] hover:text-white"} ${disabledClasses} ${highlightClasses}`}
                                                 >
                                                     {option.label}
                                                 </Button>

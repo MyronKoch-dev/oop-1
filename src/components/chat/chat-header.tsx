@@ -25,14 +25,14 @@ export function ChatHeader({
         : `Step ${normalizedStep} of ${totalSteps}`;
 
     return (
-        <div className={`border-b border-gray-200 p-4 bg-white ${className}`}>
+        <div className={`border-b border-[#333333] dark:border-[#333333] p-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] text-white ${className}`}>
             <div className="flex flex-col space-y-1.5">
-                <h2 className="text-lg font-semibold">{title}</h2>
-                {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+                <h2 className="text-lg font-semibold text-white">{title}</h2>
+                {subtitle && <p className="text-sm text-gray-300 dark:text-gray-300">{subtitle}</p>}
             </div>
             <div className="mt-3">
-                <Progress value={progressPercentage} className="h-2" />
-                <div className="flex justify-between mt-1 text-xs text-muted-foreground">
+                <Progress value={progressPercentage} className="h-2 bg-[#2a2a2a]" />
+                <div className="flex justify-between mt-1 text-xs text-gray-300 dark:text-gray-300">
                     <span>
                         {stepText}
                     </span>

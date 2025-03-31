@@ -135,18 +135,18 @@ export function ChatInput({
     }
 
     return (
-        <div className={`border-t border-gray-200 p-4 bg-white z-10 ${className}`}>
+        <div className={`border-t border-[#333333] dark:border-[#333333] p-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] z-10 ${className}`}>
             {showConfirmButton && (
                 <div className="mb-4">
                     <Button
                         onClick={onConfirmLanguages}
                         disabled={disabled}
-                        className="w-full"
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
                         variant="default"
                     >
                         Confirm Language Selections
                     </Button>
-                    <p className="text-xs text-center text-muted-foreground mt-1">
+                    <p className="text-xs text-center text-gray-400 dark:text-gray-400 mt-1">
                         Select multiple languages and click above to confirm
                     </p>
                 </div>
@@ -154,7 +154,7 @@ export function ChatInput({
 
             {showConditionalInput && (
                 <div className="mb-4 max-h-[150px] overflow-y-auto">
-                    <Label htmlFor="conditional-input" className="block text-sm font-medium mb-1">
+                    <Label htmlFor="conditional-input" className="block text-sm font-medium mb-1 text-white">
                         {displayLabel}
                     </Label>
                     <div className="flex flex-col space-y-2">
@@ -165,16 +165,16 @@ export function ChatInput({
                             onChange={handleConditionalChange}
                             onKeyDown={handleConditionalKeyDown}
                             placeholder="Type additional details here..."
-                            className="min-h-[80px] max-h-[120px] resize-none"
+                            className="min-h-[80px] max-h-[120px] resize-none bg-[#2a2a2a] dark:bg-[#2a2a2a] border-[#444444] dark:border-[#444444] text-white placeholder:text-gray-400"
                             disabled={disabled}
                         />
-                        <p className="text-xs text-muted-foreground text-center">
+                        <p className="text-xs text-gray-400 dark:text-gray-400 text-center">
                             Press Enter to submit or Shift+Enter for a new line
                         </p>
                         <Button
                             onClick={handleConditionalSubmit}
                             disabled={disabled || !conditionalText.trim()}
-                            className="w-full sticky bottom-0"
+                            className="w-full sticky bottom-0 bg-blue-600 hover:bg-blue-700 text-white"
                             type="submit"
                         >
                             Submit Details
@@ -192,9 +192,15 @@ export function ChatInput({
                         onKeyDown={handleKeyDown}
                         placeholder={placeholder}
                         disabled={isMainInputDisabled}
-                        className="flex-1"
+                        className="flex-1 bg-[#2a2a2a] dark:bg-[#2a2a2a] border-[#444444] dark:border-[#444444] text-white placeholder:text-gray-400"
                     />
-                    <Button onClick={handleSendMessage} disabled={isMainInputDisabled || !message.trim()} size="icon" type="submit">
+                    <Button
+                        onClick={handleSendMessage}
+                        disabled={isMainInputDisabled || !message.trim()}
+                        size="icon"
+                        type="submit"
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                    >
                         <Send className="h-4 w-4" />
                         <span className="sr-only">Send message</span>
                     </Button>
