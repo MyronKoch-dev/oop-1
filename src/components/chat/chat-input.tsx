@@ -90,6 +90,21 @@ export function ChatInput({
         }
     }, [inputMode, disabled, showConditionalInput, hideMainInput]);
 
+    // Add keyboard event listener for the window when confirm button is shown
+    useEffect(() => {
+        const handleGlobalKeyDown = (e: globalThis.KeyboardEvent) => {
+            if (showConfirmButton && !disabled && e.key === "Enter") {
+                e.preventDefault();
+                onConfirmLanguages?.();
+            }
+        };
+
+        if (showConfirmButton) {
+            window.addEventListener('keydown', handleGlobalKeyDown);
+            return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+        }
+    }, [showConfirmButton, disabled, onConfirmLanguages]);
+
     const handleMessageChange = (e: ChangeEvent<HTMLInputElement>) => {
         setMessage(e.target.value)
     }
@@ -100,11 +115,18 @@ export function ChatInput({
     }
 
     const handleSendMessage = () => {
-        if (message.trim() && !disabled) {
+        // Allow empty message for optional fields (determined by currentQuestionIndex)
+        // Optional fields are: GitHub (2), Telegram (3), Twitter/X (4), Portfolio (12), Additional Skills (13)
+        const isOptionalField = currentQuestionIndex === 2 || currentQuestionIndex === 3 ||
+            currentQuestionIndex === 4 || currentQuestionIndex === 12 ||
+            currentQuestionIndex === 13;
+
+        if (!disabled && (message.trim() || isOptionalField)) {
+            const valueToSend = message.trim() || "none"; // Send "none" for empty optional fields
             if (onSendMessage) {
-                onSendMessage(message.trim())
+                onSendMessage(valueToSend)
             } else {
-                onSendText(message.trim())
+                onSendText(valueToSend)
             }
             setMessage("")
         }
@@ -123,14 +145,24 @@ export function ChatInput({
         }
     }
 
+    // Modify handleConditionalKeyDown to handle empty submissions
     const handleConditionalKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-        if (e.key === "Enter" && !e.shiftKey && !disabled && conditionalText.trim()) {
-            e.preventDefault()
-            handleConditionalSubmit()
+        if (e.key === "Enter" && !e.shiftKey && !disabled) {
+            e.preventDefault();
+            // If empty or only whitespace, submit "none"
+            if (!conditionalText.trim()) {
+                if (setConditionalText) {
+                    setConditionalText("none");
+                }
+                if (onConditionalTextChange) {
+                    onConditionalTextChange("none");
+                }
+            }
+            handleConditionalSubmit();
         }
-        else if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && !disabled && conditionalText.trim()) {
-            e.preventDefault()
-            handleConditionalSubmit()
+        else if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && !disabled) {
+            e.preventDefault();
+            handleConditionalSubmit();
         }
     }
 
@@ -147,7 +179,7 @@ export function ChatInput({
                         Confirm Language Selections
                     </Button>
                     <p className="text-xs text-center text-gray-400 dark:text-gray-400 mt-1">
-                        Select multiple languages and click above to confirm
+                        Select multiple languages and click above to confirm or press Enter
                     </p>
                 </div>
             )}
@@ -173,7 +205,7 @@ export function ChatInput({
                         </p>
                         <Button
                             onClick={handleConditionalSubmit}
-                            disabled={disabled || !conditionalText.trim()}
+                            disabled={disabled}
                             className="w-full sticky bottom-0 bg-blue-600 hover:bg-blue-700 text-white"
                             type="submit"
                         >

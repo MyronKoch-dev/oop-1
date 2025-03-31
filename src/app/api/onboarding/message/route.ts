@@ -189,16 +189,20 @@ export async function POST(request: NextRequest) {
                     break;
                 case 2: // GitHub username
                     if (typeof responseToParse === 'string') {
-                        const githubUsername = responseToParse.trim();
-                        dataToUpdate.github = githubUsername ? githubUsername.replace(/^@/, '') : null;
+                        const githubUsername = responseToParse.trim().toLowerCase();
+                        if (githubUsername && !['none', 'no', 'n/a'].includes(githubUsername)) {
+                            dataToUpdate.github = githubUsername.replace(/^@/, '');
+                        } else {
+                            dataToUpdate.github = null;
+                        }
                     } else {
                         dataToUpdate.github = null;
                     }
                     break;
                 case 3: // Telegram handle
                     if (typeof responseToParse === 'string') {
-                        const telegramHandle = responseToParse.trim();
-                        if (telegramHandle) {
+                        const telegramHandle = responseToParse.trim().toLowerCase();
+                        if (telegramHandle && !['none', 'no', 'n/a'].includes(telegramHandle)) {
                             dataToUpdate.telegram = telegramHandle.startsWith('@') ? telegramHandle : `@${telegramHandle}`;
                         } else {
                             dataToUpdate.telegram = null;
@@ -209,8 +213,8 @@ export async function POST(request: NextRequest) {
                     break;
                 case 4: // X/Twitter handle
                     if (typeof responseToParse === 'string') {
-                        const xHandle = responseToParse.trim();
-                        if (xHandle) {
+                        const xHandle = responseToParse.trim().toLowerCase();
+                        if (xHandle && !['none', 'no', 'n/a'].includes(xHandle)) {
                             dataToUpdate.x = xHandle.startsWith('@') ? xHandle : `@${xHandle}`;
                         } else {
                             dataToUpdate.x = null;
@@ -226,8 +230,30 @@ export async function POST(request: NextRequest) {
                 case 9: dataToUpdate.experience_level = (responseToParse as { buttonValue: string })?.buttonValue ?? null; break;
                 case 10: dataToUpdate.hackathon = (responseToParse as { buttonValue: string })?.buttonValue ?? null; break;
                 case 11: dataToUpdate.goal = (responseToParse as { buttonValue: string })?.buttonValue ?? null; break;
-                case 12: dataToUpdate.portfolio = typeof responseToParse === 'string' ? responseToParse.trim() || null : null; break;
-                case 13: dataToUpdate.additional_skills = typeof responseToParse === 'string' ? responseToParse.trim() || null : null; break;
+                case 12:
+                    if (typeof responseToParse === 'string') {
+                        const portfolio = responseToParse.trim();
+                        if (portfolio && !['none', 'no', 'n/a'].includes(portfolio.toLowerCase())) {
+                            dataToUpdate.portfolio = portfolio;
+                        } else {
+                            dataToUpdate.portfolio = null;
+                        }
+                    } else {
+                        dataToUpdate.portfolio = null;
+                    }
+                    break;
+                case 13:
+                    if (typeof responseToParse === 'string') {
+                        const additionalSkills = responseToParse.trim();
+                        if (additionalSkills && !['none', 'no', 'n/a'].includes(additionalSkills.toLowerCase())) {
+                            dataToUpdate.additional_skills = additionalSkills;
+                        } else {
+                            dataToUpdate.additional_skills = null;
+                        }
+                    } else {
+                        dataToUpdate.additional_skills = null;
+                    }
+                    break;
                 default: console.warn(`[Session: ${currentSessionId}] No parsing/storing logic defined for question index ${currentQuestionIndex}`);
             }
 
