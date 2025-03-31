@@ -49,11 +49,6 @@ const navItems: NavItem[] = [
         icon: <BookOpen className="w-5 h-5" />
     },
     {
-        href: "https://myronkoch-dev.github.io/AndrDocsBot/",
-        label: "Docs Bot",
-        icon: <Bot className="w-5 h-5" />
-    },
-    {
         href: "https://andromeda-testnet-faucet.vercel.app/",
         label: "ANDR Faucet",
         icon: <Sun className="w-5 h-5" />
@@ -126,6 +121,40 @@ const actionItems: NavItem[] = [
         href: "https://zealy.io/cw/andromedacommunity/questboard/ff856265-3649-4b5f-a41f-c19eadfaf2e0/36c50401-4e44-452a-9539-94b9f2451f3d",
         label: "Ambassador Program",
         icon: <Award className="w-5 h-5" />
+    }
+];
+
+// Agent bots items
+const agentBots: NavItem[] = [
+    {
+        href: "https://myronkoch-dev.github.io/AndrDocsBot/",
+        label: "Docs Bot",
+        icon: <Bot className="w-5 h-5" />
+    },
+    {
+        href: "https://myronkoch-dev.github.io/AndrDocsBot/",
+        label: "Artist-bot",
+        icon: <Bot className="w-5 h-5" />
+    },
+    {
+        href: "https://myronkoch-dev.github.io/AndrDocsBot/",
+        label: "Community Catalyst bot",
+        icon: <Bot className="w-5 h-5" />
+    },
+    {
+        href: "https://myronkoch-dev.github.io/AndrDocsBot/",
+        label: "Dev Advocate bot",
+        icon: <Bot className="w-5 h-5" />
+    },
+    {
+        href: "https://myronkoch-dev.github.io/AndrDocsBot/",
+        label: "Ecosystem Explorer bot",
+        icon: <Bot className="w-5 h-5" />
+    },
+    {
+        href: "https://myronkoch-dev.github.io/AndrDocsBot/",
+        label: "Cosmos Helper bot",
+        icon: <Bot className="w-5 h-5" />
     }
 ];
 
@@ -207,6 +236,31 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                                 key={`action-${index}`}
                                 href={item.href}
                                 className="block w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-[#2a2a2a] text-white rounded-md hover:bg-[#333333] transition-colors"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {item.icon}
+                                <span>{item.label}</span>
+                                <ExternalLink className="w-4 h-4 opacity-50 ml-auto" />
+                            </a>
+                        ))}
+                    </div>
+
+                    {/* Visual separator */}
+                    <hr className="my-4 border-[#333333]" />
+
+                    {/* Agent bots section title */}
+                    <h3 className="px-4 py-2 text-sm font-semibold text-gray-400 uppercase tracking-wider">
+                        Choose Your Agent
+                    </h3>
+
+                    {/* Agent bots as buttons */}
+                    <div className="px-4 space-y-3 mt-2 mb-6">
+                        {agentBots.map((item, index) => (
+                            <a
+                                key={`agent-${index}`}
+                                href={item.href}
+                                className="block w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-[#202020] text-white rounded-md hover:bg-[#2d2d2d] transition-colors"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >

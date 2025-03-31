@@ -38,30 +38,30 @@ export default function HomePage() {
   const isSidebarVisible = useIsSidebarVisible();
 
   return (
-    // Main container with dark theme colors matching Andromeda app
-    <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-6 lg:p-8 bg-[#0f0f0f] dark:bg-[#111111] transition-all">
+    // Main container with dark theme colors matching Andromeda app - anchored to top on mobile
+    <main className="flex min-h-screen flex-col items-start justify-start p-4 md:p-6 lg:p-8 bg-[#0f0f0f] dark:bg-[#111111] transition-all pt-6">
       {/* Andromeda logo and title above the chat - only show when sidebar is collapsed */}
       {!isSidebarVisible && (
-        <div className="w-full max-w-3xl mx-auto mb-6 flex flex-col items-center">
+        <div className="w-full max-w-3xl mx-auto mb-4 flex flex-col items-center">
           <img
             src="https://avatars.githubusercontent.com/u/86694044?s=200&v=4"
-            width="80"
-            height="80"
+            width="70"
+            height="70"
             alt="Andromeda Logo"
-            className="rounded-full mb-3"
+            className="rounded-full mb-2"
           />
-          <h1 className="text-2xl font-bold text-white mb-1">Andromeda Protocol</h1>
+          <h1 className="text-xl font-bold text-white mb-1">Andromeda Protocol</h1>
           <p className="text-gray-400 text-sm">Building the future of decentralized applications</p>
         </div>
       )}
 
-      {/* Outer container with dark theme and blue accents */}
-      <div className="w-full max-w-3xl mx-auto h-[85vh] border border-[#333333] rounded-xl shadow-2xl bg-[#1a1a1a] dark:bg-[#1a1a1a] overflow-hidden">
+      {/* Outer container with dark theme and blue accents - adjusted height for mobile */}
+      <div className="w-full max-w-3xl mx-auto h-[75vh] md:h-[80vh] lg:h-[85vh] border border-[#333333] rounded-xl shadow-2xl bg-[#1a1a1a] dark:bg-[#1a1a1a] overflow-hidden">
         {/* Render the ChatContainer component with full height and dark theme */}
         <ChatContainer
           className="h-full"
           title="Onboarding Assistant"
-          subtitle="Answer a few questions to get started"
+          subtitle="Begin Your Journey With Andromeda Here."
         />
       </div>
       {/* You could add a small footer outside the chat container if needed */}
