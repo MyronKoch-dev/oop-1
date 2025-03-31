@@ -144,10 +144,12 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                                         <p className="launchpad-description text-gray-300 text-sm mt-1">
                                             Showcase your achievements and get recognition from the community.
                                         </p>
-
-                                        <span className="launchpad-link mt-3 inline-flex items-center justify-center px-4 py-2 bg-[#2a2a2a] text-white rounded-md cursor-not-allowed opacity-70">
+                                        <a href="https://t.me/andromedaprotocol/3776"
+                                            className="launchpad-link mt-3 inline-flex items-center justify-center px-4 py-2 bg-[#2a2a2a] text-white rounded-md hover:bg-[#333333] transition-colors gap-2"
+                                            target="_blank" rel="noopener noreferrer">
                                             Post in Main Telegram Channel
-                                        </span>
+                                            <ExternalLink className="w-4 h-4" />
+                                        </a>
                                     </div>
                                 </div>
                             </li>
