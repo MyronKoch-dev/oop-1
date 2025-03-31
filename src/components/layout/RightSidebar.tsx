@@ -144,6 +144,7 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                                         <p className="launchpad-description text-gray-300 text-sm mt-1">
                                             Showcase your achievements and get recognition from the community.
                                         </p>
+
                                         <span className="launchpad-link mt-3 inline-flex items-center justify-center px-4 py-2 bg-[#2a2a2a] text-white rounded-md cursor-not-allowed opacity-70">
                                             Post in Main Telegram Channel
                                         </span>
@@ -159,7 +160,7 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                                         <p className="launchpad-description text-gray-300 text-sm mt-1">
                                             Take on real-world challenges and contribute to the ecosystem.
                                         </p>
-                                        <a href="https://github.com/andromedaprotocol/ado-database-hackerboard/issues"
+                                        <a href="https://github.com/andromedaprotocol/hackerboard_tasks/issues"
                                             className="launchpad-link mt-3 inline-flex items-center justify-center px-4 py-2 bg-[#2a2a2a] text-white rounded-md hover:bg-[#333333] transition-colors gap-2"
                                             target="_blank" rel="noopener noreferrer">
                                             Visit The 🔗🔗 🪓 Hackerboard
