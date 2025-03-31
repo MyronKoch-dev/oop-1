@@ -30,7 +30,11 @@ export default function RootLayout({
   // Handle window resize to detect mobile/desktop
   useEffect(() => {
     const checkIfMobile = () => {
-      setIsMobile(window.innerWidth < 1024); // lg breakpoint
+      const mobile = window.innerWidth < 1024; // lg breakpoint
+      setIsMobile(mobile);
+
+      // Automatically close right sidebar on mobile, keep open on desktop
+      setIsRightSidebarOpen(!mobile);
     };
 
     // Initial check
@@ -75,9 +79,9 @@ export default function RootLayout({
             <Menu className="w-5 h-5" />
           </button>
 
-          {/* Right Sidebar toggle button */}
+          {/* Right Sidebar toggle button - visible only on mobile */}
           <button
-            className="sidebar-toggle fixed top-4 right-4 z-50 p-2 rounded-md bg-[#1a1a1a] border border-[#333333] text-white hover:bg-[#333333] transition-colors"
+            className="sidebar-toggle fixed top-4 right-4 z-50 p-2 rounded-md bg-[#1a1a1a] border border-[#333333] text-white hover:bg-[#333333] transition-colors lg:hidden"
             onClick={toggleRightSidebar}
             aria-label="Toggle right sidebar"
           >
@@ -89,8 +93,7 @@ export default function RootLayout({
 
           <main className={`
             transition-all duration-300 ease-in-out 
-            lg:pl-64 
-            ${isRightSidebarOpen ? 'lg:pr-80' : 'lg:pr-0'} 
+            lg:pl-64 lg:pr-96
             ${(isLeftSidebarOpen || isRightSidebarOpen) && isMobile ? 'opacity-50 blur-sm pointer-events-none' : ''}
           `}>
             {children}
