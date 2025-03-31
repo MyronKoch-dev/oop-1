@@ -657,7 +657,7 @@ export function ChatContainer({
             {
                 id: generateMessageId("user"),
                 role: "user",
-                content: `Selected languages: ${multiSelectedLanguages.join(', ')}${conditionalText ? ` | Other: ${conditionalText}` : ''}`,
+                content: `Selected languages: ${multiSelectedLanguages.join(', ')}`,
             },
         ]);
 
@@ -679,7 +679,6 @@ export function ChatContainer({
             const payload = {
                 sessionId,
                 response: multiSelectedLanguages,
-                conditionalText: conditionalText || undefined,
             };
 
             const response = await fetch("/api/onboarding/message", {

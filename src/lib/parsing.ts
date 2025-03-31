@@ -5,14 +5,12 @@ import { OnboardingData } from "./types";
 
 /**
  * Parses the response for Q5 (languages).
- * Handles button values (potentially as an array) and separate 'Other' text input.
+ * Handles button values (potentially as an array).
  * @param rawResponse Response from main input (e.g., button values). Can be string[], { buttonValue: string }, string (less likely), null.
- * @param otherTextResponse Text specifically from the 'Other' input field.
  * @param currentData The current accumulated data object (to be mutated).
  */
 export function parseLanguages(
     rawResponse: string | string[] | { buttonValue: string } | undefined | null,
-    otherTextResponse: string | undefined | null,
     currentData: Partial<OnboardingData>
 ): void {
     // Reset fields
@@ -20,7 +18,7 @@ export function parseLanguages(
     currentData.other_languages = null;
 
     let selectedLanguages: string[] = [];
-    const validLanguages = ["Rust", "JavaScript", "Python", "Go", "Solidity"]; // Expected button values
+    const validLanguages = ["Rust", "JavaScript", "Python", "Go", "Solidity", "TypeScript", "Java", "C#"]; // Expected button values
 
     if (Array.isArray(rawResponse)) {
         // If multiple buttons selected (frontend sends array of values)
@@ -42,12 +40,6 @@ export function parseLanguages(
     // Filter selected languages against the valid list from buttons
     currentData.languages = selectedLanguages.filter(lang => validLanguages.includes(lang));
 
-    // Handle the separate 'Other' text input
-    const trimmedOtherText = otherTextResponse?.trim();
-    if (trimmedOtherText) {
-        currentData.other_languages = trimmedOtherText;
-    }
-
     // Ensure languages array is null if empty, for consistency
     if (currentData.languages.length === 0) {
         console.log("Parsing Languages: No standard languages selected.");
@@ -55,8 +47,7 @@ export function parseLanguages(
     }
 
     console.log('Parsed Languages Result:', {
-        languages: currentData.languages,
-        other_languages: currentData.other_languages
+        languages: currentData.languages
     });
 }
 

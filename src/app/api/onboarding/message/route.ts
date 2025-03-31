@@ -219,7 +219,7 @@ export async function POST(request: NextRequest) {
                         dataToUpdate.x = null;
                     }
                     break;
-                case 5: parseLanguages(responseToParse, conditionalText, dataToUpdate); break;
+                case 5: parseLanguages(responseToParse, dataToUpdate); break;
                 case 6: parseBlockchain(responseToParse as { buttonValue: string } | null, conditionalText, dataToUpdate); break;
                 case 7: parseAI(responseToParse as { buttonValue: string } | null, conditionalText, dataToUpdate); break;
                 case 8: dataToUpdate.tools_familiarity = (responseToParse as { buttonValue: string })?.buttonValue ?? null; break;

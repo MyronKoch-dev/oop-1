@@ -64,23 +64,20 @@ const questions: QuestionDetail[] = [
     // Index 5 (Previously Q4 - Programming Languages)
     {
         index: 5,
-        text: "Which programming languages are you most comfortable with?",
-        inputMode: 'buttons', // Primarily buttons
+        text: "Which programming languages are you most comfortable with? (Select all that apply)",
+        inputMode: 'buttons',
         options: [
             { label: "1. Rust", value: "Rust" },
             { label: "2. JavaScript", value: "JavaScript" },
             { label: "3. Python", value: "Python" },
             { label: "4. Go", value: "Go" },
             { label: "5. Solidity", value: "Solidity" },
-            // Button/mechanism for 'Other' needs thought - maybe just text input OR a 6th button triggering text?
-            // Let's assume a text input is *always* available alongside buttons for simplicity for now.
+            { label: "6. TypeScript", value: "TypeScript" },
+            { label: "7. Java", value: "Java" },
+            { label: "8. C#", value: "C#" },
         ],
-        // Or treat as conditionalText triggered by an 'Other' button:
-        // inputMode: 'conditionalText',
-        // conditionalTriggerValue: 'Other', // Need an 'Other' button in options
-        // conditionalTextInputLabel: "Specify other languages:",
-        isOptional: false, // Need some input
-        validationHint: 'languages', // Signal for language parsing
+        isOptional: false,
+        validationHint: 'languages',
     },
     // Index 6 (Previously Q5 - Blockchain)
     {

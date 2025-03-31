@@ -49,21 +49,28 @@ const renderMessageContent = (content: string) => {
     // Combine parts and URLs
     return (
         <p className="text-sm whitespace-pre-wrap">
-            {parts.map((part, i) => (
-                <React.Fragment key={i}>
-                    {part}
-                    {urls[i] && (
-                        <a
-                            href={urls[i]}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            {urls[i]}
-                        </a>
-                    )}
-                </React.Fragment>
-            ))}
+            {parts.map((part, i) => {
+                // Check if this part is identical to the URL that immediately follows it
+                const isPartTheUrl = urls[i] && part.trim() === urls[i].trim();
+
+                return (
+                    <React.Fragment key={i}>
+                        {/* Only render the text part if it's NOT identical to the upcoming URL */}
+                        {!isPartTheUrl && part}
+
+                        {urls[i] && (
+                            <a
+                                href={urls[i]}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 hover:underline"
+                            >
+                                {urls[i]}
+                            </a>
+                        )}
+                    </React.Fragment>
+                );
+            })}
         </p>
     );
 };
