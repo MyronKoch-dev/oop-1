@@ -26,9 +26,9 @@ export function ChatHeader({
 
     return (
         <div className={`border-b border-[#333333] dark:border-[#333333] p-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] text-white ${className}`}>
-            <div className="flex flex-col space-y-1.5">
-                <h2 className="text-lg font-semibold text-white">{title}</h2>
-                {subtitle && <p className="text-sm text-gray-300 dark:text-gray-300">{subtitle}</p>}
+            <div className="flex flex-col items-center space-y-1.5">
+                <h2 className="text-lg font-semibold text-white text-center">{title}</h2>
+                {subtitle && <p className="text-sm text-gray-300 dark:text-gray-300 text-center">{subtitle}</p>}
             </div>
             <div className="mt-3">
                 <Progress value={progressPercentage} className="h-2 bg-[#2a2a2a]" />
