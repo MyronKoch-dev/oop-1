@@ -6,7 +6,7 @@ import { Avatar } from "@/components/ui/avatar" // Assuming Shadcn setup created
 import { Button } from "@/components/ui/button" // Assuming Shadcn setup created this
 import { Card } from "@/components/ui/card"     // Assuming Shadcn setup created this
 import { ScrollArea } from "@/components/ui/scroll-area" // Assuming Shadcn setup created this
-import { Bot, User } from "lucide-react" // Ensure lucide-react is installed
+import { Bot, User, ExternalLink } from "lucide-react" // Ensure lucide-react is installed
 import React from "react"
 
 // Defines the structure for a single message in the chat history
@@ -16,6 +16,7 @@ export interface ChatMessage {
     content: string
     options?: Array<{ label: string; value: string }> // Optional buttons for assistant messages
     isLoading?: boolean // Flag for loading state (e.g., "Thinking...")
+    url?: string // URL to be displayed as a clickable link
 }
 
 // Defines the props expected by the ChatMessages component
@@ -108,6 +109,11 @@ export function ChatMessages({
         return () => clearTimeout(timeoutId);
     }, [messages, scrollRef]);
 
+    // Helper function to detect if a message is the "get started here" message
+    const isGetStartedMessage = (content: string): boolean => {
+        return content.toLowerCase().includes("you can get started here");
+    };
+
     return (
         // Use Shadcn ScrollArea for the main message list container
         <ScrollArea className={`h-full w-full p-4 ${className}`}>
@@ -142,6 +148,29 @@ export function ChatMessages({
                                 >
                                     {/* Display message content with clickable links */}
                                     {renderMessageContent(message.content)}
+
+                                    {/* Render URL as a button if present */}
+                                    {message.url && (
+                                        <div className="mt-3">
+                                            <Button
+                                                variant="default"
+                                                className="w-full flex items-center justify-center gap-2"
+                                                asChild
+                                            >
+                                                <a
+                                                    href={message.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    {isGetStartedMessage(message.content) ? (
+                                                        <>Get Started <ExternalLink className="h-4 w-4" /></>
+                                                    ) : (
+                                                        <>Visit Link <ExternalLink className="h-4 w-4" /></>
+                                                    )}
+                                                </a>
+                                            </Button>
+                                        </div>
+                                    )}
                                 </Card>
 
                                 {/* Render buttons if options are provided for an assistant message */}

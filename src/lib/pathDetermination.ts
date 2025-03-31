@@ -66,16 +66,16 @@ export function determinePath(data: OnboardingData): PathResult {
         };
     }
 
-    // App Suggester Rule Check
-    const isAppSuggesterCandidate =
+    // App Suggester Rule Check (now Visionary Path)
+    const isVisionaryPathCandidate =
         data.goal === 'Share ideas for new features' &&
         (data.experience_level === 'Beginner' || data.experience_level === 'Intermediate');
 
-    if (isAppSuggesterCandidate) {
-        console.log("Path determined: App Suggester");
+    if (isVisionaryPathCandidate) {
+        console.log("Path determined: Visionary Path");
         return {
-            recommendedPath: "App Suggester",
-            recommendedPathUrl: getPathUrl("APP_SUGGESTER")
+            recommendedPath: "Visionary Path",
+            recommendedPathUrl: getPathUrl("VISIONARY_PATH")
         };
     }
 
@@ -105,25 +105,25 @@ export function determinePath(data: OnboardingData): PathResult {
         };
     }
 
-    // Beginner Rule Check (Acts as a prioritized fallback)
-    const isBeginnerCandidate =
+    // Beginner Rule Check (now Explorer Path) (Acts as a prioritized fallback)
+    const isExplorerPathCandidate =
         data.goal === 'Learn Web3 basics' ||
         data.experience_level === 'Beginner';
 
-    if (isBeginnerCandidate) {
-        console.log("Path determined: Beginner");
+    if (isExplorerPathCandidate) {
+        console.log("Path determined: Explorer Path");
         return {
-            recommendedPath: "Beginner",
-            recommendedPathUrl: getPathUrl("BEGINNER")
+            recommendedPath: "Explorer Path",
+            recommendedPathUrl: getPathUrl("EXPLORER_PATH")
         };
     }
 
     // --- Default Fallback ---
-    // If none of the specific rules match (including Beginner), default to Beginner.
+    // If none of the specific rules match (including Explorer Path), default to Explorer Path.
     // This ensures every user gets *some* path.
-    console.log("Path determined: Defaulting to Beginner (no specific rules matched)");
+    console.log("Path determined: Defaulting to Explorer Path (no specific rules matched)");
     return {
-        recommendedPath: "Beginner",
-        recommendedPathUrl: getPathUrl("BEGINNER")
+        recommendedPath: "Explorer Path",
+        recommendedPathUrl: getPathUrl("EXPLORER_PATH")
     };
 }

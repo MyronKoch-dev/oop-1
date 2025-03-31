@@ -93,7 +93,7 @@ describe('/api/onboarding/message API Route', () => {
     // Default save response: success
     mockSaveOnboardingResponse.mockResolvedValue({ success: true, error: null });
     // Default path determination
-    mockDeterminePath.mockReturnValue({ recommendedPath: 'Default Path', recommendedPathUrl: 'http://default.path' });
+    mockDeterminePath.mockReturnValue({ recommendedPath: 'Explorer Path', recommendedPathUrl: 'http://explorer.path' });
     // Default isFinalQuestion (can be overridden)
     mockIsFinalQuestion.mockImplementation((index: number) => index >= (MOCKED_TOTAL_QUESTIONS as number)); // Use the potentially overridden total
     // Default TOTAL_QUESTIONS to avoid test failures if not overridden
@@ -105,7 +105,7 @@ describe('/api/onboarding/message API Route', () => {
 
   // --- Test Cases ---
 
-  test('should successfully complete the onboarding flow (Happy Path)', async () => {
+  test('should successfully complete the onboarding flow (Happy Path - Explorer Path)', async () => {
     // --- Test Configuration ---
     const MOCK_SESSION_ID = 'happy-path-session-123';
     const TOTAL_QUESTIONS_FOR_TEST = 5;
@@ -122,7 +122,7 @@ describe('/api/onboarding/message API Route', () => {
       { index: 3, text: 'Q3: Telegram?', inputMode: 'text', validationHint: 'telegram_handle', options: [], conditionalTextInputLabel: null, conditionalTriggerValue: null },
       { index: 4, text: 'Q4: X/Twitter?', inputMode: 'text', validationHint: 'x_handle', options: [], conditionalTextInputLabel: null, conditionalTriggerValue: null },
     ];
-    const MOCK_FINAL_PATH = { recommendedPath: 'Happy Path Result', recommendedPathUrl: 'http://happy.path' };
+    const MOCK_FINAL_PATH = { recommendedPath: 'Explorer Path', recommendedPathUrl: 'http://explorer.path' };
 
     let currentSessionState: SessionState = {
       questionIndex: 0,
@@ -278,6 +278,66 @@ describe('/api/onboarding/message API Route', () => {
     expect(mockDeleteSession).toHaveBeenCalledTimes(1);
     expect(mockDeleteSession).toHaveBeenCalledWith(MOCK_SESSION_ID);
 
+  });
+
+  // New test case for Visionary Path
+  test('should recommend Visionary Path based on appropriate inputs', async () => {
+    // --- Test Configuration ---
+    const MOCK_SESSION_ID = 'visionary-path-session-456';
+    const TOTAL_QUESTIONS_FOR_TEST = 12; // Enough to reach the goal question
+
+    Object.defineProperty(require('@/lib/questionnaire'), 'TOTAL_QUESTIONS', {
+      value: TOTAL_QUESTIONS_FOR_TEST,
+      writable: true
+    });
+
+    // Setup appropriate accumulated data to trigger Visionary Path
+    const finalState: SessionState = {
+      questionIndex: TOTAL_QUESTIONS_FOR_TEST, // At the end of the questions
+      accumulatedData: {
+        name: 'Visionary User',
+        email: 'visionary@example.com',
+        experience_level: 'Intermediate', // One of the criteria for Visionary Path
+        goal: 'Share ideas for new features', // Main criteria for Visionary Path
+      },
+      repromptedIndex: null,
+      lastInteractionTimestamp: Date.now(),
+    };
+
+    const VISIONARY_PATH = {
+      recommendedPath: 'Visionary Path',
+      recommendedPathUrl: 'http://visionary.path'
+    };
+
+    // Mock session retrieval to return our prepared state
+    mockGetSession.mockResolvedValue({ ...finalState });
+    // Set up determinePath to return Visionary Path
+    mockDeterminePath.mockReturnValue(VISIONARY_PATH);
+    // Mock isFinalQuestion to return true for this index
+    mockIsFinalQuestion.mockReturnValue(true);
+
+    // Simulate the final question submission that would trigger path determination
+    const request = createMockRequest({
+      sessionId: MOCK_SESSION_ID,
+      response: 'Some final response'
+    });
+
+    const response = await POST(request);
+    const body = await response.json();
+
+    // Check that the correct path was determined and returned
+    expect(response.status).toBe(200);
+    expect(mockDeterminePath).toHaveBeenCalledTimes(1);
+    expect(mockDeterminePath).toHaveBeenCalledWith(expect.objectContaining({
+      experience_level: 'Intermediate',
+      goal: 'Share ideas for new features',
+    }));
+    expect(body.finalResult?.recommendedPath).toBe('Visionary Path');
+    expect(body.finalResult?.recommendedPathUrl).toBe('http://visionary.path');
+    expect(mockSaveOnboardingResponse).toHaveBeenCalledWith(expect.objectContaining({
+      recommendedPath: 'Visionary Path',
+      recommendedPathUrl: 'http://visionary.path',
+    }));
   });
 
   // --- NEW TEST: Session Expiry ---

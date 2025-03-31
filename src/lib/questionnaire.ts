@@ -64,7 +64,7 @@ const questions: QuestionDetail[] = [
     // Index 5 (Previously Q4 - Programming Languages)
     {
         index: 5,
-        text: "Which programming languages are you most comfortable with? (Select all that apply)",
+        text: "Which programming languages are you most comfortable with? (Select all that apply, or 'None')",
         inputMode: 'buttons',
         options: [
             { label: "1. Rust", value: "Rust" },
@@ -75,6 +75,7 @@ const questions: QuestionDetail[] = [
             { label: "6. TypeScript", value: "TypeScript" },
             { label: "7. Java", value: "Java" },
             { label: "8. C#", value: "C#" },
+            { label: "9. None of these / No experience yet", value: "None" },
         ],
         isOptional: false,
         validationHint: 'languages',

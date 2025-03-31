@@ -230,7 +230,8 @@ export function ChatContainer({
                     {
                         id: generateMessageId("assistant"),
                         role: "assistant",
-                        content: `You can get started here: ${data.finalResult?.recommendedPathUrl}`,
+                        content: "You can get started here:",
+                        url: data.finalResult?.recommendedPathUrl
                     },
                     {
                         id: generateMessageId("assistant"),
@@ -310,12 +311,20 @@ export function ChatContainer({
 
         // Special handling for Question 5 (Programming Languages) - enables multi-select
         if (currentQuestionIndex === 5) {
-            // Toggle selection: if already selected, remove it; otherwise, add it
+            // Handle "None" option as mutually exclusive with other languages
             setMultiSelectedLanguages(prev => {
-                if (prev.includes(value)) {
-                    return prev.filter(lang => lang !== value);
+                if (value === "None") {
+                    return ["None"]; // Select only "None", clear any other selections
                 } else {
-                    return [...prev, value];
+                    // If "None" was previously selected, clear it before adding a real language
+                    const clearedPrev = prev.filter(lang => lang !== "None");
+
+                    // Toggle the actual language
+                    if (clearedPrev.includes(value)) {
+                        return clearedPrev.filter(lang => lang !== value);
+                    } else {
+                        return [...clearedPrev, value];
+                    }
                 }
             });
 
@@ -411,7 +420,8 @@ export function ChatContainer({
                     {
                         id: generateMessageId("assistant"),
                         role: "assistant",
-                        content: `You can get started here: ${data.finalResult?.recommendedPathUrl}`,
+                        content: "You can get started here:",
+                        url: data.finalResult?.recommendedPathUrl
                     },
                     {
                         id: generateMessageId("assistant"),
@@ -568,7 +578,8 @@ export function ChatContainer({
                         {
                             id: generateMessageId("assistant"),
                             role: "assistant",
-                            content: `You can get started here: ${data.finalResult?.recommendedPathUrl}`,
+                            content: "You can get started here:",
+                            url: data.finalResult?.recommendedPathUrl
                         },
                         {
                             id: generateMessageId("assistant"),
@@ -576,9 +587,9 @@ export function ChatContainer({
                             content: "Thank you for completing the onboarding process!",
                         },
                     ]);
-                    setInputDisabled(true)
-                    setIsComplete(true)
-                    setCurrentQuestionIndex(TOTAL_STEPS)
+                    setInputDisabled(true);
+                    setIsComplete(true);
+                    setCurrentQuestionIndex(TOTAL_STEPS);
                 }
                 // Handle next question
                 else if (data.nextQuestion) {
@@ -726,7 +737,8 @@ export function ChatContainer({
                     {
                         id: generateMessageId("assistant"),
                         role: "assistant",
-                        content: `You can get started here: ${data.finalResult?.recommendedPathUrl}`,
+                        content: "You can get started here:",
+                        url: data.finalResult?.recommendedPathUrl
                     },
                     {
                         id: generateMessageId("assistant"),

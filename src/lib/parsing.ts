@@ -18,7 +18,7 @@ export function parseLanguages(
     currentData.other_languages = null;
 
     let selectedLanguages: string[] = [];
-    const validLanguages = ["Rust", "JavaScript", "Python", "Go", "Solidity", "TypeScript", "Java", "C#"]; // Expected button values
+    const validLanguages = ["Rust", "JavaScript", "Python", "Go", "Solidity", "TypeScript", "Java", "C#", "None"]; // Expected button values
 
     if (Array.isArray(rawResponse)) {
         // If multiple buttons selected (frontend sends array of values)
