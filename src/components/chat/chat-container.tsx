@@ -887,7 +887,7 @@ export function ChatContainer({
 
     return (
         <div
-            className={`flex flex-col h-[600px] max-h-[80vh] bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 ${className}`}
+            className={`flex flex-col h-full bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 ${className}`}
         >
             <ChatHeader title={title} subtitle={subtitle} currentStep={currentQuestionIndex || 0} totalSteps={TOTAL_STEPS} />
 

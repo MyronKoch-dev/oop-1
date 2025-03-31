@@ -11,15 +11,13 @@ import { ChatContainer } from '@/components/chat/chat-container';
 // The main functional component for the home page
 export default function HomePage() {
   return (
-    // Main container for the page, centers content
-    <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-12 lg:p-24 bg-gray-100 dark:bg-gray-950">
-      {/* Outer container to constrain chat width and add styling */}
-      <div className="w-full max-w-3xl border rounded-xl shadow-2xl bg-white dark:bg-gray-900 overflow-hidden">
-        {/* Render the ChatContainer component */}
+    // Main container for the page, centers content and takes full height
+    <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-6 lg:p-8 bg-gray-100 dark:bg-gray-950">
+      {/* Outer container takes more vertical space with height constraints removed */}
+      <div className="w-full max-w-3xl h-[85vh] border rounded-xl shadow-2xl bg-white dark:bg-gray-900 overflow-hidden">
+        {/* Render the ChatContainer component with full height */}
         <ChatContainer
-        // You can optionally pass props here if ChatContainer accepts them
-        // title="Andromeda Onboarding"
-        // subtitle="Let's get you started"
+          className="h-full" // Make chat container take full height of parent
         />
       </div>
       {/* You could add a small footer outside the chat container if needed */}
