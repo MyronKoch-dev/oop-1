@@ -141,13 +141,6 @@
   border-radius: 6px;
 }
 
-/* Make main content transition smoothly when sidebar opens/closes */
-@media (max-width: 1024px) {
-  main {
-    transition: padding-left 0.3s ease-in-out;
-  }
-}
-
 /* Overlay for mobile sidebar */
 .sidebar-overlay {
   @apply fixed inset-0 bg-black/50 z-30 transition-opacity;
