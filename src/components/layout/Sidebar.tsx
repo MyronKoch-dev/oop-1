@@ -225,8 +225,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                     <hr className="my-4 border-[#333333]" />
 
                     {/* Action items section title */}
-                    <h3 className="px-4 py-2 text-sm font-semibold text-gray-400 uppercase tracking-wider">
-                        Choose Your Path
+                    <h3 className="px-4 py-2 text-sm font-semibold text-amber-500 uppercase tracking-wider flex items-center gap-2">
+                        <span>🧭</span> Choose Your Path
                     </h3>
 
                     {/* Action items as buttons */}
@@ -250,8 +250,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                     <hr className="my-4 border-[#333333]" />
 
                     {/* Agent bots section title */}
-                    <h3 className="px-4 py-2 text-sm font-semibold text-gray-400 uppercase tracking-wider">
-                        Choose Your Agent
+                    <h3 className="px-4 py-2 text-sm font-semibold text-amber-500 uppercase tracking-wider flex items-center gap-2">
+                        <span>🤖</span> Choose Your Agent
                     </h3>
 
                     {/* Agent bots as buttons */}

@@ -131,7 +131,7 @@ export function ChatMessages({
                         >
                             {/* Avatar for user/bot */}
                             <Avatar
-                                className={`h-8 w-8 ${message.role === "user" ? "bg-blue-500 dark:bg-blue-500" : "bg-[#2a2a2a] dark:bg-[#2a2a2a]" // Different background colors
+                                className={`h-8 w-8 flex items-center justify-center ${message.role === "user" ? "bg-blue-500 dark:bg-blue-500" : "bg-[#2a2a2a] dark:bg-[#2a2a2a]" // Different background colors
                                     }`}
                             >
                                 {message.role === "user" ? (
