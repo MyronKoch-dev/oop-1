@@ -1,4 +1,7 @@
 // src/app/api/onboarding/message/route.test.ts
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-require-imports */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextRequest, NextResponse } from 'next/server';
 import { POST, GET } from './route'; // Import POST and GET handlers
 import { SessionState, OnboardingData } from '@/lib/types'; // Import types
@@ -24,7 +27,6 @@ jest.mock('@/lib/questionnaire', () => ({
 jest.mock('@/lib/parsing', () => ({
   validateInput: jest.fn(),
   // Mock individual parsers just as empty functions for simplicity in happy path
-  parseHandles: jest.fn(),
   parseLanguages: jest.fn(),
   parseBlockchain: jest.fn(),
   parseAI: jest.fn(),
@@ -42,15 +44,15 @@ jest.mock('@/lib/supabase', () => ({
 
 // Import the mocked functions AFTER jest.mock calls
 import {
-    createSession,
-    getSession,
-    updateSession,
-    deleteSession
+  createSession,
+  getSession,
+  updateSession,
+  deleteSession
 } from '@/lib/session';
 import {
-    getQuestionDetails,
-    isFinalQuestion,
-    TOTAL_QUESTIONS as MOCKED_TOTAL_QUESTIONS // Alias to avoid conflict if needed
+  getQuestionDetails,
+  isFinalQuestion,
+  TOTAL_QUESTIONS as MOCKED_TOTAL_QUESTIONS // Alias to avoid conflict if needed
 } from '@/lib/questionnaire';
 import { validateInput } from '@/lib/parsing';
 import { determinePath } from '@/lib/pathDetermination';
@@ -96,8 +98,8 @@ describe('/api/onboarding/message API Route', () => {
     mockIsFinalQuestion.mockImplementation((index: number) => index >= (MOCKED_TOTAL_QUESTIONS as number)); // Use the potentially overridden total
     // Default TOTAL_QUESTIONS to avoid test failures if not overridden
     Object.defineProperty(require('@/lib/questionnaire'), 'TOTAL_QUESTIONS', {
-        value: 10, // Default to a reasonable number
-        writable: true
+      value: 14, // Default to match the new total questions
+      writable: true
     });
   });
 
@@ -106,25 +108,27 @@ describe('/api/onboarding/message API Route', () => {
   test('should successfully complete the onboarding flow (Happy Path)', async () => {
     // --- Test Configuration ---
     const MOCK_SESSION_ID = 'happy-path-session-123';
-    const TOTAL_QUESTIONS_FOR_TEST = 3;
+    const TOTAL_QUESTIONS_FOR_TEST = 5;
     // Override the mocked TOTAL_QUESTIONS for this test suite
     Object.defineProperty(require('@/lib/questionnaire'), 'TOTAL_QUESTIONS', {
-        value: TOTAL_QUESTIONS_FOR_TEST,
-        writable: true // Allow overriding
+      value: TOTAL_QUESTIONS_FOR_TEST,
+      writable: true // Allow overriding
     });
 
     const MOCK_QUESTIONS = [
       { index: 0, text: 'Q0: Name?', inputMode: 'text', validationHint: 'text', options: [], conditionalTextInputLabel: null, conditionalTriggerValue: null },
       { index: 1, text: 'Q1: Email?', inputMode: 'text', validationHint: 'email', options: [], conditionalTextInputLabel: null, conditionalTriggerValue: null },
-      { index: 2, text: 'Q2: Done?', inputMode: 'buttons', validationHint: 'buttons', options: [{label: 'Yes', value: 'yes'}], conditionalTextInputLabel: null, conditionalTriggerValue: null },
+      { index: 2, text: 'Q2: GitHub?', inputMode: 'text', validationHint: 'github_username', options: [], conditionalTextInputLabel: null, conditionalTriggerValue: null },
+      { index: 3, text: 'Q3: Telegram?', inputMode: 'text', validationHint: 'telegram_handle', options: [], conditionalTextInputLabel: null, conditionalTriggerValue: null },
+      { index: 4, text: 'Q4: X/Twitter?', inputMode: 'text', validationHint: 'x_handle', options: [], conditionalTextInputLabel: null, conditionalTriggerValue: null },
     ];
     const MOCK_FINAL_PATH = { recommendedPath: 'Happy Path Result', recommendedPathUrl: 'http://happy.path' };
 
     let currentSessionState: SessionState = {
-        questionIndex: 0,
-        accumulatedData: {},
-        repromptedIndex: null,
-        lastInteractionTimestamp: Date.now(),
+      questionIndex: 0,
+      accumulatedData: {},
+      repromptedIndex: null,
+      lastInteractionTimestamp: Date.now(),
     };
 
     // Mock implementations specific to this test flow
@@ -193,23 +197,57 @@ describe('/api/onboarding/message API Route', () => {
     expect(body.sessionId).toBe(MOCK_SESSION_ID);
     expect(body.currentQuestionIndex).toBe(2);
     expect(body.nextQuestion).toBe(MOCK_QUESTIONS[2].text);
-    expect(body.inputMode).toBe('buttons');
-    expect(body.options).toEqual(MOCK_QUESTIONS[2].options);
+    expect(body.inputMode).toBe('text');
     expect(body.error).toBeNull();
     expect(body.isFinalQuestion).toBe(false); // isFinalQuestion checks the *next* step
     expect(currentSessionState.questionIndex).toBe(2); // State advanced
     expect(currentSessionState.accumulatedData.email).toBe('test@example.com');
 
-    // --- Simulation Step 4: Answer Q2 (Final Question) ---
-    console.log('[Test Step 4] Answering Q2 (Final)...');
-    request = createMockRequest({ sessionId: MOCK_SESSION_ID, response: { buttonValue: 'yes' } });
+    // --- Simulation Step 4: Answer Q2 (GitHub) ---
+    console.log('[Test Step 4] Answering Q2 (GitHub)...');
+    request = createMockRequest({ sessionId: MOCK_SESSION_ID, response: 'testuser123' });
     response = await POST(request);
     body = await response.json();
 
     expect(response.status).toBe(200);
-    // Session is deleted, not updated, on final step
-    expect(mockUpdateSession).toHaveBeenCalledTimes(2); // Should NOT have been called again
+    expect(mockUpdateSession).toHaveBeenCalledTimes(3);
     expect(mockGetSession).toHaveBeenCalledTimes(3);
+    expect(body.sessionId).toBe(MOCK_SESSION_ID);
+    expect(body.currentQuestionIndex).toBe(3);
+    expect(body.nextQuestion).toBe(MOCK_QUESTIONS[3].text);
+    expect(body.inputMode).toBe('text');
+    expect(body.error).toBeNull();
+    expect(body.isFinalQuestion).toBe(false);
+    expect(currentSessionState.questionIndex).toBe(3); // State advanced
+    expect(currentSessionState.accumulatedData.github).toBe('testuser123');
+
+    // --- Simulation Step 5: Answer Q3 (Telegram) ---
+    console.log('[Test Step 5] Answering Q3 (Telegram)...');
+    request = createMockRequest({ sessionId: MOCK_SESSION_ID, response: '@telegramuser' });
+    response = await POST(request);
+    body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(mockUpdateSession).toHaveBeenCalledTimes(4);
+    expect(mockGetSession).toHaveBeenCalledTimes(4);
+    expect(body.sessionId).toBe(MOCK_SESSION_ID);
+    expect(body.currentQuestionIndex).toBe(4);
+    expect(body.nextQuestion).toBe(MOCK_QUESTIONS[4].text);
+    expect(body.inputMode).toBe('text');
+    expect(body.error).toBeNull();
+    expect(body.isFinalQuestion).toBe(false);
+    expect(currentSessionState.questionIndex).toBe(4); // State advanced
+    expect(currentSessionState.accumulatedData.telegram).toBe('@telegramuser');
+
+    // --- Simulation Step 6: Answer Q4 (X/Twitter) ---
+    console.log('[Test Step 6] Answering Q4 (X/Twitter)...');
+    request = createMockRequest({ sessionId: MOCK_SESSION_ID, response: '@twitteruser' });
+    response = await POST(request);
+    body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(mockUpdateSession).toHaveBeenCalledTimes(5);
+    expect(mockGetSession).toHaveBeenCalledTimes(5);
     expect(body.sessionId).toBe(MOCK_SESSION_ID);
     expect(body.currentQuestionIndex).toBe(TOTAL_QUESTIONS_FOR_TEST); // Index is now >= total
     expect(body.nextQuestion).toBeUndefined(); // No next question
@@ -221,18 +259,21 @@ describe('/api/onboarding/message API Route', () => {
 
     // Check that final steps were taken
     expect(mockDeterminePath).toHaveBeenCalledTimes(1);
-    // Check if the data passed to determinePath looks reasonable (has name, email, last answer)
+    // Check if the data passed to determinePath looks reasonable (has name, email, handles)
     expect(mockDeterminePath).toHaveBeenCalledWith(expect.objectContaining({
-        name: 'Test User',
-        email: 'test@example.com',
-        // ... other fields would be checked based on actual parsing logic if mocked less simply
+      name: 'Test User',
+      email: 'test@example.com',
+      github: 'testuser123',
+      telegram: '@telegramuser',
+      x: '@twitteruser'
+      // ... other fields would be checked based on actual parsing logic if mocked less simply
     }));
     expect(mockSaveOnboardingResponse).toHaveBeenCalledTimes(1);
     // Check if data passed to save includes the determined path
     expect(mockSaveOnboardingResponse).toHaveBeenCalledWith(expect.objectContaining({
-        recommendedPath: MOCK_FINAL_PATH.recommendedPath,
-        recommendedPathUrl: MOCK_FINAL_PATH.recommendedPathUrl,
-        email: 'test@example.com', // Ensure critical email is there
+      recommendedPath: MOCK_FINAL_PATH.recommendedPath,
+      recommendedPathUrl: MOCK_FINAL_PATH.recommendedPathUrl,
+      email: 'test@example.com', // Ensure critical email is there
     }));
     expect(mockDeleteSession).toHaveBeenCalledTimes(1);
     expect(mockDeleteSession).toHaveBeenCalledWith(MOCK_SESSION_ID);

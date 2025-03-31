@@ -37,18 +37,33 @@ const questions: QuestionDetail[] = [
         validationHint: 'email', // Signal for email validation
         rePromptMessage: "Please provide a valid email address.",
     },
-    // Index 2
+    // Index 2 (GitHub)
     {
         index: 2,
-        text: "Please provide your handles (optional). Use the format `Platform: handle`, separated by commas if multiple. Example: `Telegram: @myhandle, GitHub: MyGitHubUser, X: @MyTwitter`",
+        text: "What is your GitHub username? (Optional)",
         inputMode: 'text',
-        isOptional: true, // Handles are optional
-        validationHint: 'handles', // Signal for handle parsing
-        rePromptMessage: "Please use the format 'Platform: [handle]', e.g., 'Telegram: @myhandle'.",
+        isOptional: true,
+        validationHint: 'github_username'
     },
-    // Index 3 (Q4)
+    // Index 3 (Telegram)
     {
         index: 3,
+        text: "What is your Telegram handle? (Optional, include @)",
+        inputMode: 'text',
+        isOptional: true,
+        validationHint: 'telegram_handle'
+    },
+    // Index 4 (X/Twitter)
+    {
+        index: 4,
+        text: "What is your X/Twitter handle? (Optional, include @)",
+        inputMode: 'text',
+        isOptional: true,
+        validationHint: 'x_handle'
+    },
+    // Index 5 (Previously Q4 - Programming Languages)
+    {
+        index: 5,
         text: "Which programming languages are you most comfortable with?",
         inputMode: 'buttons', // Primarily buttons
         options: [
@@ -67,9 +82,9 @@ const questions: QuestionDetail[] = [
         isOptional: false, // Need some input
         validationHint: 'languages', // Signal for language parsing
     },
-    // Index 4 (Q5)
+    // Index 6 (Previously Q5 - Blockchain)
     {
-        index: 4,
+        index: 6,
         text: "Have you worked with blockchain platforms?",
         inputMode: 'conditionalText', // Buttons, with text if 'Yes'
         options: [
@@ -81,9 +96,9 @@ const questions: QuestionDetail[] = [
         conditionalTextInputLabel: "Specify platforms (e.g., Cosmos, Ethereum):",
         isOptional: false,
     },
-    // Index 5 (Q6)
+    // Index 7 (Previously Q6 - AI/ML)
     {
-        index: 5,
+        index: 7,
         text: "Do you have experience with AI/ML beyond ChatGPT?",
         inputMode: 'conditionalText', // Buttons, with text if 'Yes'
         options: [
@@ -94,9 +109,9 @@ const questions: QuestionDetail[] = [
         conditionalTextInputLabel: "Specify areas/projects (e.g., NLP, CV Ops):",
         isOptional: false,
     },
-    // Index 6 (Q7)
+    // Index 8 (Previously Q7 - Andromeda tools)
     {
-        index: 6,
+        index: 8,
         text: "How familiar are you with Andromeda's tools?",
         inputMode: 'buttons',
         options: [
@@ -107,9 +122,9 @@ const questions: QuestionDetail[] = [
         ],
         isOptional: false,
     },
-    // Index 7 (Q8)
+    // Index 9 (Previously Q8 - Technical expertise)
     {
-        index: 7,
+        index: 9,
         text: "How would you rate your technical expertise?",
         inputMode: 'buttons',
         options: [
@@ -119,9 +134,9 @@ const questions: QuestionDetail[] = [
         ],
         isOptional: false,
     },
-    // Index 8 (Q9)
+    // Index 10 (Previously Q9 - Hackathon)
     {
-        index: 8,
+        index: 10,
         text: "Have you ever participated in a hackathon?",
         inputMode: 'buttons',
         options: [
@@ -131,9 +146,9 @@ const questions: QuestionDetail[] = [
         ],
         isOptional: false,
     },
-    // Index 9 (Q10)
+    // Index 11 (Previously Q10 - Main goal)
     {
-        index: 9,
+        index: 11,
         text: "What's your main goal here?",
         inputMode: 'buttons',
         options: [
@@ -146,16 +161,16 @@ const questions: QuestionDetail[] = [
         ],
         isOptional: false,
     },
-    // Index 10 (Q11)
+    // Index 12 (Previously Q11 - Portfolio)
     {
-        index: 10,
+        index: 12,
         text: "Got a portfolio or project links to showcase? (Optional, but helpful!)",
         inputMode: 'text',
         isOptional: true,
     },
-    // Index 11 (Q12)
+    // Index 13 (Previously Q12 - Additional skills)
     {
-        index: 11,
+        index: 13,
         text: "Anything else we should know about your skills or interests? (Optional)",
         inputMode: 'text',
         isOptional: true,

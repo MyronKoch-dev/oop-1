@@ -7,7 +7,6 @@ import { createSession, getSession, updateSession, deleteSession } from '@/lib/s
 import { getQuestionDetails, TOTAL_QUESTIONS, isFinalQuestion, QuestionDetail } from '@/lib/questionnaire'; // Assuming QuestionDetail is exported
 import {
     validateInput,
-    parseHandles,
     parseLanguages,
     parseBlockchain,
     parseAI
@@ -188,16 +187,47 @@ export async function POST(request: NextRequest) {
                     }
                     // No assignment needed on first failure (reprompt)
                     break;
-                case 2: parseHandles(typeof responseToParse === 'string' ? responseToParse : null, dataToUpdate); break;
-                case 3: parseLanguages(responseToParse, conditionalText, dataToUpdate); break;
-                case 4: parseBlockchain(responseToParse as { buttonValue: string } | null, conditionalText, dataToUpdate); break;
-                case 5: parseAI(responseToParse as { buttonValue: string } | null, conditionalText, dataToUpdate); break;
-                case 6: dataToUpdate.tools_familiarity = (responseToParse as { buttonValue: string })?.buttonValue ?? null; break;
-                case 7: dataToUpdate.experience_level = (responseToParse as { buttonValue: string })?.buttonValue ?? null; break;
-                case 8: dataToUpdate.hackathon = (responseToParse as { buttonValue: string })?.buttonValue ?? null; break;
-                case 9: dataToUpdate.goal = (responseToParse as { buttonValue: string })?.buttonValue ?? null; break;
-                case 10: dataToUpdate.portfolio = typeof responseToParse === 'string' ? responseToParse.trim() || null : null; break;
-                case 11: dataToUpdate.additional_skills = typeof responseToParse === 'string' ? responseToParse.trim() || null : null; break;
+                case 2: // GitHub username
+                    if (typeof responseToParse === 'string') {
+                        const githubUsername = responseToParse.trim();
+                        dataToUpdate.github = githubUsername ? githubUsername.replace(/^@/, '') : null;
+                    } else {
+                        dataToUpdate.github = null;
+                    }
+                    break;
+                case 3: // Telegram handle
+                    if (typeof responseToParse === 'string') {
+                        const telegramHandle = responseToParse.trim();
+                        if (telegramHandle) {
+                            dataToUpdate.telegram = telegramHandle.startsWith('@') ? telegramHandle : `@${telegramHandle}`;
+                        } else {
+                            dataToUpdate.telegram = null;
+                        }
+                    } else {
+                        dataToUpdate.telegram = null;
+                    }
+                    break;
+                case 4: // X/Twitter handle
+                    if (typeof responseToParse === 'string') {
+                        const xHandle = responseToParse.trim();
+                        if (xHandle) {
+                            dataToUpdate.x = xHandle.startsWith('@') ? xHandle : `@${xHandle}`;
+                        } else {
+                            dataToUpdate.x = null;
+                        }
+                    } else {
+                        dataToUpdate.x = null;
+                    }
+                    break;
+                case 5: parseLanguages(responseToParse, conditionalText, dataToUpdate); break;
+                case 6: parseBlockchain(responseToParse as { buttonValue: string } | null, conditionalText, dataToUpdate); break;
+                case 7: parseAI(responseToParse as { buttonValue: string } | null, conditionalText, dataToUpdate); break;
+                case 8: dataToUpdate.tools_familiarity = (responseToParse as { buttonValue: string })?.buttonValue ?? null; break;
+                case 9: dataToUpdate.experience_level = (responseToParse as { buttonValue: string })?.buttonValue ?? null; break;
+                case 10: dataToUpdate.hackathon = (responseToParse as { buttonValue: string })?.buttonValue ?? null; break;
+                case 11: dataToUpdate.goal = (responseToParse as { buttonValue: string })?.buttonValue ?? null; break;
+                case 12: dataToUpdate.portfolio = typeof responseToParse === 'string' ? responseToParse.trim() || null : null; break;
+                case 13: dataToUpdate.additional_skills = typeof responseToParse === 'string' ? responseToParse.trim() || null : null; break;
                 default: console.warn(`[Session: ${currentSessionId}] No parsing/storing logic defined for question index ${currentQuestionIndex}`);
             }
 

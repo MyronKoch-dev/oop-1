@@ -32,7 +32,7 @@ interface ChatContainerProps {
 }
 
 // Define a constant for total steps at the top of the component (below the imports)
-const TOTAL_STEPS = 12;
+const TOTAL_STEPS = 14;
 
 export function ChatContainer({
     initialMessage = "Hi there! I'm here to help you get started. Let's begin with a few questions to personalize your experience.",
@@ -308,8 +308,8 @@ export function ChatContainer({
     const handleButtonSelect = async (value: string) => {
         if (isProcessing || !sessionId) return
 
-        // Special handling for Question 4 (Programming Languages) - enables multi-select
-        if (currentQuestionIndex === 3) {
+        // Special handling for Question 5 (Programming Languages) - enables multi-select
+        if (currentQuestionIndex === 5) {
             // Toggle selection: if already selected, remove it; otherwise, add it
             setMultiSelectedLanguages(prev => {
                 if (prev.includes(value)) {
@@ -912,7 +912,7 @@ export function ChatContainer({
                         currentQuestionIndex={currentQuestionIndex}
                         conditionalTextInputLabel={conditionalTextInputLabel}
                         className={conditionalTextVisible ? "max-h-[200px] overflow-y-auto" : ""}
-                        showConfirmButton={currentQuestionIndex === 3 && multiSelectedLanguages.length > 0}
+                        showConfirmButton={currentQuestionIndex === 5 && multiSelectedLanguages.length > 0}
                         onConfirmLanguages={handleConfirmLanguages}
                     />
                 )}

@@ -4,55 +4,7 @@
 import { OnboardingData } from "./types";
 
 /**
- * Parses the raw response for Q3 (handles) and updates the data object.
- * Uses case-insensitive regex and trims results.
- * @param rawResponse The user's text response. Can be null/undefined if invalid on second attempt or empty.
- * @param currentData The current accumulated data object (to be mutated).
- */
-export function parseHandles(rawResponse: string | undefined | null, currentData: Partial<OnboardingData>): void {
-    // Reset fields before parsing
-    currentData.telegram = null;
-    currentData.github = null;
-    currentData.x = null;
-
-    if (!rawResponse) {
-        console.log('Parsing Handles: No raw response provided, setting all to null.');
-        return; // Optional field, empty/null input is valid, results in null fields
-    }
-
-    // Define simpler patterns: Look for Platform Name + Separator + Handle OR @Handle + Separator + Platform Name
-    // Capture Group 1: Handle | Capture Group 2: Handle
-    const telegramRegex = /(?:Telegram(?:[\s:]+))([@\w.-]+)|([@\w.-]+)(?:\s+(?:on|for)\s+Telegram)/i;
-    const githubRegex = /(?:GitHub|Github)(?:[\s:]+)([\w.-]+)|([\w.-]+)(?:\s+(?:on|for)\s+(?:GitHub|Github))/i; // GitHub doesn't usually have @
-    const xTwitterRegex = /(?:X|Twitter)(?:[\s:]+)([@\w.-]+)|([@\w.-]+)(?:\s+(?:on|for)\s+(?:X|Twitter))/i;
-
-    const telegramMatch = rawResponse.match(telegramRegex);
-    const githubMatch = rawResponse.match(githubRegex);
-    const xMatch = rawResponse.match(xTwitterRegex);
-
-    // Use the captured group (either group 1 or 2 depending on which part matched)
-    const rawTele = telegramMatch ? (telegramMatch[1] || telegramMatch[2]) : null;
-    const rawGit = githubMatch ? (githubMatch[1] || githubMatch[2]) : null;
-    const rawX = xMatch ? (xMatch[1] || xMatch[2]) : null;
-
-    // Clean and assign
-    if (rawTele) {
-        currentData.telegram = rawTele.trim().replace(/[.,;]$/, '');
-        if (!currentData.telegram.startsWith('@')) currentData.telegram = '@' + currentData.telegram;
-    }
-    if (rawGit) {
-        currentData.github = rawGit.trim().replace(/[.,;]$/, '').replace(/^@/, ''); // Remove leading @
-    }
-    if (rawX) {
-        currentData.x = rawX.trim().replace(/[.,;]$/, '');
-        if (!currentData.x.startsWith('@')) currentData.x = '@' + currentData.x;
-    }
-
-    console.log('Parsed Handles (Simplified):', { t: currentData.telegram, g: currentData.github, x: currentData.x });
-}
-
-/**
- * Parses the response for Q4 (languages).
+ * Parses the response for Q5 (languages).
  * Handles button values (potentially as an array) and separate 'Other' text input.
  * @param rawResponse Response from main input (e.g., button values). Can be string[], { buttonValue: string }, string (less likely), null.
  * @param otherTextResponse Text specifically from the 'Other' input field.
@@ -110,7 +62,7 @@ export function parseLanguages(
 
 
 /**
- * Parses the response for Q5 (Blockchain Exp). Handles button value + conditional text.
+ * Parses the response for Q6 (Blockchain Exp). Handles button value + conditional text.
  * @param rawResponse Button value object ({ buttonValue: string }) or null if invalid/missing.
  * @param conditionalText Text input value if 'Yes' was selected.
  * @param currentData The current accumulated data object (to be mutated).
@@ -142,7 +94,7 @@ export function parseBlockchain(
 
 
 /**
- * Parses the response for Q6 (AI Exp). Handles button value + conditional text.
+ * Parses the response for Q7 (AI Exp). Handles button value + conditional text.
  * @param rawResponse Button value object ({ buttonValue: string }) or null if invalid/missing.
  * @param conditionalText Text input value if 'Yes' was selected.
  * @param currentData The current accumulated data object (to be mutated).
@@ -193,10 +145,28 @@ export function validateInput(response: unknown, validationHint: string | undefi
             if (typeof response !== 'string' || response.trim() === '') return false;
             // Basic regex - can be made stricter if needed
             return /.+@.+\..+/.test(response);
-        case 'handles':
-            // For handles (Q3), it's optional. Allow empty string, null, or undefined.
-            // Actual parsing success determines if data is extracted.
-            return true; // Basic validation passes if it's string/null/undefined
+        case 'github_username':
+            // GitHub usernames can contain alphanumeric characters and hyphens
+            // They cannot start with a hyphen and can be up to 39 characters long
+            // Since it's optional, allow empty string, null, or undefined
+            if (response === null || response === undefined || (typeof response === 'string' && response.trim() === '')) return true;
+            if (typeof response !== 'string') return false;
+            // Simple validation - alphanumeric and hyphens, no starting with hyphen
+            return /^[a-zA-Z0-9][a-zA-Z0-9-]*$/.test(response.trim());
+        case 'telegram_handle':
+            // Telegram handles start with @ and can contain alphanumeric characters and underscores
+            // Since it's optional, allow empty string, null, or undefined
+            if (response === null || response === undefined || (typeof response === 'string' && response.trim() === '')) return true;
+            if (typeof response !== 'string') return false;
+            // Accept with or without @ prefix, we'll add it later if needed
+            return /^(@?)[a-zA-Z0-9_]{5,32}$/.test(response.trim());
+        case 'x_handle':
+            // X/Twitter handles start with @ and can contain alphanumeric characters and underscores
+            // Since it's optional, allow empty string, null, or undefined
+            if (response === null || response === undefined || (typeof response === 'string' && response.trim() === '')) return true;
+            if (typeof response !== 'string') return false;
+            // Accept with or without @ prefix, we'll add it later if needed
+            return /^(@?)[a-zA-Z0-9_]{1,15}$/.test(response.trim());
         // Validation for button-based inputs usually just means *something* was selected,
         // which is implicitly handled by receiving the { buttonValue: ... } object.
         // Explicit value validation could be added here if needed.

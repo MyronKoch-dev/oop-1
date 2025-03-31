@@ -144,16 +144,16 @@ export function ChatMessages({
                                             // Determine if this message has the latest interactive options
                                             const isActiveMessage = message.id === latestInteractiveMessageId;
 
-                                            // Special handling for Question 4 (Languages)
-                                            const isLanguageQuestion = currentQuestionIndex === 3 && isActiveMessage;
+                                            // Special handling for Question 5 (Languages)
+                                            const isLanguageQuestion = currentQuestionIndex === 5 && isActiveMessage;
 
-                                            // For Q4, a button is "selected" if it's in the multiSelectedLanguages array
+                                            // For Q5, a button is "selected" if it's in the multiSelectedLanguages array
                                             const isSelected = isLanguageQuestion
                                                 ? multiSelectedLanguages.includes(option.value)
                                                 : selectedButtonValue === option.value;
 
                                             // Button disabled state depends on the question type
-                                            // For Q4 (multi-select), buttons remain enabled until submission
+                                            // For Q5 (multi-select), buttons remain enabled until submission
                                             // For other questions, disable all buttons once any is selected
                                             const isDisabled = isLanguageQuestion
                                                 ? false // Never disable for multi-select question
