@@ -35,7 +35,7 @@ interface ChatContainerProps {
 const TOTAL_STEPS = 14;
 
 export function ChatContainer({
-    initialMessage = "Hey, welcome to Andromeda! I'm here to help you get started. Let me ask you a few questions to figure out what's best for you in our community. Once I understand what you're looking for, I'll point you directly to the right spot. Hope you're ready to dive in!",
+    initialMessage = "HHey, welcome to Andromeda! 🪐 I'm here to help you get started. Let me ask you a few questions to figure out what's best for you in our community. 💫 Once I understand what you're looking for, I'll point you directly to the right spot. Hope you're ready to dive in! 🌠",
     title = "Onboarding Assistant",
     subtitle = "Answer a few questions to get started",
     className = "",
