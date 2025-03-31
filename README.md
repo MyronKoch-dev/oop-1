@@ -292,3 +292,5 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 *Consider adding a link to the Mermaid chart visualization of the onboarding flow if desired.*
 
 *Remember to replace placeholders like `[repository-url]`, `[your-openai-api-key]`, `[your-vercel-app-url]`, and the `PATH_URL_*` placeholders with your actual information before publishing.*
+
+---
