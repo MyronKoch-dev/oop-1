@@ -11,7 +11,12 @@ import {
     HelpCircle,
     X,
     Youtube,
-    ExternalLink
+    ExternalLink,
+    Briefcase,
+    Target,
+    Lightbulb,
+    BrainCircuit,
+    Award
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -89,6 +94,35 @@ const navItems: NavItem[] = [
     }
 ];
 
+// Action items for the bottom section
+const actionItems: NavItem[] = [
+    {
+        href: "https://github.com/andromedaprotocol/Contractor_bidding/issues",
+        label: "Contracts for Bid",
+        icon: <Briefcase className="w-5 h-5" />
+    },
+    {
+        href: "https://github.com/andromedaprotocol/hackerboard_tasks/issues",
+        label: "Hackerboard (Bounties)",
+        icon: <Target className="w-5 h-5" />
+    },
+    {
+        href: "https://github.com/andromedaprotocol/ado-database/issues/new/choose",
+        label: "Submit ADO/Feature Idea",
+        icon: <Lightbulb className="w-5 h-5" />
+    },
+    {
+        href: "https://github.com/andromedaprotocol/ai_initiatives/issues",
+        label: "AI Initiatives",
+        icon: <BrainCircuit className="w-5 h-5" />
+    },
+    {
+        href: "https://zealy.io/cw/andromedacommunity/questboard/ff856265-3649-4b5f-a41f-c19eadfaf2e0/36c50401-4e44-452a-9539-94b9f2451f3d",
+        label: "Ambassador Program",
+        icon: <Award className="w-5 h-5" />
+    }
+];
+
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
     // Close sidebar on ESC key press
     useEffect(() => {
@@ -151,6 +185,31 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                             <ExternalLink className="ml-auto w-4 h-4 opacity-50" />
                         </a>
                     ))}
+
+                    {/* Visual separator */}
+                    <hr className="my-4 border-[#333333]" />
+
+                    {/* Action items section title */}
+                    <h3 className="px-4 py-2 text-sm font-semibold text-gray-400 uppercase tracking-wider">
+                        Choose Your Path
+                    </h3>
+
+                    {/* Action items as buttons */}
+                    <div className="px-4 space-y-3 mt-2">
+                        {actionItems.map((item, index) => (
+                            <a
+                                key={`action-${index}`}
+                                href={item.href}
+                                className="block w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-[#2a2a2a] text-white rounded-md hover:bg-[#333333] transition-colors"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {item.icon}
+                                <span>{item.label}</span>
+                                <ExternalLink className="w-4 h-4 opacity-50 ml-auto" />
+                            </a>
+                        ))}
+                    </div>
                 </nav>
             </div>
         </>
