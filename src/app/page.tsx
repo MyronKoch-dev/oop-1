@@ -12,9 +12,9 @@ import { ChatContainer } from '@/components/chat/chat-container';
 export default function HomePage() {
   return (
     // Main container with dark theme colors matching Andromeda app
-    <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-6 lg:p-8 bg-[#0f0f0f] dark:bg-[#111111]">
+    <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-6 lg:p-8 bg-[#0f0f0f] dark:bg-[#111111] transition-all">
       {/* Outer container with dark theme and blue accents */}
-      <div className="w-full max-w-3xl h-[85vh] border border-[#333333] rounded-xl shadow-2xl bg-[#1a1a1a] dark:bg-[#1a1a1a] overflow-hidden">
+      <div className="w-full max-w-3xl mx-auto h-[85vh] border border-[#333333] rounded-xl shadow-2xl bg-[#1a1a1a] dark:bg-[#1a1a1a] overflow-hidden">
         {/* Render the ChatContainer component with full height and dark theme */}
         <ChatContainer
           className="h-full"
