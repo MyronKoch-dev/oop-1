@@ -49,6 +49,11 @@ const navItems: NavItem[] = [
         icon: <BookOpen className="w-5 h-5" />
     },
     {
+        href: "https://myronkoch-dev.github.io/AndrDocsBot/",
+        label: "Docs Bot",
+        icon: <Bot className="w-5 h-5" />
+    },
+    {
         href: "https://andromeda-testnet-faucet.vercel.app/",
         label: "ANDR Faucet",
         icon: <Sun className="w-5 h-5" />
@@ -92,11 +97,6 @@ const navItems: NavItem[] = [
         href: "https://docs.google.com/document/d/11VOKvuXkUryZ5p733af6h0Qgrg0bGl41E9i32QXgLos/edit?usp=sharing",
         label: "ADO Submission FAQ",
         icon: <HelpCircle className="w-5 h-5" />
-    },
-    {
-        href: "https://myronkoch-dev.github.io/AndrDocsBot/",
-        label: "Documentation Assistant",
-        icon: <Bot className="w-5 h-5" />
     }
 ];
 
