@@ -24,7 +24,7 @@ const questions: QuestionDetail[] = [
     // Index 0
     {
         index: 0,
-        text: "What's your full name?",
+        text: "What shall I call you?",
         inputMode: 'text',
         isOptional: false, // Assuming name is desired
     },
