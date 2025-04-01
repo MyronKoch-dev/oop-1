@@ -225,7 +225,7 @@ export function ChatContainer({
                     {
                         id: generateMessageId("assistant"),
                         role: "assistant",
-                        content: `Based on your responses, I recommend the "${data.finalResult?.recommendedPath}" path for you.`,
+                        content: `⭐⭐⭐Based on your responses, I recommend the "${data.finalResult?.recommendedPath}" path for you.⭐⭐⭐`,
                     },
                     {
                         id: generateMessageId("assistant"),
@@ -415,7 +415,7 @@ export function ChatContainer({
                     {
                         id: generateMessageId("assistant"),
                         role: "assistant",
-                        content: `Based on your responses, I recommend the "${data.finalResult?.recommendedPath}" path for you.`,
+                        content: `⭐⭐⭐Based on your responses, I recommend the "${data.finalResult?.recommendedPath}" path for you.⭐⭐⭐`,
                     },
                     {
                         id: generateMessageId("assistant"),
@@ -573,7 +573,7 @@ export function ChatContainer({
                         {
                             id: generateMessageId("assistant"),
                             role: "assistant",
-                            content: `Based on your responses, I recommend the "${data.finalResult?.recommendedPath}" path for you.`,
+                            content: `⭐⭐⭐Based on your responses, I recommend the "${data.finalResult?.recommendedPath}" path for you.⭐⭐⭐`,
                         },
                         {
                             id: generateMessageId("assistant"),
@@ -732,7 +732,7 @@ export function ChatContainer({
                     {
                         id: generateMessageId("assistant"),
                         role: "assistant",
-                        content: `Based on your responses, I recommend the "${data.finalResult?.recommendedPath}" path for you.`,
+                        content: `⭐⭐⭐Based on your responses, I recommend the "${data.finalResult?.recommendedPath}" path for you.⭐⭐⭐`,
                     },
                     {
                         id: generateMessageId("assistant"),
