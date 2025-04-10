@@ -39,8 +39,6 @@ interface ChatMessagesProps {
     highlightedButtonIndex?: number | null // Index of button to highlight (for keyboard shortcut feedback)
     multiSelectedLanguages?: string[] // Array of selected language values for Question 4
     currentQuestionIndex?: number | null // Current question index for context-specific behavior
-    selectedOption?: MessageOption | null;
-    onOptionClick?: (option: MessageOption) => void;
 }
 
 // Function to render message content with clickable links
@@ -99,8 +97,6 @@ export function ChatMessages({
     highlightedButtonIndex = null, // Default to null if not provided
     multiSelectedLanguages = [], // Default to empty array if not provided
     currentQuestionIndex = null, // Default to null if not provided
-    selectedOption = null,
-    onOptionClick = () => { },
 }: ChatMessagesProps) {
     // Internal ref used only if messagesEndRef is not provided by the parent
     const internalScrollRef = useRef<HTMLDivElement>(null);
@@ -123,37 +119,6 @@ export function ChatMessages({
 
         return () => clearTimeout(timeoutId);
     }, [messages, scrollRef]);
-
-    // Helper function to detect if a message is the "get started here" message
-    const isGetStartedMessage = (content: string): boolean => {
-        return content.toLowerCase().includes("you can get started here");
-    };
-
-    const renderOptionButton = (option: { label: string; value: string }, index: number) => {
-        const isSelected = option.value === selectedButtonValue;
-
-        // Determine if button should be disabled
-        const isDisabled = !!option.disabledReason;
-        const disabledClasses = isDisabled ? "opacity-50 cursor-not-allowed" : "";
-
-        // Highlighted button styling
-        const highlightClasses = option.highlight ? "border-amber-500" : "";
-
-        return (
-            <button
-                key={index}
-                disabled={isDisabled}
-                onClick={() => !isDisabled && onButtonClick(option.value)}
-                title={option.disabledReason || option.label}
-                className={`text-left h-auto py-1.5 ${isSelected
-                    ? "bg-[#1a2b4a] text-[#6bbbff]"
-                    : "bg-[#2a2a2a] dark:bg-[#2a2a2a] border-[#444444] dark:border-[#444444] text-white hover:bg-[#333333] hover:text-white"
-                    } ${disabledClasses} ${highlightClasses}`}
-            >
-                {option.label}
-            </button>
-        );
-    };
 
     return (
         // Use Shadcn ScrollArea for the main message list container with dark theme
