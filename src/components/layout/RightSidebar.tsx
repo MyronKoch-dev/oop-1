@@ -60,7 +60,7 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                                             Here You will connect with like-minded individuals and gain access to exclusive resources.
                                         </p>
                                         <a href="https://t.me/andromedaprotocol/3776"
-                                            className="launchpad-link mt-3 inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors gap-2"
+                                            className="launchpad-link mt-3 inline-flex items-center justify-center px-4 py-2 bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff] rounded-md transition-colors gap-2"
                                             target="_blank" rel="noopener noreferrer">
                                             Join Andromeda Dev Telegram
                                             <ExternalLink className="w-4 h-4" />
