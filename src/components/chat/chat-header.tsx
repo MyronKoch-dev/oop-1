@@ -9,7 +9,7 @@ interface ChatHeaderProps {
 }
 
 export function ChatHeader({
-    title,
+    title = "Chat",
     subtitle,
     currentStep = 0,
     totalSteps = 12, // Default to 12 steps for your questionnaire

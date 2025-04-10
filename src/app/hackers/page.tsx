@@ -26,9 +26,9 @@ export default async function HackersPage() {
 
     return (
         <main className="container mx-auto p-4 md:p-6 max-w-7xl min-h-screen bg-black text-white">
-            <div className="mb-8">
+            <div className="mb-8 text-center">
                 <h1 className="text-3xl font-bold text-white mb-2">HackerBoard Bounties</h1>
-                <p className="text-gray-400">
+                <p className="text-gray-400 max-w-3xl mx-auto">
                     Browse open bounties and hacking challenges with Andromeda Protocol.
                     These are tasks that reward successful completion with bounties.
                 </p>
@@ -43,8 +43,8 @@ export default async function HackersPage() {
                             ))}
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center py-12 px-4 bg-[#1a1a1a] rounded-lg border border-[#333333]">
-                            <h3 className="text-xl font-medium text-white mb-2">No Open Bounties Available</h3>
+                        <div className="flex flex-col items-center justify-center py-12 px-4 bg-[#1a1a1a] rounded-lg border border-[#333333] max-w-3xl mx-auto">
+                            <h3 className="text-xl font-medium text-white mb-2 text-center">No Open Bounties Available</h3>
                             <p className="text-gray-400 text-center max-w-md">
                                 There are currently no open bounties available. Please check back later or
                                 explore other opportunities in the Andromeda ecosystem.
@@ -54,7 +54,7 @@ export default async function HackersPage() {
                 </Suspense>
             </ErrorBoundary>
 
-            <div className="mt-10 pt-6 border-t border-[#333333] text-sm text-gray-500">
+            <div className="mt-10 pt-6 border-t border-[#333333] text-sm text-gray-500 text-center max-w-3xl mx-auto">
                 <p>
                     Data sourced directly from the{' '}
                     <a

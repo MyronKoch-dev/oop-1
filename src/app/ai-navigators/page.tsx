@@ -40,18 +40,18 @@ export default async function AINavigatorsPage() {
 
     return (
         <main className="container mx-auto p-4 md:p-6 max-w-7xl min-h-screen bg-black text-white">
-            <div className="mb-8">
+            <div className="mb-8 text-center">
                 <h1 className="text-3xl font-bold text-white mb-2">AI Initiatives</h1>
-                <p className="text-gray-400">
+                <p className="text-gray-400 max-w-3xl mx-auto">
                     Discover and contribute to AI-focused projects and bounties within the Andromeda Protocol ecosystem.
                     Join the AI revolution in the Andromeda ecosystem.
                 </p>
             </div>
 
             {fetchError && (
-                <div className="p-4 bg-red-900/30 border border-red-700 rounded-md text-red-400 mb-6">
-                    <p>Error loading initiatives: {fetchError}</p>
-                    <p className="text-sm mt-2">Please try again later or check the repository directly.</p>
+                <div className="p-4 bg-red-900/30 border border-red-700 rounded-md text-red-400 mb-6 max-w-3xl mx-auto">
+                    <p className="text-center">Error loading initiatives: {fetchError}</p>
+                    <p className="text-sm mt-2 text-center">Please try again later or check the repository directly.</p>
                 </div>
             )}
 
@@ -77,7 +77,7 @@ export default async function AINavigatorsPage() {
                 </Suspense>
             </ErrorBoundary>
 
-            <div className="mt-10 pt-6 border-t border-[#333333] text-sm text-gray-500">
+            <div className="mt-10 pt-6 border-t border-[#333333] text-sm text-gray-500 text-center max-w-3xl mx-auto">
                 <p>
                     Data sourced directly from the{' '}
                     <a

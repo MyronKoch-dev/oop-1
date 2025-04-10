@@ -42,7 +42,7 @@ export default function HomePage() {
     <main className="flex min-h-screen flex-col items-start justify-start p-4 md:p-6 lg:p-8 bg-black transition-all pt-6">
       {/* Andromeda logo and title above the chat - only show when sidebar is collapsed */}
       {!isSidebarVisible && (
-        <div className="w-full max-w-3xl mx-auto mb-4 flex flex-col items-center">
+        <div className="w-full max-w-3xl mx-auto mb-4 flex flex-col items-center text-center">
           <img
             src="https://avatars.githubusercontent.com/u/86694044?s=200&v=4"
             width="70"

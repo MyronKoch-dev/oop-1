@@ -183,7 +183,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     const [focusedAgentIndex, setFocusedAgentIndex] = useState<number | null>(null);
 
     // Handle keyboard navigation for agent bots
-    const handleAgentKeyDown = (e: React.KeyboardEvent, index: number) => {
+    const handleAgentKeyDown = (e: React.KeyboardEvent) => {
         switch (e.key) {
             case "ArrowDown":
                 e.preventDefault();
@@ -328,7 +328,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                                 aria-disabled="true"
                                 tabIndex={0}
                                 ref={(el) => { agentRefs.current[index] = el; }}
-                                onKeyDown={(e) => handleAgentKeyDown(e, index)}
+                                onKeyDown={(e) => handleAgentKeyDown(e)}
                                 onFocus={() => setFocusedAgentIndex(index)}
                             >
                                 {item.icon}
