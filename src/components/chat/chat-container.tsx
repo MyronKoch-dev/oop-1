@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
 import { ChatHeader } from "./chat-header"
 import { ChatMessages, type ChatMessage } from "./chat-messages"
 import { ChatInput, type InputMode } from "./chat-input"
@@ -306,7 +306,7 @@ export function ChatContainer({
         }
     }
 
-    const handleButtonSelect = async (value: string) => {
+    const handleButtonSelect = useCallback(async (value: string) => {
         if (isProcessing || !sessionId) return
 
         // Special handling for Question 5 (Programming Languages) - enables multi-select
@@ -495,7 +495,14 @@ export function ChatContainer({
                 }, 100)
             }
         }
-    }
+    }, [
+        isProcessing, sessionId, currentQuestionIndex, setMultiSelectedLanguages,
+        setSelectedButtonValue, inputMode, conditionalTriggerValue, setConditionalTextVisible,
+        setShowConditionalInput, setMessages, setIsProcessing, setInputDisabled,
+        conditionalTextVisible, conditionalText, setCurrentQuestionIndex, setInputMode,
+        setConditionalText, setConditionalTriggerValue, setConditionalTextInputLabel,
+        isComplete, setSessionId // Added missing dependencies
+    ]);
 
     const handleConditionalTextSubmit = () => {
         if (!selectedButtonValue || !sessionId || isProcessing) return;
@@ -832,15 +839,15 @@ export function ChatContainer({
         .filter(msg => msg.role === 'assistant' && msg.options && msg.options.length > 0)
         .pop()?.id || null;
 
-    // Get the current options from the latest interactive message
-    const currentOptions = messages
-        .find(msg => msg.id === latestInteractiveMsgId)?.options || [];
-
     // State to track which button is being highlighted via keyboard
     const [highlightedButtonIndex, setHighlightedButtonIndex] = useState<number | null>(null);
 
     // Add keyboard shortcut handling for number keys 1-9
     useEffect(() => {
+        // Calculate currentOptions inside the effect
+        const currentOptions = messages
+            .find(msg => msg.id === latestInteractiveMsgId)?.options || [];
+
         // Only enable keyboard shortcuts when we have options to select
         // and the input isn't disabled
         if ((inputMode === 'buttons' || inputMode === 'conditionalText') &&
@@ -883,7 +890,7 @@ export function ChatContainer({
                 document.removeEventListener('keydown', handleKeyDown);
             };
         }
-    }, [inputMode, currentOptions, inputDisabled, isProcessing, handleButtonSelect]);
+    }, [messages, latestInteractiveMsgId, inputMode, inputDisabled, isProcessing, handleButtonSelect]);
 
     return (
         <div
