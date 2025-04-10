@@ -8,7 +8,6 @@ import {
     Sun,
     Layers,
     Command,
-    Clock,
     HelpCircle,
     X,
     Youtube,
@@ -35,26 +34,6 @@ interface SidebarProps {
 
 const navItems: NavItem[] = [
     {
-        href: "https://andromedaprotocol.io",
-        label: "Visit our website",
-        icon: <BookOpen className="w-5 h-5" />
-    },
-    {
-        href: "https://docs.andromedaprotocol.io/guides",
-        label: "Guides",
-        icon: <Book className="w-5 h-5" />
-    },
-    {
-        href: "https://docs.andromedaprotocol.io/andromeda",
-        label: "Developer Docs",
-        icon: <BookOpen className="w-5 h-5" />
-    },
-    {
-        href: "https://andromeda-testnet-faucet.vercel.app/",
-        label: "ANDR Faucet",
-        icon: <Sun className="w-5 h-5" />
-    },
-    {
         href: "https://app.testnet.andromedaprotocol.io/flex-builder",
         label: "Testnet ADO Builder",
         icon: <Layers className="w-5 h-5" />
@@ -75,9 +54,29 @@ const navItems: NavItem[] = [
         icon: <Layers className="w-5 h-5" />
     },
     {
-        href: "https://dashboard.andromedaprotocol.io/",
-        label: "Dashboard",
-        icon: <Clock className="w-5 h-5" />
+        href: "https://andromeda-testnet-faucet.vercel.app/",
+        label: "ANDR Faucet",
+        icon: <Sun className="w-5 h-5" />
+    },
+    {
+        href: "https://docs.andromedaprotocol.io/andromeda",
+        label: "Developer Docs",
+        icon: <BookOpen className="w-5 h-5" />
+    },
+    {
+        href: "https://docs.andromedaprotocol.io/guides",
+        label: "Guides",
+        icon: <Book className="w-5 h-5" />
+    },
+    {
+        href: "https://docs.google.com/document/d/11VOKvuXkUryZ5p733af6h0Qgrg0bGl41E9i32QXgLos/edit?usp=sharing",
+        label: "ADO Submission FAQ",
+        icon: <HelpCircle className="w-5 h-5" />
+    },
+    {
+        href: "https://andromedaprotocol.io",
+        label: "Visit our website",
+        icon: <BookOpen className="w-5 h-5" />
     },
     {
         href: "https://www.youtube.com/@AndromedaProtocol?sub_confirmation=1",
@@ -88,11 +87,6 @@ const navItems: NavItem[] = [
         href: "https://twitter.com/intent/follow?screen_name=AndromedaProt",
         label: "Follow us on X",
         icon: <X className="w-5 h-5" />
-    },
-    {
-        href: "https://docs.google.com/document/d/11VOKvuXkUryZ5p733af6h0Qgrg0bGl41E9i32QXgLos/edit?usp=sharing",
-        label: "ADO Submission FAQ",
-        icon: <HelpCircle className="w-5 h-5" />
     }
 ];
 
