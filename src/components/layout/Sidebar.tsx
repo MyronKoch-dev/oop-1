@@ -114,7 +114,7 @@ const actionItems: NavItem[] = [
         icon: <Lightbulb className="w-5 h-5" />
     },
     {
-        href: "https://github.com/andromedaprotocol/ai_initiatives/issues",
+        href: "/ai-navigators",
         label: "AI Initiatives",
         icon: <BrainCircuit className="w-5 h-5" />
     },
