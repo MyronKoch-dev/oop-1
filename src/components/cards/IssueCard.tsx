@@ -16,6 +16,28 @@ export function IssueCard({ issue }: IssueCardProps) {
         ? `${issue.body.substring(0, 150).trim()}...`
         : issue.body || 'No description provided';
 
+    // Function to clean up markdown syntax
+    const cleanMarkdown = (text: string) => {
+        return text
+            // Remove heading marks
+            .replace(/#{1,6}\s+/g, '')
+            // Replace lists with bullet points
+            .replace(/[-*]\s+/g, '• ')
+            // Replace checkboxes
+            .replace(/\[\s*[xX]\s*\]/g, '✅ ')
+            .replace(/\[\s*\]/g, '◻️ ')
+            // Replace double asterisks with nothing (bold)
+            .replace(/\*\*(.*?)\*\*/g, '$1')
+            // Replace single asterisks with nothing (italic)
+            .replace(/\*(.*?)\*/g, '$1')
+            // Replace backticks
+            .replace(/`([^`]+)`/g, '$1')
+            // Replace multiple new lines with just one
+            .replace(/\n{3,}/g, '\n\n');
+    };
+
+    const cleanedBody = cleanMarkdown(truncatedBody);
+
     return (
         <Card className="bg-[#1f1f1f] border-[#333333] shadow-md h-full flex flex-col">
             <CardHeader className="pb-2">
@@ -32,7 +54,7 @@ export function IssueCard({ issue }: IssueCardProps) {
                 </CardDescription>
             </CardHeader>
             <CardContent className="text-white/80 text-sm flex-grow">
-                <p className="whitespace-pre-line">{truncatedBody}</p>
+                <p className="whitespace-pre-line">{cleanedBody}</p>
 
                 {issue.labels.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-4">
@@ -53,7 +75,11 @@ export function IssueCard({ issue }: IssueCardProps) {
                 )}
             </CardContent>
             <CardFooter className="pt-4 border-t border-[#333333]">
-                <Button variant="default" className="w-full bg-blue-600 hover:bg-blue-700" asChild>
+                <Button
+                    variant="default"
+                    className="w-full bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
+                    asChild
+                >
                     <a href={issue.html_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
                         <span>View Details on GitHub</span>
                         <ExternalLink className="h-4 w-4" />

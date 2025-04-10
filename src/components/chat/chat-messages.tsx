@@ -9,12 +9,21 @@ import { ScrollArea } from "@/components/ui/scroll-area" // Assuming Shadcn setu
 import { Bot, User, ExternalLink } from "lucide-react" // Ensure lucide-react is installed
 import React from "react"
 
+// Interface for a message option/button
+interface MessageOption {
+    id?: string;
+    label: string;
+    value: string;
+    disabledReason?: string;
+    highlight?: boolean;
+}
+
 // Defines the structure for a single message in the chat history
 export interface ChatMessage {
     id: string // Unique ID for React keys
     role: "user" | "assistant" | "system" // Added system for errors/info
     content: string
-    options?: Array<{ label: string; value: string }> // Optional buttons for assistant messages
+    options?: MessageOption[] // Optional buttons for assistant messages
     isLoading?: boolean // Flag for loading state (e.g., "Thinking...")
     url?: string // URL to be displayed as a clickable link
 }
@@ -30,49 +39,53 @@ interface ChatMessagesProps {
     highlightedButtonIndex?: number | null // Index of button to highlight (for keyboard shortcut feedback)
     multiSelectedLanguages?: string[] // Array of selected language values for Question 4
     currentQuestionIndex?: number | null // Current question index for context-specific behavior
+    selectedOption?: MessageOption | null;
+    onOptionClick?: (option: MessageOption) => void;
 }
 
-// Modify the renderMessageContent function to handle dark theme
+// Function to render message content with clickable links
 const renderMessageContent = (content: string) => {
-    // Improved URL regex pattern that handles most common URL formats
-    const urlPattern = /(https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g;
+    if (!content) return null;
 
-    // If no URLs found, return the content as is
-    if (!content.match(urlPattern)) {
-        return <p className="text-sm whitespace-pre-wrap">{content}</p>;
+    // Regular expression to match URLs
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    // If no URLs are found, just return the content
+    if (!content.match(urlRegex)) {
+        return <div className="whitespace-pre-line">{content}</div>;
     }
 
-    // Split the content by URLs
-    const parts = content.split(urlPattern);
-    // Match all URLs
-    const urls = content.match(urlPattern) || [];
+    // Split the content by URLs and map over the parts
+    const parts = content.split(urlRegex);
+    const matches = content.match(urlRegex) || [];
 
-    // Combine parts and URLs
     return (
-        <p className="text-sm whitespace-pre-wrap">
-            {parts.map((part, i) => {
-                // Check if this part is identical to the URL that immediately follows it
-                const isPartTheUrl = urls[i] && part.trim() === urls[i].trim();
-
-                return (
-                    <React.Fragment key={i}>
-                        {/* Only render the text part if it's NOT identical to the upcoming URL */}
-                        {!isPartTheUrl && part}
-
-                        {urls[i] && (
-                            <a
-                                href={urls[i]}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-blue-400 hover:text-blue-300 hover:underline"
-                            >
-                                {urls[i]}
-                            </a>
-                        )}
-                    </React.Fragment>
-                );
+        <div className="whitespace-pre-line">
+            {parts.map((part, index) => {
+                // For even indices, these are the text parts
+                if (index % 2 === 0) {
+                    return <span key={index}>{part}</span>;
+                }
+                // For odd indices, these should be URLs, but we need to check the matches array
+                const matchIndex = Math.floor(index / 2);
+                if (matchIndex < matches.length) {
+                    const url = matches[matchIndex];
+                    return (
+                        <a
+                            key={index}
+                            href={url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-400 hover:underline break-all"
+                        >
+                            {url}
+                        </a>
+                    );
+                }
+                // Fallback, though this should never happen
+                return <span key={index}>{part}</span>;
             })}
-        </p>
+        </div>
     );
 };
 
@@ -86,6 +99,8 @@ export function ChatMessages({
     highlightedButtonIndex = null, // Default to null if not provided
     multiSelectedLanguages = [], // Default to empty array if not provided
     currentQuestionIndex = null, // Default to null if not provided
+    selectedOption = null,
+    onOptionClick = () => { },
 }: ChatMessagesProps) {
     // Internal ref used only if messagesEndRef is not provided by the parent
     const internalScrollRef = useRef<HTMLDivElement>(null);
@@ -112,6 +127,32 @@ export function ChatMessages({
     // Helper function to detect if a message is the "get started here" message
     const isGetStartedMessage = (content: string): boolean => {
         return content.toLowerCase().includes("you can get started here");
+    };
+
+    const renderOptionButton = (option: { label: string; value: string }, index: number) => {
+        const isSelected = option.value === selectedButtonValue;
+
+        // Determine if button should be disabled
+        const isDisabled = !!option.disabledReason;
+        const disabledClasses = isDisabled ? "opacity-50 cursor-not-allowed" : "";
+
+        // Highlighted button styling
+        const highlightClasses = option.highlight ? "border-amber-500" : "";
+
+        return (
+            <button
+                key={index}
+                disabled={isDisabled}
+                onClick={() => !isDisabled && onButtonClick(option.value)}
+                title={option.disabledReason || option.label}
+                className={`text-left h-auto py-1.5 ${isSelected
+                    ? "bg-[#1a2b4a] text-[#6bbbff]"
+                    : "bg-[#2a2a2a] dark:bg-[#2a2a2a] border-[#444444] dark:border-[#444444] text-white hover:bg-[#333333] hover:text-white"
+                    } ${disabledClasses} ${highlightClasses}`}
+            >
+                {option.label}
+            </button>
+        );
     };
 
     return (
@@ -143,7 +184,7 @@ export function ChatMessages({
                             {/* Container for message content and options */}
                             <div className="space-y-2">
                                 <Card
-                                    className={`p-3 ${message.role === "user" ? "bg-blue-600 dark:bg-blue-600 text-white" : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white" // Different card styles
+                                    className={`p-3 ${message.role === "user" ? "bg-[#1a2b4a] text-[#6bbbff]" : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white" // Different card styles
                                         } ${message.isLoading ? "animate-pulse" : ""}`} // Add pulse animation if loading
                                 >
                                     {/* Display message content with clickable links */}
@@ -151,24 +192,14 @@ export function ChatMessages({
 
                                     {/* Render URL as a button if present */}
                                     {message.url && (
-                                        <div className="mt-3">
-                                            <Button
-                                                variant="default"
-                                                className="w-full flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white"
-                                                asChild
+                                        <div className="mt-4">
+                                            <button
+                                                onClick={() => window.open(message.url, "_blank")}
+                                                className="w-full flex items-center justify-center gap-2 bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
                                             >
-                                                <a
-                                                    href={message.url}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    {isGetStartedMessage(message.content) ? (
-                                                        <>Get Started <ExternalLink className="h-4 w-4" /></>
-                                                    ) : (
-                                                        <>Visit Link <ExternalLink className="h-4 w-4" /></>
-                                                    )}
-                                                </a>
-                                            </Button>
+                                                <ExternalLink className="w-4 h-4" />
+                                                Get Started
+                                            </button>
                                         </div>
                                     )}
                                 </Card>
@@ -212,7 +243,7 @@ export function ChatMessages({
                                                     size="sm"
                                                     onClick={() => onButtonClick(option.value)}
                                                     disabled={isDisabled}
-                                                    className={`text-left h-auto py-1.5 ${isSelected ? "bg-blue-600 dark:bg-blue-600 text-white" : "bg-[#2a2a2a] dark:bg-[#2a2a2a] border-[#444444] dark:border-[#444444] text-white hover:bg-[#333333] hover:text-white"} ${disabledClasses} ${highlightClasses}`}
+                                                    className={`text-left h-auto py-1.5 ${isSelected ? "bg-[#1a2b4a] text-[#6bbbff]" : "bg-[#2a2a2a] dark:bg-[#2a2a2a] border-[#444444] dark:border-[#444444] text-white hover:bg-[#333333] hover:text-white"} ${disabledClasses} ${highlightClasses}`}
                                                 >
                                                     {option.label}
                                                 </Button>

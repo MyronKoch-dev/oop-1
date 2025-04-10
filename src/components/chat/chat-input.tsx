@@ -27,6 +27,10 @@ interface ChatInputProps {
     conditionalTextInputLabel?: string
     showConfirmButton?: boolean
     onConfirmLanguages?: () => void
+    confirmOptionText?: string
+    onSkipQuestion?: () => void
+    conditionalAction?: { skipText?: string }
+    isGenerating?: boolean
 }
 
 export function ChatInput({
@@ -47,7 +51,11 @@ export function ChatInput({
     currentQuestionIndex,
     conditionalTextInputLabel,
     showConfirmButton = false,
-    onConfirmLanguages
+    onConfirmLanguages,
+    confirmOptionText,
+    onSkipQuestion,
+    conditionalAction,
+    isGenerating
 }: ChatInputProps) {
     const [message, setMessage] = useState("")
     const inputRef = useRef<HTMLInputElement>(null)
@@ -173,14 +181,10 @@ export function ChatInput({
                     <Button
                         onClick={onConfirmLanguages}
                         disabled={disabled}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                        variant="default"
+                        className="w-full bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
                     >
-                        Confirm Language Selections
+                        {confirmOptionText || "Confirm Selection (or press Enter)"}
                     </Button>
-                    <p className="text-xs text-center text-gray-400 dark:text-gray-400 mt-1">
-                        Select multiple languages and click above to confirm or press Enter
-                    </p>
                 </div>
             )}
 
@@ -206,7 +210,7 @@ export function ChatInput({
                         <Button
                             onClick={handleConditionalSubmit}
                             disabled={disabled}
-                            className="w-full sticky bottom-0 bg-blue-600 hover:bg-blue-700 text-white"
+                            className="w-full sticky bottom-0 bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
                             type="submit"
                         >
                             Submit Details
@@ -228,15 +232,24 @@ export function ChatInput({
                     />
                     <Button
                         onClick={handleSendMessage}
-                        disabled={isMainInputDisabled || !message.trim()}
+                        disabled={!message.trim() || isGenerating}
                         size="icon"
                         type="submit"
-                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        className="bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
                     >
                         <Send className="h-4 w-4" />
                         <span className="sr-only">Send message</span>
                     </Button>
                 </div>
+            )}
+
+            {onSkipQuestion && (
+                <Button
+                    className="w-full sticky bottom-0 bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
+                    onClick={onSkipQuestion}
+                >
+                    {conditionalAction?.skipText || "Skip this Question"}
+                </Button>
             )}
         </div>
     )
