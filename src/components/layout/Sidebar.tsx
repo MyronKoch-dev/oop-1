@@ -17,7 +17,8 @@ import {
     Lightbulb,
     BrainCircuit,
     Award,
-    Bot
+    Bot,
+    Github
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -100,6 +101,11 @@ const navItems: NavItem[] = [
         href: "https://twitter.com/intent/follow?screen_name=AndromedaProt",
         label: "Follow us on X",
         icon: <X className="w-5 h-5" />
+    },
+    {
+        href: "https://github.com/andromedaprotocol",
+        label: "Follow us on GitHub",
+        icon: <Github className="w-5 h-5" />
     }
 ];
 
