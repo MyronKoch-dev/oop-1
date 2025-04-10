@@ -98,7 +98,7 @@ const navItems: NavItem[] = [
 // Action items for the bottom section
 const actionItems: NavItem[] = [
     {
-        href: "https://github.com/andromedaprotocol/Contractor_bidding/issues",
+        href: "/contractors",
         label: "Contracts for Bid",
         icon: <Briefcase className="w-5 h-5" />
     },
