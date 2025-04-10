@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import {
     Book,
@@ -169,13 +169,52 @@ const agentBots: NavItem[] = [
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
     // Close sidebar on ESC key press
     useEffect(() => {
-        const handleEsc = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') onClose();
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape" && isOpen) {
+                onClose();
+            }
         };
 
-        window.addEventListener('keydown', handleEsc);
-        return () => window.removeEventListener('keydown', handleEsc);
-    }, [onClose]);
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [isOpen, onClose]);
+
+    // State for tracking which agent bot is focused via keyboard
+    const [focusedAgentIndex, setFocusedAgentIndex] = useState<number | null>(null);
+
+    // Handle keyboard navigation for agent bots
+    const handleAgentKeyDown = (e: React.KeyboardEvent, index: number) => {
+        switch (e.key) {
+            case "ArrowDown":
+                e.preventDefault();
+                setFocusedAgentIndex(prev =>
+                    prev === null || prev >= agentBots.length - 1 ? 0 : prev + 1
+                );
+                break;
+            case "ArrowUp":
+                e.preventDefault();
+                setFocusedAgentIndex(prev =>
+                    prev === null || prev <= 0 ? agentBots.length - 1 : prev - 1
+                );
+                break;
+            case "Tab":
+                // Reset focus when tabbing away
+                setFocusedAgentIndex(null);
+                break;
+            default:
+                break;
+        }
+    };
+
+    // Set up refs for agent bot elements
+    const agentRefs = useRef<Array<HTMLDivElement | null>>([]);
+
+    // Focus the currently selected agent bot
+    useEffect(() => {
+        if (focusedAgentIndex !== null && agentRefs.current[focusedAgentIndex]) {
+            agentRefs.current[focusedAgentIndex]?.focus();
+        }
+    }, [focusedAgentIndex]);
 
     return (
         <>
@@ -283,11 +322,18 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                         {agentBots.map((item, index) => (
                             <div
                                 key={`agent-${index}`}
-                                className="relative block w-full inline-flex items-center justify-start gap-2 px-4 py-2 bg-[#202020] text-gray-500 rounded-md cursor-not-allowed opacity-60"
+                                className={`relative block w-full inline-flex items-center justify-start gap-2 px-4 py-2 bg-[#202020] text-gray-500 rounded-md cursor-not-allowed opacity-60 ${focusedAgentIndex === index ? 'ring-2 ring-blue-500' : ''}`}
+                                aria-label={`${item.label} - coming soon`}
+                                role="button"
+                                aria-disabled="true"
+                                tabIndex={0}
+                                ref={(el) => { agentRefs.current[index] = el; }}
+                                onKeyDown={(e) => handleAgentKeyDown(e, index)}
+                                onFocus={() => setFocusedAgentIndex(index)}
                             >
                                 {item.icon}
                                 <span>{item.label}</span>
-                                <span className="absolute top-0 right-0 bg-gray-700 text-gray-300 text-[10px] px-1.5 py-0.5 rounded-bl-md rounded-tr-md">
+                                <span className="absolute top-0 right-0 bg-gray-700 text-gray-300 text-[10px] px-1.5 py-0.5 rounded-bl-md rounded-tr-md" aria-hidden="true">
                                     Soon
                                 </span>
                             </div>

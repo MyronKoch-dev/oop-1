@@ -1,7 +1,10 @@
+import { Suspense } from "react";
 import { fetchGitHubIssues } from '@/lib/github';
 import { IssueCard } from '@/components/cards/IssueCard';
+import { IssueCardSkeleton } from '@/components/cards/IssueCardSkeleton';
 import { Metadata } from 'next';
 import { GitHubIssue } from "@/lib/github";
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 export const metadata: Metadata = {
     title: "AI Initiatives | Andromeda Protocol",
@@ -12,11 +15,23 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 export const revalidate = 600;
 
+// Skeleton grid for loading state
+function IssueCardsLoading() {
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array(6).fill(0).map((_, index) => (
+                <IssueCardSkeleton key={index} />
+            ))}
+        </div>
+    );
+}
+
 export default async function AINavigatorsPage() {
     let issues: GitHubIssue[] = [];
     let fetchError = null;
 
     try {
+        // Fetch OPEN issues for the AI initiatives repository
         issues = await fetchGitHubIssues('andromedaprotocol', 'ai_initiatives', 'open');
     } catch (error) {
         console.error("Failed to fetch AI initiatives issues:", error);
@@ -40,23 +55,27 @@ export default async function AINavigatorsPage() {
                 </div>
             )}
 
-            {!fetchError && issues.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {issues.map((issue) => (
-                        <IssueCard key={issue.id} issue={issue} />
-                    ))}
-                </div>
-            ) : (
-                !fetchError && (
-                    <div className="flex flex-col items-center justify-center py-12 px-4 bg-[#1a1a1a] rounded-lg border border-[#333333]">
-                        <h3 className="text-xl font-medium text-white mb-2">No Open AI Initiatives Available</h3>
-                        <p className="text-gray-400 text-center max-w-md">
-                            There are currently no open AI initiatives available. Please check back later or
-                            explore other opportunities in the Andromeda ecosystem.
-                        </p>
-                    </div>
-                )
-            )}
+            <ErrorBoundary>
+                <Suspense fallback={<IssueCardsLoading />}>
+                    {!fetchError && issues.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {issues.map((issue) => (
+                                <IssueCard key={issue.id} issue={issue} />
+                            ))}
+                        </div>
+                    ) : (
+                        !fetchError && (
+                            <div className="flex flex-col items-center justify-center py-12 px-4 bg-[#1a1a1a] rounded-lg border border-[#333333]">
+                                <h3 className="text-xl font-medium text-white mb-2">No Open AI Initiatives Available</h3>
+                                <p className="text-gray-400 text-center max-w-md">
+                                    There are currently no open AI initiatives available. Please check back later or
+                                    explore other opportunities in the Andromeda ecosystem.
+                                </p>
+                            </div>
+                        )
+                    )}
+                </Suspense>
+            </ErrorBoundary>
 
             <div className="mt-10 pt-6 border-t border-[#333333] text-sm text-gray-500">
                 <p>
