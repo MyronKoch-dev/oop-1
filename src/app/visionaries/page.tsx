@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function VisionariesPage() {
     return (
-        <main className="min-h-screen bg-[#0f0f0f] text-white">
+        <main className="min-h-screen bg-black text-white">
             <div className="container mx-auto p-4 md:p-6">
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold mb-4 text-white">Submit Your ADO or Feature Idea</h1>
