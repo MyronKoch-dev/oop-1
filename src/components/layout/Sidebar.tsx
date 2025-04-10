@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Link from "next/link";
 import {
     Book,
     BookOpen,
@@ -103,7 +104,7 @@ const actionItems: NavItem[] = [
         icon: <Briefcase className="w-5 h-5" />
     },
     {
-        href: "https://github.com/andromedaprotocol/hackerboard_tasks/issues",
+        href: "/hackers",
         label: "Hackerboard (Bounties)",
         icon: <Target className="w-5 h-5" />
     },
@@ -188,14 +189,16 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                 )}
             >
                 <div className="logo flex items-center gap-3 px-4 py-5 border-b border-[#333333]">
-                    <img
-                        src="https://avatars.githubusercontent.com/u/86694044?s=200&v=4"
-                        width="32"
-                        height="32"
-                        alt="Andromeda Logo"
-                        className="rounded-full"
-                    />
-                    <span className="text-white font-medium text-lg">Andromeda</span>
+                    <Link href="/" className="flex items-center gap-3">
+                        <img
+                            src="https://avatars.githubusercontent.com/u/86694044?s=200&v=4"
+                            width="32"
+                            height="32"
+                            alt="Andromeda Logo"
+                            className="rounded-full"
+                        />
+                        <span className="text-white font-medium text-lg">Andromeda</span>
+                    </Link>
 
                     {/* Close button - only visible on mobile */}
                     <button
@@ -235,13 +238,13 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                             <a
                                 key={`action-${index}`}
                                 href={item.href}
-                                className="block w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-[#2a2a2a] text-white rounded-md hover:bg-[#333333] transition-colors"
-                                target="_blank"
-                                rel="noopener noreferrer"
+                                className="block w-full inline-flex items-center justify-start gap-2 px-4 py-2 bg-[#2a2a2a] text-white rounded-md hover:bg-[#333333] transition-colors"
+                                target={item.href.startsWith('/') ? undefined : "_blank"}
+                                rel={item.href.startsWith('/') ? undefined : "noopener noreferrer"}
                             >
                                 {item.icon}
                                 <span>{item.label}</span>
-                                <ExternalLink className="w-4 h-4 opacity-50 ml-auto" />
+                                {!item.href.startsWith('/') && <ExternalLink className="w-4 h-4 opacity-50 ml-auto" />}
                             </a>
                         ))}
                     </div>
@@ -260,7 +263,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                             <a
                                 key={`agent-${index}`}
                                 href={item.href}
-                                className="block w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-[#202020] text-white rounded-md hover:bg-[#2d2d2d] transition-colors"
+                                className="block w-full inline-flex items-center justify-start gap-2 px-4 py-2 bg-[#202020] text-white rounded-md hover:bg-[#2d2d2d] transition-colors"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
