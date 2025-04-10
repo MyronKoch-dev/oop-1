@@ -254,17 +254,16 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                     {/* Agent bots as buttons */}
                     <div className="px-4 space-y-3 mt-2 mb-6">
                         {agentBots.map((item, index) => (
-                            <a
+                            <div
                                 key={`agent-${index}`}
-                                href={item.href}
-                                className="block w-full inline-flex items-center justify-start gap-2 px-4 py-2 bg-[#202020] text-white rounded-md hover:bg-[#2d2d2d] transition-colors"
-                                target="_blank"
-                                rel="noopener noreferrer"
+                                className="relative block w-full inline-flex items-center justify-start gap-2 px-4 py-2 bg-[#202020] text-gray-500 rounded-md cursor-not-allowed opacity-60"
                             >
                                 {item.icon}
                                 <span>{item.label}</span>
-                                <ExternalLink className="w-4 h-4 opacity-50 ml-auto" />
-                            </a>
+                                <span className="absolute top-0 right-0 bg-gray-700 text-gray-300 text-[10px] px-1.5 py-0.5 rounded-bl-md rounded-tr-md">
+                                    Soon
+                                </span>
+                            </div>
                         ))}
                     </div>
                 </nav>
