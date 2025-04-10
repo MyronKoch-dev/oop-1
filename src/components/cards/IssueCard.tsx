@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink } from "lucide-react";
+import { Github } from "lucide-react";
 import { GitHubIssue } from "@/lib/github";
 
 interface IssueCardProps {
@@ -81,8 +81,8 @@ export function IssueCard({ issue }: IssueCardProps) {
                     asChild
                 >
                     <a href={issue.html_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
-                        <span>View Details on GitHub</span>
-                        <ExternalLink className="h-4 w-4" />
+                        <span>View on GitHub</span>
+                        <Github className="h-4 w-4" />
                     </a>
                 </Button>
             </CardFooter>
