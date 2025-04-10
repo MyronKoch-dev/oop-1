@@ -25,6 +25,10 @@ interface NavItem {
     href: string;
     label: string;
     icon: React.ReactNode;
+    badge?: {
+        text: string;
+        description?: string;
+    };
 }
 
 interface SidebarProps {
@@ -42,6 +46,15 @@ const navItems: NavItem[] = [
         href: "https://app.testnet.andromedaprotocol.io/app-builder",
         label: "Testnet App Builder",
         icon: <Layers className="w-5 h-5" />
+    },
+    {
+        href: "#",
+        label: "Assistant",
+        icon: <Bot className="w-5 h-5" />,
+        badge: {
+            text: "Soon",
+            description: "Chrome Extension"
+        }
     },
     {
         href: "https://app.testnet.andromedaprotocol.io/cli",
@@ -208,13 +221,27 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                         <a
                             key={index}
                             href={item.href}
-                            className="nav-item flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-[#232323] hover:text-white transition-colors"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            className={`nav-item flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-[#232323] hover:text-white transition-colors ${item.badge ? 'cursor-not-allowed opacity-75' : ''}`}
+                            target={item.badge ? undefined : "_blank"}
+                            rel={item.badge ? undefined : "noopener noreferrer"}
+                            onClick={item.badge ? (e) => e.preventDefault() : undefined}
                         >
                             {item.icon}
                             <span>{item.label}</span>
-                            <ExternalLink className="ml-auto w-4 h-4 opacity-50" />
+                            {item.badge ? (
+                                <div className="ml-auto flex items-center gap-1">
+                                    <span className="bg-gray-700 text-gray-300 text-[10px] px-1.5 py-0.5 rounded-md flex items-center gap-1">
+                                        {item.badge.text}
+                                        {item.badge.description && (
+                                            <span className="inline-block ml-1 text-[8px] text-gray-400">
+                                                {item.badge.description}
+                                            </span>
+                                        )}
+                                    </span>
+                                </div>
+                            ) : (
+                                <ExternalLink className="ml-auto w-4 h-4 opacity-50" />
+                            )}
                         </a>
                     ))}
 
