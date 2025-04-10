@@ -1,8 +1,10 @@
-import { Suspense } from "react";
-import { fetchGitHubIssues } from "@/lib/github";
-import { IssueCard } from "@/components/cards/IssueCard";
-import { IssueCardSkeleton } from "@/components/cards/IssueCardSkeleton";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
+'use client';
+
+import { useState, useEffect } from "react";
+import { fetchGitHubIssues, GitHubIssue } from "../../lib/github";
+import { IssueCard } from "../../components/cards/IssueCard";
+import { IssueCardSkeleton } from "../../components/cards/IssueCardSkeleton";
+import { ErrorBoundary } from "../../components/ErrorBoundary";
 
 export const metadata = {
     title: 'HackerBoard Bounties | Andromeda Protocol',
@@ -20,9 +22,24 @@ function IssueCardsLoading() {
     );
 }
 
-export default async function HackersPage() {
-    // Fetch issues from GitHub
-    const issues = await fetchGitHubIssues('andromedaprotocol', 'hackerboard_tasks', 'open');
+export default function HackersPage() {
+    const [issues, setIssues] = useState<GitHubIssue[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function loadIssues() {
+            try {
+                const data = await fetchGitHubIssues('andromedaprotocol', 'hackerboard_tasks', 'open');
+                setIssues(data);
+            } catch (error) {
+                console.error("Failed to fetch issues:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        loadIssues();
+    }, []);
 
     return (
         <main className="container mx-auto p-4 md:p-6 max-w-7xl min-h-screen bg-black text-white">
@@ -35,23 +52,27 @@ export default async function HackersPage() {
             </div>
 
             <ErrorBoundary>
-                <Suspense fallback={<IssueCardsLoading />}>
-                    {issues.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {issues.map((issue) => (
-                                <IssueCard key={issue.id} issue={issue} />
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="flex flex-col items-center justify-center py-12 px-4 bg-[#1a1a1a] rounded-lg border border-[#333333] max-w-3xl mx-auto">
-                            <h3 className="text-xl font-medium text-white mb-2 text-center">No Open Bounties Available</h3>
-                            <p className="text-gray-400 text-center max-w-md">
-                                There are currently no open bounties available. Please check back later or
-                                explore other opportunities in the Andromeda ecosystem.
-                            </p>
-                        </div>
-                    )}
-                </Suspense>
+                {loading ? (
+                    <IssueCardsLoading />
+                ) : (
+                    <>
+                        {issues.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {issues.map((issue) => (
+                                    <IssueCard key={issue.id} issue={issue} />
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center py-12 px-4 bg-[#1a1a1a] rounded-lg border border-[#333333] max-w-3xl mx-auto">
+                                <h3 className="text-xl font-medium text-white mb-2 text-center">No Open Bounties Available</h3>
+                                <p className="text-gray-400 text-center max-w-md">
+                                    There are currently no open bounties available. Please check back later or
+                                    explore other opportunities in the Andromeda ecosystem.
+                                </p>
+                            </div>
+                        )}
+                    </>
+                )}
             </ErrorBoundary>
 
             <div className="mt-10 pt-6 border-t border-[#333333] text-sm text-gray-500 text-center max-w-3xl mx-auto">
