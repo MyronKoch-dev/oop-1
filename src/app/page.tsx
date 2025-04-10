@@ -39,7 +39,7 @@ export default function HomePage() {
 
   return (
     // Main container with dark theme colors matching Andromeda app - anchored to top on mobile
-    <main className="flex min-h-screen flex-col items-start justify-start p-4 md:p-6 lg:p-8 bg-[#0f0f0f] dark:bg-[#111111] transition-all pt-6">
+    <main className="flex min-h-screen flex-col items-start justify-start p-4 md:p-6 lg:p-8 bg-black dark:bg-black transition-all pt-6">
       {/* Andromeda logo and title above the chat - only show when sidebar is collapsed */}
       {!isSidebarVisible && (
         <div className="w-full max-w-3xl mx-auto mb-4 flex flex-col items-center">

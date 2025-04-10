@@ -11,7 +11,7 @@ export default async function HackersPage() {
     const issues = await fetchGitHubIssues('andromedaprotocol', 'hackerboard_tasks', 'open');
 
     return (
-        <main className="container mx-auto p-4 md:p-6 max-w-7xl min-h-screen bg-[#0f0f0f] text-white">
+        <main className="container mx-auto p-4 md:p-6 max-w-7xl min-h-screen bg-black text-white">
             <div className="mb-8">
                 <h1 className="text-3xl font-bold text-white mb-2">HackerBoard Bounties</h1>
                 <p className="text-gray-400">
