@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Layers, ExternalLink, Rocket } from "lucide-react";
+import { Layers, ExternalLink } from "lucide-react";
 
 interface RightSidebarProps {
     isOpen: boolean;
@@ -24,14 +24,14 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                 className={cn(
                     "fixed top-0 right-0 h-full w-96 bg-[#121212] border-l border-[#333333] z-40 transition-transform duration-300 ease-in-out transform shadow-xl overflow-y-auto",
                     isOpen ? "translate-x-0" : "translate-x-full",
-                    "lg:shadow-none" // Removed "lg:translate-x-0" to allow collapsing on desktop
+                    "lg:translate-x-0 lg:shadow-none" // Always show on large screens, matching left sidebar
                 )}
             >
                 <div className="p-6">
                     <div className="card bg-[#1a1a1a] rounded-lg border border-[#333333] p-5">
                         <div className="header-section mb-4 text-center">
                             <h2 className="header-title text-xl font-bold text-white flex items-center justify-center gap-2">
-                                Developer <Rocket className="w-6 h-6 text-amber-500" /> Launchpad
+                                Developer <span className="rocket-icon">🚀</span> Launchpad
                             </h2>
                             <p className="onboard-check text-gray-400 text-sm mt-1">Already onboarded?</p>
                             <div className="warning mt-3 flex items-center gap-2 bg-[#262626] p-3 rounded-md">
@@ -60,7 +60,7 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                                             Here You will connect with like-minded individuals and gain access to exclusive resources.
                                         </p>
                                         <a href="https://t.me/andromedaprotocol/3776"
-                                            className="launchpad-link mt-3 inline-flex items-center justify-center px-4 py-2 bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff] rounded-md transition-colors gap-2"
+                                            className="launchpad-link mt-3 inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors gap-2"
                                             target="_blank" rel="noopener noreferrer">
                                             Join Andromeda Dev Telegram
                                             <ExternalLink className="w-4 h-4" />

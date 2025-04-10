@@ -24,7 +24,7 @@ export default async function AINavigatorsPage() {
     }
 
     return (
-        <main className="container mx-auto p-4 md:p-6 max-w-7xl min-h-screen bg-black text-white">
+        <main className="container mx-auto p-4 md:p-6 max-w-7xl min-h-screen bg-[#0f0f0f] text-white">
             <div className="mb-8">
                 <h1 className="text-3xl font-bold text-white mb-2">AI Initiatives</h1>
                 <p className="text-gray-400">
