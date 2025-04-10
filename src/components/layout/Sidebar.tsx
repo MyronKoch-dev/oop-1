@@ -109,7 +109,7 @@ const actionItems: NavItem[] = [
         icon: <Target className="w-5 h-5" />
     },
     {
-        href: "https://github.com/andromedaprotocol/ado-database/issues/new/choose",
+        href: "/visionaries",
         label: "Submit ADO/Feature Idea",
         icon: <Lightbulb className="w-5 h-5" />
     },
