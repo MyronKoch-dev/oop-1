@@ -26,6 +26,10 @@ export interface ChatMessage {
     options?: MessageOption[] // Optional buttons for assistant messages
     isLoading?: boolean // Flag for loading state (e.g., "Thinking...")
     url?: string // URL to be displayed as a clickable link
+    finalResult?: {
+        recommendedPath: string;
+        recommendedPathUrl: string;
+    } | null;
 }
 
 // Defines the props expected by the ChatMessages component
@@ -149,27 +153,51 @@ export function ChatMessages({
                                 )}
                             </Avatar>
                             {/* Container for message content and options */}
-                            <div className="space-y-2">
-                                <Card
-                                    className={`p-3 ${message.role === "user" ? "bg-[#1a2b4a] text-[#6bbbff]" : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white" // Different card styles
-                                        } ${message.isLoading ? "animate-pulse" : ""}`} // Add pulse animation if loading
-                                >
-                                    {/* Display message content with clickable links */}
-                                    {renderMessageContent(message.content)}
+                            <div className="space-y-2 w-full">
+                                {/* Custom rendering for final recommendation */}
+                                {message.content === "__FINAL_RECOMMENDATION__" && message.finalResult ? (
+                                    <div className="p-6 bg-gradient-to-br from-[#1a2b4a] to-[#213459] rounded-xl shadow-lg text-center text-white border border-[#333333]">
+                                        <h2 className="text-2xl font-bold mb-2">🎉 Congratulations! 🎉</h2>
+                                        <p className="text-lg mb-4">
+                                            Based on your responses, we recommend the:
+                                            <br />
+                                            <span className="text-xl font-semibold text-blue-400">🌟 {message.finalResult.recommendedPath} 🌟</span>
+                                        </p>
+                                        <a
+                                            href={message.finalResult.recommendedPathUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition text-lg mt-2"
+                                        >
+                                            <span className="mr-2">Get Started</span> 🚀
+                                        </a>
+                                        <p className="mt-6 text-base">
+                                            Thank you for completing the onboarding process!<br />
+                                            <span className="text-2xl">WELCOME TO ANDROMEDA 🎉</span>
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <Card
+                                        className={`p-3 ${message.role === "user" ? "bg-[#1a2b4a] text-[#6bbbff]" : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white" // Different card styles
+                                            } ${message.isLoading ? "animate-pulse" : ""}`}
+                                    >
+                                        {/* Display message content with clickable links */}
+                                        {renderMessageContent(message.content)}
 
-                                    {/* Render URL as a button if present */}
-                                    {message.url && (
-                                        <div className="mt-4">
-                                            <button
-                                                onClick={() => window.open(message.url, "_blank")}
-                                                className="w-full flex items-center justify-center gap-2 bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
-                                            >
-                                                <ExternalLink className="w-4 h-4" />
-                                                Get Started
-                                            </button>
-                                        </div>
-                                    )}
-                                </Card>
+                                        {/* Render URL as a button if present */}
+                                        {message.url && (
+                                            <div className="mt-4">
+                                                <button
+                                                    onClick={() => window.open(message.url, "_blank")}
+                                                    className="w-full flex items-center justify-center gap-2 bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
+                                                >
+                                                    <ExternalLink className="w-4 h-4" />
+                                                    Get Started
+                                                </button>
+                                            </div>
+                                        )}
+                                    </Card>
+                                )}
 
                                 {/* Render buttons if options are provided for an assistant message */}
                                 {message.role === 'assistant' && message.options && message.options.length > 0 && (

@@ -227,18 +227,8 @@ export function ChatContainer({
                     {
                         id: generateMessageId("assistant"),
                         role: "assistant",
-                        content: `⭐⭐⭐Based on your responses, I recommend the "${data.finalResult?.recommendedPath}" path for you.⭐⭐⭐`,
-                    },
-                    {
-                        id: generateMessageId("assistant"),
-                        role: "assistant",
-                        content: "⭐⭐⭐ You can get started here: ⭐⭐⭐",
-                        url: data.finalResult?.recommendedPathUrl
-                    },
-                    {
-                        id: generateMessageId("assistant"),
-                        role: "assistant",
-                        content: "Thank you for completing the onboarding process!\nWELCOME TO ANDROMEDA\n🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉",
+                        content: `__FINAL_RECOMMENDATION__`,
+                        finalResult: data.finalResult,
                     },
                 ])
                 setInputDisabled(true)
@@ -427,18 +417,8 @@ export function ChatContainer({
                     {
                         id: generateMessageId("assistant"),
                         role: "assistant",
-                        content: `⭐⭐⭐Based on your responses, I recommend the "${data.finalResult?.recommendedPath}" path for you.⭐⭐⭐`,
-                    },
-                    {
-                        id: generateMessageId("assistant"),
-                        role: "assistant",
-                        content: "⭐⭐⭐ You can get started here: ⭐⭐⭐",
-                        url: data.finalResult?.recommendedPathUrl
-                    },
-                    {
-                        id: generateMessageId("assistant"),
-                        role: "assistant",
-                        content: "Thank you for completing the onboarding process!\nWELCOME TO ANDROMEDA\n🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉",
+                        content: `__FINAL_RECOMMENDATION__`,
+                        finalResult: data.finalResult,
                     },
                 ])
                 setInputDisabled(true)
@@ -592,18 +572,8 @@ export function ChatContainer({
                         {
                             id: generateMessageId("assistant"),
                             role: "assistant",
-                            content: `⭐⭐⭐Based on your responses, I recommend the "${data.finalResult?.recommendedPath}" path for you.⭐⭐⭐`,
-                        },
-                        {
-                            id: generateMessageId("assistant"),
-                            role: "assistant",
-                            content: "⭐⭐⭐ You can get started here: ⭐⭐⭐",
-                            url: data.finalResult?.recommendedPathUrl
-                        },
-                        {
-                            id: generateMessageId("assistant"),
-                            role: "assistant",
-                            content: "Thank you for completing the onboarding process!\nWELCOME TO ANDROMEDA\n🎉🎉🎉🎉��🎉🎉🎉🎉🎉🎉🎉🎉",
+                            content: `__FINAL_RECOMMENDATION__`,
+                            finalResult: data.finalResult,
                         },
                     ]);
                     setInputDisabled(true);
@@ -751,23 +721,13 @@ export function ChatContainer({
                     {
                         id: generateMessageId("assistant"),
                         role: "assistant",
-                        content: `⭐⭐⭐Based on your responses, I recommend the "${data.finalResult?.recommendedPath}" path for you.⭐⭐⭐`,
+                        content: `__FINAL_RECOMMENDATION__`,
+                        finalResult: data.finalResult,
                     },
-                    {
-                        id: generateMessageId("assistant"),
-                        role: "assistant",
-                        content: "⭐⭐⭐ You can get started here: ⭐⭐⭐",
-                        url: data.finalResult?.recommendedPathUrl
-                    },
-                    {
-                        id: generateMessageId("assistant"),
-                        role: "assistant",
-                        content: "Thank you for completing the onboarding process!\nWELCOME TO ANDROMEDA\n🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉",
-                    },
-                ]);
-                setInputDisabled(true);
-                setIsComplete(true);
-                setCurrentQuestionIndex(TOTAL_STEPS);
+                ])
+                setInputDisabled(true)
+                setIsComplete(true)
+                setCurrentQuestionIndex(TOTAL_STEPS)
             }
             // Handle next question
             else if (data.nextQuestion) {
@@ -785,10 +745,10 @@ export function ChatContainer({
                 setInputMode(data.inputMode || "text");
 
                 // Reset selection states
-                setConditionalText("");
-                setConditionalTextVisible(false);
-                setShowConditionalInput(false);
-                setSelectedButtonValue(null);
+                setConditionalText("")
+                setConditionalTextVisible(false)
+                setShowConditionalInput(false)
+                setSelectedButtonValue(null)
                 setMultiSelectedLanguages([]); // Reset multi-select state
 
                 // Set up conditional text if applicable
@@ -889,23 +849,13 @@ export function ChatContainer({
                     {
                         id: generateMessageId("assistant"),
                         role: "assistant",
-                        content: `⭐⭐⭐Based on your responses, I recommend the "${data.finalResult?.recommendedPath}" path for you.⭐⭐⭐`,
+                        content: `__FINAL_RECOMMENDATION__`,
+                        finalResult: data.finalResult,
                     },
-                    {
-                        id: generateMessageId("assistant"),
-                        role: "assistant",
-                        content: "⭐⭐⭐ You can get started here: ⭐⭐⭐",
-                        url: data.finalResult?.recommendedPathUrl
-                    },
-                    {
-                        id: generateMessageId("assistant"),
-                        role: "assistant",
-                        content: "Thank you for completing the onboarding process!\nWELCOME TO ANDROMEDA\n🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉",
-                    },
-                ]);
-                setInputDisabled(true);
-                setIsComplete(true);
-                setCurrentQuestionIndex(TOTAL_STEPS);
+                ])
+                setInputDisabled(true)
+                setIsComplete(true)
+                setCurrentQuestionIndex(TOTAL_STEPS)
             } else if (data.nextQuestion) {
                 setMessages((prev) => [
                     ...prev,
