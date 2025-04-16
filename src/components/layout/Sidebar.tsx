@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { FaTelegramPlane } from "react-icons/fa";
 import { cn } from "@/lib/utils";
+import { usePathname } from 'next/navigation';
 
 interface NavItem {
     href: string;
@@ -189,7 +190,7 @@ const agentBots: NavItem[] = [
 ];
 
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
-    const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+    const pathname = usePathname();
 
     // Close sidebar on ESC key press
     useEffect(() => {
