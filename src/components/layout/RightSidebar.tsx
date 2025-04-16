@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Layers, ExternalLink } from "lucide-react";
+import { Layers } from "lucide-react";
 
 interface RightSidebarProps {
     isOpen: boolean;
@@ -41,7 +41,7 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                         </div>
 
                         <ol className="launchpad-list space-y-6">
-                            <li className="launchpad-item bg-[#262626] p-4 rounded-md">
+                            <li className="launchpad-item bg-[#262626] p-4 rounded-md border border-[#333333]">
                                 <div className="flex gap-3">
                                     <div className="launchpad-number flex-shrink-0 bg-[#333333] w-8 h-8 rounded-full flex items-center justify-center text-amber-400 font-bold">⭐</div>
                                     <p className="launchpad-description text-white font-medium">
@@ -50,7 +50,7 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                                 </div>
                             </li>
 
-                            <li className="launchpad-item bg-[#262626] p-4 rounded-md">
+                            <li className="launchpad-item bg-[#262626] p-4 rounded-md border border-[#333333]">
                                 <div className="flex gap-3">
                                     <div className="launchpad-number flex-shrink-0 bg-[#333333] w-8 h-8 rounded-full flex items-center justify-center text-amber-400 font-bold">1</div>
                                     <div className="content">
@@ -59,17 +59,19 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                                             Joining our telegram is the first step in becoming a part of the Andromeda Developer Program.
                                             Here You will connect with like-minded individuals and gain access to exclusive resources.
                                         </p>
-                                        <a href="https://t.me/andromedaprotocol/3776"
-                                            className="launchpad-link mt-3 inline-flex items-center justify-center px-4 py-2 bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff] rounded-md transition-colors gap-2"
-                                            target="_blank" rel="noopener noreferrer">
+                                        <a
+                                            href="https://t.me/andromedaprotocol/3776"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="block text-blue-400 hover:underline text-center font-medium mt-3 transition"
+                                        >
                                             Join Andromeda Dev Telegram
-                                            <ExternalLink className="w-4 h-4" />
                                         </a>
                                     </div>
                                 </div>
                             </li>
 
-                            <li className="launchpad-item bg-[#262626] p-4 rounded-md">
+                            <li className="launchpad-item bg-[#262626] p-4 rounded-md border border-[#333333]">
                                 <div className="flex gap-3">
                                     <div className="launchpad-number flex-shrink-0 bg-[#333333] w-8 h-8 rounded-full flex items-center justify-center text-amber-400 font-bold">2</div>
                                     <div className="content">
@@ -82,7 +84,7 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                                 </div>
                             </li>
 
-                            <li className="launchpad-item p-4 rounded-md border border-[#333333]">
+                            <li className="launchpad-item bg-[#262626] p-4 rounded-md border border-[#333333]">
                                 <div className="flex gap-3">
                                     <div className="launchpad-number flex-shrink-0 bg-[#333333] w-8 h-8 rounded-full flex items-center justify-center text-gray-400 font-bold">3</div>
                                     <div className="content">
@@ -90,17 +92,19 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                                         <p className="launchpad-description text-gray-300 text-sm mt-1">
                                             Complete 8 comprehensive guides to understand the fundamentals of ADO development.
                                         </p>
-                                        <a href="https://docs.andromedaprotocol.io/guides/guides-and-examples/ado-builder"
-                                            className="launchpad-link mt-3 inline-flex items-center justify-center px-4 py-2 bg-[#2a2a2a] text-white rounded-md hover:bg-[#333333] transition-colors gap-2"
-                                            target="_blank" rel="noopener noreferrer">
+                                        <a
+                                            href="https://docs.andromedaprotocol.io/guides/guides-and-examples/ado-builder"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="block text-blue-400 hover:underline text-center font-medium mt-3 transition"
+                                        >
                                             Start ADO Builder Guides
-                                            <ExternalLink className="w-4 h-4" />
                                         </a>
                                     </div>
                                 </div>
                             </li>
 
-                            <li className="launchpad-item p-4 rounded-md border border-[#333333]">
+                            <li className="launchpad-item bg-[#262626] p-4 rounded-md border border-[#333333]">
                                 <div className="flex gap-3">
                                     <div className="launchpad-number flex-shrink-0 bg-[#333333] w-8 h-8 rounded-full flex items-center justify-center text-gray-400 font-bold">4</div>
                                     <div className="content">
@@ -108,17 +112,19 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                                         <p className="launchpad-description text-gray-300 text-sm mt-1">
                                             Create a functional application using the Andromeda App Builder.
                                         </p>
-                                        <a href="https://docs.andromedaprotocol.io/guides/guides-and-examples/app-builder/nft-auction-marketplace"
-                                            className="launchpad-link mt-3 inline-flex items-center justify-center px-4 py-2 bg-[#2a2a2a] text-white rounded-md hover:bg-[#333333] transition-colors gap-2"
-                                            target="_blank" rel="noopener noreferrer">
+                                        <a
+                                            href="https://docs.andromedaprotocol.io/guides/guides-and-examples/app-builder/nft-auction-marketplace"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="block text-blue-400 hover:underline text-center font-medium mt-3 transition"
+                                        >
                                             Explore App Builder Guide
-                                            <ExternalLink className="w-4 h-4" />
                                         </a>
                                     </div>
                                 </div>
                             </li>
 
-                            <li className="launchpad-item p-4 rounded-md border border-[#333333]">
+                            <li className="launchpad-item bg-[#262626] p-4 rounded-md border border-[#333333]">
                                 <div className="flex gap-3">
                                     <div className="launchpad-number flex-shrink-0 bg-[#333333] w-8 h-8 rounded-full flex items-center justify-center text-gray-400 font-bold">5</div>
                                     <div className="content">
@@ -126,17 +132,19 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                                         <p className="launchpad-description text-gray-300 text-sm mt-1">
                                             Learn how to create Andromeda embeddables.
                                         </p>
-                                        <a href="https://docs.andromedaprotocol.io/guides/guides-and-examples/embeddables/nft-auction"
-                                            className="launchpad-link mt-3 inline-flex items-center justify-center px-4 py-2 bg-[#2a2a2a] text-white rounded-md hover:bg-[#333333] transition-colors gap-2"
-                                            target="_blank" rel="noopener noreferrer">
+                                        <a
+                                            href="https://docs.andromedaprotocol.io/guides/guides-and-examples/embeddables/nft-auction"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="block text-blue-400 hover:underline text-center font-medium mt-3 transition"
+                                        >
                                             Try Embeddables Guide
-                                            <ExternalLink className="w-4 h-4" />
                                         </a>
                                     </div>
                                 </div>
                             </li>
 
-                            <li className="launchpad-item p-4 rounded-md border border-[#333333]">
+                            <li className="launchpad-item bg-[#262626] p-4 rounded-md border border-[#333333]">
                                 <div className="flex gap-3">
                                     <div className="launchpad-number flex-shrink-0 bg-[#333333] w-8 h-8 rounded-full flex items-center justify-center text-gray-400 font-bold">6</div>
                                     <div className="content">
@@ -144,17 +152,19 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                                         <p className="launchpad-description text-gray-300 text-sm mt-1">
                                             Showcase your achievements and get recognition from the community.
                                         </p>
-                                        <a href="https://t.me/andromedaprotocol/3776"
-                                            className="launchpad-link mt-3 inline-flex items-center justify-center px-4 py-2 bg-[#2a2a2a] text-white rounded-md hover:bg-[#333333] transition-colors gap-2"
-                                            target="_blank" rel="noopener noreferrer">
+                                        <a
+                                            href="https://t.me/andromedaprotocol/3776"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="block text-blue-400 hover:underline text-center font-medium mt-3 transition"
+                                        >
                                             Post in Main Telegram Channel
-                                            <ExternalLink className="w-4 h-4" />
                                         </a>
                                     </div>
                                 </div>
                             </li>
 
-                            <li className="launchpad-item p-4 rounded-md border border-[#333333]">
+                            <li className="launchpad-item bg-[#262626] p-4 rounded-md border border-[#333333]">
                                 <div className="flex gap-3">
                                     <div className="launchpad-number flex-shrink-0 bg-[#333333] w-8 h-8 rounded-full flex items-center justify-center text-gray-400 font-bold">7</div>
                                     <div className="content">
@@ -162,11 +172,13 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                                         <p className="launchpad-description text-gray-300 text-sm mt-1">
                                             Take on real-world challenges and contribute to the ecosystem.
                                         </p>
-                                        <a href="https://github.com/andromedaprotocol/hackerboard_tasks/issues"
-                                            className="launchpad-link mt-3 inline-flex items-center justify-center px-4 py-2 bg-[#2a2a2a] text-white rounded-md hover:bg-[#333333] transition-colors gap-2"
-                                            target="_blank" rel="noopener noreferrer">
+                                        <a
+                                            href="https://github.com/andromedaprotocol/hackerboard_tasks/issues"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="block text-blue-400 hover:underline text-center font-medium mt-3 transition"
+                                        >
                                             Visit The 🔗🔗 🪓 Hackerboard
-                                            <ExternalLink className="w-4 h-4" />
                                         </a>
                                     </div>
                                 </div>
