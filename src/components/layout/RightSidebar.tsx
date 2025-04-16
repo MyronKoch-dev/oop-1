@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Layers } from "lucide-react";
+import { Layers, ChevronDown } from "lucide-react";
 import React, { useState } from "react";
 
 interface RightSidebarProps {
@@ -10,7 +10,7 @@ interface RightSidebarProps {
 }
 
 export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
-    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(1);
 
     return (
         <>
@@ -96,13 +96,21 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                             ].map((item, idx) => (
                                 <li
                                     key={idx}
-                                    className="launchpad-item bg-[#262626] p-4 rounded-md border border-[#333333] cursor-pointer transition-all duration-200"
+                                    className="launchpad-item bg-[#262626] p-4 rounded-md border border-[#333333] cursor-pointer transition-all duration-200 outline-none"
                                     onMouseEnter={() => setHoveredIndex(idx)}
                                     onMouseLeave={() => setHoveredIndex(null)}
+                                    onFocus={() => setHoveredIndex(idx)}
+                                    onBlur={() => setHoveredIndex(null)}
+                                    tabIndex={0}
+                                    aria-expanded={hoveredIndex === idx}
+                                    aria-label={item.title}
                                 >
                                     <div className="flex gap-3 items-center">
                                         <div className="launchpad-number flex-shrink-0 bg-[#333333] w-8 h-8 rounded-full flex items-center justify-center text-amber-400 font-bold">{item.number}</div>
                                         <div className="launchpad-title text-white font-semibold text-base flex-1 break-words">{item.title}</div>
+                                        {idx !== 0 && (
+                                            <ChevronDown className={`w-5 h-5 text-gray-400 ml-2 transition-transform duration-200 ${hoveredIndex === idx ? 'rotate-180' : ''}`} aria-hidden="true" />
+                                        )}
                                     </div>
                                     <div className={`transition-all duration-300 overflow-hidden ${hoveredIndex === idx ? 'max-h-96 mt-2' : 'max-h-0'}`}>
                                         {item.description && (
