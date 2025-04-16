@@ -1,5 +1,6 @@
-
 # Andromeda Onboarding Chatbot
+
+**Last Updated: 2024-06-10**
 
 [![Vercel Deploy Button](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=YOUR_GITHUB_REPO_URL_HERE&env=OPENAI_API_KEY,GROQ_API_KEY,SUPABASE_URL,SUPABASE_ANON_KEY,SUPABASE_SERVICE_ROLE_KEY,KV_URL,KV_REST_API_URL,KV_REST_API_TOKEN,PATH_URL_CONTRACTOR,PATH_URL_HACKER,PATH_URL_VISIONARY_PATH,PATH_URL_AI_NAVIGATOR,PATH_URL_AMBASSADOR,PATH_URL_EXPLORER_PATH)
 
@@ -14,67 +15,46 @@ This chatbot provides a guided questionnaire experience, leveraging a modern web
 
 This V1.0 implementation prioritizes a **strict, questionnaire-based approach** for reliability and efficiency, ensuring a seamless onboarding experience for a diverse range of users, from technical developers to community ambassadors.
 
-## Project Structure
+## Project Structure (TypeScript/Next.js)
 
 ```
 project_root/
-├── models/
-│   ├── __init__.py
-│   └── data_models.py       # Pydantic models for data structures (Python version - for reference)
-├── components/
-│   ├── __init__.py
-│   ├── llm_provider.py      # LLM Provider Wrapper (Python version - for reference)
-│   ├── interview.py         # Interview Manager (Python version - for reference)
-│   ├── fact_extractor.py    # Fact Extraction Logic (Python version - for reference)
-│   ├── path_analyzer.py     # Path Analysis Logic (Python version - for reference)
-│   ├── recommendation.py    # Recommendation Engine (Python version - for reference)
-│   ├── database.py          # Database Interface (Python version - for reference)
-│   └── ... (other JS/TS components in 'components/' directory)
 ├── src/
 │   ├── app/
 │   │   ├── api/
 │   │   │   └── onboarding/
 │   │   │       └── message/
-│   │   │           └── route.ts         # Main API Route Handler (Next.js App Router)
-│   │   ├── layout.tsx              # Root Layout Component (with Sidebars)
-│   │   └── page.tsx                # Home Page (renders ChatContainer)
+│   │   │           ├── route.ts         # Main API Route Handler (Next.js App Router)
+│   │   │           └── route.test.ts    # Integration Tests for API Route
+│   │   ├── layout.tsx                   # Root Layout Component
+│   │   ├── page.tsx                     # Home Page (renders ChatContainer)
+│   │   └── globals.css                  # Global Styles (Tailwind CSS, Dark Mode Theme)
 │   ├── components/
 │   │   ├── chat/
-│   │   │   ├── ChatContainer.tsx     # Main Chatbot Container Component
-│   │   │   ├── ChatHeader.tsx        # Chat Header (Title, Progress Bar)
-│   │   │   ├── ChatInput.tsx         # User Input Component (Text, Buttons, Conditional)
-│   │   │   └── ChatMessages.tsx      # Message Display Area (User/Bot Messages, Links, Buttons)
-│   │   └── ui/                   # Shadcn/ui Components (Button, Card, etc.)
+│   │   │   ├── chat-container.tsx       # Main Chatbot Container Component
+│   │   │   ├── chat-header.tsx          # Chat Header (Title, Progress Bar)
+│   │   │   ├── chat-input.tsx           # User Input Component (Text, Buttons, Conditional)
+│   │   │   └── chat-messages.tsx        # Message Display Area (User/Bot Messages, Links, Buttons)
+│   │   ├── ui/                          # Shadcn/ui Components (Button, Card, etc.)
+│   │   └── ErrorBoundary.tsx            # Error Boundary for React
 │   ├── lib/
-│   │   ├── session.ts              # Session Management Service (Upstash Redis)
-│   │   ├── questionnaire.ts        # Questionnaire Definition (Questions, Options)
-│   │   ├── parsing.ts              # Input Parsing & Validation Logic
-│   │   ├── pathDetermination.ts    # Path Determination Rules
-│   │   ├── supabase.ts             # Database Interaction Service (Supabase)
-│   │   └── types.ts                # TypeScript Interface Definitions
-│   └── app/globals.css           # Global Styles (Tailwind CSS, Dark Mode Theme)
-├── config.py                # Configuration Settings (Python version - for reference)
-├── example.py               # Example Usage (Python version - for reference)
-├── run_tests.py             # Test Runner Script (Python version - for reference)
-├── simple_test.py           # Simple Component Tests (Python version - for reference)
-├── simulation_test.py       # Simulation Test (Python version - for reference)
-├── test_components.py        # Component Tests (Python version - for reference)
-├── test_database.py         # Database Tests (Python version - for reference)
-├── test_error_handling.py    # Error Handling Tests (Python version - for reference)
-├── test_interactive.py       # Interactive Test CLI (Python version - for reference)
-├── test_integration.py       # Integration Tests (Python version - for reference)
-├── test_performance.py       # Performance Tests (Python version - for reference)
-├── fix_dependencies.py       # Dependency Fix Script (Python version - for reference)
-├── onboarding_chatbot.py    # Onboarding Chatbot (Python version - for reference)
-├── onboarding_system.log    # Log file (example - Python version)
-├── README.md                # THIS FILE - Project Documentation
-├── next-env.d.ts            # Next.js Environment Declarations
-├── next.config.js           # Next.js Configuration File (JavaScript)
-├── package-lock.json        # npm Dependency Lock File
-├── package.json             # Project Dependencies and Scripts
-├── postcss.config.mjs       # PostCSS Configuration
-└── tsconfig.json            # TypeScript Configuration
+│   │   ├── session.ts                   # Session Management Service (Upstash Redis)
+│   │   ├── questionnaire.ts             # Questionnaire Definition (Questions, Options)
+│   │   ├── parsing.ts                   # Input Parsing & Validation Logic
+│   │   ├── pathDetermination.ts         # Path Determination Rules
+│   │   ├── supabase.ts                  # Database Interaction Service (Supabase)
+│   │   ├── types.ts                     # TypeScript Interface Definitions
+│   │   └── utils.ts                     # Utility Functions
+├── README.md                            # THIS FILE - Project Documentation
+├── next-env.d.ts                        # Next.js Environment Declarations
+├── next.config.js                       # Next.js Configuration File
+├── package-lock.json                    # npm Dependency Lock File
+├── package.json                         # Project Dependencies and Scripts
+├── postcss.config.mjs                   # PostCSS Configuration
+└── tsconfig.json                        # TypeScript Configuration
 ```
+
+**Note:** Python files and references are legacy and not used in the current TypeScript/Next.js implementation. Remove or ignore them for all new development.
 
 ## Key Features
 
@@ -83,8 +63,6 @@ project_root/
 *   **Multiple Onboarding Paths:** Supports five distinct paths: Contractor, Hacker, Visionary Path, AI Navigator, and Ambassador, plus a general Explorer Path for beginners.
 *   **Data Persistence:** Stores collected user profile data in a Supabase PostgreSQL database for future analysis and engagement.
 *   **Modern Web Stack:** Built with Next.js 14+ App Router, React, TypeScript, Tailwind CSS, and Shadcn/ui, ensuring performance, maintainability, and a modern user experience.
-*   **Collapsible Sidebars:** Implements a user-friendly layout with collapsible left and right sidebars, enhancing navigation and content presentation.
-*   **Dark Mode Theme:** Features a visually appealing dark mode theme that matches the Andromeda brand aesthetic.
 *   **Keyboard Accessibility:** Supports keyboard number input for quick button selection in multiple-choice questions.
 *   **Input Validation & Error Handling:** Includes client-side and server-side validation, graceful error handling, and user re-prompting for invalid input.
 *   **Session Management:** Uses Upstash Redis for robust server-side session management with automatic session expiry.
@@ -123,12 +101,12 @@ project_root/
         UPSTASH_REDIS_REST_TOKEN=[Your_KV_REST_API_TOKEN]
 
         # Onboarding Path URLs - Replace with your desired destination URLs
-        PATH_URL_CONTRACTOR="[contractor-path-url]"        # e.g., https://github.com/andromedaprotocol/Contractor_bidding/issues
-        PATH_URL_HACKER="[hacker-path-url]"             # e.g., https://github.com/andromedaprotocol/hackerboard_tasks/issues
-        PATH_URL_VISIONARY_PATH="[visionary-path-url]"    # e.g., https://github.com/andromedaprotocol/ado-database/discussions
-        PATH_URL_AI_NAVIGATOR="[ai-experienced-path-url]"    # e.g., https://github.com/andromedaprotocol/ai_initiatives/issues
-        PATH_URL_AMBASSADOR="[ambassador-path-url]"       # e.g., https://zealy.io/cw/andromedacommunity/questboard/...
-        PATH_URL_EXPLORER_PATH="[explorer-path-url]"      # e.g., https://www.andromedaprotocol.io/learn
+        PATH_URL_CONTRACTOR="[contractor-path-url]"
+        PATH_URL_HACKER="[hacker-path-url]"
+        PATH_URL_VISIONARY_PATH="[visionary-path-url]"
+        PATH_URL_AI_NAVIGATOR="[ai-experienced-path-url]"
+        PATH_URL_AMBASSADOR="[ambassador-path-url]"
+        PATH_URL_EXPLORER_PATH="[explorer-path-url]"
 
         NODE_ENV=development
         ```
@@ -152,7 +130,7 @@ The Andromeda Onboarding Bot presents a chat-like interface where users are guid
 3.  **Multiple Input Types:** The chatbot supports various input methods:
     *   **Text Input:** For open-ended questions like name, email, and handles.
     *   **Button Selection:** For multiple-choice questions, allowing users to select from predefined options using clickable buttons or keyboard number shortcuts (1-9).
-    *   **Conditional Text Input:** For questions requiring additional details based on a button selection (e.g., specifying blockchain platforms after answering "Yes" to blockchain experience).
+    *   **Conditional Text Input:** For questions requiring additional details based on a button selection (e.g., specifying AI/ML areas after answering "Yes" to AI/ML experience).
 4.  **Progress Tracking:** A progress bar in the chat header visually indicates the user's advancement through the questionnaire.
 5.  **Path Recommendation:** After answering all questions, the chatbot analyzes the user's responses and presents a recommended onboarding path, along with a direct link to relevant resources.
 6.  **Completion:** Upon completion, the chatbot confirms the onboarding process is finished and provides a conclusive message.
@@ -207,15 +185,13 @@ The Andromeda Onboarding Bot is designed to be flexible and customizable. Key ar
 
 The application uses Supabase (PostgreSQL) as its database for persistent storage of user onboarding data.
 
-*   **Schema Definition:** The database schema for the `onboarding_responses` table is defined in `src/lib/database.ts` (Python version - schema is conceptually similar in the TypeScript/Next.js implementation).
-*   **Database Interaction:** The `DatabaseInterface` class (Python version - similar logic in `src/lib/supabase.ts`) handles database operations, specifically saving user profiles upon onboarding completion.
-*   **In-Memory Fallback (Development):** For simplified local development and testing, the database interaction can be configured to use an in-memory store (currently simulated with a dictionary in the Python version's `DatabaseInterface`). For production, a connection to a real Supabase PostgreSQL database is essential via environment variables.
+*   **Schema Definition:** The database schema for the `onboarding_responses` table is defined in your Supabase project and should match the fields in `src/lib/types.ts`.
+*   **Database Interaction:** The `src/lib/supabase.ts` file handles database operations, specifically saving user profiles upon onboarding completion.
 
 ## Error Handling
 
 The onboarding system is designed with robust error handling in mind:
 
-*   **Custom Exception Classes:** Defines custom exception classes (`OnboardingError`, `LLMProviderError`, `InterviewError`, `DatabaseError` in the Python version - conceptually similar error handling is implemented in TypeScript using `try...catch` blocks and error responses from the API).
 *   **Comprehensive Logging:** Implements detailed logging using `console.log` and `console.error` throughout the backend and frontend code to track the flow, debug issues, and capture errors.
 *   **User-Friendly Error Messages:** Returns user-friendly error messages to the frontend UI in case of validation failures, session expiry, or internal server errors, guiding users on how to proceed.
 *   **Retry Logic:** Includes retry mechanisms for database save operations to handle transient network issues.
@@ -228,11 +204,10 @@ The Andromeda Onboarding Bot is implemented using a modular, component-based arc
 **Key Components:**
 
 *   **Frontend (React/Next.js Components):**
-    *   `ChatContainer`: Orchestrates the chat flow, manages state, and handles API interactions.
-    *   `ChatHeader`: Displays the chat title, subtitle, and progress bar.
-    *   `ChatMessages`: Renders the scrollable list of chat messages, handling different message types and button options.
-    *   `ChatInput`: Provides the user input area, dynamically switching between text input, button groups, and conditional text inputs based on the current question.
-    *   `Sidebar` / `RightSidebar`: Layout components for collapsible navigation sidebars.
+    *   `chat-container.tsx`: Orchestrates the chat flow, manages state, and handles API interactions.
+    *   `chat-header.tsx`: Displays the chat title, subtitle, and progress bar.
+    *   `chat-messages.tsx`: Renders the scrollable list of chat messages, handling different message types and button options.
+    *   `chat-input.tsx`: Provides the user input area, dynamically switching between text input, button groups, and conditional text inputs based on the current question.
     *   `ui/*`: Reusable UI primitives from Shadcn/ui (Button, Card, Input, Textarea, etc.) for consistent styling and accessibility.
 *   **Backend (Next.js API Route & Services):**
     *   `/api/onboarding/message/route.ts`: Main API endpoint handling POST requests, orchestrating the onboarding flow, calling services, and returning responses to the frontend.
@@ -288,8 +263,6 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ---
 
 *Feel free to further customize and expand this README.md file to best suit your project and audience.*
-
-*Consider adding a link to the Mermaid chart visualization of the onboarding flow if desired.*
 
 *Remember to replace placeholders like `[repository-url]`, `[your-openai-api-key]`, `[your-vercel-app-url]`, and the `PATH_URL_*` placeholders with your actual information before publishing.*
 
