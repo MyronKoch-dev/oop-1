@@ -224,7 +224,30 @@ export async function POST(request: NextRequest) {
                     }
                     break;
                 case 5: parseLanguages(responseToParse, dataToUpdate); break;
-                case 6: parseBlockchain(responseToParse as { buttonValue: string } | null, conditionalText, dataToUpdate); break;
+                case 6: {
+                    // For blockchain platforms, pass selectedValues if available
+                    let selectedValues: string[] | undefined = undefined;
+                    let buttonValue = '';
+                    if (Array.isArray(responseToParse)) {
+                        selectedValues = responseToParse;
+                        buttonValue = 'Yes'; // Assume multi-select only happens if user said Yes
+                    } else if (typeof responseToParse === 'object' && responseToParse !== null) {
+                        if ('buttonValue' in responseToParse && typeof responseToParse.buttonValue === 'string') {
+                            buttonValue = responseToParse.buttonValue;
+                        }
+                        if ('selectedValues' in responseToParse && Array.isArray(responseToParse.selectedValues)) {
+                            selectedValues = responseToParse.selectedValues;
+                        }
+                    } else if (typeof responseToParse === 'string') {
+                        buttonValue = responseToParse;
+                    }
+                    parseBlockchain(
+                        { buttonValue, selectedValues },
+                        conditionalText,
+                        dataToUpdate
+                    );
+                    break;
+                }
                 case 7: parseAI(responseToParse as { buttonValue: string } | null, conditionalText, dataToUpdate); break;
                 case 8: dataToUpdate.tools_familiarity = (responseToParse as { buttonValue: string })?.buttonValue ?? null; break;
                 case 9: dataToUpdate.experience_level = (responseToParse as { buttonValue: string })?.buttonValue ?? null; break;

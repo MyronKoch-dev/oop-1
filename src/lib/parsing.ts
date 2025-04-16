@@ -59,7 +59,7 @@ export function parseLanguages(
  * @param currentData The current accumulated data object (to be mutated).
  */
 export function parseBlockchain(
-    rawResponse: { buttonValue: string } | undefined | null,
+    rawResponse: { buttonValue: string, selectedValues?: string[] } | undefined | null,
     conditionalText: string | undefined | null,
     currentData: Partial<OnboardingData>
 ): void {
@@ -68,14 +68,9 @@ export function parseBlockchain(
     currentData.blockchain_platforms = null;
 
     if (rawResponse?.buttonValue) {
-        // Store the selection ('Yes', 'No - curious', 'No experience')
         currentData.blockchain_experience = rawResponse.buttonValue;
-        // If 'Yes' was selected, store the conditional text (if provided)
-        if (rawResponse.buttonValue === 'Yes') {
-            const trimmedConditional = conditionalText?.trim();
-            if (trimmedConditional) {
-                currentData.blockchain_platforms = trimmedConditional;
-            }
+        if (rawResponse.buttonValue === 'Yes' && Array.isArray(rawResponse.selectedValues)) {
+            currentData.blockchain_platforms = rawResponse.selectedValues;
         }
     } else {
         console.log("Parsing Blockchain: No valid button value received.");

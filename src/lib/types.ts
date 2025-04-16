@@ -12,7 +12,7 @@ export interface OnboardingData {
     languages?: string[] | null; // Q4 Parsed Language Names
     other_languages?: string | null; // Q4 Text from 'Other'
     blockchain_experience?: string | null; // Q5 Button Value ('Yes', 'No - curious', 'No experience')
-    blockchain_platforms?: string | null; // Q5 Conditional Text
+    blockchain_platforms?: string[] | null; // Q5 Conditional Text
     ai_experience?: string | null; // Q6 Button Value ('Yes', 'No')
     ai_ml_areas?: string | null; // Q6 Conditional Text
     tools_familiarity?: string | null; // Q7 Button Value
@@ -44,7 +44,7 @@ export interface OnboardingResponseForDB {
     languages?: string[] | null;
     other_languages?: string | null;
     blockchain_experience?: string | null;
-    blockchain_platforms?: string | null;
+    blockchain_platforms?: string[] | null;
     ai_experience?: string | null;
     ai_ml_areas?: string | null;
     tools_familiarity?: string | null;
