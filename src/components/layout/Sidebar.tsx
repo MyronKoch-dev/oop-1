@@ -245,6 +245,14 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     const [showTools, setShowTools] = useState(true);
     const [showResources, setShowResources] = useState(false);
 
+    // Open the section containing the current path on mount
+    useEffect(() => {
+        if (actionItems.some(item => item.href === pathname)) setShowPath(true);
+        if (toolNavItems.some(item => item.href === pathname)) setShowTools(true);
+        if (resourceNavItems.some(item => item.href === pathname)) setShowResources(true);
+        // If you have agent bots with real links, do the same for showAgent
+    }, [pathname]);
+
     return (
         <>
             {/* Overlay that appears behind the sidebar on mobile when it's open */}
@@ -288,7 +296,9 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                     {/* Tools section (collapsible) */}
                     <div
                         onMouseEnter={() => setShowTools(true)}
-                        onMouseLeave={() => setShowTools(false)}
+                        onMouseLeave={() => {
+                            if (!toolNavItems.some(item => item.href === pathname)) setShowTools(false);
+                        }}
                         onFocus={() => setShowTools(true)}
                         onBlur={() => setShowTools(false)}
                     >
@@ -302,46 +312,54 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                             <span>🛠️</span> Tools
                             {showTools ? <ChevronDown className="w-4 h-4 ml-auto" /> : <ChevronRight className="w-4 h-4 ml-auto" />}
                         </button>
-                        {showTools && (
-                            <div id="sidebar-tools-section">
-                                {toolNavItems.map((item, index) => {
-                                    const isActive = item.href === pathname;
-                                    return (
-                                        <a
-                                            key={index}
-                                            href={item.href}
-                                            className={`nav-item flex items-center gap-3 px-4 py-3 transition-colors ${isActive ? 'bg-[#232323] text-blue-400 border-l-4 border-blue-400' : 'text-gray-300 hover:bg-[#232323] hover:text-white'} ${item.badge ? 'cursor-not-allowed opacity-75' : ''}`}
-                                            target={item.badge ? undefined : "_blank"}
-                                            rel={item.badge ? undefined : "noopener noreferrer"}
-                                            onClick={item.badge ? (e) => e.preventDefault() : undefined}
-                                        >
-                                            {item.icon}
-                                            <span>{item.label}</span>
-                                            {item.badge ? (
-                                                <div className="ml-auto flex items-center gap-1">
-                                                    <span className="bg-gray-700 text-gray-300 text-[10px] px-1.5 py-0.5 rounded-md flex items-center gap-1">
-                                                        {item.badge.text}
-                                                        {item.badge.description && (
-                                                            <span className="inline-block ml-1 text-[8px] text-gray-400">
-                                                                {item.badge.description}
-                                                            </span>
-                                                        )}
-                                                    </span>
-                                                </div>
-                                            ) : (
-                                                <ExternalLink className="ml-auto w-4 h-4 opacity-50" />
-                                            )}
-                                        </a>
-                                    );
-                                })}
-                            </div>
-                        )}
+                        <div
+                            id="sidebar-tools-section"
+                            className={`transition-all duration-400 ease-[cubic-bezier(.4,0,.2,1)] overflow-hidden
+                                ${showTools ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}
+                        >
+                            {toolNavItems.map((item, index) => {
+                                const isActive = item.href === pathname;
+                                return (
+                                    <a
+                                        key={index}
+                                        href={item.href}
+                                        className={`nav-item flex items-center gap-3 px-4 py-3
+                                            transition-all duration-400 ease-[cubic-bezier(.4,0,.2,1)] rounded-md
+                                            hover:bg-[#232323] hover:text-white hover:scale-105 hover:opacity-90 hover:translate-x-1
+                                            ${isActive ? 'bg-[#232323] text-blue-400 border-l-4 border-blue-400' : 'text-gray-300'}
+                                            ${item.badge ? 'cursor-not-allowed opacity-75' : ''}`}
+                                        target={item.badge ? undefined : "_blank"}
+                                        rel={item.badge ? undefined : "noopener noreferrer"}
+                                        onClick={item.badge ? (e) => e.preventDefault() : undefined}
+                                    >
+                                        {item.icon}
+                                        <span>{item.label}</span>
+                                        {item.badge ? (
+                                            <div className="ml-auto flex items-center gap-1">
+                                                <span className="bg-gray-700 text-gray-300 text-[10px] px-1.5 py-0.5 rounded-md flex items-center gap-1">
+                                                    {item.badge.text}
+                                                    {item.badge.description && (
+                                                        <span className="inline-block ml-1 text-[8px] text-gray-400">
+                                                            {item.badge.description}
+                                                        </span>
+                                                    )}
+                                                </span>
+                                            </div>
+                                        ) : (
+                                            <ExternalLink className="ml-auto w-4 h-4 opacity-50" />
+                                        )}
+                                    </a>
+                                );
+                            })}
+                        </div>
                     </div>
                     <hr className="my-4 border-[#333333]" />
                     {/* Resources section (collapsible) */}
                     <div
                         onMouseEnter={() => setShowResources(true)}
-                        onMouseLeave={() => setShowResources(false)}
+                        onMouseLeave={() => {
+                            if (!resourceNavItems.some(item => item.href === pathname)) setShowResources(false);
+                        }}
                         onFocus={() => setShowResources(true)}
                         onBlur={() => setShowResources(false)}
                     >
@@ -355,26 +373,31 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                             <span>📚</span> Resources
                             {showResources ? <ChevronDown className="w-4 h-4 ml-auto" /> : <ChevronRight className="w-4 h-4 ml-auto" />}
                         </button>
-                        {showResources && (
-                            <div id="sidebar-resources-section">
-                                {resourceNavItems.map((item, index) => {
-                                    const isActive = item.href === pathname;
-                                    return (
-                                        <a
-                                            key={index}
-                                            href={item.href}
-                                            className={`nav-item flex items-center gap-3 px-4 py-3 transition-colors ${isActive ? 'bg-[#232323] text-green-400 border-l-4 border-green-400' : 'text-gray-300 hover:bg-[#232323] hover:text-white'}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            {item.icon}
-                                            <span>{item.label}</span>
-                                            <ExternalLink className="ml-auto w-4 h-4 opacity-50" />
-                                        </a>
-                                    );
-                                })}
-                            </div>
-                        )}
+                        <div
+                            id="sidebar-resources-section"
+                            className={`transition-all duration-400 ease-[cubic-bezier(.4,0,.2,1)] overflow-hidden
+                                ${showResources ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}
+                        >
+                            {resourceNavItems.map((item, index) => {
+                                const isActive = item.href === pathname;
+                                return (
+                                    <a
+                                        key={index}
+                                        href={item.href}
+                                        className={`nav-item flex items-center gap-3 px-4 py-3
+                                            transition-all duration-400 ease-[cubic-bezier(.4,0,.2,1)] rounded-md
+                                            hover:bg-[#232323] hover:text-white hover:scale-105 hover:opacity-90 hover:translate-x-1
+                                            ${isActive ? 'bg-[#232323] text-green-400 border-l-4 border-green-400' : 'text-gray-300'}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        {item.icon}
+                                        <span>{item.label}</span>
+                                        <ExternalLink className="ml-auto w-4 h-4 opacity-50" />
+                                    </a>
+                                );
+                            })}
+                        </div>
                     </div>
 
                     {/* Visual separator */}
@@ -383,7 +406,9 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                     {/* Action items section title */}
                     <div
                         onMouseEnter={() => setShowPath(true)}
-                        onMouseLeave={() => setShowPath(false)}
+                        onMouseLeave={() => {
+                            if (!actionItems.some(item => item.href === pathname)) setShowPath(false);
+                        }}
                         onFocus={() => setShowPath(true)}
                         onBlur={() => setShowPath(false)}
                     >
@@ -397,26 +422,28 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                             <span>🧭</span> Choose Your Path
                             {showPath ? <ChevronDown className="w-4 h-4 ml-auto" /> : <ChevronRight className="w-4 h-4 ml-auto" />}
                         </button>
-                        {showPath && (
-                            <div id="sidebar-path-section" className="px-4 space-y-3 mt-2">
-                                {actionItems.map((item, index) => {
-                                    const isActive = item.href === pathname;
-                                    return (
-                                        <a
-                                            key={`action-${index}`}
-                                            href={item.href}
-                                            className={`block w-full inline-flex items-center justify-start gap-2 px-4 py-2 rounded-md transition-colors ${isActive ? 'bg-[#333333] text-amber-400 border-l-4 border-amber-400' : 'bg-[#2a2a2a] text-white hover:bg-[#333333]'}`}
-                                            target={item.href.startsWith('/') ? undefined : "_blank"}
-                                            rel={item.href.startsWith('/') ? undefined : "noopener noreferrer"}
-                                        >
-                                            {item.icon}
-                                            <span>{item.label}</span>
-                                            {!item.href.startsWith('/') && <ExternalLink className="w-4 h-4 opacity-50 ml-auto" />}
-                                        </a>
-                                    );
-                                })}
-                            </div>
-                        )}
+                        <div
+                            id="sidebar-path-section"
+                            className={`px-4 space-y-3 mt-2 transition-all duration-400 ease-[cubic-bezier(.4,0,.2,1)] overflow-hidden
+                                ${showPath ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}
+                        >
+                            {actionItems.map((item, index) => {
+                                const isActive = item.href === pathname;
+                                return (
+                                    <a
+                                        key={`action-${index}`}
+                                        href={item.href}
+                                        className={`block w-full inline-flex items-center justify-start gap-2 px-4 py-2 rounded-md transition-colors ${isActive ? 'bg-[#333333] text-amber-400 border-l-4 border-amber-400' : 'bg-[#2a2a2a] text-white hover:bg-[#333333]'}`}
+                                        target={item.href.startsWith('/') ? undefined : "_blank"}
+                                        rel={item.href.startsWith('/') ? undefined : "noopener noreferrer"}
+                                    >
+                                        {item.icon}
+                                        <span>{item.label}</span>
+                                        {!item.href.startsWith('/') && <ExternalLink className="w-4 h-4 opacity-50 ml-auto" />}
+                                    </a>
+                                );
+                            })}
+                        </div>
                     </div>
 
                     {/* Visual separator */}
@@ -439,29 +466,31 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                             <span>🤖</span> Choose Your Agent
                             {showAgent ? <ChevronDown className="w-4 h-4 ml-auto" /> : <ChevronRight className="w-4 h-4 ml-auto" />}
                         </button>
-                        {showAgent && (
-                            <div id="sidebar-agent-section" className="px-4 space-y-3 mt-2 mb-6">
-                                {agentBots.map((item, index) => (
-                                    <div
-                                        key={`agent-${index}`}
-                                        className={`relative block w-full inline-flex items-center justify-start gap-2 px-4 py-2 bg-[#202020] text-gray-500 rounded-md cursor-not-allowed opacity-60 ${focusedAgentIndex === index ? 'ring-2 ring-blue-500' : ''}`}
-                                        aria-label={`${item.label} - coming soon`}
-                                        role="button"
-                                        aria-disabled="true"
-                                        tabIndex={0}
-                                        ref={(el) => { agentRefs.current[index] = el; }}
-                                        onKeyDown={(e) => handleAgentKeyDown(e)}
-                                        onFocus={() => setFocusedAgentIndex(index)}
-                                    >
-                                        {item.icon}
-                                        <span>{item.label}</span>
-                                        <span className="absolute top-0 right-0 bg-gray-700 text-gray-300 text-[10px] px-1.5 py-0.5 rounded-bl-md rounded-tr-md" aria-hidden="true">
-                                            Soon
-                                        </span>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+                        <div
+                            id="sidebar-agent-section"
+                            className={`px-4 space-y-3 mt-2 mb-6 transition-all duration-400 ease-[cubic-bezier(.4,0,.2,1)] overflow-hidden
+                                ${showAgent ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}
+                        >
+                            {agentBots.map((item, index) => (
+                                <div
+                                    key={`agent-${index}`}
+                                    className={`relative block w-full inline-flex items-center justify-start gap-2 px-4 py-2 bg-[#202020] text-gray-500 rounded-md cursor-not-allowed opacity-60 ${focusedAgentIndex === index ? 'ring-2 ring-blue-500' : ''}`}
+                                    aria-label={`${item.label} - coming soon`}
+                                    role="button"
+                                    aria-disabled="true"
+                                    tabIndex={0}
+                                    ref={(el) => { agentRefs.current[index] = el; }}
+                                    onKeyDown={(e) => handleAgentKeyDown(e)}
+                                    onFocus={() => setFocusedAgentIndex(index)}
+                                >
+                                    {item.icon}
+                                    <span>{item.label}</span>
+                                    <span className="absolute top-0 right-0 bg-gray-700 text-gray-300 text-[10px] px-1.5 py-0.5 rounded-bl-md rounded-tr-md" aria-hidden="true">
+                                        Soon
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </nav>
                 <div className="flex gap-4 px-4 py-4 mt-6 border-t border-[#333333]">
