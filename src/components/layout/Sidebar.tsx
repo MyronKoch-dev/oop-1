@@ -20,6 +20,7 @@ import {
     Bot,
     Github
 } from "lucide-react";
+import { FaTelegramPlane } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 
 interface NavItem {
@@ -91,21 +92,30 @@ const navItems: NavItem[] = [
         href: "https://andromedaprotocol.io",
         label: "Visit our website",
         icon: <BookOpen className="w-5 h-5" />
-    },
+    }
+];
+
+// Social links as a separate array
+const socialLinks = [
     {
         href: "https://www.youtube.com/@AndromedaProtocol?sub_confirmation=1",
-        label: "Subscribe on YouTube",
-        icon: <Youtube className="w-5 h-5" />
+        icon: <Youtube className="w-5 h-5" />,
+        label: "YouTube"
     },
     {
         href: "https://twitter.com/intent/follow?screen_name=AndromedaProt",
-        label: "Follow us on X",
-        icon: <X className="w-5 h-5" />
+        icon: <X className="w-5 h-5" />,
+        label: "X (Twitter)"
     },
     {
         href: "https://github.com/andromedaprotocol",
-        label: "Follow us on GitHub",
-        icon: <Github className="w-5 h-5" />
+        icon: <Github className="w-5 h-5" />,
+        label: "GitHub"
+    },
+    {
+        href: "https://t.me/andromedaprotocol/1",
+        icon: <FaTelegramPlane className="w-5 h-5" />,
+        label: "Telegram"
     }
 ];
 
@@ -289,6 +299,23 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                             )}
                         </a>
                     ))}
+
+                    {/* Social links icons only */}
+                    <div className="flex gap-4 px-4 py-4 mt-6 border-t border-[#333333]">
+                        {socialLinks.map((item) => (
+                            <a
+                                key={item.label}
+                                href={item.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label={item.label}
+                                title={item.label}
+                                className="text-gray-400 hover:text-white transition-colors"
+                            >
+                                {item.icon}
+                            </a>
+                        ))}
+                    </div>
 
                     {/* Visual separator */}
                     <hr className="my-4 border-[#333333]" />
