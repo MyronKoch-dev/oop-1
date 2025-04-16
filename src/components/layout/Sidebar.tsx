@@ -303,7 +303,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                         onBlur={() => setShowTools(false)}
                     >
                         <button
-                            className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold text-blue-400 uppercase tracking-wider focus:outline-none"
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-[#7B3FE4]"
                             onClick={() => setShowTools((v) => !v)}
                             aria-expanded={showTools}
                             aria-controls="sidebar-tools-section"
@@ -326,7 +326,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                                         className={`nav-item flex items-center gap-3 px-4 py-3
                                             transition-all duration-400 ease-[cubic-bezier(.4,0,.2,1)] rounded-md
                                             hover:bg-[#232323] hover:text-white hover:scale-105 hover:opacity-90 hover:translate-x-1
-                                            ${isActive ? 'bg-[#232323] text-blue-400 border-l-4 border-blue-400' : 'text-gray-300'}
+                                            ${isActive ? 'bg-[#232323] text-[#7B3FE4] border-l-4 border-[#7B3FE4]' : 'text-gray-300'}
                                             ${item.badge ? 'cursor-not-allowed opacity-75' : ''}`}
                                         target={item.badge ? undefined : "_blank"}
                                         rel={item.badge ? undefined : "noopener noreferrer"}
@@ -364,7 +364,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                         onBlur={() => setShowResources(false)}
                     >
                         <button
-                            className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold text-green-400 uppercase tracking-wider focus:outline-none"
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-[#3FB6E4]"
                             onClick={() => setShowResources((v) => !v)}
                             aria-expanded={showResources}
                             aria-controls="sidebar-resources-section"
@@ -387,7 +387,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                                         className={`nav-item flex items-center gap-3 px-4 py-3
                                             transition-all duration-400 ease-[cubic-bezier(.4,0,.2,1)] rounded-md
                                             hover:bg-[#232323] hover:text-white hover:scale-105 hover:opacity-90 hover:translate-x-1
-                                            ${isActive ? 'bg-[#232323] text-green-400 border-l-4 border-green-400' : 'text-gray-300'}`}
+                                            ${isActive ? 'bg-[#232323] text-[#3FB6E4] border-l-4 border-[#3FB6E4]' : 'text-gray-300'}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
@@ -413,7 +413,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                         onBlur={() => setShowPath(false)}
                     >
                         <button
-                            className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold text-amber-500 uppercase tracking-wider focus:outline-none"
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-[#FFB300]"
                             onClick={() => setShowPath((v) => !v)}
                             aria-expanded={showPath}
                             aria-controls="sidebar-path-section"
@@ -433,7 +433,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                                     <a
                                         key={`action-${index}`}
                                         href={item.href}
-                                        className={`block w-full inline-flex items-center justify-start gap-2 px-4 py-2 rounded-md transition-colors ${isActive ? 'bg-[#333333] text-amber-400 border-l-4 border-amber-400' : 'bg-[#2a2a2a] text-white hover:bg-[#333333]'}`}
+                                        className={`block w-full inline-flex items-center justify-start gap-2 px-4 py-2 rounded-md transition-colors
+                                            ${isActive ? 'bg-[#333333] text-[#FFB300] border-l-4 border-[#FFB300]' : 'bg-[#2a2a2a] text-white hover:bg-[#333333]'}`}
                                         target={item.href.startsWith('/') ? undefined : "_blank"}
                                         rel={item.href.startsWith('/') ? undefined : "noopener noreferrer"}
                                     >
@@ -457,7 +458,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                         onBlur={() => setShowAgent(false)}
                     >
                         <button
-                            className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold text-amber-500 uppercase tracking-wider focus:outline-none"
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-[#E43F7B]"
                             onClick={() => setShowAgent((v) => !v)}
                             aria-expanded={showAgent}
                             aria-controls="sidebar-agent-section"
