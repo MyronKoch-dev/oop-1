@@ -189,6 +189,8 @@ const agentBots: NavItem[] = [
 ];
 
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
+    const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+
     // Close sidebar on ESC key press
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -243,14 +245,6 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     const [showTools, setShowTools] = useState(true);
     const [showResources, setShowResources] = useState(false);
 
-    // Handlers for hover/focus open/close
-    const handleSectionHover = (setter: (v: boolean) => void) => ({
-        onMouseEnter: () => setter(true),
-        onMouseLeave: () => setter(false),
-        onFocus: () => setter(true),
-        onBlur: () => setter(false),
-    });
-
     return (
         <>
             {/* Overlay that appears behind the sidebar on mobile when it's open */}
@@ -292,154 +286,183 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
                 <nav className="mt-2 py-2">
                     {/* Tools section (collapsible) */}
-                    <button
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold text-blue-400 uppercase tracking-wider focus:outline-none"
-                        onClick={() => setShowTools((v) => !v)}
-                        aria-expanded={showTools}
-                        aria-controls="sidebar-tools-section"
-                        tabIndex={0}
-                        {...handleSectionHover(setShowTools)}
+                    <div
+                        onMouseEnter={() => setShowTools(true)}
+                        onMouseLeave={() => setShowTools(false)}
+                        onFocus={() => setShowTools(true)}
+                        onBlur={() => setShowTools(false)}
                     >
-                        <span>🛠️</span> Tools
-                        {showTools ? <ChevronDown className="w-4 h-4 ml-auto" /> : <ChevronRight className="w-4 h-4 ml-auto" />}
-                    </button>
-                    {showTools && (
-                        <div id="sidebar-tools-section">
-                            {toolNavItems.map((item, index) => (
-                                <a
-                                    key={index}
-                                    href={item.href}
-                                    className={`nav-item flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-[#232323] hover:text-white transition-colors ${item.badge ? 'cursor-not-allowed opacity-75' : ''}`}
-                                    target={item.badge ? undefined : "_blank"}
-                                    rel={item.badge ? undefined : "noopener noreferrer"}
-                                    onClick={item.badge ? (e) => e.preventDefault() : undefined}
-                                >
-                                    {item.icon}
-                                    <span>{item.label}</span>
-                                    {item.badge ? (
-                                        <div className="ml-auto flex items-center gap-1">
-                                            <span className="bg-gray-700 text-gray-300 text-[10px] px-1.5 py-0.5 rounded-md flex items-center gap-1">
-                                                {item.badge.text}
-                                                {item.badge.description && (
-                                                    <span className="inline-block ml-1 text-[8px] text-gray-400">
-                                                        {item.badge.description}
+                        <button
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold text-blue-400 uppercase tracking-wider focus:outline-none"
+                            onClick={() => setShowTools((v) => !v)}
+                            aria-expanded={showTools}
+                            aria-controls="sidebar-tools-section"
+                            tabIndex={0}
+                        >
+                            <span>🛠️</span> Tools
+                            {showTools ? <ChevronDown className="w-4 h-4 ml-auto" /> : <ChevronRight className="w-4 h-4 ml-auto" />}
+                        </button>
+                        {showTools && (
+                            <div id="sidebar-tools-section">
+                                {toolNavItems.map((item, index) => {
+                                    const isActive = item.href === pathname;
+                                    return (
+                                        <a
+                                            key={index}
+                                            href={item.href}
+                                            className={`nav-item flex items-center gap-3 px-4 py-3 transition-colors ${isActive ? 'bg-[#232323] text-blue-400 border-l-4 border-blue-400' : 'text-gray-300 hover:bg-[#232323] hover:text-white'} ${item.badge ? 'cursor-not-allowed opacity-75' : ''}`}
+                                            target={item.badge ? undefined : "_blank"}
+                                            rel={item.badge ? undefined : "noopener noreferrer"}
+                                            onClick={item.badge ? (e) => e.preventDefault() : undefined}
+                                        >
+                                            {item.icon}
+                                            <span>{item.label}</span>
+                                            {item.badge ? (
+                                                <div className="ml-auto flex items-center gap-1">
+                                                    <span className="bg-gray-700 text-gray-300 text-[10px] px-1.5 py-0.5 rounded-md flex items-center gap-1">
+                                                        {item.badge.text}
+                                                        {item.badge.description && (
+                                                            <span className="inline-block ml-1 text-[8px] text-gray-400">
+                                                                {item.badge.description}
+                                                            </span>
+                                                        )}
                                                     </span>
-                                                )}
-                                            </span>
-                                        </div>
-                                    ) : (
-                                        <ExternalLink className="ml-auto w-4 h-4 opacity-50" />
-                                    )}
-                                </a>
-                            ))}
-                        </div>
-                    )}
+                                                </div>
+                                            ) : (
+                                                <ExternalLink className="ml-auto w-4 h-4 opacity-50" />
+                                            )}
+                                        </a>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
                     <hr className="my-4 border-[#333333]" />
                     {/* Resources section (collapsible) */}
-                    <button
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold text-green-400 uppercase tracking-wider focus:outline-none"
-                        onClick={() => setShowResources((v) => !v)}
-                        aria-expanded={showResources}
-                        aria-controls="sidebar-resources-section"
-                        tabIndex={0}
-                        {...handleSectionHover(setShowResources)}
+                    <div
+                        onMouseEnter={() => setShowResources(true)}
+                        onMouseLeave={() => setShowResources(false)}
+                        onFocus={() => setShowResources(true)}
+                        onBlur={() => setShowResources(false)}
                     >
-                        <span>📚</span> Resources
-                        {showResources ? <ChevronDown className="w-4 h-4 ml-auto" /> : <ChevronRight className="w-4 h-4 ml-auto" />}
-                    </button>
-                    {showResources && (
-                        <div id="sidebar-resources-section">
-                            {resourceNavItems.map((item, index) => (
-                                <a
-                                    key={index}
-                                    href={item.href}
-                                    className="nav-item flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-[#232323] hover:text-white transition-colors"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    {item.icon}
-                                    <span>{item.label}</span>
-                                    <ExternalLink className="ml-auto w-4 h-4 opacity-50" />
-                                </a>
-                            ))}
-                        </div>
-                    )}
+                        <button
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold text-green-400 uppercase tracking-wider focus:outline-none"
+                            onClick={() => setShowResources((v) => !v)}
+                            aria-expanded={showResources}
+                            aria-controls="sidebar-resources-section"
+                            tabIndex={0}
+                        >
+                            <span>📚</span> Resources
+                            {showResources ? <ChevronDown className="w-4 h-4 ml-auto" /> : <ChevronRight className="w-4 h-4 ml-auto" />}
+                        </button>
+                        {showResources && (
+                            <div id="sidebar-resources-section">
+                                {resourceNavItems.map((item, index) => {
+                                    const isActive = item.href === pathname;
+                                    return (
+                                        <a
+                                            key={index}
+                                            href={item.href}
+                                            className={`nav-item flex items-center gap-3 px-4 py-3 transition-colors ${isActive ? 'bg-[#232323] text-green-400 border-l-4 border-green-400' : 'text-gray-300 hover:bg-[#232323] hover:text-white'}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            {item.icon}
+                                            <span>{item.label}</span>
+                                            <ExternalLink className="ml-auto w-4 h-4 opacity-50" />
+                                        </a>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
 
                     {/* Visual separator */}
                     <hr className="my-4 border-[#333333]" />
 
                     {/* Action items section title */}
-                    <button
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold text-amber-500 uppercase tracking-wider focus:outline-none"
-                        onClick={() => setShowPath((v) => !v)}
-                        aria-expanded={showPath}
-                        aria-controls="sidebar-path-section"
-                        tabIndex={0}
-                        {...handleSectionHover(setShowPath)}
+                    <div
+                        onMouseEnter={() => setShowPath(true)}
+                        onMouseLeave={() => setShowPath(false)}
+                        onFocus={() => setShowPath(true)}
+                        onBlur={() => setShowPath(false)}
                     >
-                        <span>🧭</span> Choose Your Path
-                        {showPath ? <ChevronDown className="w-4 h-4 ml-auto" /> : <ChevronRight className="w-4 h-4 ml-auto" />}
-                    </button>
-
-                    {/* Action items as buttons */}
-                    {showPath && (
-                        <div id="sidebar-path-section" className="px-4 space-y-3 mt-2">
-                            {actionItems.map((item, index) => (
-                                <a
-                                    key={`action-${index}`}
-                                    href={item.href}
-                                    className="block w-full inline-flex items-center justify-start gap-2 px-4 py-2 bg-[#2a2a2a] text-white rounded-md hover:bg-[#333333] transition-colors"
-                                    target={item.href.startsWith('/') ? undefined : "_blank"}
-                                    rel={item.href.startsWith('/') ? undefined : "noopener noreferrer"}
-                                >
-                                    {item.icon}
-                                    <span>{item.label}</span>
-                                    {!item.href.startsWith('/') && <ExternalLink className="w-4 h-4 opacity-50 ml-auto" />}
-                                </a>
-                            ))}
-                        </div>
-                    )}
+                        <button
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold text-amber-500 uppercase tracking-wider focus:outline-none"
+                            onClick={() => setShowPath((v) => !v)}
+                            aria-expanded={showPath}
+                            aria-controls="sidebar-path-section"
+                            tabIndex={0}
+                        >
+                            <span>🧭</span> Choose Your Path
+                            {showPath ? <ChevronDown className="w-4 h-4 ml-auto" /> : <ChevronRight className="w-4 h-4 ml-auto" />}
+                        </button>
+                        {showPath && (
+                            <div id="sidebar-path-section" className="px-4 space-y-3 mt-2">
+                                {actionItems.map((item, index) => {
+                                    const isActive = item.href === pathname;
+                                    return (
+                                        <a
+                                            key={`action-${index}`}
+                                            href={item.href}
+                                            className={`block w-full inline-flex items-center justify-start gap-2 px-4 py-2 rounded-md transition-colors ${isActive ? 'bg-[#333333] text-amber-400 border-l-4 border-amber-400' : 'bg-[#2a2a2a] text-white hover:bg-[#333333]'}`}
+                                            target={item.href.startsWith('/') ? undefined : "_blank"}
+                                            rel={item.href.startsWith('/') ? undefined : "noopener noreferrer"}
+                                        >
+                                            {item.icon}
+                                            <span>{item.label}</span>
+                                            {!item.href.startsWith('/') && <ExternalLink className="w-4 h-4 opacity-50 ml-auto" />}
+                                        </a>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
 
                     {/* Visual separator */}
                     <hr className="my-4 border-[#333333]" />
 
                     {/* Agent bots section title */}
-                    <button
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold text-amber-500 uppercase tracking-wider focus:outline-none"
-                        onClick={() => setShowAgent((v) => !v)}
-                        aria-expanded={showAgent}
-                        aria-controls="sidebar-agent-section"
-                        tabIndex={0}
-                        {...handleSectionHover(setShowAgent)}
+                    <div
+                        onMouseEnter={() => setShowAgent(true)}
+                        onMouseLeave={() => setShowAgent(false)}
+                        onFocus={() => setShowAgent(true)}
+                        onBlur={() => setShowAgent(false)}
                     >
-                        <span>🤖</span> Choose Your Agent
-                        {showAgent ? <ChevronDown className="w-4 h-4 ml-auto" /> : <ChevronRight className="w-4 h-4 ml-auto" />}
-                    </button>
-
-                    {/* Agent bots as buttons */}
-                    {showAgent && (
-                        <div id="sidebar-agent-section" className="px-4 space-y-3 mt-2 mb-6">
-                            {agentBots.map((item, index) => (
-                                <div
-                                    key={`agent-${index}`}
-                                    className={`relative block w-full inline-flex items-center justify-start gap-2 px-4 py-2 bg-[#202020] text-gray-500 rounded-md cursor-not-allowed opacity-60 ${focusedAgentIndex === index ? 'ring-2 ring-blue-500' : ''}`}
-                                    aria-label={`${item.label} - coming soon`}
-                                    role="button"
-                                    aria-disabled="true"
-                                    tabIndex={0}
-                                    ref={(el) => { agentRefs.current[index] = el; }}
-                                    onKeyDown={(e) => handleAgentKeyDown(e)}
-                                    onFocus={() => setFocusedAgentIndex(index)}
-                                >
-                                    {item.icon}
-                                    <span>{item.label}</span>
-                                    <span className="absolute top-0 right-0 bg-gray-700 text-gray-300 text-[10px] px-1.5 py-0.5 rounded-bl-md rounded-tr-md" aria-hidden="true">
-                                        Soon
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                        <button
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold text-amber-500 uppercase tracking-wider focus:outline-none"
+                            onClick={() => setShowAgent((v) => !v)}
+                            aria-expanded={showAgent}
+                            aria-controls="sidebar-agent-section"
+                            tabIndex={0}
+                        >
+                            <span>🤖</span> Choose Your Agent
+                            {showAgent ? <ChevronDown className="w-4 h-4 ml-auto" /> : <ChevronRight className="w-4 h-4 ml-auto" />}
+                        </button>
+                        {showAgent && (
+                            <div id="sidebar-agent-section" className="px-4 space-y-3 mt-2 mb-6">
+                                {agentBots.map((item, index) => (
+                                    <div
+                                        key={`agent-${index}`}
+                                        className={`relative block w-full inline-flex items-center justify-start gap-2 px-4 py-2 bg-[#202020] text-gray-500 rounded-md cursor-not-allowed opacity-60 ${focusedAgentIndex === index ? 'ring-2 ring-blue-500' : ''}`}
+                                        aria-label={`${item.label} - coming soon`}
+                                        role="button"
+                                        aria-disabled="true"
+                                        tabIndex={0}
+                                        ref={(el) => { agentRefs.current[index] = el; }}
+                                        onKeyDown={(e) => handleAgentKeyDown(e)}
+                                        onFocus={() => setFocusedAgentIndex(index)}
+                                    >
+                                        {item.icon}
+                                        <span>{item.label}</span>
+                                        <span className="absolute top-0 right-0 bg-gray-700 text-gray-300 text-[10px] px-1.5 py-0.5 rounded-bl-md rounded-tr-md" aria-hidden="true">
+                                            Soon
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </nav>
                 <div className="flex gap-4 px-4 py-4 mt-6 border-t border-[#333333]">
                     {socialLinks.map((item) => (
