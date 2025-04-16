@@ -42,6 +42,16 @@ interface OnboardingResponsePayload {
     haltFlow?: boolean; // True if the frontend should stop the flow (e.g., fatal email validation)
 }
 
+// Normalize a social handle to always start with '@' if not empty/null
+function normalizeHandle(handle: string | null | undefined): string | null {
+    if (!handle) return null;
+    handle = handle.trim();
+    if (!handle) return null;
+    if (!handle.startsWith('@')) {
+        handle = '@' + handle;
+    }
+    return handle;
+}
 
 export async function POST(request: NextRequest) {
     const requestTimestamp = Date.now(); // For logging request time
@@ -203,7 +213,7 @@ export async function POST(request: NextRequest) {
                     if (typeof responseToParse === 'string') {
                         const telegramHandle = responseToParse.trim().toLowerCase();
                         if (telegramHandle && !['none', 'no', 'n/a'].includes(telegramHandle)) {
-                            dataToUpdate.telegram = telegramHandle.startsWith('@') ? telegramHandle : `@${telegramHandle}`;
+                            dataToUpdate.telegram = normalizeHandle(telegramHandle);
                         } else {
                             dataToUpdate.telegram = null;
                         }
@@ -215,7 +225,7 @@ export async function POST(request: NextRequest) {
                     if (typeof responseToParse === 'string') {
                         const xHandle = responseToParse.trim().toLowerCase();
                         if (xHandle && !['none', 'no', 'n/a'].includes(xHandle)) {
-                            dataToUpdate.x = xHandle.startsWith('@') ? xHandle : `@${xHandle}`;
+                            dataToUpdate.x = normalizeHandle(xHandle);
                         } else {
                             dataToUpdate.x = null;
                         }

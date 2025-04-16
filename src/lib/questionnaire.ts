@@ -49,7 +49,7 @@ const questions: QuestionDetail[] = [
     // Index 3 (Telegram)
     {
         index: 3,
-        text: "What is your Telegram handle? (Optional, include @)",
+        text: "What is your Telegram handle? (Optional)",
         inputMode: 'text',
         isOptional: true,
         validationHint: 'telegram_handle',
@@ -58,7 +58,7 @@ const questions: QuestionDetail[] = [
     // Index 4 (X/Twitter)
     {
         index: 4,
-        text: "What is your X/Twitter handle? (Optional, include @)",
+        text: "What is your X/Twitter handle? (Optional)",
         inputMode: 'text',
         isOptional: true,
         validationHint: 'x_handle',

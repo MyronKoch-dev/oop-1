@@ -168,8 +168,6 @@ export function ChatMessages({
                                         </p>
                                         <a
                                             href={message.finalResult.recommendedPathUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
                                             className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition text-lg mt-2"
                                         >
                                             <span className="mr-2">Get Started</span> 🚀
