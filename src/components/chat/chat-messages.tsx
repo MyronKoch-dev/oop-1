@@ -6,7 +6,7 @@ import { Avatar } from "@/components/ui/avatar" // Assuming Shadcn setup created
 import { Button } from "@/components/ui/button" // Assuming Shadcn setup created this
 import { Card } from "@/components/ui/card"     // Assuming Shadcn setup created this
 import { ScrollArea } from "@/components/ui/scroll-area" // Assuming Shadcn setup created this
-import { Bot, User, ExternalLink } from "lucide-react" // Ensure lucide-react is installed
+import { User, ExternalLink } from "lucide-react" // Ensure lucide-react is installed
 import React from "react"
 
 // Interface for a message option/button
@@ -143,13 +143,16 @@ export function ChatMessages({
                         >
                             {/* Avatar for user/bot */}
                             <Avatar
-                                className={`h-8 w-8 flex items-center justify-center ${message.role === "user" ? "bg-blue-500 dark:bg-blue-500" : "bg-[#2a2a2a] dark:bg-[#2a2a2a]" // Different background colors
-                                    }`}
+                                className={`h-8 w-8 flex items-center justify-center ${message.role === "user" ? "bg-blue-500 dark:bg-blue-500" : "bg-[#2a2a2a] dark:bg-[#2a2a2a]"}`}
                             >
                                 {message.role === "user" ? (
                                     <User className="h-4 w-4 text-white dark:text-white" />
                                 ) : (
-                                    <Bot className="h-4 w-4 text-white dark:text-white" />
+                                    <img
+                                        src="https://avatars.githubusercontent.com/u/86694044?s=200&v=4"
+                                        alt="Andromeda Bot"
+                                        className="h-6 w-6 rounded-full bg-[#232323]"
+                                    />
                                 )}
                             </Avatar>
                             {/* Container for message content and options */}

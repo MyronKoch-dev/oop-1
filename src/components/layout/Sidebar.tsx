@@ -303,7 +303,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                         onBlur={() => setShowTools(false)}
                     >
                         <button
-                            className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-[#7B3FE4]"
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-[#A084F7]"
                             onClick={() => setShowTools((v) => !v)}
                             aria-expanded={showTools}
                             aria-controls="sidebar-tools-section"
@@ -326,7 +326,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                                         className={`nav-item flex items-center gap-3 px-4 py-3
                                             transition-all duration-400 ease-[cubic-bezier(.4,0,.2,1)] rounded-md
                                             hover:bg-[#232323] hover:text-white hover:scale-105 hover:opacity-90 hover:translate-x-1
-                                            ${isActive ? 'bg-[#232323] text-[#7B3FE4] border-l-4 border-[#7B3FE4]' : 'text-gray-300'}
+                                            ${isActive ? 'bg-[#232323] text-[#A084F7] border-l-4 border-[#A084F7]' : 'text-gray-300'}
                                             ${item.badge ? 'cursor-not-allowed opacity-75' : ''}`}
                                         target={item.badge ? undefined : "_blank"}
                                         rel={item.badge ? undefined : "noopener noreferrer"}
