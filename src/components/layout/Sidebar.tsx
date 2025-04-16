@@ -428,7 +428,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                         onBlur={() => { if (!pathLocked) setShowPath(false); }}
                     >
                         <button
-                            className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-[#FFB300]"
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-[#E43F7B]"
                             onClick={() => {
                                 setPathLocked((locked) => {
                                     const newLocked = !locked;
@@ -480,7 +480,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                         onBlur={() => { if (!agentLocked) setShowAgent(false); }}
                     >
                         <button
-                            className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-[#E43F7B]"
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-[#FFB300]"
                             onClick={() => {
                                 setAgentLocked((locked) => {
                                     const newLocked = !locked;
