@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { Layers } from "lucide-react";
+import React, { useState } from "react";
 
 interface RightSidebarProps {
     isOpen: boolean;
@@ -9,6 +10,8 @@ interface RightSidebarProps {
 }
 
 export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
     return (
         <>
             {/* Overlay that appears behind the sidebar on mobile when it's open */}
@@ -41,148 +44,83 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                         </div>
 
                         <ol className="launchpad-list space-y-6">
-                            <li className="launchpad-item bg-[#262626] p-4 rounded-md border border-[#333333]">
-                                <div className="flex gap-3">
-                                    <div className="launchpad-number flex-shrink-0 bg-[#333333] w-8 h-8 rounded-full flex items-center justify-center text-amber-400 font-bold">⭐</div>
-                                    <p className="launchpad-description text-white font-medium">
-                                        COMPLETE ALL OF THE FOLLOWING TASKS TO JOIN THE ANDROMEDA FLIGHT CREW 👽
-                                    </p>
-                                </div>
-                            </li>
-
-                            <li className="launchpad-item bg-[#262626] p-4 rounded-md border border-[#333333]">
-                                <div className="flex gap-3">
-                                    <div className="launchpad-number flex-shrink-0 bg-[#333333] w-8 h-8 rounded-full flex items-center justify-center text-amber-400 font-bold">1</div>
-                                    <div className="content">
-                                        <h4 className="launchpad-title text-white font-semibold">Join the Andromeda Developer Program</h4>
-                                        <p className="launchpad-description text-gray-300 text-sm mt-1">
-                                            Joining our telegram is the first step in becoming a part of the Andromeda Developer Program.
-                                            Here You will connect with like-minded individuals and gain access to exclusive resources.
-                                        </p>
-                                        <a
-                                            href="https://t.me/andromedaprotocol/3776"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="block text-blue-400 hover:underline text-center font-medium mt-3 transition"
-                                        >
-                                            Join Andromeda Dev Telegram
-                                        </a>
+                            {[
+                                {
+                                    number: "⭐",
+                                    title: "COMPLETE ALL OF THE FOLLOWING TASKS TO JOIN THE ANDROMEDA FLIGHT CREW 👽",
+                                    description: null,
+                                    link: null,
+                                },
+                                {
+                                    number: "1",
+                                    title: "Join the Andromeda Developer Program",
+                                    description: "Joining our telegram is the first step in becoming a part of the Andromeda Developer Program. Here You will connect with like-minded individuals and gain access to exclusive resources.",
+                                    link: { href: "https://t.me/andromedaprotocol/3776", text: "Join Andromeda Dev Telegram" },
+                                },
+                                {
+                                    number: "2",
+                                    title: "Introduce Yourself in the Telegram",
+                                    description: "Once you're a member, introduce yourself by sharing your background and aspirations. Here, you'll make friends and receive real-time support from the community.",
+                                    link: null,
+                                },
+                                {
+                                    number: "3",
+                                    title: "Master ADO Building",
+                                    description: "Complete 8 comprehensive guides to understand the fundamentals of ADO development.",
+                                    link: { href: "https://docs.andromedaprotocol.io/guides/guides-and-examples/ado-builder", text: "Start ADO Builder Guides" },
+                                },
+                                {
+                                    number: "4",
+                                    title: "Build Your First App",
+                                    description: "Create a functional application using the Andromeda App Builder.",
+                                    link: { href: "https://docs.andromedaprotocol.io/guides/guides-and-examples/app-builder/nft-auction-marketplace", text: "Explore App Builder Guide" },
+                                },
+                                {
+                                    number: "5",
+                                    title: "Explore Embeddables",
+                                    description: "Learn how to create Andromeda embeddables.",
+                                    link: { href: "https://docs.andromedaprotocol.io/guides/guides-and-examples/embeddables/nft-auction", text: "Try Embeddables Guide" },
+                                },
+                                {
+                                    number: "6",
+                                    title: "Share Your Success",
+                                    description: "Showcase your achievements and get recognition from the community.",
+                                    link: { href: "https://t.me/andromedaprotocol/3776", text: "Post in Main Telegram Channel" },
+                                },
+                                {
+                                    number: "7",
+                                    title: "Launch Your Project",
+                                    description: "Take on real-world challenges and contribute to the ecosystem.",
+                                    link: { href: "https://github.com/andromedaprotocol/hackerboard_tasks/issues", text: "Visit The 🔗�� 🪓 Hackerboard" },
+                                },
+                            ].map((item, idx) => (
+                                <li
+                                    key={idx}
+                                    className="launchpad-item bg-[#262626] p-4 rounded-md border border-[#333333] cursor-pointer transition-all duration-200"
+                                    onMouseEnter={() => setHoveredIndex(idx)}
+                                    onMouseLeave={() => setHoveredIndex(null)}
+                                >
+                                    <div className="flex gap-3 items-center">
+                                        <div className="launchpad-number flex-shrink-0 bg-[#333333] w-8 h-8 rounded-full flex items-center justify-center text-amber-400 font-bold">{item.number}</div>
+                                        <div className="launchpad-title text-white font-semibold text-base flex-1 break-words">{item.title}</div>
                                     </div>
-                                </div>
-                            </li>
-
-                            <li className="launchpad-item bg-[#262626] p-4 rounded-md border border-[#333333]">
-                                <div className="flex gap-3">
-                                    <div className="launchpad-number flex-shrink-0 bg-[#333333] w-8 h-8 rounded-full flex items-center justify-center text-amber-400 font-bold">2</div>
-                                    <div className="content">
-                                        <h4 className="launchpad-title text-white font-semibold">Introduce Yourself in the Telegram</h4>
-                                        <p className="launchpad-description text-gray-300 text-sm mt-1 italic font-medium">
-                                            Once you&apos;re a member, introduce yourself by sharing your background and aspirations.
-                                            Here, you&apos;ll make friends and receive real-time support from the community.
-                                        </p>
+                                    <div className={`transition-all duration-300 overflow-hidden ${hoveredIndex === idx ? 'max-h-96 mt-2' : 'max-h-0'}`}>
+                                        {item.description && (
+                                            <div className="launchpad-description text-gray-300 text-sm text-center">{item.description}</div>
+                                        )}
+                                        {item.link && (
+                                            <a
+                                                href={item.link.href}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="block text-blue-400 hover:underline text-center font-medium mt-3 transition"
+                                            >
+                                                {item.link.text}
+                                            </a>
+                                        )}
                                     </div>
-                                </div>
-                            </li>
-
-                            <li className="launchpad-item bg-[#262626] p-4 rounded-md border border-[#333333]">
-                                <div className="flex gap-3">
-                                    <div className="launchpad-number flex-shrink-0 bg-[#333333] w-8 h-8 rounded-full flex items-center justify-center text-gray-400 font-bold">3</div>
-                                    <div className="content">
-                                        <h4 className="launchpad-title text-white font-semibold">Master ADO Building</h4>
-                                        <p className="launchpad-description text-gray-300 text-sm mt-1">
-                                            Complete 8 comprehensive guides to understand the fundamentals of ADO development.
-                                        </p>
-                                        <a
-                                            href="https://docs.andromedaprotocol.io/guides/guides-and-examples/ado-builder"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="block text-blue-400 hover:underline text-center font-medium mt-3 transition"
-                                        >
-                                            Start ADO Builder Guides
-                                        </a>
-                                    </div>
-                                </div>
-                            </li>
-
-                            <li className="launchpad-item bg-[#262626] p-4 rounded-md border border-[#333333]">
-                                <div className="flex gap-3">
-                                    <div className="launchpad-number flex-shrink-0 bg-[#333333] w-8 h-8 rounded-full flex items-center justify-center text-gray-400 font-bold">4</div>
-                                    <div className="content">
-                                        <h4 className="launchpad-title text-white font-semibold">Build Your First App</h4>
-                                        <p className="launchpad-description text-gray-300 text-sm mt-1">
-                                            Create a functional application using the Andromeda App Builder.
-                                        </p>
-                                        <a
-                                            href="https://docs.andromedaprotocol.io/guides/guides-and-examples/app-builder/nft-auction-marketplace"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="block text-blue-400 hover:underline text-center font-medium mt-3 transition"
-                                        >
-                                            Explore App Builder Guide
-                                        </a>
-                                    </div>
-                                </div>
-                            </li>
-
-                            <li className="launchpad-item bg-[#262626] p-4 rounded-md border border-[#333333]">
-                                <div className="flex gap-3">
-                                    <div className="launchpad-number flex-shrink-0 bg-[#333333] w-8 h-8 rounded-full flex items-center justify-center text-gray-400 font-bold">5</div>
-                                    <div className="content">
-                                        <h4 className="launchpad-title text-white font-semibold">Explore Embeddables</h4>
-                                        <p className="launchpad-description text-gray-300 text-sm mt-1">
-                                            Learn how to create Andromeda embeddables.
-                                        </p>
-                                        <a
-                                            href="https://docs.andromedaprotocol.io/guides/guides-and-examples/embeddables/nft-auction"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="block text-blue-400 hover:underline text-center font-medium mt-3 transition"
-                                        >
-                                            Try Embeddables Guide
-                                        </a>
-                                    </div>
-                                </div>
-                            </li>
-
-                            <li className="launchpad-item bg-[#262626] p-4 rounded-md border border-[#333333]">
-                                <div className="flex gap-3">
-                                    <div className="launchpad-number flex-shrink-0 bg-[#333333] w-8 h-8 rounded-full flex items-center justify-center text-gray-400 font-bold">6</div>
-                                    <div className="content">
-                                        <h4 className="launchpad-title text-white font-semibold">Share Your Success</h4>
-                                        <p className="launchpad-description text-gray-300 text-sm mt-1">
-                                            Showcase your achievements and get recognition from the community.
-                                        </p>
-                                        <a
-                                            href="https://t.me/andromedaprotocol/3776"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="block text-blue-400 hover:underline text-center font-medium mt-3 transition"
-                                        >
-                                            Post in Main Telegram Channel
-                                        </a>
-                                    </div>
-                                </div>
-                            </li>
-
-                            <li className="launchpad-item bg-[#262626] p-4 rounded-md border border-[#333333]">
-                                <div className="flex gap-3">
-                                    <div className="launchpad-number flex-shrink-0 bg-[#333333] w-8 h-8 rounded-full flex items-center justify-center text-gray-400 font-bold">7</div>
-                                    <div className="content">
-                                        <h4 className="launchpad-title text-white font-semibold">Launch Your Project</h4>
-                                        <p className="launchpad-description text-gray-300 text-sm mt-1">
-                                            Take on real-world challenges and contribute to the ecosystem.
-                                        </p>
-                                        <a
-                                            href="https://github.com/andromedaprotocol/hackerboard_tasks/issues"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="block text-blue-400 hover:underline text-center font-medium mt-3 transition"
-                                        >
-                                            Visit The 🔗🔗 🪓 Hackerboard
-                                        </a>
-                                    </div>
-                                </div>
-                            </li>
+                                </li>
+                            ))}
                         </ol>
                     </div>
                 </div>
