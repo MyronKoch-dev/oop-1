@@ -243,6 +243,14 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     const [showTools, setShowTools] = useState(true);
     const [showResources, setShowResources] = useState(false);
 
+    // Handlers for hover/focus open/close
+    const handleSectionHover = (setter: (v: boolean) => void) => ({
+        onMouseEnter: () => setter(true),
+        onMouseLeave: () => setter(false),
+        onFocus: () => setter(true),
+        onBlur: () => setter(false),
+    });
+
     return (
         <>
             {/* Overlay that appears behind the sidebar on mobile when it's open */}
@@ -289,6 +297,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                         onClick={() => setShowTools((v) => !v)}
                         aria-expanded={showTools}
                         aria-controls="sidebar-tools-section"
+                        tabIndex={0}
+                        {...handleSectionHover(setShowTools)}
                     >
                         <span>🛠️</span> Tools
                         {showTools ? <ChevronDown className="w-4 h-4 ml-auto" /> : <ChevronRight className="w-4 h-4 ml-auto" />}
@@ -331,6 +341,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                         onClick={() => setShowResources((v) => !v)}
                         aria-expanded={showResources}
                         aria-controls="sidebar-resources-section"
+                        tabIndex={0}
+                        {...handleSectionHover(setShowResources)}
                     >
                         <span>📚</span> Resources
                         {showResources ? <ChevronDown className="w-4 h-4 ml-auto" /> : <ChevronRight className="w-4 h-4 ml-auto" />}
@@ -362,6 +374,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                         onClick={() => setShowPath((v) => !v)}
                         aria-expanded={showPath}
                         aria-controls="sidebar-path-section"
+                        tabIndex={0}
+                        {...handleSectionHover(setShowPath)}
                     >
                         <span>🧭</span> Choose Your Path
                         {showPath ? <ChevronDown className="w-4 h-4 ml-auto" /> : <ChevronRight className="w-4 h-4 ml-auto" />}
@@ -395,6 +409,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                         onClick={() => setShowAgent((v) => !v)}
                         aria-expanded={showAgent}
                         aria-controls="sidebar-agent-section"
+                        tabIndex={0}
+                        {...handleSectionHover(setShowAgent)}
                     >
                         <span>🤖</span> Choose Your Agent
                         {showAgent ? <ChevronDown className="w-4 h-4 ml-auto" /> : <ChevronRight className="w-4 h-4 ml-auto" />}
