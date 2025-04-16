@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react"
 import { ChatHeader } from "./chat-header"
 import { ChatMessages, type ChatMessage } from "./chat-messages"
 import { ChatInput, type InputMode } from "./chat-input"
+import { getQuestionDetails } from "@/lib/questionnaire"
 
 // Define API response types
 interface OnboardingResponsePayload {
@@ -55,6 +56,7 @@ export function ChatContainer({
     const [conditionalText, setConditionalText] = useState("")
     const [selectedButtonValue, setSelectedButtonValue] = useState<string | null>(null)
     const [multiSelectedLanguages, setMultiSelectedLanguages] = useState<string[]>([])
+    const [multiSelectedPlatforms, setMultiSelectedPlatforms] = useState<string[]>([])
     const [sessionId, setSessionId] = useState<string | null>(null)
     const [inputDisabled, setInputDisabled] = useState(false)
     const [isProcessing, setIsProcessing] = useState(false)
@@ -311,15 +313,11 @@ export function ChatContainer({
 
         // Special handling for Question 5 (Programming Languages) - enables multi-select
         if (currentQuestionIndex === 5) {
-            // Handle "None" option as mutually exclusive with other languages
             setMultiSelectedLanguages(prev => {
                 if (value === "None") {
-                    return ["None"]; // Select only "None", clear any other selections
+                    return ["None"];
                 } else {
-                    // If "None" was previously selected, clear it before adding a real language
                     const clearedPrev = prev.filter(lang => lang !== "None");
-
-                    // Toggle the actual language
                     if (clearedPrev.includes(value)) {
                         return clearedPrev.filter(lang => lang !== value);
                     } else {
@@ -327,8 +325,22 @@ export function ChatContainer({
                     }
                 }
             });
-
-            // Don't proceed with API call yet - wait for confirmation button
+            return;
+        }
+        // Special handling for Question 6 (Blockchain Platforms) - enables multi-select
+        if (currentQuestionIndex === 6) {
+            setMultiSelectedPlatforms(prev => {
+                if (value === "None") {
+                    return ["None"];
+                } else {
+                    const clearedPrev = prev.filter(chain => chain !== "None");
+                    if (clearedPrev.includes(value)) {
+                        return clearedPrev.filter(chain => chain !== value);
+                    } else {
+                        return [...clearedPrev, value];
+                    }
+                }
+            });
             return;
         }
 
@@ -496,7 +508,7 @@ export function ChatContainer({
             }
         }
     }, [
-        isProcessing, sessionId, currentQuestionIndex, setMultiSelectedLanguages,
+        isProcessing, sessionId, currentQuestionIndex, setMultiSelectedLanguages, setMultiSelectedPlatforms,
         setSelectedButtonValue, inputMode, conditionalTriggerValue, setConditionalTextVisible,
         setShowConditionalInput, setMessages, setIsProcessing, setInputDisabled,
         conditionalTextVisible, conditionalText, setCurrentQuestionIndex, setInputMode,
@@ -821,6 +833,130 @@ export function ChatContainer({
         }
     };
 
+    const handleConfirmPlatforms = async () => {
+        if (isProcessing || !sessionId || multiSelectedPlatforms.length === 0) return;
+        setMessages((prev) => [
+            ...prev,
+            {
+                id: generateMessageId("user"),
+                role: "user",
+                content: `Selected platforms: ${multiSelectedPlatforms.join(', ')}`,
+            },
+        ]);
+        setMessages((prev) => [
+            ...prev,
+            {
+                id: generateMessageId("assistant"),
+                role: "assistant",
+                content: "Thinking...",
+                isLoading: true,
+            },
+        ]);
+        setIsProcessing(true);
+        setInputDisabled(true);
+        try {
+            const payload = {
+                sessionId,
+                response: multiSelectedPlatforms,
+            };
+            const response = await fetch("/api/onboarding/message", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            });
+            if (!response.ok) {
+                throw new Error(`Failed to send message: ${response.status} ${response.statusText}`);
+            }
+            const data: OnboardingResponsePayload = await response.json();
+            setMessages((prev) => prev.slice(0, -1));
+            if (data.error) {
+                setMessages((prev) => [
+                    ...prev,
+                    {
+                        id: generateMessageId("assistant"),
+                        role: "assistant",
+                        content: data.error || "An error occurred",
+                    },
+                ]);
+                if (data.haltFlow) {
+                    setInputDisabled(true);
+                }
+            } else if (data.isFinalQuestion && data.finalResult) {
+                setMessages((prev) => [
+                    ...prev,
+                    {
+                        id: generateMessageId("assistant"),
+                        role: "assistant",
+                        content: `⭐⭐⭐Based on your responses, I recommend the "${data.finalResult?.recommendedPath}" path for you.⭐⭐⭐`,
+                    },
+                    {
+                        id: generateMessageId("assistant"),
+                        role: "assistant",
+                        content: "⭐⭐⭐ You can get started here: ⭐⭐⭐",
+                        url: data.finalResult?.recommendedPathUrl
+                    },
+                    {
+                        id: generateMessageId("assistant"),
+                        role: "assistant",
+                        content: "Thank you for completing the onboarding process!\nWELCOME TO ANDROMEDA\n🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉",
+                    },
+                ]);
+                setInputDisabled(true);
+                setIsComplete(true);
+                setCurrentQuestionIndex(TOTAL_STEPS);
+            } else if (data.nextQuestion) {
+                setMessages((prev) => [
+                    ...prev,
+                    {
+                        id: generateMessageId("assistant"),
+                        role: "assistant",
+                        content: data.nextQuestion || "Let's continue",
+                        options: data.options,
+                    },
+                ]);
+                setCurrentQuestionIndex(data.currentQuestionIndex);
+                setInputMode(data.inputMode || "text");
+                setConditionalText("");
+                setConditionalTextVisible(false);
+                setShowConditionalInput(false);
+                setSelectedButtonValue(null);
+                setMultiSelectedPlatforms([]); // Reset multi-select state
+                if (data.conditionalTextInputLabel) {
+                    setConditionalTextVisible(false);
+                    setConditionalTriggerValue(data.conditionalTriggerValue || null);
+                    setConditionalTextInputLabel(data.conditionalTextInputLabel);
+                }
+            }
+            if (data.newSessionId) {
+                setSessionId(data.newSessionId);
+            }
+        } catch (error) {
+            const errorMessage = error instanceof Error
+                ? error.message
+                : "Error processing your selections. Please try again.";
+            console.error("Error submitting platform selections:", errorMessage);
+            setMessages((prev) => prev.slice(0, -1));
+            setMessages((prev) => [
+                ...prev,
+                {
+                    id: generateMessageId("assistant"),
+                    role: "assistant",
+                    content: "Sorry, there was an error processing your selections. Please try again.",
+                },
+            ]);
+        } finally {
+            setIsProcessing(false);
+            if (!isComplete) {
+                setInputDisabled(false);
+                setTimeout(() => {
+                    setInputMode(prev => prev);
+                }, 100);
+            }
+        }
+    };
+
     useEffect(() => {
         // Update showConditionalInput whenever conditionalTextVisible changes
         setShowConditionalInput(conditionalTextVisible)
@@ -908,6 +1044,7 @@ export function ChatContainer({
                     latestInteractiveMessageId={latestInteractiveMsgId}
                     highlightedButtonIndex={highlightedButtonIndex}
                     multiSelectedLanguages={multiSelectedLanguages}
+                    multiSelectedPlatforms={multiSelectedPlatforms}
                     currentQuestionIndex={currentQuestionIndex}
                 />
             </div>
@@ -930,8 +1067,9 @@ export function ChatContainer({
                         currentQuestionIndex={currentQuestionIndex}
                         conditionalTextInputLabel={conditionalTextInputLabel}
                         className={conditionalTextVisible ? "max-h-[200px] overflow-y-auto" : ""}
-                        showConfirmButton={currentQuestionIndex === 5 && multiSelectedLanguages.length > 0}
-                        onConfirmLanguages={handleConfirmLanguages}
+                        showConfirmButton={(currentQuestionIndex === 5 && multiSelectedLanguages.length > 0) || (currentQuestionIndex === 6 && multiSelectedPlatforms.length > 0)}
+                        onConfirmLanguages={currentQuestionIndex === 5 ? handleConfirmLanguages : handleConfirmPlatforms}
+                        placeholder={getQuestionDetails(currentQuestionIndex ?? -1)?.placeholder || undefined}
                     />
                 )}
             </div>

@@ -38,6 +38,7 @@ interface ChatMessagesProps {
     latestInteractiveMessageId?: string | null // ID of the most recent message with options
     highlightedButtonIndex?: number | null // Index of button to highlight (for keyboard shortcut feedback)
     multiSelectedLanguages?: string[] // Array of selected language values for Question 4
+    multiSelectedPlatforms?: string[] // Array of selected blockchain platform values for Question 6
     currentQuestionIndex?: number | null // Current question index for context-specific behavior
 }
 
@@ -96,6 +97,7 @@ export function ChatMessages({
     latestInteractiveMessageId = null, // Default to null if not provided
     highlightedButtonIndex = null, // Default to null if not provided
     multiSelectedLanguages = [], // Default to empty array if not provided
+    multiSelectedPlatforms = [], // Default to empty array if not provided
     currentQuestionIndex = null, // Default to null if not provided
 }: ChatMessagesProps) {
     // Internal ref used only if messagesEndRef is not provided by the parent
@@ -178,16 +180,21 @@ export function ChatMessages({
 
                                             // Special handling for Question 5 (Languages)
                                             const isLanguageQuestion = currentQuestionIndex === 5 && isActiveMessage;
+                                            // Special handling for Question 6 (Blockchain Platforms)
+                                            const isPlatformQuestion = currentQuestionIndex === 6 && isActiveMessage;
 
                                             // For Q5, a button is "selected" if it's in the multiSelectedLanguages array
+                                            // For Q6, a button is "selected" if it's in the multiSelectedPlatforms array
                                             const isSelected = isLanguageQuestion
                                                 ? multiSelectedLanguages.includes(option.value)
-                                                : selectedButtonValue === option.value;
+                                                : isPlatformQuestion
+                                                    ? multiSelectedPlatforms.includes(option.value)
+                                                    : selectedButtonValue === option.value;
 
                                             // Button disabled state depends on the question type
-                                            // For Q5 (multi-select), buttons remain enabled until submission
+                                            // For Q5/Q6 (multi-select), buttons remain enabled until submission
                                             // For other questions, disable all buttons once any is selected
-                                            const isDisabled = isLanguageQuestion
+                                            const isDisabled = (isLanguageQuestion || isPlatformQuestion)
                                                 ? false // Never disable for multi-select question
                                                 : !isActiveMessage || (isActiveMessage && selectedButtonValue !== null);
 

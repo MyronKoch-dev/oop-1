@@ -17,6 +17,7 @@ export interface QuestionDetail {
     isOptional?: boolean; // Mainly for Q11, Q12
     validationHint?: string; // e.g., 'email', 'handles' - used by API to apply specific validation
     rePromptMessage?: string; // Specific message on validation failure
+    placeholder?: string; // Added placeholder
 }
 
 // Define all questions based on Spec FR1.4
@@ -51,7 +52,8 @@ const questions: QuestionDetail[] = [
         text: "What is your Telegram handle? (Optional, include @)",
         inputMode: 'text',
         isOptional: true,
-        validationHint: 'telegram_handle'
+        validationHint: 'telegram_handle',
+        placeholder: '@yourhandle',
     },
     // Index 4 (X/Twitter)
     {
@@ -59,7 +61,8 @@ const questions: QuestionDetail[] = [
         text: "What is your X/Twitter handle? (Optional, include @)",
         inputMode: 'text',
         isOptional: true,
-        validationHint: 'x_handle'
+        validationHint: 'x_handle',
+        placeholder: '@yourhandle',
     },
     // Index 5 (Previously Q4 - Programming Languages)
     {
@@ -83,16 +86,24 @@ const questions: QuestionDetail[] = [
     // Index 6 (Previously Q5 - Blockchain)
     {
         index: 6,
-        text: "Have you worked with blockchain platforms?",
-        inputMode: 'conditionalText', // Buttons, with text if 'Yes'
+        text: "Which blockchain platforms have you worked with? (Select all that apply, or 'None')",
+        inputMode: 'buttons',
         options: [
-            { label: "1. Yes", value: "Yes" },
-            { label: "2. No, but I'm curious!", value: "No - curious" },
-            { label: "3. No experience", value: "No experience" },
+            { label: "1. Bitcoin", value: "Bitcoin" },
+            { label: "2. Ethereum", value: "Ethereum" },
+            { label: "3. Solana", value: "Solana" },
+            { label: "4. SEI", value: "SEI" },
+            { label: "5. Cosmos SDK chains", value: "Cosmos SDK chains" },
+            { label: "6. XRP", value: "XRP" },
+            { label: "7. BNB", value: "BNB" },
+            { label: "8. Polygon", value: "Polygon" },
+            { label: "9. Avalanche", value: "Avalanche" },
+            { label: "10. Polkadot", value: "Polkadot" },
+            { label: "11. Other / Not listed", value: "Other" },
+            { label: "12. None of these / No experience yet", value: "None" },
         ],
-        conditionalTriggerValue: "Yes",
-        conditionalTextInputLabel: "Specify platforms (e.g., Cosmos, Ethereum):",
         isOptional: false,
+        validationHint: 'blockchain_platforms',
     },
     // Index 7 (Previously Q6 - AI/ML)
     {
