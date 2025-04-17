@@ -32,9 +32,7 @@ export default function RootLayout({
     const checkIfMobile = () => {
       const mobile = window.innerWidth < 1024; // lg breakpoint
       setIsMobile(mobile);
-
-      // Automatically close right sidebar on mobile, keep open on desktop
-      setIsRightSidebarOpen(!mobile);
+      setIsRightSidebarOpen(false); // Always collapsed by default
     };
 
     // Initial check
@@ -81,7 +79,7 @@ export default function RootLayout({
 
           {/* Right Sidebar toggle button - visible only on mobile */}
           <button
-            className="sidebar-toggle fixed top-4 right-4 z-50 p-2 rounded-md bg-[#1a1a1a] border border-[#333333] text-white hover:bg-[#333333] transition-colors lg:hidden"
+            className="sidebar-toggle fixed top-4 right-4 z-50 p-2 rounded-md bg-[#1a1a1a] border border-[#333333] text-white hover:bg-[#333333] transition-colors"
             onClick={toggleRightSidebar}
             aria-label="Toggle right sidebar"
           >

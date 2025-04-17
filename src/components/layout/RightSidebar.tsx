@@ -27,7 +27,7 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                 className={cn(
                     "fixed top-0 right-0 h-full w-96 bg-[#121212] border-l border-[#333333] z-40 transition-transform duration-300 ease-in-out transform shadow-xl overflow-y-auto",
                     isOpen ? "translate-x-0" : "translate-x-full",
-                    "lg:translate-x-0 lg:shadow-none" // Always show on large screens, matching left sidebar
+                    "lg:shadow-none" // Only keep shadow-none for large screens
                 )}
             >
                 <div className="p-6">
