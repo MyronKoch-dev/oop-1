@@ -73,7 +73,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black`}
       >
-        <SidebarContext.Provider value={{ openRightSidebar }}>
+        <SidebarContext.Provider value={{ openRightSidebar, isRightSidebarOpen }}>
           <ThemeProvider>
             {/* Left Sidebar toggle button - visible only on mobile */}
             <button
@@ -96,11 +96,7 @@ export default function RootLayout({
             <Sidebar isOpen={isLeftSidebarOpen} onClose={toggleLeftSidebar} />
             <RightSidebar isOpen={isRightSidebarOpen} onClose={toggleRightSidebar} />
 
-            <main className={`
-              transition-all duration-300 ease-in-out 
-              lg:pl-64 lg:pr-96
-              ${(isLeftSidebarOpen || isRightSidebarOpen) && isMobile ? 'opacity-50 blur-sm pointer-events-none' : ''}
-            `}>
+            <main className={`flex justify-center transition-all duration-300 ease-in-out lg:pl-64 ${isRightSidebarOpen ? 'lg:pr-96' : 'lg:pr-0'} ${(isLeftSidebarOpen || isRightSidebarOpen) && isMobile ? 'opacity-50 blur-sm pointer-events-none' : ''}`}>
               {children}
             </main>
           </ThemeProvider>

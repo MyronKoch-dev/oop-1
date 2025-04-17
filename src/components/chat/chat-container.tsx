@@ -43,7 +43,7 @@ export function ChatContainer({
     className = "",
 }: ChatContainerProps) {
     // Access the openRightSidebar function from context
-    const { openRightSidebar } = useSidebar();
+    const { openRightSidebar, isRightSidebarOpen } = useSidebar();
 
     // State for messages and chat flow
     const [messages, setMessages] = useState<ChatMessage[]>([
@@ -1019,7 +1019,7 @@ export function ChatContainer({
 
     return (
         <div
-            className={`flex flex-col h-full bg-[#1a1a1a] dark:bg-[#1a1a1a] rounded-lg shadow-lg overflow-hidden border border-[#333333] dark:border-[#333333] text-white ${className}`}
+            className={`flex flex-col h-full bg-[#1a1a1a] dark:bg-[#1a1a1a] rounded-lg shadow-lg overflow-hidden border border-[#333333] dark:border-[#333333] text-white ${className} ${isRightSidebarOpen ? 'adjust-for-sidebar' : 'centered'}`}
         >
             <ChatHeader title={title} subtitle={subtitle} currentStep={currentQuestionIndex || 0} totalSteps={TOTAL_STEPS} onRestart={handleRestart} />
 
