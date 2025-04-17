@@ -5,7 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { RightSidebar } from "@/components/layout/RightSidebar";
-import { Menu, PanelRight } from "lucide-react";
+import { PanelRight } from "lucide-react";
 import "./globals.css";
 import { SidebarContext } from "@/context/SidebarContext";
 
@@ -81,7 +81,7 @@ export default function RootLayout({
               onClick={toggleLeftSidebar}
               aria-label="Toggle left sidebar"
             >
-              <Menu className="w-5 h-5" />
+              <img src="/icons/ANDRsmall_logo.png" alt="Andromeda Logo" className="w-5 h-5" />
             </button>
 
             {/* Right Sidebar toggle button - visible only on mobile */}
