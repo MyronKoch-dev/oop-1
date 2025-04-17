@@ -7,6 +7,7 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { RightSidebar } from "@/components/layout/RightSidebar";
 import { Menu, PanelRight } from "lucide-react";
 import "./globals.css";
+import { SidebarContext } from "@/context/SidebarContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -62,41 +63,48 @@ export default function RootLayout({
     }
   };
 
+  // Function to expose via context that opens the right sidebar
+  const openRightSidebar = () => {
+    setIsRightSidebarOpen(true);
+  };
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black`}
       >
-        <ThemeProvider>
-          {/* Left Sidebar toggle button - visible only on mobile */}
-          <button
-            className="sidebar-toggle fixed top-4 left-4 z-50 p-2 rounded-md bg-[#1a1a1a] border border-[#333333] text-white hover:bg-[#333333] transition-colors lg:hidden"
-            onClick={toggleLeftSidebar}
-            aria-label="Toggle left sidebar"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
+        <SidebarContext.Provider value={{ openRightSidebar }}>
+          <ThemeProvider>
+            {/* Left Sidebar toggle button - visible only on mobile */}
+            <button
+              className="sidebar-toggle fixed top-4 left-4 z-50 p-2 rounded-md bg-[#1a1a1a] border border-[#333333] text-white hover:bg-[#333333] transition-colors lg:hidden"
+              onClick={toggleLeftSidebar}
+              aria-label="Toggle left sidebar"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
 
-          {/* Right Sidebar toggle button - visible only on mobile */}
-          <button
-            className="sidebar-toggle fixed top-4 right-4 z-50 p-2 rounded-md bg-[#1a1a1a] border border-[#333333] text-white hover:bg-[#333333] transition-colors"
-            onClick={toggleRightSidebar}
-            aria-label="Toggle right sidebar"
-          >
-            <PanelRight className="w-5 h-5" />
-          </button>
+            {/* Right Sidebar toggle button - visible only on mobile */}
+            <button
+              className="sidebar-toggle fixed top-4 right-4 z-50 p-2 rounded-md bg-[#1a1a1a] border border-[#333333] text-white hover:bg-[#333333] transition-colors"
+              onClick={toggleRightSidebar}
+              aria-label="Toggle right sidebar"
+            >
+              <PanelRight className="w-5 h-5" />
+            </button>
 
-          <Sidebar isOpen={isLeftSidebarOpen} onClose={toggleLeftSidebar} />
-          <RightSidebar isOpen={isRightSidebarOpen} onClose={toggleRightSidebar} />
+            <Sidebar isOpen={isLeftSidebarOpen} onClose={toggleLeftSidebar} />
+            <RightSidebar isOpen={isRightSidebarOpen} onClose={toggleRightSidebar} />
 
-          <main className={`
-            transition-all duration-300 ease-in-out 
-            lg:pl-64 lg:pr-96
-            ${(isLeftSidebarOpen || isRightSidebarOpen) && isMobile ? 'opacity-50 blur-sm pointer-events-none' : ''}
-          `}>
-            {children}
-          </main>
-        </ThemeProvider>
+            <main className={`
+              transition-all duration-300 ease-in-out 
+              lg:pl-64 lg:pr-96
+              ${(isLeftSidebarOpen || isRightSidebarOpen) && isMobile ? 'opacity-50 blur-sm pointer-events-none' : ''}
+            `}>
+              {children}
+            </main>
+          </ThemeProvider>
+        </SidebarContext.Provider>
       </body>
     </html>
   );

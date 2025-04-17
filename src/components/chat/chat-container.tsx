@@ -5,6 +5,7 @@ import { ChatHeader } from "./chat-header"
 import { ChatMessages, type ChatMessage } from "./chat-messages"
 import { ChatInput, type InputMode } from "./chat-input"
 import { getQuestionDetails } from "@/lib/questionnaire"
+import { useSidebar } from "@/context/SidebarContext"
 
 // Define API response types
 interface OnboardingResponsePayload {
@@ -41,8 +42,8 @@ export function ChatContainer({
     subtitle = "Answer a few questions to get started",
     className = "",
 }: ChatContainerProps) {
-    // This component will be stateful in the actual implementation
-    // Here we're just defining the structure and props
+    // Access the openRightSidebar function from context
+    const { openRightSidebar } = useSidebar();
 
     // State for messages and chat flow
     const [messages, setMessages] = useState<ChatMessage[]>([
@@ -1005,6 +1006,16 @@ export function ChatContainer({
         // You could also refactor the effect into a function and call it here
         window.location.reload(); // Easiest way to fully reset for now
     };
+
+    // Add effect to open the sidebar when completion happens
+    useEffect(() => {
+        if (isComplete) {
+            // Add a slight delay so the congratulations panel appears first
+            setTimeout(() => {
+                openRightSidebar();
+            }, 1000);
+        }
+    }, [isComplete, openRightSidebar]);
 
     return (
         <div
