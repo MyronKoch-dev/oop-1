@@ -978,11 +978,39 @@ export function ChatContainer({
         }
     }, [messages, latestInteractiveMsgId, inputMode, inputDisabled, isProcessing, handleButtonSelect]);
 
+    // Add a handler to reset all chat state and start a new session
+    const handleRestart = () => {
+        setMessages([
+            {
+                id: "initial-message",
+                role: "assistant",
+                content: initialMessage,
+            },
+        ]);
+        setInputMode("text");
+        setConditionalText("");
+        setSelectedButtonValue(null);
+        setMultiSelectedLanguages([]);
+        setMultiSelectedPlatforms([]);
+        setSessionId(null);
+        setInputDisabled(false);
+        setIsProcessing(false);
+        setCurrentQuestionIndex(null);
+        setConditionalTextVisible(false);
+        setConditionalTriggerValue(null);
+        setConditionalTextInputLabel("Please provide more details:");
+        setIsComplete(false);
+        // Start a new onboarding session by re-running the effect
+        // (simulate by calling the same logic as on mount)
+        // You could also refactor the effect into a function and call it here
+        window.location.reload(); // Easiest way to fully reset for now
+    };
+
     return (
         <div
             className={`flex flex-col h-full bg-[#1a1a1a] dark:bg-[#1a1a1a] rounded-lg shadow-lg overflow-hidden border border-[#333333] dark:border-[#333333] text-white ${className}`}
         >
-            <ChatHeader title={title} subtitle={subtitle} currentStep={currentQuestionIndex || 0} totalSteps={TOTAL_STEPS} />
+            <ChatHeader title={title} subtitle={subtitle} currentStep={currentQuestionIndex || 0} totalSteps={TOTAL_STEPS} onRestart={handleRestart} />
 
             <div className={`flex-1 overflow-hidden relative`}>
                 <ChatMessages

@@ -498,7 +498,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                         </button>
                         <div
                             id="sidebar-agent-section"
-                            className={`px-4 space-y-3 mt-2 mb-6 transition-all duration-400 ease-[cubic-bezier(.4,0,.2,1)] overflow-hidden
+                            className={`px-4 space-y-3 mt-2 transition-all duration-400 ease-[cubic-bezier(.4,0,.2,1)] overflow-hidden
                                 ${showAgent ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}
                         >
                             {agentBots.map((item, index) => (
@@ -523,7 +523,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                         </div>
                     </div>
                 </nav>
-                <div className="flex gap-4 px-4 py-4 mt-6 border-t border-[#333333]">
+                <div className="flex gap-4 px-4 py-4 border-t border-[#333333]">
                     {socialLinks.map((item) => (
                         <a
                             key={item.label}
