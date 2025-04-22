@@ -246,12 +246,6 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     const [showTools, setShowTools] = useState(true);
     const [showResources, setShowResources] = useState(false);
 
-    // Add locked state for each section
-    const [toolsLocked, setToolsLocked] = useState(false);
-    const [resourcesLocked, setResourcesLocked] = useState(false);
-    const [pathLocked, setPathLocked] = useState(false);
-    const [agentLocked, setAgentLocked] = useState(false);
-
     // Open the section containing the current path on mount
     useEffect(() => {
         if (actionItems.some(item => item.href === pathname)) setShowPath(true);
@@ -302,21 +296,12 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                 <nav className="mt-2 py-2">
                     {/* Tools section (collapsible) */}
                     <div
-                        onMouseEnter={() => { if (!toolsLocked) setShowTools(true); }}
-                        onMouseLeave={() => { if (!toolsLocked) setShowTools(false); }}
-                        onFocus={() => { if (!toolsLocked) setShowTools(true); }}
-                        onBlur={() => { if (!toolsLocked) setShowTools(false); }}
+                        onMouseEnter={() => { if (!showTools) setShowTools(true); }}
+                        onMouseLeave={() => { if (!showTools) setShowTools(false); }}
                     >
                         <button
                             className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-[#A084F7]"
-                            onClick={() => {
-                                setToolsLocked((locked) => {
-                                    const newLocked = !locked;
-                                    if (!newLocked) setShowTools(false); // If unlocking, close
-                                    else setShowTools(true); // If locking, open
-                                    return newLocked;
-                                });
-                            }}
+                            onClick={() => setShowTools((open) => !open)}
                             aria-expanded={showTools}
                             aria-controls="sidebar-tools-section"
                             tabIndex={0}
@@ -368,21 +353,12 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                     <hr className="my-4 border-[#333333]" />
                     {/* Resources section (collapsible) */}
                     <div
-                        onMouseEnter={() => { if (!resourcesLocked) setShowResources(true); }}
-                        onMouseLeave={() => { if (!resourcesLocked) setShowResources(false); }}
-                        onFocus={() => { if (!resourcesLocked) setShowResources(true); }}
-                        onBlur={() => { if (!resourcesLocked) setShowResources(false); }}
+                        onMouseEnter={() => { if (!showResources) setShowResources(true); }}
+                        onMouseLeave={() => { if (!showResources) setShowResources(false); }}
                     >
                         <button
                             className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-[#3FB6E4]"
-                            onClick={() => {
-                                setResourcesLocked((locked) => {
-                                    const newLocked = !locked;
-                                    if (!newLocked) setShowResources(false);
-                                    else setShowResources(true);
-                                    return newLocked;
-                                });
-                            }}
+                            onClick={() => setShowResources((open) => !open)}
                             aria-expanded={showResources}
                             aria-controls="sidebar-resources-section"
                             tabIndex={0}
@@ -422,21 +398,12 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
                     {/* Action items section title */}
                     <div
-                        onMouseEnter={() => { if (!pathLocked) setShowPath(true); }}
-                        onMouseLeave={() => { if (!pathLocked) setShowPath(false); }}
-                        onFocus={() => { if (!pathLocked) setShowPath(true); }}
-                        onBlur={() => { if (!pathLocked) setShowPath(false); }}
+                        onMouseEnter={() => { if (!showPath) setShowPath(true); }}
+                        onMouseLeave={() => { if (!showPath) setShowPath(false); }}
                     >
                         <button
                             className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-[#E43F7B]"
-                            onClick={() => {
-                                setPathLocked((locked) => {
-                                    const newLocked = !locked;
-                                    if (!newLocked) setShowPath(false);
-                                    else setShowPath(true);
-                                    return newLocked;
-                                });
-                            }}
+                            onClick={() => setShowPath((open) => !open)}
                             aria-expanded={showPath}
                             aria-controls="sidebar-path-section"
                             tabIndex={0}
@@ -474,21 +441,12 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
                     {/* Agent bots section title */}
                     <div
-                        onMouseEnter={() => { if (!agentLocked) setShowAgent(true); }}
-                        onMouseLeave={() => { if (!agentLocked) setShowAgent(false); }}
-                        onFocus={() => { if (!agentLocked) setShowAgent(true); }}
-                        onBlur={() => { if (!agentLocked) setShowAgent(false); }}
+                        onMouseEnter={() => { if (!showAgent) setShowAgent(true); }}
+                        onMouseLeave={() => { if (!showAgent) setShowAgent(false); }}
                     >
                         <button
                             className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-[#FFB300]"
-                            onClick={() => {
-                                setAgentLocked((locked) => {
-                                    const newLocked = !locked;
-                                    if (!newLocked) setShowAgent(false);
-                                    else setShowAgent(true);
-                                    return newLocked;
-                                });
-                            }}
+                            onClick={() => setShowAgent((open) => !open)}
                             aria-expanded={showAgent}
                             aria-controls="sidebar-agent-section"
                             tabIndex={0}
