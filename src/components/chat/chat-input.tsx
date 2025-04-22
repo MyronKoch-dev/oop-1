@@ -64,7 +64,7 @@ export function ChatInput({
     // Variable declarations - moved up before they're used in useEffect
     const showConditionalInput = conditionalTextVisible || isConditionalVisible
     const hideMainInput = showConditionalInput && inputMode === "conditionalText"
-    const isMainInputDisabled = disabled || (inputMode === "buttons" && !showConditionalInput)
+    const isMainInputDisabled = disabled || (inputMode === "buttons" && !showConditionalInput) || (inputMode === "conditionalText" && !conditionalTextVisible)
     const displayLabel = conditionalTextInputLabel || conditionalLabel
 
     // Effect to focus main input when appropriate
@@ -202,7 +202,7 @@ export function ChatInput({
                             onKeyDown={handleConditionalKeyDown}
                             placeholder="Type additional details here..."
                             className="min-h-[80px] max-h-[120px] resize-none bg-[#2a2a2a] dark:bg-[#2a2a2a] border-[#444444] dark:border-[#444444] text-white placeholder:text-gray-400"
-                            disabled={disabled}
+                            disabled={disabled || !conditionalTextVisible}
                         />
                         <p className="text-xs text-gray-400 dark:text-gray-400 text-center">
                             Press Enter to submit or Shift+Enter for a new line

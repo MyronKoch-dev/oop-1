@@ -335,16 +335,15 @@ export function ChatContainer({
             return;
         }
 
-        setSelectedButtonValue(value)
-
-        // Only show conditional text input and return early when BOTH conditions are true:
-        // 1. We're specifically in conditionalText mode
-        // 2. The clicked value matches the conditionalTriggerValue
-        // For ALL other cases (including 'buttons' mode), proceed with the API call
         if (inputMode === "conditionalText" && conditionalTriggerValue && value === conditionalTriggerValue) {
-            setConditionalTextVisible(true)
-            setShowConditionalInput(true)
-            return // Don't submit yet, wait for conditional text
+            setConditionalTextVisible(true);
+            setShowConditionalInput(true);
+            setSelectedButtonValue(value);
+            return;
+        } else if (inputMode === "conditionalText") {
+            setConditionalTextVisible(false);
+            setShowConditionalInput(false);
+            setSelectedButtonValue(value);
         }
 
         // Add user message to chat
