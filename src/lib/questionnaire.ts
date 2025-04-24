@@ -64,7 +64,7 @@ const questions: QuestionDetail[] = [
         validationHint: 'x_handle',
         placeholder: '@yourhandle',
     },
-    // Index 5 (Previously Q4 - Programming Languages)
+    // Index 5 Programming Languages)
     {
         index: 5,
         text: "Which programming languages are you most comfortable with? (Select all that apply, or 'None')",
@@ -83,7 +83,7 @@ const questions: QuestionDetail[] = [
         isOptional: false,
         validationHint: 'languages',
     },
-    // Index 6 (Previously Q5 - Blockchain)
+    // Index 6 (Blockchain)
     {
         index: 6,
         text: "Which blockchain platforms have you worked with? (Select all that apply, or 'None')",
@@ -102,7 +102,7 @@ const questions: QuestionDetail[] = [
         isOptional: false,
         validationHint: 'blockchain_platforms',
     },
-    // Index 7 (Previously Q6 - AI/ML)
+    // Index 7 (AI/ML)
     {
         index: 7,
         text: "Do you have experience with AI/ML beyond ChatGPT?",
@@ -115,7 +115,7 @@ const questions: QuestionDetail[] = [
         conditionalTextInputLabel: "Specify areas/projects (e.g., NLP, CV Ops):",
         isOptional: false,
     },
-    // Index 8 (Previously Q7 - Andromeda tools)
+    // Index 8 (Andromeda tools)
     {
         index: 8,
         text: "How familiar are you with Andromeda's tools?",
@@ -128,7 +128,7 @@ const questions: QuestionDetail[] = [
         ],
         isOptional: false,
     },
-    // Index 9 (Previously Q8 - Technical expertise)
+    // Index 9 (Technical expertise)
     {
         index: 9,
         text: "How would you rate your technical expertise?",
@@ -140,7 +140,7 @@ const questions: QuestionDetail[] = [
         ],
         isOptional: false,
     },
-    // Index 10 (Previously Q9 - Hackathon)
+    // Index 10 (Hackathon)
     {
         index: 10,
         text: "Have you ever participated in a hackathon?",
@@ -152,7 +152,7 @@ const questions: QuestionDetail[] = [
         ],
         isOptional: false,
     },
-    // Index 11 (Previously Q10 - Main goal)
+    // Index 11 (Main goal)
     {
         index: 11,
         text: "What's your main goal here?",
@@ -167,14 +167,14 @@ const questions: QuestionDetail[] = [
         ],
         isOptional: false,
     },
-    // Index 12 (Previously Q11 - Portfolio)
+    // Index 12 (Portfolio)
     {
         index: 12,
         text: "Got a portfolio or project links to showcase? (Optional, but helpful!)",
         inputMode: 'text',
         isOptional: true,
     },
-    // Index 13 (Previously Q12 - Additional skills)
+    // Index 13 (Additional skills)
     {
         index: 13,
         text: "Anything else we should know about your skills or interests? (Optional)",
