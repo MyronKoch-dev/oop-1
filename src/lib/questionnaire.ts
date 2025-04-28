@@ -18,6 +18,7 @@ export interface QuestionDetail {
     validationHint?: string; // e.g., 'email', 'handles' - used by API to apply specific validation
     rePromptMessage?: string; // Specific message on validation failure
     placeholder?: string; // Added placeholder
+    isMultiSelect?: boolean;
 }
 
 // Define all questions based on Spec FR1.4
@@ -82,6 +83,7 @@ const questions: QuestionDetail[] = [
         ],
         isOptional: false,
         validationHint: 'languages',
+        isMultiSelect: true,
     },
     // Index 6 (Blockchain)
     {
@@ -101,19 +103,28 @@ const questions: QuestionDetail[] = [
         ],
         isOptional: false,
         validationHint: 'blockchain_platforms',
+        isMultiSelect: true,
     },
     // Index 7 (AI/ML)
     {
         index: 7,
-        text: "Do you have experience with AI/ML beyond ChatGPT?",
-        inputMode: 'conditionalText', // Buttons, with text if 'Yes'
+        text: "Do you have experience with AI/ML beyond ChatGPT? (Select all that apply)",
+        inputMode: 'buttons',
         options: [
-            { label: "1. Yes", value: "Yes" },
-            { label: "2. No", value: "No" },
+            { label: "1. Natural Language Processing (NLP)", value: "NLP" },
+            { label: "2. Computer Vision", value: "Computer Vision" },
+            { label: "3. Machine Learning (General)", value: "Machine Learning" },
+            { label: "4. Deep Learning", value: "Deep Learning" },
+            { label: "5. Reinforcement Learning", value: "Reinforcement Learning" },
+            { label: "6. Data Science / Analytics", value: "Data Science" },
+            { label: "7. MLOps / Model Deployment", value: "MLOps" },
+            { label: "8. Generative AI", value: "Generative AI" },
+            { label: "9. Other", value: "Other" },
         ],
-        conditionalTriggerValue: "Yes",
-        conditionalTextInputLabel: "Specify areas/projects (e.g., NLP, CV Ops):",
+        conditionalTriggerValue: "Other",
+        conditionalTextInputLabel: "Please specify your AI/ML experience:",
         isOptional: false,
+        isMultiSelect: true,
     },
     // Index 8 (Andromeda tools)
     {
