@@ -10,7 +10,7 @@ interface RightSidebarProps {
 }
 
 export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
-    const [hoveredIndex, setHoveredIndex] = useState<number | null>(1);
+    const [openIndex, setOpenIndex] = useState<number | null>(null);
 
     return (
         <>
@@ -91,30 +91,43 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                                     number: "7",
                                     title: "Launch Your Project",
                                     description: "Take on real-world challenges and contribute to the ecosystem.",
-                                    link: { href: "https://github.com/andromedaprotocol/hackerboard_tasks/issues", text: "Visit The 🔗�� 🪓 Hackerboard" },
+                                    link: { href: "https://github.com/andromedaprotocol/hackerboard_tasks/issues", text: "Visit The 🔗🪓 Hackerboard" },
                                 },
                             ].map((item, idx) => (
                                 <li
                                     key={idx}
                                     className="launchpad-item bg-[#262626] p-4 rounded-md border border-[#333333] cursor-pointer transition-all duration-200 outline-none"
-                                    onMouseEnter={() => setHoveredIndex(idx)}
-                                    onMouseLeave={() => setHoveredIndex(null)}
-                                    onFocus={() => setHoveredIndex(idx)}
-                                    onBlur={() => setHoveredIndex(null)}
+                                    onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
                                     tabIndex={0}
-                                    aria-expanded={hoveredIndex === idx}
+                                    aria-expanded={openIndex === idx}
                                     aria-label={item.title}
                                 >
                                     <div className="flex gap-3 items-center">
                                         <div className="launchpad-number flex-shrink-0 bg-[#333333] w-8 h-8 rounded-full flex items-center justify-center text-amber-400 font-bold">{item.number}</div>
                                         <div className="launchpad-title text-white font-semibold text-base flex-1 break-words">{item.title}</div>
                                         {idx !== 0 && (
-                                            <ChevronDown className={`w-5 h-5 text-gray-400 ml-2 transition-transform duration-200 ${hoveredIndex === idx ? 'rotate-180' : ''}`} aria-hidden="true" />
+                                            <ChevronDown className={`w-5 h-5 text-gray-400 ml-2 transition-transform duration-200 ${openIndex === idx ? 'rotate-180' : ''}`} aria-hidden="true" />
                                         )}
                                     </div>
-                                    <div className={`transition-all duration-300 overflow-hidden ${hoveredIndex === idx ? 'max-h-96 mt-2' : 'max-h-0'}`}>
+                                    <div className={`transition-all duration-300 overflow-hidden ${openIndex === idx ? 'max-h-96 mt-2' : 'max-h-0'}`}>
                                         {item.description && (
-                                            <div className="launchpad-description text-gray-300 text-sm text-center">{item.description}</div>
+                                            <div className="launchpad-description text-gray-300 text-sm text-center">
+                                                {idx === 2 ? (
+                                                    <>
+                                                        <a
+                                                            href="https://t.me/andromedaprotocol/3776"
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-blue-400 hover:underline font-medium"
+                                                        >
+                                                            Once you&apos;re a member, introduce yourself
+                                                        </a>
+                                                        {", by sharing your background and aspirations. Here, you'll make friends and receive real-time support from the community."}
+                                                    </>
+                                                ) : (
+                                                    item.description
+                                                )}
+                                            </div>
                                         )}
                                         {item.link && (
                                             <a
