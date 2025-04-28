@@ -8,7 +8,6 @@ import { RightSidebar } from "@/components/layout/RightSidebar";
 import { PanelRight } from "lucide-react";
 import "./globals.css";
 import { SidebarContext } from "@/context/SidebarContext";
-import Image from "next/image";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -82,7 +81,7 @@ export default function RootLayout({
               onClick={toggleLeftSidebar}
               aria-label="Toggle left sidebar"
             >
-              <Image src="/icons/ANDRsmall_logo.png" alt="Andromeda Logo" width={20} height={20} className="w-5 h-5" />
+              <span className="w-5 h-5 text-2xl flex items-center justify-center">🚀</span>
             </button>
 
             {/* Right Sidebar toggle button - visible only on mobile */}
