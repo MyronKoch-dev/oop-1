@@ -56,8 +56,6 @@ export function ChatContainer({
     const [inputMode, setInputMode] = useState<InputMode>("text")
     const [conditionalText, setConditionalText] = useState("")
     const [selectedButtonValue, setSelectedButtonValue] = useState<string | null>(null)
-    const [multiSelectedLanguages, setMultiSelectedLanguages] = useState<string[]>([])
-    const [multiSelectedPlatforms, setMultiSelectedPlatforms] = useState<string[]>([])
     const [sessionId, setSessionId] = useState<string | null>(null)
     const [inputDisabled, setInputDisabled] = useState(false)
     const [isProcessing, setIsProcessing] = useState(false)
@@ -69,6 +67,7 @@ export function ChatContainer({
     const [showConditionalInput, setShowConditionalInput] = useState(false)
     const conditionalInputRef = useRef<HTMLDivElement>(null)
     const [isComplete, setIsComplete] = useState(false)
+    const [multiSelectAnswers, setMultiSelectAnswers] = useState<{ [key: number]: string[] }>({});
 
     // Helper function to generate unique IDs for messages
     const generateMessageId = (role: string) => `${role}-${Date.now()}-${Math.floor(Math.random() * 1000)}`
@@ -255,7 +254,6 @@ export function ChatContainer({
                 setConditionalText("")
                 setConditionalTextVisible(false)
                 setSelectedButtonValue(null)
-                setMultiSelectedLanguages([])
 
                 // Set up conditional text if applicable
                 if (data.conditionalTextInputLabel) {
@@ -300,41 +298,23 @@ export function ChatContainer({
     }
 
     const handleButtonSelect = useCallback(async (value: string) => {
-        if (isProcessing || !sessionId) return
-
-        // Special handling for Question 5 (Programming Languages) - enables multi-select
-        if (currentQuestionIndex === 5) {
-            setMultiSelectedLanguages(prev => {
+        if (isProcessing || !sessionId) return;
+        // Only handle multi-select if currentQuestionIndex is a number
+        if (typeof currentQuestionIndex === 'number' && [5, 6].includes(currentQuestionIndex)) {
+            setMultiSelectAnswers(prev => {
+                const prevSelected = prev[currentQuestionIndex] || [];
                 if (value === "None") {
-                    return ["None"];
+                    return { ...prev, [currentQuestionIndex]: ["None"] };
+                }
+                const clearedPrev = prevSelected.filter((v: string) => v !== "None");
+                if (clearedPrev.includes(value)) {
+                    return { ...prev, [currentQuestionIndex]: clearedPrev.filter((v: string) => v !== value) };
                 } else {
-                    const clearedPrev = prev.filter(lang => lang !== "None");
-                    if (clearedPrev.includes(value)) {
-                        return clearedPrev.filter(lang => lang !== value);
-                    } else {
-                        return [...clearedPrev, value];
-                    }
+                    return { ...prev, [currentQuestionIndex]: [...clearedPrev, value] };
                 }
             });
             return;
         }
-        // Special handling for Question 6 (Blockchain Platforms) - enables multi-select
-        if (currentQuestionIndex === 6) {
-            setMultiSelectedPlatforms(prev => {
-                if (value === "None") {
-                    return ["None"];
-                } else {
-                    const clearedPrev = prev.filter(chain => chain !== "None");
-                    if (clearedPrev.includes(value)) {
-                        return clearedPrev.filter(chain => chain !== value);
-                    } else {
-                        return [...clearedPrev, value];
-                    }
-                }
-            });
-            return;
-        }
-
         if (inputMode === "conditionalText" && conditionalTriggerValue && value === conditionalTriggerValue) {
             setConditionalTextVisible(true);
             setShowConditionalInput(true);
@@ -445,7 +425,9 @@ export function ChatContainer({
                 setConditionalTextVisible(false)
                 setShowConditionalInput(false)
                 setSelectedButtonValue(null)
-                setMultiSelectedLanguages([])
+                if (typeof currentQuestionIndex === 'number') {
+                    setMultiSelectAnswers(prev => ({ ...prev, [currentQuestionIndex]: [] }));
+                }
 
                 // Set up conditional text if applicable
                 if (data.conditionalTextInputLabel) {
@@ -488,8 +470,7 @@ export function ChatContainer({
             }
         }
     }, [
-        isProcessing, sessionId, currentQuestionIndex, setMultiSelectedLanguages, setMultiSelectedPlatforms,
-        setSelectedButtonValue, inputMode, conditionalTriggerValue, setConditionalTextVisible,
+        isProcessing, sessionId, currentQuestionIndex, setSelectedButtonValue, inputMode, conditionalTriggerValue, setConditionalTextVisible,
         setShowConditionalInput, setMessages, setIsProcessing, setInputDisabled,
         conditionalTextVisible, conditionalText, setCurrentQuestionIndex, setInputMode,
         setConditionalText, setConditionalTriggerValue, setConditionalTextInputLabel,
@@ -600,7 +581,9 @@ export function ChatContainer({
                     setConditionalTextVisible(false);
                     setShowConditionalInput(false);
                     setSelectedButtonValue(null);
-                    setMultiSelectedLanguages([])
+                    if (typeof currentQuestionIndex === 'number') {
+                        setMultiSelectAnswers(prev => ({ ...prev, [currentQuestionIndex]: [] }));
+                    }
 
                     // Set up conditional text if applicable
                     if (data.conditionalTextInputLabel) {
@@ -647,160 +630,20 @@ export function ChatContainer({
         submitConditionalResponse();
     }
 
-    // New handler for confirming multiple language selections
-    const handleConfirmLanguages = async () => {
-        if (isProcessing || !sessionId || multiSelectedLanguages.length === 0) return;
-
-        // Add user message showing selected languages
+    const handleConfirmMultiSelect = async () => {
+        if (
+            isProcessing ||
+            !sessionId ||
+            typeof currentQuestionIndex !== 'number' ||
+            !multiSelectAnswers[currentQuestionIndex] ||
+            multiSelectAnswers[currentQuestionIndex].length === 0
+        ) return;
         setMessages((prev) => [
             ...prev,
             {
                 id: generateMessageId("user"),
                 role: "user",
-                content: `Selected languages: ${multiSelectedLanguages.join(', ')}`,
-            },
-        ]);
-
-        // Add loading message
-        setMessages((prev) => [
-            ...prev,
-            {
-                id: generateMessageId("assistant"),
-                role: "assistant",
-                content: "Thinking...",
-                isLoading: true,
-            },
-        ]);
-
-        setIsProcessing(true);
-        setInputDisabled(true);
-
-        try {
-            const payload = {
-                sessionId,
-                response: multiSelectedLanguages,
-            };
-
-            const response = await fetch("/api/onboarding/message", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(payload),
-            });
-
-            if (!response.ok) {
-                throw new Error(`Failed to send message: ${response.status} ${response.statusText}`);
-            }
-
-            const data: OnboardingResponsePayload = await response.json();
-
-            // Remove the loading message
-            setMessages((prev) => prev.slice(0, -1));
-
-            // Handle error if present
-            if (data.error) {
-                setMessages((prev) => [
-                    ...prev,
-                    {
-                        id: generateMessageId("assistant"),
-                        role: "assistant",
-                        content: data.error || "An error occurred",
-                    },
-                ]);
-
-                // If flow should halt, disable input
-                if (data.haltFlow) {
-                    setInputDisabled(true);
-                }
-            }
-            // Handle final result
-            else if (data.isFinalQuestion && data.finalResult) {
-                setMessages((prev) => [
-                    ...prev,
-                    {
-                        id: generateMessageId("assistant"),
-                        role: "assistant",
-                        content: `__FINAL_RECOMMENDATION__`,
-                        finalResult: data.finalResult,
-                    },
-                ])
-                setInputDisabled(true)
-                setIsComplete(true)
-                setCurrentQuestionIndex(TOTAL_STEPS)
-            }
-            // Handle next question
-            else if (data.nextQuestion) {
-                setMessages((prev) => [
-                    ...prev,
-                    {
-                        id: generateMessageId("assistant"),
-                        role: "assistant",
-                        content: data.nextQuestion || "Let's continue",
-                        options: data.options,
-                    },
-                ]);
-
-                setCurrentQuestionIndex(data.currentQuestionIndex);
-                setInputMode(data.inputMode || "text");
-
-                // Reset selection states
-                setConditionalText("")
-                setConditionalTextVisible(false)
-                setShowConditionalInput(false)
-                setSelectedButtonValue(null)
-                setMultiSelectedLanguages([]); // Reset multi-select state
-
-                // Set up conditional text if applicable
-                if (data.conditionalTextInputLabel) {
-                    setConditionalTextVisible(false);
-                    setConditionalTriggerValue(data.conditionalTriggerValue || null);
-                    setConditionalTextInputLabel(data.conditionalTextInputLabel);
-                }
-            }
-
-            // If we got a new session ID (session expired), update it
-            if (data.newSessionId) {
-                setSessionId(data.newSessionId);
-            }
-        } catch (error) {
-            const errorMessage = error instanceof Error
-                ? error.message
-                : "Error processing your selections. Please try again.";
-            console.error("Error submitting language selections:", errorMessage);
-
-            // Remove the loading message
-            setMessages((prev) => prev.slice(0, -1));
-
-            setMessages((prev) => [
-                ...prev,
-                {
-                    id: generateMessageId("assistant"),
-                    role: "assistant",
-                    content: "Sorry, there was an error processing your selections. Please try again.",
-                },
-            ]);
-        } finally {
-            setIsProcessing(false);
-            if (!isComplete) {
-                setInputDisabled(false);
-                // Add short delay before attempting to refocus
-                setTimeout(() => {
-                    // Trigger a re-render to focus the input
-                    setInputMode(prev => prev);
-                }, 100);
-            }
-        }
-    };
-
-    const handleConfirmPlatforms = async () => {
-        if (isProcessing || !sessionId || multiSelectedPlatforms.length === 0) return;
-        setMessages((prev) => [
-            ...prev,
-            {
-                id: generateMessageId("user"),
-                role: "user",
-                content: `Selected platforms: ${multiSelectedPlatforms.join(', ')}`,
+                content: `Selected: ${multiSelectAnswers[currentQuestionIndex].join(', ')}`,
             },
         ]);
         setMessages((prev) => [
@@ -817,7 +660,7 @@ export function ChatContainer({
         try {
             const payload = {
                 sessionId,
-                response: multiSelectedPlatforms,
+                response: multiSelectAnswers[currentQuestionIndex],
             };
             const response = await fetch("/api/onboarding/message", {
                 method: "POST",
@@ -872,7 +715,9 @@ export function ChatContainer({
                 setConditionalTextVisible(false);
                 setShowConditionalInput(false);
                 setSelectedButtonValue(null);
-                setMultiSelectedPlatforms([]); // Reset multi-select state
+                if (typeof currentQuestionIndex === 'number') {
+                    setMultiSelectAnswers(prev => ({ ...prev, [currentQuestionIndex]: [] }));
+                }
                 if (data.conditionalTextInputLabel) {
                     setConditionalTextVisible(false);
                     setConditionalTriggerValue(data.conditionalTriggerValue || null);
@@ -886,7 +731,7 @@ export function ChatContainer({
             const errorMessage = error instanceof Error
                 ? error.message
                 : "Error processing your selections. Please try again.";
-            console.error("Error submitting platform selections:", errorMessage);
+            console.error("Error submitting selections:", errorMessage);
             setMessages((prev) => prev.slice(0, -1));
             setMessages((prev) => [
                 ...prev,
@@ -990,8 +835,7 @@ export function ChatContainer({
         setInputMode("text");
         setConditionalText("");
         setSelectedButtonValue(null);
-        setMultiSelectedLanguages([]);
-        setMultiSelectedPlatforms([]);
+        setMultiSelectAnswers({});
         setSessionId(null);
         setInputDisabled(false);
         setIsProcessing(false);
@@ -1031,8 +875,7 @@ export function ChatContainer({
                     className="h-full overflow-auto"
                     latestInteractiveMessageId={latestInteractiveMsgId}
                     highlightedButtonIndex={highlightedButtonIndex}
-                    multiSelectedLanguages={multiSelectedLanguages}
-                    multiSelectedPlatforms={multiSelectedPlatforms}
+                    multiSelectAnswers={multiSelectAnswers}
                     currentQuestionIndex={currentQuestionIndex}
                 />
             </div>
@@ -1055,8 +898,8 @@ export function ChatContainer({
                         currentQuestionIndex={currentQuestionIndex}
                         conditionalTextInputLabel={conditionalTextInputLabel}
                         className={conditionalTextVisible ? "max-h-[200px] overflow-y-auto" : ""}
-                        showConfirmButton={(currentQuestionIndex === 5 && multiSelectedLanguages.length > 0) || (currentQuestionIndex === 6 && multiSelectedPlatforms.length > 0)}
-                        onConfirmLanguages={currentQuestionIndex === 5 ? handleConfirmLanguages : handleConfirmPlatforms}
+                        showConfirmButton={typeof currentQuestionIndex === 'number' && [5, 6].includes(currentQuestionIndex) && multiSelectAnswers[currentQuestionIndex]?.length > 0}
+                        onConfirmLanguages={handleConfirmMultiSelect}
                         placeholder={getQuestionDetails(currentQuestionIndex ?? -1)?.placeholder || undefined}
                     />
                 )}
