@@ -299,8 +299,9 @@ export function ChatContainer({
 
     const handleButtonSelect = useCallback(async (value: string) => {
         if (isProcessing || !sessionId) return;
-        // Only handle multi-select if currentQuestionIndex is a number
-        if (typeof currentQuestionIndex === 'number' && [5, 6].includes(currentQuestionIndex)) {
+        // Use isMultiSelect property from question definition
+        const currentQuestion = typeof currentQuestionIndex === 'number' ? getQuestionDetails(currentQuestionIndex) : null;
+        if (currentQuestion && currentQuestion.isMultiSelect && typeof currentQuestionIndex === 'number') {
             setMultiSelectAnswers(prev => {
                 const prevSelected = prev[currentQuestionIndex] || [];
                 if (value === "None") {
@@ -860,6 +861,9 @@ export function ChatContainer({
         }
     }, [isComplete, openRightSidebar]);
 
+    // Before the return statement, define currentQuestion:
+    const currentQuestion = typeof currentQuestionIndex === 'number' ? getQuestionDetails(currentQuestionIndex) : null;
+
     return (
         <div
             className={`flex flex-col h-full bg-[#1a1a1a] dark:bg-[#1a1a1a] rounded-lg shadow-lg overflow-hidden border border-[#333333] dark:border-[#333333] text-white ${className} ${isRightSidebarOpen ? 'adjust-for-sidebar' : 'centered'}`}
@@ -892,13 +896,25 @@ export function ChatContainer({
                         disabled={inputDisabled}
                         inputMode={inputMode}
                         onSendMessage={handleSendMessage}
-                        conditionalTextVisible={conditionalTextVisible}
+                        conditionalTextVisible={
+                            !!(
+                                currentQuestion?.conditionalTriggerValue &&
+                                typeof currentQuestionIndex === 'number' &&
+                                Array.isArray(multiSelectAnswers[currentQuestionIndex]) &&
+                                multiSelectAnswers[currentQuestionIndex]?.includes(currentQuestion.conditionalTriggerValue)
+                            )
+                        }
                         setConditionalText={setConditionalText}
                         onConditionalTextSubmit={handleConditionalTextSubmit}
                         currentQuestionIndex={currentQuestionIndex}
                         conditionalTextInputLabel={conditionalTextInputLabel}
                         className={conditionalTextVisible ? "max-h-[200px] overflow-y-auto" : ""}
-                        showConfirmButton={typeof currentQuestionIndex === 'number' && [5, 6].includes(currentQuestionIndex) && multiSelectAnswers[currentQuestionIndex]?.length > 0}
+                        showConfirmButton={
+                            currentQuestion?.isMultiSelect &&
+                            typeof currentQuestionIndex === 'number' &&
+                            Array.isArray(multiSelectAnswers[currentQuestionIndex]) &&
+                            multiSelectAnswers[currentQuestionIndex]?.length > 0
+                        }
                         onConfirmLanguages={handleConfirmMultiSelect}
                         placeholder={getQuestionDetails(currentQuestionIndex ?? -1)?.placeholder || undefined}
                     />
