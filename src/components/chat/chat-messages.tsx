@@ -236,6 +236,23 @@ export function ChatMessages({
                                             })}
                                         </div>
                                     )}
+
+                                    {message.content === "__FINAL_RECOMMENDATION__" && message.finalResult ? (
+                                        <Card className="p-6 bg-gradient-to-br from-[#1a2b4a] to-[#213459] rounded-xl shadow-lg text-center text-white border border-[#333333]">
+                                            <h2 className="text-2xl font-bold mb-2">🌟 Your Personalized Recommendation 🌟</h2>
+                                            <p className="text-lg mb-4">
+                                                Based on your responses, I recommend the <span className="text-xl font-semibold text-blue-400">{message.finalResult.recommendedPath}</span> path for you.
+                                            </p>
+                                            <a
+                                                href={message.finalResult.recommendedPathUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-block mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition-colors"
+                                            >
+                                                Get Started
+                                            </a>
+                                        </Card>
+                                    ) : null}
                                 </div>
                             </div>
                         </div>
