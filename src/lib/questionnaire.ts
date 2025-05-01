@@ -33,10 +33,10 @@ const questions: QuestionDetail[] = [
     // Index 1
     {
         index: 1,
-        text: "What email should we use to stay in touch?",
+        text: "What email should we use to stay in touch, {name}?",
         inputMode: 'text',
         isOptional: false,
-        validationHint: 'email', // Signal for email validation
+        validationHint: 'email',
         rePromptMessage: "Please provide a valid email address.",
     },
     // Index 2 (GitHub)
@@ -68,7 +68,7 @@ const questions: QuestionDetail[] = [
     // Index 5 Programming Languages)
     {
         index: 5,
-        text: "Which programming languages are you most comfortable with? (Select all that apply, or 'None')",
+        text: "Which programming languages are you most comfortable with, {name}? (Select all that apply, or 'None')",
         inputMode: 'buttons',
         options: [
             { label: "1. Rust", value: "Rust" },
@@ -129,7 +129,7 @@ const questions: QuestionDetail[] = [
     // Index 8 (Andromeda tools)
     {
         index: 8,
-        text: "How familiar are you with Andromeda's tools?",
+        text: "Okay, great. So, how familiar are you with Andromeda's tools?",
         inputMode: 'buttons',
         options: [
             { label: "1. Very familiar", value: "Very familiar" },
@@ -159,14 +159,14 @@ const questions: QuestionDetail[] = [
         options: [
             { label: "1. Yes—and I've won! 🏆", value: "Winner" },
             { label: "2. Yes—as a participant", value: "Participant" },
-            { label: "3. Not yet", value: "Not yet" }, // Changed value slightly for clarity
+            { label: "3. Not yet", value: "Not yet" },
         ],
         isOptional: false,
     },
     // Index 11 (Main goal)
     {
         index: 11,
-        text: "What's your main goal here?",
+        text: "Out of these broad choices, What are your goals here, {name}?",
         inputMode: 'buttons',
         options: [
             { label: "1. Build apps/dApps", value: "Build apps/dApps" },

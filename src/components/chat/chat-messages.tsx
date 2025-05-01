@@ -43,32 +43,29 @@ interface ChatMessagesProps {
     highlightedButtonIndex?: number | null // Index of button to highlight (for keyboard shortcut feedback)
     multiSelectAnswers?: { [key: number]: string[] } // New: all multi-select answers by question index
     currentQuestionIndex?: number | null // Current question index for context-specific behavior
+    userName?: string // Add userName prop for personalization
 }
 
 // Function to render message content with clickable links
-const renderMessageContent = (content: string) => {
+const renderMessageContent = (content: string, userName?: string) => {
     if (!content) return null;
-
+    // Replace {name} with userName if provided
+    const personalizedContent = userName ? content.replace(/\{name\}/g, userName) : content;
     // Regular expression to match URLs
     const urlRegex = /(https?:\/\/[^\s]+)/g;
-
     // If no URLs are found, just return the content
-    if (!content.match(urlRegex)) {
-        return <div className="whitespace-pre-line">{content}</div>;
+    if (!personalizedContent.match(urlRegex)) {
+        return <div className="whitespace-pre-line">{personalizedContent}</div>;
     }
-
     // Split the content by URLs and map over the parts
-    const parts = content.split(urlRegex);
-    const matches = content.match(urlRegex) || [];
-
+    const parts = personalizedContent.split(urlRegex);
+    const matches = personalizedContent.match(urlRegex) || [];
     return (
         <div className="whitespace-pre-line">
             {parts.map((part, index) => {
-                // For even indices, these are the text parts
                 if (index % 2 === 0) {
                     return <span key={index}>{part}</span>;
                 }
-                // For odd indices, these should be URLs, but we need to check the matches array
                 const matchIndex = Math.floor(index / 2);
                 if (matchIndex < matches.length) {
                     const url = matches[matchIndex];
@@ -84,7 +81,6 @@ const renderMessageContent = (content: string) => {
                         </a>
                     );
                 }
-                // Fallback, though this should never happen
                 return <span key={index}>{part}</span>;
             })}
         </div>
@@ -101,6 +97,7 @@ export function ChatMessages({
     highlightedButtonIndex = null, // Default to null if not provided
     multiSelectAnswers = {}, // Default to empty object if not provided
     currentQuestionIndex = null, // Default to null if not provided
+    userName,
 }: ChatMessagesProps) {
     // Internal ref used only if messagesEndRef is not provided by the parent
     const internalScrollRef = useRef<HTMLDivElement>(null);
@@ -158,9 +155,9 @@ export function ChatMessages({
                                 {/* Custom rendering for final recommendation */}
                                 {message.content === "__FINAL_RECOMMENDATION__" && message.finalResult ? (
                                     <div className="p-6 bg-gradient-to-br from-[#1a2b4a] to-[#213459] rounded-xl shadow-lg text-center text-white border border-[#333333]">
-                                        <h2 className="text-2xl font-bold mb-2">🎉 Congratulations! 🎉</h2>
+                                        <h2 className="text-2xl font-bold mb-2">🎉 Congratulations, {userName || "friend"}! 🎉</h2>
                                         <p className="text-lg mb-4">
-                                            Based on your responses, we recommend the:
+                                            {userName ? `Based on your responses, ${userName}, we recommend the:` : "Based on your responses, we recommend the:"}
                                             <br />
                                             <span className="text-xl font-semibold text-blue-400">🌟 {message.finalResult.recommendedPath} 🌟</span>
                                         </p>
@@ -190,8 +187,8 @@ export function ChatMessages({
                                                 : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white"
                                             } ${message.isLoading ? "animate-pulse" : ""}`}
                                     >
-                                        {/* Display message content with clickable links */}
-                                        {renderMessageContent(message.content)}
+                                        {/* Display message content with clickable links and name replacement */}
+                                        {renderMessageContent(message.content, message.role === "assistant" ? userName : undefined)}
 
                                         {/* Render URL as a button if present */}
                                         {message.url && (

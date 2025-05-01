@@ -68,6 +68,7 @@ export function ChatContainer({
     const conditionalInputRef = useRef<HTMLDivElement>(null)
     const [isComplete, setIsComplete] = useState(false)
     const [multiSelectAnswers, setMultiSelectAnswers] = useState<{ [key: number]: string[] }>({});
+    const [userName, setUserName] = useState<string>("");
 
     // Helper function to generate unique IDs for messages
     const generateMessageId = (role: string) => `${role}-${Date.now()}-${Math.floor(Math.random() * 1000)}`
@@ -146,6 +147,11 @@ export function ChatContainer({
 
     const handleSendMessage = async (message: string) => {
         if (isProcessing || !sessionId) return
+
+        // If answering the name question (index 0), store the name
+        if (currentQuestionIndex === 0) {
+            setUserName(message.trim());
+        }
 
         // Add user message to chat
         setMessages((prev) => [
@@ -881,6 +887,7 @@ export function ChatContainer({
                     highlightedButtonIndex={highlightedButtonIndex}
                     multiSelectAnswers={multiSelectAnswers}
                     currentQuestionIndex={currentQuestionIndex}
+                    userName={userName}
                 />
             </div>
 
