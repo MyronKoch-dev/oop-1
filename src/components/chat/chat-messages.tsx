@@ -126,130 +126,121 @@ export function ChatMessages({
         <ScrollArea className={`h-full w-full p-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] ${className}`}>
             <div className="space-y-4 pb-2">
                 {/* Map over the messages array to render each message */}
-                {messages.map((message) => (
-                    <div
-                        key={message.id} // Use unique message ID as key
-                        className={`flex ${message.role === "user" ? "justify-end" : "justify-start" // Align user messages right, others left
-                            }`}
-                    >
+                {messages.map((message, idx) => {
+                    const isInitialAssistantMessage =
+                        idx === 0 && message.role === "assistant";
+                    return (
                         <div
-                            className={`flex gap-3 max-w-[85%] ${message.role === "user" ? "flex-row-reverse" : "flex-row" // Reverse layout for user messages
-                                }`}
+                            key={message.id}
+                            className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
                         >
-                            {/* Avatar for user/bot */}
-                            <Avatar
-                                className={`h-8 w-8 flex items-center justify-center ${message.role === "user" ? "bg-blue-500 dark:bg-blue-500" : "bg-[#2a2a2a] dark:bg-[#2a2a2a]"}`}
+                            <div
+                                className={`flex gap-3 max-w-[85%] ${message.role === "user" ? "flex-row-reverse" : "flex-row"}`}
                             >
-                                {message.role === "user" ? (
-                                    <User className="h-4 w-4 text-white dark:text-white" />
-                                ) : (
-                                    <img
-                                        src="https://avatars.githubusercontent.com/u/86694044?s=200&v=4"
-                                        alt="Andromeda Bot"
-                                        className="h-6 w-6 rounded-full bg-[#232323]"
-                                    />
-                                )}
-                            </Avatar>
-                            {/* Container for message content and options */}
-                            <div className="space-y-2 w-full">
-                                {/* Custom rendering for final recommendation */}
-                                {message.content === "__FINAL_RECOMMENDATION__" && message.finalResult ? (
-                                    <div className="p-6 bg-gradient-to-br from-[#1a2b4a] to-[#213459] rounded-xl shadow-lg text-center text-white border border-[#333333]">
-                                        <h2 className="text-2xl font-bold mb-2">🎉 Congratulations, {userName || "friend"}! 🎉</h2>
-                                        <p className="text-lg mb-4">
-                                            {userName ? `Based on your responses, ${userName}, we recommend the:` : "Based on your responses, we recommend the:"}
-                                            <br />
-                                            <span className="text-xl font-semibold text-blue-400">🌟 {message.finalResult.recommendedPath} 🌟</span>
-                                        </p>
-                                        <a
-                                            href={message.finalResult.recommendedPathUrl}
-                                            className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition text-lg mt-2"
+                                {/* Avatar for user/bot */}
+                                <Avatar
+                                    className={`h-8 w-8 flex items-center justify-center ${message.role === "user" ? "bg-blue-500 dark:bg-blue-500" : "bg-[#2a2a2a] dark:bg-[#2a2a2a]"}`}
+                                >
+                                    {message.role === "user" ? (
+                                        <User className="h-4 w-4 text-white dark:text-white" />
+                                    ) : (
+                                        <img
+                                            src="https://avatars.githubusercontent.com/u/86694044?s=200&v=4"
+                                            alt="Andromeda Bot"
+                                            className="h-6 w-6 rounded-full bg-[#232323]"
+                                        />
+                                    )}
+                                </Avatar>
+                                <div className="space-y-2 w-full">
+                                    {isInitialAssistantMessage ? (
+                                        <div className="p-6 bg-gradient-to-br from-[#1a2b4a] to-[#213459] rounded-xl shadow-lg text-center text-white border border-[#333333]">
+                                            <h2 className="text-2xl font-bold mb-2">🌟 Welcome to Andromeda! 🌟</h2>
+                                            <p className="text-lg mb-4">
+                                                I&apos;m your Onboarding Assistant, here to help you get started.<br /><br />
+                                                I&apos;ll ask a few quick questions to learn about your background and interests.<br /><br />
+                                                Once I understand what you&apos;re looking for, I&apos;ll point you directly to the right spot in our community!<br /><br />
+                                                <span className="text-xl font-semibold text-blue-400">Ready to dive in? 🚀</span>
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        // Render error/warning messages in red if they match known patterns
+                                        <Card
+                                            className={`p-3 ${message.role === "assistant" &&
+                                                (message.content.toLowerCase().includes("please provide a valid") ||
+                                                    message.content.toLowerCase().includes("error") ||
+                                                    message.content.toLowerCase().includes("required") ||
+                                                    message.content.toLowerCase().includes("sorry")
+                                                )
+                                                ? "bg-red-900/80 border-red-600 text-red-200" // Red style for warnings/errors
+                                                : message.role === "user"
+                                                    ? "bg-[#1a2b4a] text-[#6bbbff]"
+                                                    : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white"
+                                                } ${message.isLoading ? "animate-pulse" : ""}`}
                                         >
-                                            <span className="mr-2">Get Started</span> 🚀
-                                        </a>
-                                        <p className="mt-6 text-base">
-                                            Thank you for completing the onboarding process!<br />
-                                            <span className="text-2xl">WELCOME TO ANDROMEDA 🎉</span>
-                                        </p>
-                                    </div>
-                                ) : (
-                                    // Render error/warning messages in red if they match known patterns
-                                    <Card
-                                        className={`p-3 ${message.role === "assistant" &&
-                                            (message.content.toLowerCase().includes("please provide a valid") ||
-                                                message.content.toLowerCase().includes("error") ||
-                                                message.content.toLowerCase().includes("required") ||
-                                                message.content.toLowerCase().includes("sorry")
-                                            )
-                                            ? "bg-red-900/80 border-red-600 text-red-200" // Red style for warnings/errors
-                                            : message.role === "user"
-                                                ? "bg-[#1a2b4a] text-[#6bbbff]"
-                                                : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white"
-                                            } ${message.isLoading ? "animate-pulse" : ""}`}
-                                    >
-                                        {/* Display message content with clickable links and name replacement */}
-                                        {renderMessageContent(message.content, message.role === "assistant" ? userName : undefined)}
+                                            {/* Display message content with clickable links and name replacement */}
+                                            {renderMessageContent(message.content, message.role === "assistant" ? userName : undefined)}
 
-                                        {/* Render URL as a button if present */}
-                                        {message.url && (
-                                            <div className="mt-4">
-                                                <button
-                                                    onClick={() => window.open(message.url, "_blank")}
-                                                    className="w-full flex items-center justify-center gap-2 bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
-                                                >
-                                                    <ExternalLink className="w-4 h-4" />
-                                                    Get Started
-                                                </button>
-                                            </div>
-                                        )}
-                                    </Card>
-                                )}
+                                            {/* Render URL as a button if present */}
+                                            {message.url && (
+                                                <div className="mt-4">
+                                                    <button
+                                                        onClick={() => window.open(message.url, "_blank")}
+                                                        className="w-full flex items-center justify-center gap-2 bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
+                                                    >
+                                                        <ExternalLink className="w-4 h-4" />
+                                                        Get Started
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </Card>
+                                    )}
 
-                                {/* Render buttons if options are provided for an assistant message */}
-                                {message.role === 'assistant' && message.options && message.options.length > 0 && (
-                                    <div className="flex flex-wrap gap-2 pt-1">
-                                        {message.options.map((option, index) => {
-                                            // Determine if this message has the latest interactive options
-                                            const isActiveMessage = message.id === latestInteractiveMessageId;
+                                    {/* Render buttons if options are provided for an assistant message */}
+                                    {message.role === 'assistant' && message.options && message.options.length > 0 && (
+                                        <div className="flex flex-wrap gap-2 pt-1">
+                                            {message.options.map((option, index) => {
+                                                // Determine if this message has the latest interactive options
+                                                const isActiveMessage = message.id === latestInteractiveMessageId;
 
-                                            // Use selectedValues only if currentQuestionIndex is a number
-                                            const selectedValues = typeof currentQuestionIndex === 'number' ? (multiSelectAnswers[currentQuestionIndex] || []) : [];
-                                            const isSelected = selectedValues.includes(option.value);
+                                                // Use selectedValues only if currentQuestionIndex is a number
+                                                const selectedValues = typeof currentQuestionIndex === 'number' ? (multiSelectAnswers[currentQuestionIndex] || []) : [];
+                                                const isSelected = selectedValues.includes(option.value);
 
-                                            // Button disabled state depends on the question type
-                                            // For Q5/Q6 (multi-select), buttons remain enabled until submission
-                                            // For other questions, disable all buttons once any is selected
-                                            const isDisabled = !isActiveMessage || (isActiveMessage && selectedButtonValue !== null);
+                                                // Button disabled state depends on the question type
+                                                // For Q5/Q6 (multi-select), buttons remain enabled until submission
+                                                // For other questions, disable all buttons once any is selected
+                                                const isDisabled = !isActiveMessage || (isActiveMessage && selectedButtonValue !== null);
 
-                                            // Styling classes for disabled buttons
-                                            const disabledClasses = !isActiveMessage ? "opacity-70 cursor-not-allowed" : "";
+                                                // Styling classes for disabled buttons
+                                                const disabledClasses = !isActiveMessage ? "opacity-70 cursor-not-allowed" : "";
 
-                                            // Check if this button is currently highlighted via keyboard
-                                            const isHighlighted = isActiveMessage &&
-                                                highlightedButtonIndex === index;
+                                                // Check if this button is currently highlighted via keyboard
+                                                const isHighlighted = isActiveMessage &&
+                                                    highlightedButtonIndex === index;
 
-                                            // Apply highlight style if this button is being pressed via keyboard
-                                            const highlightClasses = isHighlighted ? "ring-2 ring-offset-1 ring-blue-500" : "";
+                                                // Apply highlight style if this button is being pressed via keyboard
+                                                const highlightClasses = isHighlighted ? "ring-2 ring-offset-1 ring-blue-500" : "";
 
-                                            return (
-                                                <Button
-                                                    key={option.value}
-                                                    variant={isSelected ? "default" : "outline"}
-                                                    size="sm"
-                                                    onClick={() => onButtonClick(option.value)}
-                                                    disabled={isDisabled}
-                                                    className={`text-left h-auto py-1.5 ${isSelected ? "bg-[#1a2b4a] text-[#6bbbff]" : "bg-[#2a2a2a] dark:bg-[#2a2a2a] border-[#444444] dark:border-[#444444] text-white hover:bg-[#333333] hover:text-white"} ${disabledClasses} ${highlightClasses}`}
-                                                >
-                                                    {option.label}
-                                                </Button>
-                                            );
-                                        })}
-                                    </div>
-                                )}
+                                                return (
+                                                    <Button
+                                                        key={option.value}
+                                                        variant={isSelected ? "default" : "outline"}
+                                                        size="sm"
+                                                        onClick={() => onButtonClick(option.value)}
+                                                        disabled={isDisabled}
+                                                        className={`text-left h-auto py-1.5 ${isSelected ? "bg-[#1a2b4a] text-[#6bbbff]" : "bg-[#2a2a2a] dark:bg-[#2a2a2a] border-[#444444] dark:border-[#444444] text-white hover:bg-[#333333] hover:text-white"} ${disabledClasses} ${highlightClasses}`}
+                                                    >
+                                                        {option.label}
+                                                    </Button>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
                 {/* Empty div at the end to attach the scroll ref */}
                 <div ref={scrollRef} className="h-4 w-full" /> {/* Add min-height to ensure scrolling */}
             </div>

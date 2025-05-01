@@ -152,6 +152,11 @@ const actionItems: NavItem[] = [
         href: "https://zealy.io/cw/andromedacommunity/questboard/ff856265-3649-4b5f-a41f-c19eadfaf2e0/36c50401-4e44-452a-9539-94b9f2451f3d",
         label: "Ambassador Program",
         icon: <Award className="w-5 h-5" />
+    },
+    {
+        href: "https://andromedaprotocol.io/learn",
+        label: "Explorer",
+        icon: <BookOpen className="w-5 h-5" />
     }
 ];
 
