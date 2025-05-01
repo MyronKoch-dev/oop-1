@@ -23,6 +23,14 @@ function getPathUrl(pathKey: string): string {
     return url;
 }
 
+// ---
+// HOW TO EDIT OR EXPAND PATH RECOMMENDATION RULES
+// - To tweak a rule, edit the relevant isXxxCandidate variable below.
+// - To add a new path, add a new rule block above the fallback.
+// - To make rules more granular, add more specific conditions or implement a scoring system.
+// - See PATH_RULES_GUIDE.md in the root for a step-by-step guide and examples.
+// ---
+
 /**
  * Determines the recommended onboarding path based on user data.
  * Follows the strict rules defined in the Specification Sheet FR3.3.
@@ -30,6 +38,9 @@ function getPathUrl(pathKey: string): string {
  * @param data The completed OnboardingData object.
  * @returns An object containing the recommendedPath name and its URL.
  */
+// ---
+// MAIN RULE LOGIC: Edit or add rules below to change path recommendations.
+// ---
 export function determinePath(data: OnboardingData): PathResult {
     console.log("Determining path for data:", data);
 
@@ -127,3 +138,6 @@ export function determinePath(data: OnboardingData): PathResult {
         recommendedPathUrl: getPathUrl("EXPLORER_PATH")
     };
 }
+// ---
+// For more details, see PATH_RULES_GUIDE.md in the root.
+// ---
