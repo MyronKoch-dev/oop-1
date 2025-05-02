@@ -645,12 +645,20 @@ export function ChatContainer({
             !multiSelectAnswers[currentQuestionIndex] ||
             multiSelectAnswers[currentQuestionIndex].length === 0
         ) return;
+
+        // Special handling for AI/ML (index 7): merge conditionalText if 'Other' is selected and custom text is provided
+        let selections = multiSelectAnswers[currentQuestionIndex];
+        if (currentQuestionIndex === 7 && selections.includes('Other') && conditionalText.trim()) {
+            selections = selections.filter(v => v !== 'Other');
+            selections.push(`Other: ${conditionalText.trim()}`);
+        }
+
         setMessages((prev) => [
             ...prev,
             {
                 id: generateMessageId("user"),
                 role: "user",
-                content: `Selected: ${multiSelectAnswers[currentQuestionIndex].join(', ')}`,
+                content: `Selected: ${selections.join(', ')}`,
             },
         ]);
         setMessages((prev) => [
@@ -667,7 +675,7 @@ export function ChatContainer({
         try {
             const payload = {
                 sessionId,
-                response: multiSelectAnswers[currentQuestionIndex],
+                response: selections,
             };
             const response = await fetch("/api/onboarding/message", {
                 method: "POST",

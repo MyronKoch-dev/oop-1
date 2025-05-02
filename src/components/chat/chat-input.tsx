@@ -129,8 +129,9 @@ export function ChatInput({
             currentQuestionIndex === 4 || currentQuestionIndex === 12 ||
             currentQuestionIndex === 13;
 
+        // Only send 'none' if the field is truly empty, otherwise send the actual value
         if (!disabled && (message.trim() || isOptionalField)) {
-            const valueToSend = message.trim() || "none"; // Send "none" for empty optional fields
+            const valueToSend = message.trim() ? message.trim() : (isOptionalField ? "none" : "");
             if (onSendMessage) {
                 onSendMessage(valueToSend)
             } else {

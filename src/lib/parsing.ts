@@ -86,26 +86,24 @@ export function parseBlockchain(
  * @param currentData The current accumulated data object (to be mutated).
  */
 export function parseAI(
-    rawResponse: { buttonValue: string } | undefined | null,
-    conditionalText: string | undefined | null,
+    rawResponse: { buttonValue: string } | string[] | undefined | null,
+    _conditionalText: string | undefined | null,
     currentData: Partial<OnboardingData>
 ): void {
-    // Reset fields
     currentData.ai_experience = null;
     currentData.ai_ml_areas = null;
 
-    if (rawResponse?.buttonValue) {
-        // Store the selection ('Yes', 'No')
-        currentData.ai_experience = rawResponse.buttonValue;
-        // If 'Yes' was selected, store the conditional text (if provided)
-        if (rawResponse.buttonValue === 'Yes') {
-            const trimmedConditional = conditionalText?.trim();
-            if (trimmedConditional) {
-                currentData.ai_ml_areas = trimmedConditional;
-            }
+    if (Array.isArray(rawResponse)) {
+        if (rawResponse.length > 0) {
+            currentData.ai_experience = "Yes";
+            currentData.ai_ml_areas = rawResponse.join(", ");
+        } else {
+            currentData.ai_experience = "No";
         }
+    } else if (rawResponse?.buttonValue) {
+        currentData.ai_experience = rawResponse.buttonValue;
     } else {
-        console.log("Parsing AI: No valid button value received.");
+        console.log("Parsing AI: No valid button value or array received.");
     }
     console.log('Parsed AI Result:', { exp: currentData.ai_experience, areas: currentData.ai_ml_areas });
 }
