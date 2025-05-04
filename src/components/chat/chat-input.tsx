@@ -1,256 +1,280 @@
-"use client"
+"use client";
 
-import { useState, useRef, useEffect, type KeyboardEvent, type ChangeEvent } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
-import { Send } from "lucide-react"
+import {
+  useState,
+  useRef,
+  useEffect,
+  type KeyboardEvent,
+  type ChangeEvent,
+} from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Send } from "lucide-react";
 
-export type InputMode = "text" | "buttons" | "conditionalText"
+export type InputMode = "text" | "buttons" | "conditionalText";
 
 interface ChatInputProps {
-    onSendText: (text: string) => void
-    onConditionalTextChange?: (text: string) => void
-    isConditionalVisible?: boolean
-    conditionalLabel?: string
-    conditionalText?: string
-    disabled?: boolean
-    inputMode: InputMode
-    placeholder?: string
-    className?: string
-    onSendMessage?: (message: string) => void
-    conditionalTextVisible?: boolean
-    setConditionalText?: (text: string) => void
-    onConditionalTextSubmit?: () => void
-    currentQuestionIndex?: number | null
-    conditionalTextInputLabel?: string
-    showConfirmButton?: boolean
-    onConfirmLanguages?: () => void
-    confirmOptionText?: string
-    onSkipQuestion?: () => void
-    conditionalAction?: { skipText?: string }
-    isGenerating?: boolean
+  onSendText: (text: string) => void;
+  onConditionalTextChange?: (text: string) => void;
+  isConditionalVisible?: boolean;
+  conditionalLabel?: string;
+  conditionalText?: string;
+  disabled?: boolean;
+  inputMode: InputMode;
+  placeholder?: string;
+  className?: string;
+  onSendMessage?: (message: string) => void;
+  conditionalTextVisible?: boolean;
+  setConditionalText?: (text: string) => void;
+  onConditionalTextSubmit?: () => void;
+  currentQuestionIndex?: number | null;
+  conditionalTextInputLabel?: string;
+  showConfirmButton?: boolean;
+  onConfirmLanguages?: () => void;
+  confirmOptionText?: string;
+  onSkipQuestion?: () => void;
+  conditionalAction?: { skipText?: string };
+  isGenerating?: boolean;
 }
 
 export function ChatInput({
-    onSendText,
-    onConditionalTextChange,
-    isConditionalVisible = false,
-    conditionalLabel = "Please provide more details:",
-    conditionalText = "",
-    disabled = false,
-    inputMode = "text",
-    placeholder = "Type your message...",
-    className = "",
-    onSendMessage,
-    conditionalTextVisible = false,
-    setConditionalText,
-    onConditionalTextSubmit,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    currentQuestionIndex,
-    conditionalTextInputLabel,
-    showConfirmButton = false,
-    onConfirmLanguages,
-    confirmOptionText,
-    onSkipQuestion,
-    conditionalAction,
-    isGenerating
+  onSendText,
+  onConditionalTextChange,
+  isConditionalVisible = false,
+  conditionalLabel = "Please provide more details:",
+  conditionalText = "",
+  disabled = false,
+  inputMode = "text",
+  placeholder = "Type your message...",
+  className = "",
+  onSendMessage,
+  conditionalTextVisible = false,
+  setConditionalText,
+  onConditionalTextSubmit,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  currentQuestionIndex,
+  conditionalTextInputLabel,
+  showConfirmButton = false,
+  onConfirmLanguages,
+  confirmOptionText,
+  onSkipQuestion,
+  conditionalAction,
+  isGenerating,
 }: ChatInputProps) {
-    const [message, setMessage] = useState("")
-    const inputRef = useRef<HTMLInputElement>(null)
-    const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const [message, setMessage] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-    // Variable declarations - moved up before they're used in useEffect
-    const showConditionalInput = conditionalTextVisible || isConditionalVisible
-    const hideMainInput = showConditionalInput && inputMode === "conditionalText"
-    const isMainInputDisabled = disabled || (inputMode === "buttons" && !showConditionalInput) || (inputMode === "conditionalText" && !conditionalTextVisible)
-    const displayLabel = conditionalTextInputLabel || conditionalLabel
+  // Variable declarations - moved up before they're used in useEffect
+  const showConditionalInput = conditionalTextVisible || isConditionalVisible;
+  const hideMainInput = showConditionalInput && inputMode === "conditionalText";
+  const isMainInputDisabled =
+    disabled ||
+    (inputMode === "buttons" && !showConditionalInput) ||
+    (inputMode === "conditionalText" && !conditionalTextVisible);
+  const displayLabel = conditionalTextInputLabel || conditionalLabel;
 
-    // Effect to focus main input when appropriate
-    useEffect(() => {
-        if (!disabled && !showConditionalInput && inputRef.current) {
-            inputRef.current.focus()
-        }
-    }, [disabled, inputMode, showConditionalInput])
-
-    // Update the useEffect for conditional text focus
-    useEffect(() => {
-        if (showConditionalInput && !disabled && textareaRef.current) {
-            // Short delay to ensure the element is fully rendered
-            setTimeout(() => {
-                if (textareaRef.current) {
-                    textareaRef.current.focus();
-                    // Place cursor at the end of existing text
-                    const length = textareaRef.current.value.length;
-                    textareaRef.current.setSelectionRange(length, length);
-                }
-            }, 50);
-        }
-    }, [showConditionalInput, disabled, conditionalText]);
-
-    // Add an effect to handle focus changes when input mode changes
-    useEffect(() => {
-        if (showConditionalInput && !disabled && textareaRef.current) {
-            textareaRef.current.focus();
-        } else if (!showConditionalInput && !disabled && !hideMainInput && inputRef.current) {
-            inputRef.current.focus();
-        }
-    }, [inputMode, disabled, showConditionalInput, hideMainInput]);
-
-    // Add keyboard event listener for the window when confirm button is shown
-    useEffect(() => {
-        const handleGlobalKeyDown = (e: globalThis.KeyboardEvent) => {
-            if (showConfirmButton && !disabled && e.key === "Enter") {
-                e.preventDefault();
-                onConfirmLanguages?.();
-            }
-        };
-
-        if (showConfirmButton) {
-            window.addEventListener('keydown', handleGlobalKeyDown);
-            return () => window.removeEventListener('keydown', handleGlobalKeyDown);
-        }
-    }, [showConfirmButton, disabled, onConfirmLanguages]);
-
-    const handleMessageChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setMessage(e.target.value)
+  // Effect to focus main input when appropriate
+  useEffect(() => {
+    if (!disabled && !showConditionalInput && inputRef.current) {
+      inputRef.current.focus();
     }
+  }, [disabled, inputMode, showConditionalInput]);
 
-    const handleConditionalChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        onConditionalTextChange?.(e.target.value)
-        setConditionalText?.(e.target.value)
-    }
-
-    const handleSendMessage = () => {
-        // Allow empty message for optional fields (determined by currentQuestionIndex)
-        // Optional fields are: GitHub (2), Telegram (3), Twitter/X (4), Portfolio (12), Additional Skills (13)
-        const isOptionalField = currentQuestionIndex === 2 || currentQuestionIndex === 3 ||
-            currentQuestionIndex === 4 || currentQuestionIndex === 12 ||
-            currentQuestionIndex === 13;
-
-        // Only send 'none' if the field is truly empty, otherwise send the actual value
-        if (!disabled && (message.trim() || isOptionalField)) {
-            const valueToSend = message.trim() ? message.trim() : (isOptionalField ? "none" : "");
-            if (onSendMessage) {
-                onSendMessage(valueToSend)
-            } else {
-                onSendText(valueToSend)
-            }
-            setMessage("")
+  // Update the useEffect for conditional text focus
+  useEffect(() => {
+    if (showConditionalInput && !disabled && textareaRef.current) {
+      // Short delay to ensure the element is fully rendered
+      setTimeout(() => {
+        if (textareaRef.current) {
+          textareaRef.current.focus();
+          // Place cursor at the end of existing text
+          const length = textareaRef.current.value.length;
+          textareaRef.current.setSelectionRange(length, length);
         }
+      }, 50);
     }
+  }, [showConditionalInput, disabled, conditionalText]);
 
-    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault()
-            handleSendMessage()
-        }
+  // Add an effect to handle focus changes when input mode changes
+  useEffect(() => {
+    if (showConditionalInput && !disabled && textareaRef.current) {
+      textareaRef.current.focus();
+    } else if (
+      !showConditionalInput &&
+      !disabled &&
+      !hideMainInput &&
+      inputRef.current
+    ) {
+      inputRef.current.focus();
     }
+  }, [inputMode, disabled, showConditionalInput, hideMainInput]);
 
-    const handleConditionalSubmit = () => {
-        if (onConditionalTextSubmit) {
-            onConditionalTextSubmit()
-        }
+  // Add keyboard event listener for the window when confirm button is shown
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: globalThis.KeyboardEvent) => {
+      if (showConfirmButton && !disabled && e.key === "Enter") {
+        e.preventDefault();
+        onConfirmLanguages?.();
+      }
+    };
+
+    if (showConfirmButton) {
+      window.addEventListener("keydown", handleGlobalKeyDown);
+      return () => window.removeEventListener("keydown", handleGlobalKeyDown);
     }
+  }, [showConfirmButton, disabled, onConfirmLanguages]);
 
-    // Modify handleConditionalKeyDown to handle empty submissions
-    const handleConditionalKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-        if (e.key === "Enter" && !e.shiftKey && !disabled) {
-            e.preventDefault();
-            // If empty or only whitespace, submit "none"
-            if (!conditionalText.trim()) {
-                if (setConditionalText) {
-                    setConditionalText("none");
-                }
-                if (onConditionalTextChange) {
-                    onConditionalTextChange("none");
-                }
-            }
-            handleConditionalSubmit();
-        }
-        else if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && !disabled) {
-            e.preventDefault();
-            handleConditionalSubmit();
-        }
+  const handleMessageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setMessage(e.target.value);
+  };
+
+  const handleConditionalChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    onConditionalTextChange?.(e.target.value);
+    setConditionalText?.(e.target.value);
+  };
+
+  const handleSendMessage = () => {
+    // Allow empty message for optional fields (determined by currentQuestionIndex)
+    // Optional fields are: GitHub (2), Telegram (3), Twitter/X (4), Portfolio (12), Additional Skills (13)
+    const isOptionalField =
+      currentQuestionIndex === 2 ||
+      currentQuestionIndex === 3 ||
+      currentQuestionIndex === 4 ||
+      currentQuestionIndex === 12 ||
+      currentQuestionIndex === 13;
+
+    // Only send 'none' if the field is truly empty, otherwise send the actual value
+    if (!disabled && (message.trim() || isOptionalField)) {
+      const valueToSend = message.trim()
+        ? message.trim()
+        : isOptionalField
+          ? "none"
+          : "";
+      if (onSendMessage) {
+        onSendMessage(valueToSend);
+      } else {
+        onSendText(valueToSend);
+      }
+      setMessage("");
     }
+  };
 
-    return (
-        <div className={`border-t border-[#333333] dark:border-[#333333] p-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] z-10 ${className}`}>
-            {showConfirmButton && (
-                <div className="mb-4">
-                    <Button
-                        onClick={onConfirmLanguages}
-                        disabled={disabled}
-                        className="w-full bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
-                    >
-                        {confirmOptionText || "Confirm Selection (or press Enter)"}
-                    </Button>
-                </div>
-            )}
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
 
-            {showConditionalInput && (
-                <div className="mb-4 max-h-[150px] overflow-y-auto bg-[#232b3a] border border-[#444] rounded-xl p-4 flex flex-col gap-3 shadow-lg">
-                    <Label htmlFor="conditional-input" className="block text-sm font-medium mb-1 text-white">
-                        {displayLabel}
-                    </Label>
-                    <Textarea
-                        id="conditional-input"
-                        ref={textareaRef}
-                        value={conditionalText}
-                        onChange={handleConditionalChange}
-                        onKeyDown={handleConditionalKeyDown}
-                        placeholder="Type additional details here..."
-                        className="min-h-[80px] max-h-[120px] resize-none bg-[#2a2a2a] dark:bg-[#2a2a2a] border-[#444444] dark:border-[#444444] text-white placeholder:text-gray-400 mb-2"
-                        disabled={disabled || !conditionalTextVisible}
-                    />
-                    <p className="text-xs text-gray-400 dark:text-gray-400 text-center mb-2">
-                        Press Enter to submit or Shift+Enter for a new line
-                    </p>
-                    <Button
-                        onClick={handleConditionalSubmit}
-                        disabled={disabled}
-                        className="w-full bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff] mt-2"
-                        type="submit"
-                    >
-                        Submit Details
-                    </Button>
-                </div>
-            )}
+  const handleConditionalSubmit = () => {
+    if (onConditionalTextSubmit) {
+      onConditionalTextSubmit();
+    }
+  };
 
-            {!hideMainInput && !showConfirmButton && (
-                <div className="flex items-center space-x-2">
-                    <Input
-                        ref={inputRef}
-                        value={message}
-                        onChange={handleMessageChange}
-                        onKeyDown={handleKeyDown}
-                        placeholder={placeholder}
-                        disabled={isMainInputDisabled}
-                        className="flex-1 bg-[#2a2a2a] dark:bg-[#2a2a2a] border-[#444444] dark:border-[#444444] text-white placeholder:text-gray-400"
-                    />
-                    <Button
-                        onClick={handleSendMessage}
-                        disabled={!message.trim() || isGenerating}
-                        size="icon"
-                        type="submit"
-                        className="bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
-                    >
-                        <Send className="h-4 w-4" />
-                        <span className="sr-only">Send message</span>
-                    </Button>
-                </div>
-            )}
+  // Modify handleConditionalKeyDown to handle empty submissions
+  const handleConditionalKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey && !disabled) {
+      e.preventDefault();
+      // If empty or only whitespace, submit "none"
+      if (!conditionalText.trim()) {
+        if (setConditionalText) {
+          setConditionalText("none");
+        }
+        if (onConditionalTextChange) {
+          onConditionalTextChange("none");
+        }
+      }
+      handleConditionalSubmit();
+    } else if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && !disabled) {
+      e.preventDefault();
+      handleConditionalSubmit();
+    }
+  };
 
-            {onSkipQuestion && (
-                <Button
-                    className="w-full sticky bottom-0 bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
-                    onClick={onSkipQuestion}
-                >
-                    {conditionalAction?.skipText || "Skip this Question"}
-                </Button>
-            )}
+  return (
+    <div
+      className={`border-t border-[#333333] dark:border-[#333333] p-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] z-10 ${className}`}
+    >
+      {showConfirmButton && (
+        <div className="mb-4">
+          <Button
+            onClick={onConfirmLanguages}
+            disabled={disabled}
+            className="w-full bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
+          >
+            {confirmOptionText || "Confirm Selection (or press Enter)"}
+          </Button>
         </div>
-    )
-}
+      )}
 
+      {showConditionalInput && (
+        <div className="mb-4 max-h-[150px] overflow-y-auto bg-[#232b3a] border border-[#444] rounded-xl p-4 flex flex-col gap-3 shadow-lg">
+          <Label
+            htmlFor="conditional-input"
+            className="block text-sm font-medium mb-1 text-white"
+          >
+            {displayLabel}
+          </Label>
+          <Textarea
+            id="conditional-input"
+            ref={textareaRef}
+            value={conditionalText}
+            onChange={handleConditionalChange}
+            onKeyDown={handleConditionalKeyDown}
+            placeholder="Type additional details here..."
+            className="min-h-[80px] max-h-[120px] resize-none bg-[#2a2a2a] dark:bg-[#2a2a2a] border-[#444444] dark:border-[#444444] text-white placeholder:text-gray-400 mb-2"
+            disabled={disabled || !conditionalTextVisible}
+          />
+          <p className="text-xs text-gray-400 dark:text-gray-400 text-center mb-2">
+            Press Enter to submit or Shift+Enter for a new line
+          </p>
+          <Button
+            onClick={handleConditionalSubmit}
+            disabled={disabled}
+            className="w-full bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff] mt-2"
+            type="submit"
+          >
+            Submit Details
+          </Button>
+        </div>
+      )}
+
+      {!hideMainInput && !showConfirmButton && (
+        <div className="flex items-center space-x-2">
+          <Input
+            ref={inputRef}
+            value={message}
+            onChange={handleMessageChange}
+            onKeyDown={handleKeyDown}
+            placeholder={placeholder}
+            disabled={isMainInputDisabled}
+            className="flex-1 bg-[#2a2a2a] dark:bg-[#2a2a2a] border-[#444444] dark:border-[#444444] text-white placeholder:text-gray-400"
+          />
+          <Button
+            onClick={handleSendMessage}
+            disabled={!message.trim() || isGenerating}
+            size="icon"
+            type="submit"
+            className="bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
+          >
+            <Send className="h-4 w-4" />
+            <span className="sr-only">Send message</span>
+          </Button>
+        </div>
+      )}
+
+      {onSkipQuestion && (
+        <Button
+          className="w-full sticky bottom-0 bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
+          onClick={onSkipQuestion}
+        >
+          {conditionalAction?.skipText || "Skip this Question"}
+        </Button>
+      )}
+    </div>
+  );
+}
