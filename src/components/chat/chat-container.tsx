@@ -6,6 +6,7 @@ import { ChatMessages, type ChatMessage } from "./chat-messages";
 import { ChatInput, type InputMode } from "./chat-input";
 import { getQuestionDetails } from "@/lib/questionnaire";
 import { useSidebar } from "@/context/SidebarContext";
+import { ContactInfoForm } from "./ContactInfoForm";
 
 // Define API response types
 interface OnboardingResponsePayload {
@@ -1010,42 +1011,138 @@ export function ChatContainer({
         ref={conditionalInputRef}
       >
         {!isComplete && (
-          <ChatInput
-            onSendText={handleSendMessage}
-            onConditionalTextChange={handleConditionalTextChange}
-            conditionalText={conditionalText}
-            disabled={inputDisabled}
-            inputMode={inputMode}
-            onSendMessage={handleSendMessage}
-            conditionalTextVisible={
-              !!(
-                currentQuestion?.conditionalTriggerValue &&
+          currentQuestionIndex === 10 ? (
+            <ContactInfoForm
+              onSubmit={async (values) => {
+                setInputDisabled(true);
+                setIsProcessing(true);
+                // Add a message to the chat for the form submission
+                setMessages((prev) => [
+                  ...prev,
+                  {
+                    id: generateMessageId("user"),
+                    role: "user",
+                    content: `Contact Info Submitted`,
+                  },
+                  {
+                    id: generateMessageId("assistant"),
+                    role: "assistant",
+                    content: "Processing your contact info...",
+                    isLoading: true,
+                  },
+                ]);
+                // Send all four answers in a single API call
+                try {
+                  const response = await fetch("/api/onboarding/message", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      sessionId,
+                      response: {
+                        email: values.email,
+                        github: values.github,
+                        telegram: values.telegram,
+                        x: values.x,
+                        batchContact: true,
+                      },
+                    }),
+                  });
+                  const data: OnboardingResponsePayload = await response.json();
+                  setMessages((prev) => prev.slice(0, -1)); // Remove loading
+                  if (data.error) {
+                    setMessages((prev) => [
+                      ...prev,
+                      {
+                        id: generateMessageId("assistant"),
+                        role: "assistant",
+                        content: data.error || "An error occurred",
+                      },
+                    ]);
+                    setInputDisabled(false);
+                  } else if (data.isFinalQuestion && data.finalResult) {
+                    setMessages((prev) => [
+                      ...prev,
+                      {
+                        id: generateMessageId("assistant"),
+                        role: "assistant",
+                        content: `__FINAL_RECOMMENDATION__`,
+                        finalResult: data.finalResult,
+                      },
+                    ]);
+                    setInputDisabled(true);
+                    setIsComplete(true);
+                    setCurrentQuestionIndex(TOTAL_STEPS);
+                  } else if (data.nextQuestion) {
+                    setMessages((prev) => [
+                      ...prev,
+                      {
+                        id: generateMessageId("assistant"),
+                        role: "assistant",
+                        content: data.nextQuestion || "Let's continue",
+                        options: data.options,
+                      },
+                    ]);
+                    setCurrentQuestionIndex(data.currentQuestionIndex);
+                    setInputMode(data.inputMode || "text");
+                  }
+                  if (data.newSessionId) {
+                    setSessionId(data.newSessionId);
+                  }
+                } catch {
+                  setMessages((prev) => prev.slice(0, -1));
+                  setMessages((prev) => [
+                    ...prev,
+                    {
+                      id: generateMessageId("assistant"),
+                      role: "assistant",
+                      content: "Sorry, there was an error submitting your contact info. Please try again.",
+                    },
+                  ]);
+                  setInputDisabled(false);
+                } finally {
+                  setIsProcessing(false);
+                }
+              }}
+              isSubmitting={isProcessing}
+            />
+          ) : (
+            <ChatInput
+              onSendText={handleSendMessage}
+              onConditionalTextChange={handleConditionalTextChange}
+              conditionalText={conditionalText}
+              disabled={inputDisabled}
+              inputMode={inputMode}
+              onSendMessage={handleSendMessage}
+              conditionalTextVisible={
+                !!(
+                  currentQuestion?.conditionalTriggerValue &&
+                  typeof currentQuestionIndex === "number" &&
+                  Array.isArray(multiSelectAnswers[currentQuestionIndex]) &&
+                  multiSelectAnswers[currentQuestionIndex]?.includes(
+                    currentQuestion.conditionalTriggerValue,
+                  )
+                )
+              }
+              setConditionalText={setConditionalText}
+              onConditionalTextSubmit={handleConditionalTextSubmit}
+              currentQuestionIndex={currentQuestionIndex}
+              conditionalTextInputLabel={conditionalTextInputLabel}
+              className={
+                conditionalTextVisible ? "max-h-[200px] overflow-y-auto" : ""
+              }
+              showConfirmButton={
+                currentQuestion?.isMultiSelect &&
                 typeof currentQuestionIndex === "number" &&
                 Array.isArray(multiSelectAnswers[currentQuestionIndex]) &&
-                multiSelectAnswers[currentQuestionIndex]?.includes(
-                  currentQuestion.conditionalTriggerValue,
-                )
-              )
-            }
-            setConditionalText={setConditionalText}
-            onConditionalTextSubmit={handleConditionalTextSubmit}
-            currentQuestionIndex={currentQuestionIndex}
-            conditionalTextInputLabel={conditionalTextInputLabel}
-            className={
-              conditionalTextVisible ? "max-h-[200px] overflow-y-auto" : ""
-            }
-            showConfirmButton={
-              currentQuestion?.isMultiSelect &&
-              typeof currentQuestionIndex === "number" &&
-              Array.isArray(multiSelectAnswers[currentQuestionIndex]) &&
-              multiSelectAnswers[currentQuestionIndex]?.length > 0
-            }
-            onConfirmLanguages={handleConfirmMultiSelect}
-            placeholder={
-              getQuestionDetails(currentQuestionIndex ?? -1)?.placeholder ||
-              undefined
-            }
-          />
+                multiSelectAnswers[currentQuestionIndex]?.length > 0
+              }
+              onConfirmLanguages={handleConfirmMultiSelect}
+              placeholder={
+                getQuestionDetails(currentQuestionIndex ?? -1)?.placeholder ||
+                undefined
+              }
+            />
+          )
         )}
       </div>
     </div>
