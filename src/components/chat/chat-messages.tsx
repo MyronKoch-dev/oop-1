@@ -99,7 +99,8 @@ export function ChatMessages({
     multiSelectAnswers = {}, // Default to empty object if not provided
     currentQuestionIndex = null, // Default to null if not provided
     userName,
-}: ChatMessagesProps) {
+    conditionalInputOpen = false, // NEW: pass this from parent
+}: ChatMessagesProps & { conditionalInputOpen?: boolean }) {
     // Internal ref used only if messagesEndRef is not provided by the parent
     const internalScrollRef = useRef<HTMLDivElement>(null);
     // Use the ref passed from the parent if available, otherwise use the internal one
@@ -121,6 +122,12 @@ export function ChatMessages({
 
         return () => clearTimeout(timeoutId);
     }, [messages, scrollRef]);
+
+    // Disable number key shortcuts when conditional input is open
+    useEffect(() => {
+        if (conditionalInputOpen) return;
+        // ... existing keyboard shortcut logic ...
+    }, [conditionalInputOpen /*, other deps as before */]);
 
     return (
         // Use Shadcn ScrollArea for the main message list container with dark theme
@@ -207,10 +214,8 @@ export function ChatMessages({
                                                 const selectedValues = typeof currentQuestionIndex === 'number' ? (multiSelectAnswers[currentQuestionIndex] || []) : [];
                                                 const isSelected = selectedValues.includes(option.value);
 
-                                                // Button disabled state depends on the question type
-                                                // For Q5/Q6 (multi-select), buttons remain enabled until submission
-                                                // For other questions, disable all buttons once any is selected
-                                                const isDisabled = !isActiveMessage || (isActiveMessage && selectedButtonValue !== null);
+                                                // Disable all buttons if conditional input is open
+                                                const isDisabled = conditionalInputOpen || !isActiveMessage || (isActiveMessage && selectedButtonValue !== null);
 
                                                 // Styling classes for disabled buttons
                                                 const disabledClasses = !isActiveMessage ? "opacity-70 cursor-not-allowed" : "";

@@ -77,15 +77,15 @@ export function determinePath(data: OnboardingData): PathResult {
         };
     }
 
-    // App Suggester Rule Check (now Visionary Path)
+    // App Suggester Rule Check (now Visionary)
     const isVisionaryPathCandidate =
         data.goal === 'Share ideas for new features' &&
         (data.experience_level === 'Beginner' || data.experience_level === 'Intermediate');
 
     if (isVisionaryPathCandidate) {
-        console.log("Path determined: Visionary Path");
+        console.log("Path determined: Visionary");
         return {
-            recommendedPath: "Visionary Path",
+            recommendedPath: "Visionary",
             recommendedPathUrl: getPathUrl("VISIONARY_PATH")
         };
     }
@@ -96,10 +96,10 @@ export function determinePath(data: OnboardingData): PathResult {
         data.goal === 'Work on AI projects';
 
     if (isAIExperiencedCandidate) {
-        console.log("Path determined: AI Experienced");
+        console.log("Path determined: AI Initiatives");
         return {
-            recommendedPath: "AI Experienced",
-            recommendedPathUrl: getPathUrl("AI_EXPERIENCED")
+            recommendedPath: "AI Initiatives",
+            recommendedPathUrl: getPathUrl("AI_INITIATIVES")
         };
     }
 
@@ -116,25 +116,25 @@ export function determinePath(data: OnboardingData): PathResult {
         };
     }
 
-    // Beginner Rule Check (now Explorer Path) (Acts as a prioritized fallback)
+    // Beginner Rule Check (now Explorer) (Acts as a prioritized fallback)
     const isExplorerPathCandidate =
         data.goal === 'Learn Web3 basics' ||
         data.experience_level === 'Beginner';
 
     if (isExplorerPathCandidate) {
-        console.log("Path determined: Explorer Path");
+        console.log("Path determined: Explorer");
         return {
-            recommendedPath: "Explorer Path",
+            recommendedPath: "Explorer",
             recommendedPathUrl: getPathUrl("EXPLORER_PATH")
         };
     }
 
     // --- Default Fallback ---
-    // If none of the specific rules match (including Explorer Path), default to Explorer Path.
+    // If none of the specific rules match (including Explorer), default to Explorer.
     // This ensures every user gets *some* path.
-    console.log("Path determined: Defaulting to Explorer Path (no specific rules matched)");
+    console.log("Path determined: Defaulting to Explorer (no specific rules matched)");
     return {
-        recommendedPath: "Explorer Path",
+        recommendedPath: "Explorer",
         recommendedPathUrl: getPathUrl("EXPLORER_PATH")
     };
 }

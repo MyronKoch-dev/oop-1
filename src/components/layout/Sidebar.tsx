@@ -130,17 +130,17 @@ const socialLinks = [
 const actionItems: NavItem[] = [
     {
         href: "/contractors",
-        label: "Contracts for Bid",
+        label: "Contractor",
         icon: <Briefcase className="w-5 h-5" />
     },
     {
         href: "/hackers",
-        label: "Hackerboard (Bounties)",
+        label: "Hacker",
         icon: <Target className="w-5 h-5" />
     },
     {
         href: "/visionaries",
-        label: "Submit ADO/Feature Idea",
+        label: "Visionary",
         icon: <Lightbulb className="w-5 h-5" />
     },
     {
@@ -150,7 +150,7 @@ const actionItems: NavItem[] = [
     },
     {
         href: "https://zealy.io/cw/andromedacommunity/questboard/ff856265-3649-4b5f-a41f-c19eadfaf2e0/36c50401-4e44-452a-9539-94b9f2451f3d",
-        label: "Ambassador Program",
+        label: "Ambassador",
         icon: <Award className="w-5 h-5" />
     },
     {

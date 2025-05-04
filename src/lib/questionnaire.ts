@@ -174,7 +174,7 @@ const questions: QuestionDetail[] = [
             { label: "3. Share ideas for new features", value: "Share ideas for new features" },
             { label: "4. Work on AI projects", value: "Work on AI projects" },
             { label: "5. Promote blockchain/Andromeda", value: "Promote blockchain/Andromeda" },
-            { label: "6. Learn Web3 basics", value: "Learn Web3 basics" },
+            { label: "6. Learn about Andromeda", value: "Learn about Andromeda" },
         ],
         isOptional: false,
     },

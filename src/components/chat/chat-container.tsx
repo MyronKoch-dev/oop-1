@@ -896,6 +896,7 @@ export function ChatContainer({
                     multiSelectAnswers={multiSelectAnswers}
                     currentQuestionIndex={currentQuestionIndex}
                     userName={userName}
+                    conditionalInputOpen={showConditionalInput}
                 />
             </div>
 

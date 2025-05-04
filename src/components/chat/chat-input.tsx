@@ -190,33 +190,31 @@ export function ChatInput({
             )}
 
             {showConditionalInput && (
-                <div className="mb-4 max-h-[150px] overflow-y-auto">
+                <div className="mb-4 max-h-[150px] overflow-y-auto bg-[#232b3a] border border-[#444] rounded-xl p-4 flex flex-col gap-3 shadow-lg">
                     <Label htmlFor="conditional-input" className="block text-sm font-medium mb-1 text-white">
                         {displayLabel}
                     </Label>
-                    <div className="flex flex-col space-y-2">
-                        <Textarea
-                            id="conditional-input"
-                            ref={textareaRef}
-                            value={conditionalText}
-                            onChange={handleConditionalChange}
-                            onKeyDown={handleConditionalKeyDown}
-                            placeholder="Type additional details here..."
-                            className="min-h-[80px] max-h-[120px] resize-none bg-[#2a2a2a] dark:bg-[#2a2a2a] border-[#444444] dark:border-[#444444] text-white placeholder:text-gray-400"
-                            disabled={disabled || !conditionalTextVisible}
-                        />
-                        <p className="text-xs text-gray-400 dark:text-gray-400 text-center">
-                            Press Enter to submit or Shift+Enter for a new line
-                        </p>
-                        <Button
-                            onClick={handleConditionalSubmit}
-                            disabled={disabled}
-                            className="w-full sticky bottom-0 bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
-                            type="submit"
-                        >
-                            Submit Details
-                        </Button>
-                    </div>
+                    <Textarea
+                        id="conditional-input"
+                        ref={textareaRef}
+                        value={conditionalText}
+                        onChange={handleConditionalChange}
+                        onKeyDown={handleConditionalKeyDown}
+                        placeholder="Type additional details here..."
+                        className="min-h-[80px] max-h-[120px] resize-none bg-[#2a2a2a] dark:bg-[#2a2a2a] border-[#444444] dark:border-[#444444] text-white placeholder:text-gray-400 mb-2"
+                        disabled={disabled || !conditionalTextVisible}
+                    />
+                    <p className="text-xs text-gray-400 dark:text-gray-400 text-center mb-2">
+                        Press Enter to submit or Shift+Enter for a new line
+                    </p>
+                    <Button
+                        onClick={handleConditionalSubmit}
+                        disabled={disabled}
+                        className="w-full bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff] mt-2"
+                        type="submit"
+                    >
+                        Submit Details
+                    </Button>
                 </div>
             )}
 
