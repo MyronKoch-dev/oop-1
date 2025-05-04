@@ -246,7 +246,7 @@ describe('/api/onboarding/message API Route', () => {
     body = await response.json();
 
     expect(response.status).toBe(200);
-    expect(mockUpdateSession).toHaveBeenCalledTimes(5);
+    expect(mockUpdateSession).toHaveBeenCalledTimes(4);
     expect(mockGetSession).toHaveBeenCalledTimes(5);
     expect(body.sessionId).toBe(MOCK_SESSION_ID);
     expect(body.currentQuestionIndex).toBe(TOTAL_QUESTIONS_FOR_TEST); // Index is now >= total

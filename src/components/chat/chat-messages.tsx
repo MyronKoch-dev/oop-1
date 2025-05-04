@@ -245,8 +245,8 @@ export function ChatMessages({
 
                                     {message.content === "__FINAL_RECOMMENDATION__" && message.finalResult != null ? (
                                         <RecommendationPanel
-                                            pathName={message.finalResult.recommendedPath}
-                                            onGetStarted={() => window.open(message.finalResult.recommendedPathUrl, "_blank")}
+                                            pathName={message.finalResult?.recommendedPath}
+                                            onGetStarted={() => window.open(message.finalResult?.recommendedPathUrl, "_blank")}
                                         />
                                     ) : null}
                                 </div>
