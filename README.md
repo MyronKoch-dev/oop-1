@@ -267,3 +267,27 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 *Remember to replace placeholders like `[repository-url]`, `[your-openai-api-key]`, `[your-vercel-app-url]`, and the `PATH_URL_*` placeholders with your actual information before publishing.*
 
 ---
+
+# oop-1
+
+> **Note:** This project uses [pnpm](https://pnpm.io/) as its package manager. You must use pnpm for all dependency management and installs.
+>
+> - The lockfile is `pnpm-lock.yaml`. Do not use `npm install` or commit `package-lock.json`.
+> - If you previously used npm, run `pnpm install -g pnpm` and then `pnpm install` in this directory.
+
+## Getting Started
+
+1. **Install pnpm (if not already installed):**
+   ```sh
+   npm install -g pnpm
+   # or with corepack (recommended for Node 16.13+)
+   corepack enable && corepack prepare pnpm@latest --activate
+   ```
+2. **Install dependencies:**
+   ```sh
+   pnpm install
+   ```
+3. **Run the dev server:**
+   ```sh
+   pnpm dev
+   ```
