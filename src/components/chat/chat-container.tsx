@@ -1010,8 +1010,8 @@ export function ChatContainer({
         className={`relative transition-all duration-200 ${showConditionalInput ? "flex-shrink-0 max-h-[250px]" : "flex-shrink-0"}`}
         ref={conditionalInputRef}
       >
-        {!isComplete && (
-          currentQuestionIndex === 10 ? (
+        {!isComplete &&
+          (currentQuestionIndex === 10 ? (
             <ContactInfoForm
               onSubmit={async (values) => {
                 setInputDisabled(true);
@@ -1095,7 +1095,8 @@ export function ChatContainer({
                     {
                       id: generateMessageId("assistant"),
                       role: "assistant",
-                      content: "Sorry, there was an error submitting your contact info. Please try again.",
+                      content:
+                        "Sorry, there was an error submitting your contact info. Please try again.",
                     },
                   ]);
                   setInputDisabled(false);
@@ -1142,8 +1143,7 @@ export function ChatContainer({
                 undefined
               }
             />
-          )
-        )}
+          ))}
       </div>
     </div>
   );
