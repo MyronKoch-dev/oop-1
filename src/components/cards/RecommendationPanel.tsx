@@ -29,7 +29,7 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
 
     {secondPathName && (
       <div className={styles.secondPath}>
-        <p>We also think you might be interested in:</p>
+        <p>We also think you might be interested inand secondarily, :</p>
         <p className={styles.path}>
           <span className={styles.highlight}>{secondPathName}</span>
         </p>
@@ -45,7 +45,7 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
     )}
 
     <p className={styles.thanks}>
-      Thank you for completing the onboarding inquiry process! We hope this gives you a bit of guidance toward areas which you'll have the quickest success in. We look forward to hearing about what you build with Andromeda!
+      Thank you for completing the onboarding inquiry process! We hope this gives you a bit of guidance toward areas which you can have the quickest success. We look forward to hearing about what you build with Andromeda!
     </p>
     <h3>WELCOME TO ANDROMEDA 🎉</h3>
   </div>
