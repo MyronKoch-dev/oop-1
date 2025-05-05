@@ -17,7 +17,7 @@ export interface OnboardingData {
   ai_ml_areas?: string | null; // Q6 Conditional Text
   tools_familiarity?: string | null; // Q7 Button Value
   experience_level?: string | null; // Q8 Button Value
-  hackathon?: string | null; // Q9 Button Value ('Winner', 'Participant', 'Not yet')
+  hackathon?: string[] | null; // Q9 Button Values (multi-select)
   goal?: string | null; // Q10 Button Value
   portfolio?: string | null; // Q11 Response
   additional_skills?: string | null; // Q12 Response
@@ -49,7 +49,7 @@ export interface OnboardingResponseForDB {
   ai_ml_areas?: string | null;
   tools_familiarity?: string | null;
   experience_level?: string | null;
-  hackathon?: string | null;
+  hackathon?: string[] | null;
   goal?: string | null;
   portfolio?: string | null;
   additional_skills?: string | null;

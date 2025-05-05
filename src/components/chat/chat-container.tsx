@@ -341,6 +341,22 @@ export function ChatContainer({
       ) {
         setMultiSelectAnswers((prev) => {
           const prevSelected = prev[currentQuestionIndex] || [];
+          // Special logic for hackathon question (index 6)
+          if (currentQuestionIndex === 6 && value === "No") {
+            // If 'No, I haven't' is selected, clear all others and only select 'No'
+            setTimeout(() => {
+              handleConfirmMultiSelect();
+            }, 0);
+            return { ...prev, [currentQuestionIndex]: ["No"] };
+          }
+          if (currentQuestionIndex === 6 && prevSelected.includes("No")) {
+            // If 'No, I haven't' is already selected, deselect it if another is chosen
+            return {
+              ...prev,
+              [currentQuestionIndex]: [value],
+            };
+          }
+          // Default multi-select logic
           if (value === "None") {
             return { ...prev, [currentQuestionIndex]: ["None"] };
           }
@@ -749,10 +765,23 @@ export function ChatContainer({
     setIsProcessing(true);
     setInputDisabled(true);
     try {
-      const payload = {
-        sessionId,
-        response: selections,
-      };
+      let payload;
+      if (currentQuestionIndex === 1) {
+        // Languages: send as array
+        payload = { sessionId, response: selections };
+      } else if (currentQuestionIndex === 2) {
+        // Blockchain platforms: send as { selectedValues, buttonValue }
+        payload = {
+          sessionId,
+          response: { selectedValues: selections, buttonValue: "Yes" },
+        };
+      } else if (currentQuestionIndex === 6) {
+        // Hackathon: send as { selectedValues }
+        payload = { sessionId, response: { selectedValues: selections } };
+      } else {
+        // Default: send as array
+        payload = { sessionId, response: selections };
+      }
       const response = await fetch("/api/onboarding/message", {
         method: "POST",
         headers: {

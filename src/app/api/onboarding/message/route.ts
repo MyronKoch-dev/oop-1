@@ -353,8 +353,25 @@ export async function POST(request: NextRequest) {
               (responseToParse as { buttonValue: string })?.buttonValue ?? null;
             break;
           case 6:
-            dataToUpdate.hackathon =
-              (responseToParse as { buttonValue: string })?.buttonValue ?? null;
+            if (
+              responseToParse &&
+              typeof responseToParse === "object" &&
+              "selectedValues" in responseToParse &&
+              Array.isArray(responseToParse.selectedValues)
+            ) {
+              dataToUpdate.hackathon = responseToParse.selectedValues;
+            } else if (
+              responseToParse &&
+              typeof responseToParse === "object" &&
+              "buttonValue" in responseToParse &&
+              typeof responseToParse.buttonValue === "string"
+            ) {
+              dataToUpdate.hackathon = [responseToParse.buttonValue];
+            } else if (typeof responseToParse === "string") {
+              dataToUpdate.hackathon = [responseToParse];
+            } else {
+              dataToUpdate.hackathon = null;
+            }
             break;
           case 7:
             dataToUpdate.goal =

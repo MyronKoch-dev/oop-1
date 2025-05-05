@@ -78,7 +78,11 @@ export async function saveOnboardingResponse(
     ai_ml_areas: data.ai_ml_areas ?? null,
     tools_familiarity: data.tools_familiarity ?? null,
     experience_level: data.experience_level ?? null,
-    hackathon: data.hackathon ?? null,
+    hackathon: Array.isArray(data.hackathon)
+      ? data.hackathon
+      : data.hackathon
+        ? [data.hackathon]
+        : null,
     goal: data.goal ?? null,
     portfolio: data.portfolio ?? null,
     additional_skills: data.additional_skills ?? null,
@@ -88,10 +92,7 @@ export async function saveOnboardingResponse(
     // created_at: (data.createdAt ?? new Date()).toISOString(), // Only set manually if DB default isn't used
   };
 
-  console.log(
-    `Attempting to save data to Supabase for email: ${dbPayload.email}`,
-  );
-  // console.log('Payload:', dbPayload); // Uncomment for deep debugging if needed
+  console.log("Payload sent to Supabase:", JSON.stringify(dbPayload, null, 2));
 
   // --- Perform Insertion with Retry Logic ---
   let attempts = 0;
@@ -100,7 +101,7 @@ export async function saveOnboardingResponse(
 
   while (attempts < maxAttempts) {
     attempts++;
-    const { error } = await supabaseAdmin.from(TABLE_NAME).insert(dbPayload); // Insert the correctly typed payload
+    const { error } = await supabaseAdmin.from(TABLE_NAME).insert([dbPayload]); // Insert the correctly typed payload as an array
 
     // --- Handle Success ---
     if (!error) {

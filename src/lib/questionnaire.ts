@@ -122,11 +122,13 @@ const questions: QuestionDetail[] = [
     text: "Have you ever participated in a hackathon?",
     inputMode: "buttons",
     options: [
-      { label: "1. Yes—and I've won! 🏆", value: "Winner" },
-      { label: "2. Yes—as a participant", value: "Participant" },
-      { label: "3. Not yet", value: "Not yet" },
+      { label: "Yes, a web 2 one", value: "Web2" },
+      { label: "Yes, a web3 one", value: "Web3" },
+      { label: "I won!", value: "Winner" },
+      { label: "No, I haven't", value: "No" },
     ],
     isOptional: false,
+    isMultiSelect: true,
   },
   // Index 7 (Main goal)
   {
