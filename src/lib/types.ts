@@ -22,6 +22,8 @@ export interface OnboardingData {
   additional_skills?: string | null; // Q12 Response
   recommendedPath?: string; // Determined post-Q12
   recommendedPathUrl?: string; // Determined post-Q12
+  secondRecommendedPath?: string; // Second recommended path
+  secondRecommendedPathUrl?: string; // URL for second recommended path
   createdAt?: Date; // Timestamp added before DB save
 }
 
@@ -53,5 +55,7 @@ export interface OnboardingResponseForDB {
   additional_skills?: string | null;
   recommended_path?: string | null;
   recommended_path_url?: string | null;
+  second_recommended_path?: string | null;
+  second_recommended_path_url?: string | null;
   created_at?: Date | string; // Optional field here; DB has DEFAULT NOW()
 }

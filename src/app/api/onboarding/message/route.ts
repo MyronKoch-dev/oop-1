@@ -48,6 +48,8 @@ interface OnboardingResponsePayload {
     // Present only on successful completion
     recommendedPath: string;
     recommendedPathUrl: string;
+    secondRecommendedPath?: string;
+    secondRecommendedPathUrl?: string;
   } | null;
   error?: string | null; // User-facing error message (validation failure, session expiry)
   haltFlow?: boolean; // True if the frontend should stop the flow (e.g., fatal email validation)
@@ -498,12 +500,17 @@ export async function POST(request: NextRequest) {
       }
 
       // 3a. Determine Path
-      const { recommendedPath, recommendedPathUrl } = determinePath(finalData);
+      const { recommendedPath, recommendedPathUrl, secondRecommendedPath, secondRecommendedPathUrl } = determinePath(finalData);
       finalData.recommendedPath = recommendedPath;
       finalData.recommendedPathUrl = recommendedPathUrl;
       console.log(
         `[Session: ${currentSessionId}] Determined Path: ${recommendedPath}`,
       );
+      if (secondRecommendedPath) {
+        console.log(
+          `[Session: ${currentSessionId}] Second Recommended Path: ${secondRecommendedPath}`,
+        );
+      }
 
       // 3b. Save to Database
       const { success: dbSaveSuccess, error: dbSaveError } =
@@ -525,7 +532,12 @@ export async function POST(request: NextRequest) {
         sessionId: currentSessionId,
         currentQuestionIndex: nextQuestionIndex, // Index is now >= TOTAL_QUESTIONS
         isFinalQuestion: true, // Signifies flow end
-        finalResult: { recommendedPath, recommendedPathUrl },
+        finalResult: {
+          recommendedPath,
+          recommendedPathUrl,
+          secondRecommendedPath,
+          secondRecommendedPathUrl
+        },
         error: !dbSaveSuccess
           ? `Completed, but profile saving failed: ${dbSaveError}`
           : null,

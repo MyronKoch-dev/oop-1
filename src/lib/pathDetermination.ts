@@ -4,6 +4,8 @@ import { OnboardingData } from "./types";
 interface PathResult {
     recommendedPath: string;
     recommendedPathUrl: string;
+    secondRecommendedPath?: string;
+    secondRecommendedPathUrl?: string;
 }
 
 // Helper function to get URL from environment variables
@@ -113,9 +115,15 @@ export function determinePath(data: OnboardingData): PathResult {
     });
     pathScores.sort((a, b) => b.score - a.score);
     const best = pathScores[0];
+    const secondBest = pathScores[1];
+
     return {
         recommendedPath: best.path,
         recommendedPathUrl: getPathUrl(best.path.toUpperCase().replace(/ /g, "_")),
+        secondRecommendedPath: secondBest?.path,
+        secondRecommendedPathUrl: secondBest?.path
+            ? getPathUrl(secondBest.path.toUpperCase().replace(/ /g, "_"))
+            : undefined,
     };
 }
 // ---

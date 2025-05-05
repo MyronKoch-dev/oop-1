@@ -23,6 +23,8 @@ interface OnboardingResponsePayload {
   finalResult?: {
     recommendedPath: string;
     recommendedPathUrl: string;
+    secondRecommendedPath?: string;
+    secondRecommendedPathUrl?: string;
   };
   newSessionId?: string;
 }
