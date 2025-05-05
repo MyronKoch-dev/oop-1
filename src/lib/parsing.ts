@@ -37,9 +37,14 @@ export function parseLanguages(
     selectedLanguages.push(rawResponse);
   }
   // Filter to only valid values
-  const filtered = selectedLanguages.filter((lang) => validLanguages.includes(lang));
+  const filtered = selectedLanguages.filter((lang) =>
+    validLanguages.includes(lang),
+  );
   if (filtered.length !== selectedLanguages.length) {
-    console.warn("[parseLanguages] Ignored unexpected values:", selectedLanguages.filter((lang) => !validLanguages.includes(lang)));
+    console.warn(
+      "[parseLanguages] Ignored unexpected values:",
+      selectedLanguages.filter((lang) => !validLanguages.includes(lang)),
+    );
   }
   currentData.languages = filtered;
   // Always store as array (empty if none selected)
@@ -80,8 +85,14 @@ export function parseBlockchain(
     currentData.blockchain_platforms = [];
   }
   // Debug log
-  console.log("[parseBlockchain] Storing blockchain_experience:", currentData.blockchain_experience);
-  console.log("[parseBlockchain] Storing blockchain_platforms:", currentData.blockchain_platforms);
+  console.log(
+    "[parseBlockchain] Storing blockchain_experience:",
+    currentData.blockchain_experience,
+  );
+  console.log(
+    "[parseBlockchain] Storing blockchain_platforms:",
+    currentData.blockchain_platforms,
+  );
 }
 
 /**
@@ -135,6 +146,9 @@ export function validateInput(
 
   // console.log(`Validating for hint: ${validationHint}`, response);
   switch (validationHint) {
+    case "text":
+      // Ensure non-empty string
+      return typeof response === "string" && response.trim().length > 0;
     case "email":
       // Check if it's a non-empty string and matches basic email pattern
       if (typeof response !== "string" || response.trim() === "") return false;

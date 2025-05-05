@@ -6,15 +6,6 @@ interface PathResult {
     recommendedPathUrl: string;
 }
 
-// Helper function to safely check if an array includes any of the target values
-function arrayIncludesAny(
-    arr: string[] | null | undefined,
-    targets: string[],
-): boolean {
-    if (!arr) return false;
-    return targets.some((target) => arr.includes(target));
-}
-
 // Helper function to get URL from environment variables
 function getPathUrl(pathKey: string): string {
     const envVarName = `PATH_URL_${pathKey.toUpperCase().replace(/ /g, "_")}`;
@@ -36,6 +27,67 @@ function getPathUrl(pathKey: string): string {
 // - See PATH_RULES_GUIDE.md in the root for a step-by-step guide and examples.
 // ---
 
+// --- SCORING SYSTEM CONFIGURATION ---
+const PATH_SCORING = {
+    Contractor: {
+        // Only score if both Rust and TypeScript are present (enforced below)
+        languages: { Rust: 2, Go: 1, TypeScript: 2 },
+        tools_familiarity: { "Very familiar": 2, "Some experience": 1 },
+        experience_level: { Advanced: 2 },
+        goal: { "Build apps/dApps": 2 },
+    },
+    Hacker: {
+        languages: { TypeScript: 2 },
+        tools_familiarity: { "Very familiar": 1, "Some experience": 1 },
+        hackathon: { Winner: 2, Web2: 1, Web3: 1 },
+        goal: { "Earn bounties": 2 },
+    },
+    Visionary: {
+        goal: { "Share ideas for new features": 2 },
+        experience_level: { Beginner: 1, Intermediate: 1 },
+    },
+    "AI Initiatives": {
+        ai_experience: { Yes: 2 },
+        goal: { "Work on AI projects": 2 },
+    },
+    Ambassador: {
+        blockchain_experience: { Yes: 2 },
+        goal: { "Promote blockchain/Andromeda": 2 },
+    },
+    Explorer: {
+        goal: { "Learn Web3 basics": 2 },
+        experience_level: { Beginner: 2 },
+    },
+};
+
+function scorePath(
+    data: OnboardingData,
+    path: keyof typeof PATH_SCORING,
+): number {
+    let score = 0;
+    const rules = PATH_SCORING[path];
+    for (const [field, values] of Object.entries(rules)) {
+        const userValue = (data as unknown as Record<string, unknown>)[field];
+        if (Array.isArray(userValue)) {
+            for (const v of userValue) {
+                if (values[v]) score += values[v];
+            }
+        } else if (userValue && values[userValue as string]) {
+            score += values[userValue as string];
+        }
+    }
+    return score;
+}
+
+function hasContractorRequirements(data: OnboardingData): boolean {
+    const langs = data.languages;
+    const blockchains = data.blockchain_platforms;
+    return (
+        !!langs && langs.includes("Rust") && langs.includes("TypeScript") &&
+        !!blockchains && blockchains.includes("Cosmos SDK Chains")
+    );
+}
+
 /**
  * Determines the recommended onboarding path based on user data.
  * Follows the strict rules defined in the Specification Sheet FR3.3.
@@ -49,101 +101,21 @@ function getPathUrl(pathKey: string): string {
 export function determinePath(data: OnboardingData): PathResult {
     console.log("Determining path for data:", data);
 
-    // --- Rule Evaluation ---
-    // Order matters slightly, as the first match often takes precedence in simple logic,
-    // although here we evaluate all conditions. We need a priority/fallback.
-
-    // Contractor Rule Check
-    const isContractorCandidate =
-        arrayIncludesAny(data.languages, ["Rust", "Solidity", "Python"]) &&
-        (data.tools_familiarity === "Very familiar" ||
-            data.tools_familiarity === "Some experience") &&
-        data.experience_level === "Advanced" &&
-        data.goal?.includes("Build apps/dApps");
-
-    if (isContractorCandidate) {
-        console.log("Path determined: Contractor");
+    const pathScores = Object.keys(PATH_SCORING).map((path) => {
+        // Enforce hard requirement for Contractor
+        if (path === "Contractor" && !hasContractorRequirements(data)) {
+            return { path, score: -Infinity };
+        }
         return {
-            recommendedPath: "Contractor",
-            recommendedPathUrl: getPathUrl("CONTRACTOR"),
+            path,
+            score: scorePath(data, path as keyof typeof PATH_SCORING),
         };
-    }
-
-    // Hacker Rule Check
-    const isHackerCandidate =
-        (data.tools_familiarity === "Some experience" ||
-            data.tools_familiarity === "Very familiar") && // Corrected typo from "Very Familiar" to "Very familiar"
-        arrayIncludesAny(data.hackathon, ["Winner", "Web2", "Web3"]) &&
-        data.goal?.includes("Earn bounties");
-
-    if (isHackerCandidate) {
-        console.log("Path determined: Hacker");
-        return {
-            recommendedPath: "Hacker",
-            recommendedPathUrl: getPathUrl("HACKER"),
-        };
-    }
-
-    // App Suggester Rule Check (now Visionary)
-    const isVisionaryPathCandidate =
-        data.goal?.includes("Share ideas for new features") &&
-        (data.experience_level === "Beginner" ||
-            data.experience_level === "Intermediate");
-
-    if (isVisionaryPathCandidate) {
-        console.log("Path determined: Visionary");
-        return {
-            recommendedPath: "Visionary",
-            recommendedPathUrl: getPathUrl("VISIONARY_PATH"),
-        };
-    }
-
-    // AI Experienced Rule Check
-    const isAIExperiencedCandidate =
-        data.ai_experience === "Yes" && data.goal?.includes("Work on AI projects");
-
-    if (isAIExperiencedCandidate) {
-        console.log("Path determined: AI Initiatives");
-        return {
-            recommendedPath: "AI Initiatives",
-            recommendedPathUrl: getPathUrl("AI_INITIATIVES"),
-        };
-    }
-
-    // Ambassador Rule Check
-    const isAmbassadorCandidate =
-        data.blockchain_experience === "Yes" && // Check the button value
-        data.goal?.includes("Promote blockchain/Andromeda");
-
-    if (isAmbassadorCandidate) {
-        console.log("Path determined: Ambassador");
-        return {
-            recommendedPath: "Ambassador",
-            recommendedPathUrl: getPathUrl("AMBASSADOR"),
-        };
-    }
-
-    // Beginner Rule Check (now Explorer) (Acts as a prioritized fallback)
-    const isExplorerPathCandidate =
-        data.goal?.includes("Learn Web3 basics") || data.experience_level === "Beginner";
-
-    if (isExplorerPathCandidate) {
-        console.log("Path determined: Explorer");
-        return {
-            recommendedPath: "Explorer",
-            recommendedPathUrl: getPathUrl("EXPLORER_PATH"),
-        };
-    }
-
-    // --- Default Fallback ---
-    // If none of the specific rules match (including Explorer), default to Explorer.
-    // This ensures every user gets *some* path.
-    console.log(
-        "Path determined: Defaulting to Explorer (no specific rules matched)",
-    );
+    });
+    pathScores.sort((a, b) => b.score - a.score);
+    const best = pathScores[0];
     return {
-        recommendedPath: "Explorer",
-        recommendedPathUrl: getPathUrl("EXPLORER_PATH"),
+        recommendedPath: best.path,
+        recommendedPathUrl: getPathUrl(best.path.toUpperCase().replace(/ /g, "_")),
     };
 }
 // ---
