@@ -30,6 +30,8 @@ export interface ChatMessage {
   finalResult?: {
     recommendedPath: string;
     recommendedPathUrl: string;
+    secondRecommendedPath?: string;
+    secondRecommendedPathUrl?: string;
   } | null;
 }
 
@@ -191,19 +193,18 @@ export function ChatMessages({
                   ) : (
                     // Render error/warning messages in red if they match known patterns
                     <Card
-                      className={`p-3 ${
-                        message.role === "assistant" &&
-                        (message.content
-                          .toLowerCase()
-                          .includes("please provide a valid") ||
-                          message.content.toLowerCase().includes("error") ||
-                          message.content.toLowerCase().includes("required") ||
-                          message.content.toLowerCase().includes("sorry"))
+                      className={`p-3 ${message.role === "assistant" &&
+                          (message.content
+                            .toLowerCase()
+                            .includes("please provide a valid") ||
+                            message.content.toLowerCase().includes("error") ||
+                            message.content.toLowerCase().includes("required") ||
+                            message.content.toLowerCase().includes("sorry"))
                           ? "bg-red-900/80 border-red-600 text-red-200" // Red style for warnings/errors
                           : message.role === "user"
                             ? "bg-[#1a2b4a] text-[#6bbbff]"
                             : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white"
-                      } ${message.isLoading ? "animate-pulse" : ""}`}
+                        } ${message.isLoading ? "animate-pulse" : ""}`}
                     >
                       {/* Display message content with clickable links and name replacement */}
                       {renderMessageContent(
@@ -282,14 +283,24 @@ export function ChatMessages({
                     )}
 
                   {message.content === "__FINAL_RECOMMENDATION__" &&
-                  message.finalResult != null ? (
+                    message.finalResult != null ? (
                     <RecommendationPanel
                       pathName={message.finalResult?.recommendedPath}
+                      secondPathName={message.finalResult?.secondRecommendedPath}
                       onGetStarted={() =>
                         window.open(
                           message.finalResult?.recommendedPathUrl,
                           "_blank",
                         )
+                      }
+                      onSecondPathSelected={
+                        message.finalResult?.secondRecommendedPathUrl
+                          ? () =>
+                            window.open(
+                              message.finalResult?.secondRecommendedPathUrl,
+                              "_blank",
+                            )
+                          : undefined
                       }
                     />
                   ) : null}

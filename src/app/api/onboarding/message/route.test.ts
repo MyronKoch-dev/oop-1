@@ -182,6 +182,9 @@ describe("/api/onboarding/message API Route", () => {
     expect(response.status).toBe(200);
     expect(body.finalResult?.recommendedPath).toBe("Visionary");
     expect(body.finalResult?.recommendedPathUrl).toBe("https://example.com/placeholder/visionary");
+    // Check that a second path is recommended
+    expect(body.finalResult?.secondRecommendedPath).toBeDefined();
+    expect(body.finalResult?.secondRecommendedPathUrl).toBeDefined();
   });
 
   test("should recommend Contractor Path only if both Rust and TypeScript are present", async () => {

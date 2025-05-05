@@ -87,6 +87,8 @@ export async function saveOnboardingResponse(
     additional_skills: data.additional_skills ?? null,
     recommended_path: data.recommendedPath ?? null,
     recommended_path_url: data.recommendedPathUrl ?? null,
+    second_recommended_path: data.secondRecommendedPath ?? null,
+    second_recommended_path_url: data.secondRecommendedPathUrl ?? null,
     // Let the DB handle the 'created_at' default timestamp
     // created_at: (data.createdAt ?? new Date()).toISOString(), // Only set manually if DB default isn't used
   };

@@ -44,6 +44,27 @@
   background: #285bb5;
 }
 
+.secondPath {
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.secondPath p {
+  margin: 8px 0;
+}
+
+.secondaryBtn {
+  background: #2c64b9;
+  padding: 12px 24px;
+  font-size: 1rem;
+  margin: 16px 0;
+}
+
+.secondaryBtn:hover {
+  background: #1d4580;
+}
+
 .thanks {
   margin-top: 16px;
   font-size: 1rem;
