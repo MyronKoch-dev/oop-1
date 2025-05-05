@@ -18,7 +18,7 @@ export interface OnboardingData {
   tools_familiarity?: string | null; // Q7 Button Value
   experience_level?: string | null; // Q8 Button Value
   hackathon?: string[] | null; // Q9 Button Values (multi-select)
-  goal?: string | null; // Q10 Button Value
+  goal?: string[] | null; // Q10 Button Values (multi-select)
   portfolio?: string | null; // Q11 Response
   additional_skills?: string | null; // Q12 Response
   recommendedPath?: string; // Determined post-Q12
@@ -50,7 +50,7 @@ export interface OnboardingResponseForDB {
   tools_familiarity?: string | null;
   experience_level?: string | null;
   hackathon?: string[] | null;
-  goal?: string | null;
+  goal?: string[] | null;
   portfolio?: string | null;
   additional_skills?: string | null;
   recommended_path?: string | null;

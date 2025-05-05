@@ -374,8 +374,20 @@ export async function POST(request: NextRequest) {
             }
             break;
           case 7:
-            dataToUpdate.goal =
-              (responseToParse as { buttonValue: string })?.buttonValue ?? null;
+            if (Array.isArray(responseToParse)) {
+              dataToUpdate.goal = responseToParse;
+            } else if (
+              responseToParse &&
+              typeof responseToParse === "object" &&
+              "buttonValue" in responseToParse &&
+              typeof responseToParse.buttonValue === "string"
+            ) {
+              dataToUpdate.goal = [responseToParse.buttonValue];
+            } else if (typeof responseToParse === "string") {
+              dataToUpdate.goal = [responseToParse];
+            } else {
+              dataToUpdate.goal = null;
+            }
             break;
           case 8:
             if (typeof responseToParse === "string") {

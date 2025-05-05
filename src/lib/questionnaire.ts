@@ -23,17 +23,29 @@ export interface QuestionDetail {
 
 // Define all questions based on Spec FR1.4
 const questions: QuestionDetail[] = [
-  // Index 0
+  // Index 0 (Name)
   {
     index: 0,
-    text: "What shall I call you?",
+    text: "Hey there! What should I call you?",
     inputMode: "text",
-    isOptional: false, // Assuming name is desired
+    isOptional: false,
   },
-  // Index 1 (Programming Languages)
+  // Index 1 (Technical expertise, moved up)
   {
     index: 1,
-    text: "Which programming languages are you most comfortable with, {name}? (Select all that apply, or 'None')",
+    text: "If you had to rate your technical expertise, where would you put yourself?",
+    inputMode: "buttons",
+    options: [
+      { label: "1. Beginner", value: "Beginner" },
+      { label: "2. Intermediate", value: "Intermediate" },
+      { label: "3. Advanced", value: "Advanced" },
+    ],
+    isOptional: false,
+  },
+  // Index 2 (Programming Languages)
+  {
+    index: 2,
+    text: "Nice to meet you, {name}! If you are a programmer, which programming languages do you feel most at home with? (Pick as many as you like, or select 'I'm not a programmer.' if that's you.)",
     inputMode: "buttons",
     options: [
       { label: "1. Rust", value: "Rust" },
@@ -43,58 +55,59 @@ const questions: QuestionDetail[] = [
       { label: "5. Solidity", value: "Solidity" },
       { label: "6. TypeScript", value: "TypeScript" },
       { label: "7. Java", value: "Java" },
-      { label: "8. C#", value: "C#" },
-      { label: "9. None of these / No experience yet", value: "None" },
+      { label: "8. Others not listed", value: "Others not listed" },
+      { label: "9. I'm not a programmer.", value: "Not a programmer" },
     ],
     isOptional: false,
     validationHint: "languages",
     isMultiSelect: true,
   },
-  // Index 2 (Blockchain)
+  // Index 3
   {
-    index: 2,
-    text: "Which blockchain platforms have you worked with? (Select all that apply, or 'None')",
+    index: 3,
+    text: "How about blockchains? Have you tinkered with any of these platforms before? (Select all that apply, or 'None')",
     inputMode: "buttons",
     options: [
       { label: "1. Bitcoin", value: "Bitcoin" },
-      { label: "2. Ethereum", value: "Ethereum" },
+      { label: "2. Ethereum/EVMs", value: "Ethereum/EVMs" },
       { label: "3. Solana", value: "Solana" },
       { label: "4. SEI", value: "SEI" },
       { label: "5. Cosmos SDK chains", value: "Cosmos SDK chains" },
       { label: "6. XRP", value: "XRP" },
       { label: "7. BNB", value: "BNB" },
-      { label: "8. Polygon", value: "Polygon" },
+      { label: "8. Others not listed", value: "Others not listed" },
       { label: "9. None of these / No experience yet", value: "None" },
     ],
     isOptional: false,
     validationHint: "blockchain_platforms",
     isMultiSelect: true,
   },
-  // Index 3 (AI/ML)
+  // Index 4
   {
-    index: 3,
-    text: "Do you have experience with AI/ML beyond ChatGPT? (Select all that apply)",
+    index: 4,
+    text: "And what about AI or machine learning? Any hands-on experience beyond just chatting with ChatGPT? (Select all that fit, or 'Other' to specify)",
     inputMode: "buttons",
     options: [
       { label: "1. Natural Language Processing (NLP)", value: "NLP" },
       { label: "2. Computer Vision", value: "Computer Vision" },
-      { label: "3. Machine Learning (General)", value: "Machine Learning" },
-      { label: "4. Deep Learning", value: "Deep Learning" },
-      { label: "5. Reinforcement Learning", value: "Reinforcement Learning" },
-      { label: "6. Data Science / Analytics", value: "Data Science" },
-      { label: "7. MLOps / Model Deployment", value: "MLOps" },
-      { label: "8. Generative AI", value: "Generative AI" },
+      { label: "3. Smart Contract AI/Automation", value: "Smart Contract AI" },
+      { label: "4. Blockchain Data Science / Analytics", value: "Blockchain Analytics" },
+      { label: "5. Generative AI (NFTs, Art, Music)", value: "Generative AI" },
+      { label: "6. Decentralized AI / Federated Learning", value: "Decentralized AI" },
+      { label: "7. MLOps / Model Deployment (on-chain/off-chain)", value: "MLOps" },
+      { label: "8. Crypto Trading Bots / DeFi Automation", value: "DeFi Automation" },
       { label: "9. Other", value: "Other" },
     ],
     conditionalTriggerValue: "Other",
-    conditionalTextInputLabel: "Please specify your AI/ML experience:",
+    conditionalTextInputLabel:
+      "Cool! Tell me a bit about your AI/ML experience:",
     isOptional: false,
     isMultiSelect: true,
   },
-  // Index 4 (Andromeda tools)
+  // Index 5
   {
-    index: 4,
-    text: "Okay, great. So, how familiar are you with Andromeda's tools?",
+    index: 5,
+    text: "Switching gears a bit—how familiar are you with Andromeda's tools so far?",
     inputMode: "buttons",
     options: [
       { label: "1. Very familiar", value: "Very familiar" },
@@ -104,22 +117,10 @@ const questions: QuestionDetail[] = [
     ],
     isOptional: false,
   },
-  // Index 5 (Technical expertise)
-  {
-    index: 5,
-    text: "How would you rate your technical expertise?",
-    inputMode: "buttons",
-    options: [
-      { label: "1. Beginner", value: "Beginner" },
-      { label: "2. Intermediate", value: "Intermediate" },
-      { label: "3. Advanced", value: "Advanced" },
-    ],
-    isOptional: false,
-  },
-  // Index 6 (Hackathon)
+  // Index 6
   {
     index: 6,
-    text: "Have you ever participated in a hackathon?",
+    text: "Ever tried your hand at a hackathon? (You can pick more than one if they apply!)",
     inputMode: "buttons",
     options: [
       { label: "Yes, a web 2 one", value: "Web2" },
@@ -130,71 +131,78 @@ const questions: QuestionDetail[] = [
     isOptional: false,
     isMultiSelect: true,
   },
-  // Index 7 (Main goal)
+  // Index 7
   {
     index: 7,
-    text: "Out of these broad choices, What are your goals here, {name}?",
+    text:
+      "Based on what you've shared so far, {name}, here are some paths where people like you often find success. Which of these would you like to focus on, or are you most curious about? (Pick what feels right—you can always explore more later!)",
     inputMode: "buttons",
     options: [
-      { label: "1. Build apps/dApps", value: "Build apps/dApps" },
-      { label: "2. Earn bounties", value: "Earn bounties" },
+      { label: "🚀 Building apps/dApps", value: "Build apps/dApps" },
+      { label: "💰 Earning bounties", value: "Earn bounties" },
       {
-        label: "3. Share ideas for new features",
+        label: "💡 Sharing ideas for new features",
         value: "Share ideas for new features",
       },
-      { label: "4. Work on AI projects", value: "Work on AI projects" },
+      { label: "🤖 Working on AI projects", value: "Work on AI projects" },
       {
-        label: "5. Promote blockchain/Andromeda",
+        label: "📢 Promoting blockchain/Andromeda",
         value: "Promote blockchain/Andromeda",
       },
-      { label: "6. Learn about Andromeda", value: "Learn about Andromeda" },
+      {
+        label: "📚 Learning about Andromeda",
+        value: "Learn about Andromeda",
+      },
+      // { label: "🤔 Not sure yet—help me decide!", value: "Not sure" },
     ],
     isOptional: false,
+    isMultiSelect: true,
   },
-  // Index 8 (Portfolio)
+  // Index 8
   {
     index: 8,
-    text: "Got a portfolio or project links to showcase? (Optional, but helpful!)",
+    text: "Do you have a portfolio or any project links you'd like to share? (Totally optional, but I'd love to see your work!)",
     inputMode: "text",
     isOptional: true,
   },
-  // Index 9 (Additional skills)
+  // Index 9
   {
     index: 9,
-    text: "Anything else we should know about your skills or interests? (Optional)",
+    text: "Is there anything else you'd like us to know about your skills or interests? (Optional, but I'm all ears!)",
     inputMode: "text",
     isOptional: true,
   },
-  // Index 10 (Email)
+  // Index 10
   {
     index: 10,
-    text: "What email should we use to stay in touch, {name}?",
+    text: "What's the best email to reach you at, {name}?",
     inputMode: "text",
     isOptional: false,
     validationHint: "email",
-    rePromptMessage: "Please provide a valid email address.",
+    rePromptMessage:
+      "Hmm, that doesn't look like a valid email. Could you double-check it for me?",
   },
-  // Index 11 (GitHub)
+  // Index 11
   {
     index: 11,
-    text: "What is your GitHub username? (Optional)",
+    text: "If you're on GitHub, what's your username? (Optional)",
     inputMode: "text",
     isOptional: true,
     validationHint: "github_username",
   },
-  // Index 12 (Telegram)
+  // Index 12
   {
     index: 12,
-    text: "What is your Telegram handle? (Optional)",
+    text: "How about Telegram? If you'd like, drop your handle here. (Optional)",
     inputMode: "text",
     isOptional: true,
     validationHint: "telegram_handle",
     placeholder: "@yourhandle",
   },
-  // Index 13 (X/Twitter)
+  // Index 13
   {
     index: 13,
-    text: "What is your X/Twitter handle? (Optional)",
+    text: "And last one—what's your X/Twitter handle? (Optional)",
     inputMode: "text",
     isOptional: true,
     validationHint: "x_handle",
@@ -221,3 +229,21 @@ export function getQuestionDetails(index: number): QuestionDetail | null {
 export function isFinalQuestion(index: number): boolean {
   return index === TOTAL_QUESTIONS - 1;
 }
+
+// Lightweight reaction messages to show between questions for a more conversational flow
+export const reactionMessages: string[] = [
+  "👋 Let's get started!",
+  "🙌 Awesome, thanks!",
+  "🚀 Great choices!",
+  "🤖 AI is fascinating, right?",
+  "🔄 Switching gears...",
+  "💡 Good to know!",
+  "🏆 Hackathons are fun!",
+  "🎯 Got it!",
+  "🌐 Always cool to see projects!",
+  "📝 Noted!",
+  "📧 Thanks, we'll keep in touch!",
+  "🐙 Love seeing GitHub users!",
+  "✈️ Telegram, got it!",
+  "🐦 X/Twitter, awesome!",
+];
