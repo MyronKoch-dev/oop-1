@@ -4,16 +4,16 @@
 
 [![Vercel Deploy Button](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=YOUR_GITHUB_REPO_URL_HERE&env=OPENAI_API_KEY,GROQ_API_KEY,SUPABASE_URL,SUPABASE_ANON_KEY,SUPABASE_SERVICE_ROLE_KEY,KV_URL,KV_REST_API_URL,KV_REST_API_TOKEN,PATH_URL_CONTRACTOR,PATH_URL_HACKER,PATH_URL_VISIONARY_PATH,PATH_URL_AI_NAVIGATOR,PATH_URL_AMBASSADOR,PATH_URL_EXPLORER_PATH)
 
-**A modular, efficient, and user-friendly chatbot designed to onboard new users into the Andromeda ecosystem.**
+**A modular, efficient, and user-friendly chatbot designed to onboard new users into the Andromeda ecosystem. It intelligently guides users through a questionnaire, determines the most suitable path using a weighted scoring system and hard requirements, and persists the data.**
 
 This chatbot provides a guided questionnaire experience, leveraging a modern web stack and AI-powered components to:
 
 - **Intelligently gather key information** from new users about their skills, interests, and goals.
-- **Deterministically analyze user profiles** against predefined criteria to recommend the most suitable onboarding path.
+- **Deterministically analyze user profiles** using a weighted scoring system and predefined requirements to recommend the most suitable onboarding path.
 - **Provide clear, actionable guidance** by directing users to tailored resources and community pathways within Andromeda.
 - **Persist structured user data** in a database for future analysis and personalized engagement.
 
-This V1.0 implementation prioritizes a **strict, questionnaire-based approach** for reliability and efficiency, ensuring a seamless onboarding experience for a diverse range of users, from technical developers to community ambassadors.
+This implementation prioritizes a **structured, questionnaire-based approach** for reliability and efficiency, ensuring a seamless onboarding experience for a diverse range of users, from technical developers to community ambassadors.
 
 ## Project Structure (TypeScript/Next.js)
 
@@ -56,17 +56,53 @@ project_root/
 
 **Note:** Python files and references are legacy and not used in the current TypeScript/Next.js implementation. Remove or ignore them for all new development.
 
+## Onboarding Flow Overview
+
+Here's a simplified diagram of the user onboarding flow:
+
+```mermaid
+graph TD
+    A[User starts chat] --> B{Session Exists?}
+    B -- Yes --> C[Retrieve Session]
+    B -- No --> D[Create New Session]
+    C --> E{Session Valid?}
+    D --> E
+    E -- Yes --> F[Process User Response]
+    E -- No --> G[Restart Flow (Session Expired)]
+    G --> D
+    F --> H{Input Valid?}
+    H -- Yes --> I[Parse & Store Data]
+    H -- No --> J{Re-prompt Attempt?}
+    J -- Yes --> K[Re-prompt User]
+    J -- No --> L[Halt Flow (e.g., Email Error)]
+    I --> M{All Questions Answered?}
+    K --> F
+    M -- Yes --> N[Determine Path (Scoring Logic)]
+    M -- No --> O[Get Next Question]
+    N --> P[Save Data to DB]
+    P --> Q[Delete Session]
+    Q --> R[Return Final Recommendation]
+    O --> S[Save Session State]
+    S --> T[Return Next Question]
+    L --> U[Return Halt Message]
+```
+
+> **Mermaid Diagram Troubleshooting:**
+> - This diagram uses triple backticks with `mermaid` (no indentation).
+> - Most modern Markdown previewers (including Cursor, VSCode with Mermaid plugins, and GitHub web) support this syntax.
+> - If you do not see a rendered diagram, ensure your preview tool is up to date and supports Mermaid, or try a different Markdown viewer.
+
 ## Key Features
 
 - **Guided Onboarding Questionnaire:** Presents a clear, step-by-step questionnaire to new users, ensuring consistent data collection.
-- **Deterministic Path Recommendation:** Applies predefined, rule-based logic to user responses to accurately suggest the most relevant Andromeda ecosystem path.
+- **Deterministic Path Recommendation:** Applies a weighted scoring system and predefined requirements in `src/lib/pathDetermination.ts` to accurately suggest the most relevant Andromeda ecosystem path, including hard requirements for certain paths (e.g., Rust, TypeScript, and Cosmos SDK Chains for Contractors).
 - **Multiple Onboarding Paths:** Supports five distinct paths: Contractor, Hacker, Visionary Path, AI Navigator, and Ambassador, plus a general Explorer Path for beginners.
 - **Data Persistence:** Stores collected user profile data in a Supabase PostgreSQL database for future analysis and engagement.
 - **Modern Web Stack:** Built with Next.js 14+ App Router, React, TypeScript, Tailwind CSS, and Shadcn/ui, ensuring performance, maintainability, and a modern user experience.
 - **Keyboard Accessibility:** Supports keyboard number input for quick button selection in multiple-choice questions.
 - **Input Validation & Error Handling:** Includes client-side and server-side validation, graceful error handling, and user re-prompting for invalid input.
 - **Session Management:** Uses Upstash Redis for robust server-side session management with automatic session expiry.
-- **Comprehensive Integration Tests:** Includes a Jest-based integration test suite to verify the API route logic and core onboarding flow.
+- **Comprehensive Integration Tests:** Includes a Jest-based integration test suite (`src/app/api/onboarding/message/route.test.ts`) to verify the API route logic and core onboarding flow, including testing the scoring system, hard requirements, session expiry, re-prompting, halting, and service connectivity.
 - **Easy Deployment:** Designed for seamless deployment on Vercel, leveraging serverless functions and managed services.
 
 ## Setup
@@ -148,7 +184,7 @@ Based on user responses, the chatbot recommends one of the following paths:
 
 ## Testing
 
-The project includes a comprehensive integration test suite built with Jest to ensure the backend API (`/api/onboarding/message`) functions correctly.
+The project includes a comprehensive integration test suite built with Jest to ensure the backend API (`/api/onboarding/message`) functions correctly, now including tests for the scoring-based path determination and session handling.
 
 **To run the tests:**
 
@@ -159,27 +195,27 @@ The project includes a comprehensive integration test suite built with Jest to e
     npm test
     ```
 
-The test suite (`src/app/api/onboarding/message/route.test.ts`) covers the following scenarios:
+The comprehensive integration test suite (`src/app/api/onboarding/message/route.test.ts`) ensures the backend API functions correctly. It covers scenarios such as:
 
-- **Happy Path (Explorer Path):** Simulates a user completing the onboarding flow with valid responses, verifying the final path recommendation.
+- **Happy Path (Explorer, Visionary, Contractor):** Simulates users completing the onboarding flow with valid responses, verifying the final path recommendations based on the new scoring system and hard requirements.
 - **Session Start:** Tests the initial API call to start a new session and receive the first question.
 - **Session Expiry:** Verifies that expired sessions are correctly detected, forcing a restart and issuing a new session ID.
-- **Invalid Email Handling:** Tests the re-prompt and halt flow when an invalid email address is provided twice.
+- **Input Validation:** Tests the re-prompt and halt flow for invalid input, specifically including the email validation halt scenario.
 - **GET Handler:** Checks the basic connectivity of the GET endpoint and its service dependencies.
-- **Visionary Path Trigger:** Specifically tests inputs designed to trigger the Visionary onboarding path recommendation.
-- **Contractor Path Trigger:** Specifically tests inputs designed to trigger the Contractor onboarding path recommendation.
 
-The tests use mocking for external services (Upstash, Supabase, questionnaire data, path determination logic) to isolate the API route logic and ensure predictable test outcomes.
+The tests utilize mocking for external services (Upstash, Supabase, questionnaire data) to isolate the core API route logic. Notably, the path determination logic (`determinePath`) is tested using its real implementation with carefully constructed session data, ensuring accurate coverage of the scoring system and hard requirements.
 
 ## Customization
 
 The Andromeda Onboarding Bot is designed to be flexible and customizable. Key areas for modification include:
 
 - **Questionnaire Content:** Modify the questions, options, validation hints, and re-prompt messages directly within the `src/lib/questionnaire.ts` file.
-- **Path Determination Logic:** Adjust the rules for assigning onboarding paths in the `determinePath` function within `src/lib/pathDetermination.ts` to fine-tune path recommendations based on evolving criteria.
-- **Resource Recommendations:** Update the URLs and descriptions for recommended resources associated with each path by modifying the `getPathUrl` function in `src/lib/pathDetermination.ts` and the `PATH_URL_*` environment variables.
-- **Styling and Theming:** Customize the visual appearance by modifying Tailwind CSS classes throughout the components and adjusting the base theme colors in `src/app/globals.css` and `tailwind.config.js`.
-- **Adding More Languages:** Expand the list of supported programming languages in Question 4 by updating the `questions` array in `src/lib/questionnaire.ts` and the `validLanguages` array in `src/lib/parsing.ts`.
+- **Path Determination Logic:** Adjust the weights and requirements in the `PATH_SCORING` object and the `hasContractorRequirements` function within `src/lib/pathDetermination.ts` to fine-tune path recommendations based on evolving criteria.
+- **Resource Recommendations:** Update the URLs and descriptions for recommended resources by modifying the `getPathUrl` function and environment variables related to path URLs.
+- **Extend Language Options:** Add or remove programming languages in Question 4's button options in `src/lib/questionnaire.ts` and update the `validLanguages` array in `src/lib/parsing.ts`.
+- **Customize Styling:** Modify the visual appearance by tweaking Tailwind CSS classes throughout the components and customizing the Shadcn/ui theme in `src/app/globals.css` and `tailwind.config.js`.
+- **Expand Test Suite:** Add more test cases to `src/app/api/onboarding/message/route.test.ts` to cover additional scenarios, edge cases, or validation rules.
+- **Implement Additional Features:** Extend the chatbot with new features or integrations as outlined in the "Future Enhancements" section below.
 
 ## Database Integration
 
