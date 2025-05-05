@@ -146,6 +146,9 @@ export function validateInput(
 
   // console.log(`Validating for hint: ${validationHint}`, response);
   switch (validationHint) {
+    case "text":
+      // Ensure non-empty string
+      return typeof response === "string" && response.trim().length > 0;
     case "email":
       // Check if it's a non-empty string and matches basic email pattern
       if (typeof response !== "string" || response.trim() === "") return false;

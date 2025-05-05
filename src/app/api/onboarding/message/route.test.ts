@@ -114,6 +114,14 @@ describe("/api/onboarding/message API Route", () => {
       },
     );
     mockDeleteSession.mockResolvedValue(undefined);
+
+    // Inside beforeEach, after mockDeleteSession
+    mockCreateSession.mockResolvedValue({
+      sessionId: "test-session",
+      initialState: { questionIndex: 0, accumulatedData: {}, repromptedIndex: null, lastInteractionTimestamp: Date.now() },
+    });
+    mockGetSession.mockResolvedValue({ questionIndex: 0, accumulatedData: {}, repromptedIndex: null, lastInteractionTimestamp: Date.now() });
+    mockDeleteSession.mockResolvedValue(undefined);
   });
 
   // --- Test Cases ---
@@ -352,23 +360,30 @@ describe("/api/onboarding/message API Route", () => {
   // --- NEW TEST: GET Handler ---
   describe("GET Handler", () => {
     test("should return OK status when services connect", async () => {
-      const MOCK_SESSION_ID = "get-test-session-ok";
-      // Mock session functions for successful test
-      mockGetQuestionDetails.mockResolvedValue({
-        questionIndex: 0 /* minimal state */,
+      // Arrange: createSession and getSession succeed
+      mockCreateSession.mockResolvedValueOnce({
+        sessionId: "ok-session",
+        initialState: { questionIndex: 0, accumulatedData: {}, repromptedIndex: null, lastInteractionTimestamp: Date.now() },
       });
+      mockGetSession.mockResolvedValueOnce({ questionIndex: 0, accumulatedData: {}, repromptedIndex: null, lastInteractionTimestamp: Date.now() });
+      mockDeleteSession.mockResolvedValueOnce(undefined);
 
+      // Act
       const response = await GET();
       const body = await response.json();
 
+      // Assert
       expect(response.status).toBe(200);
       expect(body.status).toBe("OK");
       expect(body.message).toContain("Session Service connected");
     });
 
     test("should return ERROR status if getSession fails post-create", async () => {
-      const MOCK_SESSION_ID = "get-test-session-fail";
-      // After createSession, getSession returns null
+      // Arrange: createSession succeeds, getSession returns null
+      mockCreateSession.mockResolvedValueOnce({
+        sessionId: "fail-session",
+        initialState: { questionIndex: 0, accumulatedData: {}, repromptedIndex: null, lastInteractionTimestamp: Date.now() },
+      });
       mockGetSession.mockResolvedValueOnce(null);
 
       const response = await GET();
@@ -382,7 +397,7 @@ describe("/api/onboarding/message API Route", () => {
     });
 
     test("should return ERROR status if createSession throws error", async () => {
-      // Mock createSession to throw error
+      // Arrange: createSession throws
       const error = new Error("Redis connection failed");
       mockCreateSession.mockRejectedValueOnce(error);
 
