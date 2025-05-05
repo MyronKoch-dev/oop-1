@@ -40,15 +40,15 @@ export default function RootLayout({
     checkIfMobile();
 
     // Add event listener
-    window.addEventListener('resize', checkIfMobile);
+    window.addEventListener("resize", checkIfMobile);
 
     // Cleanup
-    return () => window.removeEventListener('resize', checkIfMobile);
+    return () => window.removeEventListener("resize", checkIfMobile);
   }, []);
 
   // Toggle functions for sidebars
   const toggleLeftSidebar = () => {
-    setIsLeftSidebarOpen(prev => !prev);
+    setIsLeftSidebarOpen((prev) => !prev);
     // Close right sidebar when opening left sidebar on mobile
     if (isMobile) {
       setIsRightSidebarOpen(false);
@@ -56,7 +56,7 @@ export default function RootLayout({
   };
 
   const toggleRightSidebar = () => {
-    setIsRightSidebarOpen(prev => !prev);
+    setIsRightSidebarOpen((prev) => !prev);
     // Close left sidebar when opening right sidebar on mobile
     if (isMobile) {
       setIsLeftSidebarOpen(false);
@@ -73,7 +73,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black`}
       >
-        <SidebarContext.Provider value={{ openRightSidebar, isRightSidebarOpen }}>
+        <SidebarContext.Provider
+          value={{ openRightSidebar, isRightSidebarOpen }}
+        >
           <ThemeProvider>
             {/* Left Sidebar toggle button - visible only on mobile */}
             <button
@@ -81,7 +83,9 @@ export default function RootLayout({
               onClick={toggleLeftSidebar}
               aria-label="Toggle left sidebar"
             >
-              <span className="w-5 h-5 text-2xl flex items-center justify-center">🚀</span>
+              <span className="w-5 h-5 text-2xl flex items-center justify-center">
+                🚀
+              </span>
             </button>
 
             {/* Right Sidebar toggle button - visible only on mobile */}
@@ -94,9 +98,14 @@ export default function RootLayout({
             </button>
 
             <Sidebar isOpen={isLeftSidebarOpen} onClose={toggleLeftSidebar} />
-            <RightSidebar isOpen={isRightSidebarOpen} onClose={toggleRightSidebar} />
+            <RightSidebar
+              isOpen={isRightSidebarOpen}
+              onClose={toggleRightSidebar}
+            />
 
-            <main className={`flex justify-center transition-all duration-300 ease-in-out lg:pl-64 ${isRightSidebarOpen ? 'lg:pr-96' : 'lg:pr-0'} ${(isLeftSidebarOpen || isRightSidebarOpen) && isMobile ? 'opacity-50 blur-sm pointer-events-none' : ''}`}>
+            <main
+              className={`flex justify-center transition-all duration-300 ease-in-out lg:pl-64 ${isRightSidebarOpen ? "lg:pr-96" : "lg:pr-0"} ${(isLeftSidebarOpen || isRightSidebarOpen) && isMobile ? "opacity-50 blur-sm pointer-events-none" : ""}`}
+            >
               {children}
             </main>
           </ThemeProvider>

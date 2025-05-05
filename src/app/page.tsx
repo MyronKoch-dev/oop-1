@@ -1,10 +1,10 @@
 // src/app/page.tsx (Corrected to render ChatContainer)
-'use client'; // REQUIRED: Mark this as a Client Component for state and effects
+"use client"; // REQUIRED: Mark this as a Client Component for state and effects
 
-import React, { useState, useEffect } from 'react'; // Import React hooks
+import React, { useState, useEffect } from "react"; // Import React hooks
 
 // Import your main ChatContainer component using the correct path alias
-import { ChatContainer } from '@/components/chat/chat-container';
+import { ChatContainer } from "@/components/chat/chat-container";
 // NOTE: Ensure ChatContainer is EXPORTED from its file, e.g.:
 // export function ChatContainer() { ... } OR export default function ChatContainer() { ... }
 
@@ -23,10 +23,10 @@ function useIsSidebarVisible() {
     checkWidth();
 
     // Add event listener for window resize
-    window.addEventListener('resize', checkWidth);
+    window.addEventListener("resize", checkWidth);
 
     // Clean up
-    return () => window.removeEventListener('resize', checkWidth);
+    return () => window.removeEventListener("resize", checkWidth);
   }, []);
 
   // On desktop, sidebar is always visible; on mobile it's not
@@ -50,8 +50,12 @@ export default function HomePage() {
             alt="Andromeda Logo"
             className="rounded-full mb-2"
           />
-          <h1 className="text-xl font-bold text-white mb-1">Andromeda Protocol</h1>
-          <p className="text-gray-400 text-sm">Building the future of decentralized applications</p>
+          <h1 className="text-xl font-bold text-white mb-1">
+            Andromeda Protocol
+          </h1>
+          <p className="text-gray-400 text-sm">
+            Building the future of decentralized applications
+          </p>
         </div>
       )}
 
