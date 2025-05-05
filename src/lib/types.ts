@@ -10,7 +10,6 @@ export interface OnboardingData {
   github?: string | null; // Q3 Parsed Handle
   x?: string | null; // Q3 Parsed Handle (Interface uses 'x')
   languages?: string[] | null; // Q4 Parsed Language Names
-  other_languages?: string | null; // Q4 Text from 'Other'
   blockchain_experience?: string | null; // Q5 Button Value ('Yes', 'No - curious', 'No experience')
   blockchain_platforms?: string[] | null; // Q5 Conditional Text
   ai_experience?: string | null; // Q6 Button Value ('Yes', 'No')
@@ -42,7 +41,6 @@ export interface OnboardingResponseForDB {
   github?: string | null;
   x_handle?: string | null; // Matches DB column name 'x_handle'
   languages?: string[] | null;
-  other_languages?: string | null;
   blockchain_experience?: string | null;
   blockchain_platforms?: string[] | null;
   ai_experience?: string | null;

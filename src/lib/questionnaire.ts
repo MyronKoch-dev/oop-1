@@ -33,7 +33,7 @@ const questions: QuestionDetail[] = [
   // Index 1 (Technical expertise, moved up)
   {
     index: 1,
-    text: "If you had to rate your technical expertise, where would you put yourself?",
+    text: "Nice to meet you, {name}! If you had to rate your technical expertise, where would you put yourself?",
     inputMode: "buttons",
     options: [
       { label: "1. Beginner", value: "Beginner" },
@@ -45,7 +45,7 @@ const questions: QuestionDetail[] = [
   // Index 2 (Programming Languages)
   {
     index: 2,
-    text: "Nice to meet you, {name}! If you are a programmer, which programming languages do you feel most at home with? (Pick as many as you like, or select 'I'm not a programmer.' if that's you.)",
+    text: "If you are a programmer, which programming languages do you feel most at home with? (Pick as many as you like, or select 'I'm not a programmer.' if that's you.)",
     inputMode: "buttons",
     options: [
       { label: "1. Rust", value: "Rust" },

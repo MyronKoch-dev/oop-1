@@ -71,7 +71,6 @@ export async function saveOnboardingResponse(
     github: data.github ?? null,
     x_handle: data.x ?? null, // Map 'x' from OnboardingData to 'x_handle' in DB type
     languages: data.languages ?? null,
-    other_languages: data.other_languages ?? null,
     blockchain_experience: data.blockchain_experience ?? null,
     blockchain_platforms: data.blockchain_platforms ?? null,
     ai_experience: data.ai_experience ?? null,

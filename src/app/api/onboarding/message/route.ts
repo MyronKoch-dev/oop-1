@@ -302,54 +302,31 @@ export async function POST(request: NextRequest) {
                 : null;
             break;
           case 1:
-            parseLanguages(responseToParse, dataToUpdate);
+            dataToUpdate.experience_level =
+              (responseToParse as { buttonValue: string })?.buttonValue ?? null;
             break;
-          case 2: {
-            // For blockchain platforms, pass selectedValues if available
-            let selectedValues: string[] | undefined = undefined;
-            let buttonValue = "";
-            if (Array.isArray(responseToParse)) {
-              selectedValues = responseToParse;
-              buttonValue = "Yes"; // Assume multi-select only happens if user said Yes
-            } else if (
-              typeof responseToParse === "object" &&
-              responseToParse !== null
-            ) {
-              if (
-                "buttonValue" in responseToParse &&
-                typeof responseToParse.buttonValue === "string"
-              ) {
-                buttonValue = responseToParse.buttonValue;
-              }
-              if (
-                "selectedValues" in responseToParse &&
-                Array.isArray(responseToParse.selectedValues)
-              ) {
-                selectedValues = responseToParse.selectedValues;
-              }
-            } else if (typeof responseToParse === "string") {
-              buttonValue = responseToParse;
-            }
+          case 2:
+            parseLanguages(responseToParse, dataToUpdate);
+            console.log("[PATCH] Stored languages:", dataToUpdate.languages);
+            break;
+          case 3:
             parseBlockchain(
-              { buttonValue, selectedValues },
+              { buttonValue: (responseToParse as { buttonValue: string })?.buttonValue, selectedValues: (responseToParse as { selectedValues?: string[] })?.selectedValues },
               conditionalText,
               dataToUpdate,
             );
+            console.log("[PATCH] Stored blockchain_experience:", dataToUpdate.blockchain_experience);
+            console.log("[PATCH] Stored blockchain_platforms:", dataToUpdate.blockchain_platforms);
             break;
-          }
-          case 3:
+          case 4:
             parseAI(
               responseToParse as { buttonValue: string } | null,
               conditionalText,
               dataToUpdate,
             );
             break;
-          case 4:
-            dataToUpdate.tools_familiarity =
-              (responseToParse as { buttonValue: string })?.buttonValue ?? null;
-            break;
           case 5:
-            dataToUpdate.experience_level =
+            dataToUpdate.tools_familiarity =
               (responseToParse as { buttonValue: string })?.buttonValue ?? null;
             break;
           case 6:
