@@ -26,14 +26,14 @@ const questions: QuestionDetail[] = [
   // Index 0
   {
     index: 0,
-    text: "What shall I call you?",
+    text: "Hey there! What should I call you?",
     inputMode: "text",
-    isOptional: false, // Assuming name is desired
+    isOptional: false,
   },
-  // Index 1 (Programming Languages)
+  // Index 1
   {
     index: 1,
-    text: "Which programming languages are you most comfortable with, {name}? (Select all that apply, or 'None')",
+    text: "Nice to meet you, {name}! Which programming languages do you feel most at home with? (Pick as many as you like, or 'None' if you're just starting out.)",
     inputMode: "buttons",
     options: [
       { label: "1. Rust", value: "Rust" },
@@ -50,10 +50,10 @@ const questions: QuestionDetail[] = [
     validationHint: "languages",
     isMultiSelect: true,
   },
-  // Index 2 (Blockchain)
+  // Index 2
   {
     index: 2,
-    text: "Which blockchain platforms have you worked with? (Select all that apply, or 'None')",
+    text: "How about blockchains? Have you tinkered with any of these platforms before? (Select all that apply, or 'None')",
     inputMode: "buttons",
     options: [
       { label: "1. Bitcoin", value: "Bitcoin" },
@@ -70,10 +70,10 @@ const questions: QuestionDetail[] = [
     validationHint: "blockchain_platforms",
     isMultiSelect: true,
   },
-  // Index 3 (AI/ML)
+  // Index 3
   {
     index: 3,
-    text: "Do you have experience with AI/ML beyond ChatGPT? (Select all that apply)",
+    text: "And what about AI or machine learning? Any hands-on experience beyond just chatting with ChatGPT? (Select all that fit, or 'Other' to specify)",
     inputMode: "buttons",
     options: [
       { label: "1. Natural Language Processing (NLP)", value: "NLP" },
@@ -87,14 +87,15 @@ const questions: QuestionDetail[] = [
       { label: "9. Other", value: "Other" },
     ],
     conditionalTriggerValue: "Other",
-    conditionalTextInputLabel: "Please specify your AI/ML experience:",
+    conditionalTextInputLabel:
+      "Cool! Tell me a bit about your AI/ML experience:",
     isOptional: false,
     isMultiSelect: true,
   },
-  // Index 4 (Andromeda tools)
+  // Index 4
   {
     index: 4,
-    text: "Okay, great. So, how familiar are you with Andromeda's tools?",
+    text: "Switching gears a bit—how familiar are you with Andromeda's tools so far?",
     inputMode: "buttons",
     options: [
       { label: "1. Very familiar", value: "Very familiar" },
@@ -104,10 +105,10 @@ const questions: QuestionDetail[] = [
     ],
     isOptional: false,
   },
-  // Index 5 (Technical expertise)
+  // Index 5
   {
     index: 5,
-    text: "How would you rate your technical expertise?",
+    text: "If you had to rate your technical expertise, where would you put yourself?",
     inputMode: "buttons",
     options: [
       { label: "1. Beginner", value: "Beginner" },
@@ -116,10 +117,10 @@ const questions: QuestionDetail[] = [
     ],
     isOptional: false,
   },
-  // Index 6 (Hackathon)
+  // Index 6
   {
     index: 6,
-    text: "Have you ever participated in a hackathon?",
+    text: "Ever tried your hand at a hackathon? (You can pick more than one if they apply!)",
     inputMode: "buttons",
     options: [
       { label: "Yes, a web 2 one", value: "Web2" },
@@ -130,10 +131,10 @@ const questions: QuestionDetail[] = [
     isOptional: false,
     isMultiSelect: true,
   },
-  // Index 7 (Main goal)
+  // Index 7
   {
     index: 7,
-    text: "Out of these broad choices, What are your goals here, {name}?",
+    text: "So, {name}, what brings you here? What are you hoping to get out of this experience?",
     inputMode: "buttons",
     options: [
       { label: "1. Build apps/dApps", value: "Build apps/dApps" },
@@ -151,50 +152,51 @@ const questions: QuestionDetail[] = [
     ],
     isOptional: false,
   },
-  // Index 8 (Portfolio)
+  // Index 8
   {
     index: 8,
-    text: "Got a portfolio or project links to showcase? (Optional, but helpful!)",
+    text: "Do you have a portfolio or any project links you'd like to share? (Totally optional, but I'd love to see your work!)",
     inputMode: "text",
     isOptional: true,
   },
-  // Index 9 (Additional skills)
+  // Index 9
   {
     index: 9,
-    text: "Anything else we should know about your skills or interests? (Optional)",
+    text: "Is there anything else you'd like us to know about your skills or interests? (Optional, but I'm all ears!)",
     inputMode: "text",
     isOptional: true,
   },
-  // Index 10 (Email)
+  // Index 10
   {
     index: 10,
-    text: "What email should we use to stay in touch, {name}?",
+    text: "What's the best email to reach you at, {name}?",
     inputMode: "text",
     isOptional: false,
     validationHint: "email",
-    rePromptMessage: "Please provide a valid email address.",
+    rePromptMessage:
+      "Hmm, that doesn't look like a valid email. Could you double-check it for me?",
   },
-  // Index 11 (GitHub)
+  // Index 11
   {
     index: 11,
-    text: "What is your GitHub username? (Optional)",
+    text: "If you're on GitHub, what's your username? (Optional)",
     inputMode: "text",
     isOptional: true,
     validationHint: "github_username",
   },
-  // Index 12 (Telegram)
+  // Index 12
   {
     index: 12,
-    text: "What is your Telegram handle? (Optional)",
+    text: "How about Telegram? If you'd like, drop your handle here. (Optional)",
     inputMode: "text",
     isOptional: true,
     validationHint: "telegram_handle",
     placeholder: "@yourhandle",
   },
-  // Index 13 (X/Twitter)
+  // Index 13
   {
     index: 13,
-    text: "What is your X/Twitter handle? (Optional)",
+    text: "And last one—what's your X/Twitter handle? (Optional)",
     inputMode: "text",
     isOptional: true,
     validationHint: "x_handle",
@@ -221,3 +223,21 @@ export function getQuestionDetails(index: number): QuestionDetail | null {
 export function isFinalQuestion(index: number): boolean {
   return index === TOTAL_QUESTIONS - 1;
 }
+
+// Lightweight reaction messages to show between questions for a more conversational flow
+export const reactionMessages: string[] = [
+  "👋 Let's get started!",
+  "🙌 Awesome, thanks!",
+  "🚀 Great choices!",
+  "🤖 AI is fascinating, right?",
+  "🔄 Switching gears...",
+  "💡 Good to know!",
+  "🏆 Hackathons are fun!",
+  "🎯 Got it!",
+  "🌐 Always cool to see projects!",
+  "📝 Noted!",
+  "📧 Thanks, we'll keep in touch!",
+  "🐙 Love seeing GitHub users!",
+  "✈️ Telegram, got it!",
+  "🐦 X/Twitter, awesome!",
+];
