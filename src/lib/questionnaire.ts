@@ -134,21 +134,26 @@ const questions: QuestionDetail[] = [
   // Index 7
   {
     index: 7,
-    text: "So, {name}, what brings you here? What are you hoping to get out of this experience?",
+    text:
+      "Based on what you've shared so far, {name}, here are some paths where people like you often find success. Which of these would you like to focus on, or are you most curious about? (Pick what feels right—you can always explore more later!)",
     inputMode: "buttons",
     options: [
-      { label: "1. Build apps/dApps", value: "Build apps/dApps" },
-      { label: "2. Earn bounties", value: "Earn bounties" },
+      { label: "🚀 Building apps/dApps", value: "Build apps/dApps" },
+      { label: "💰 Earning bounties", value: "Earn bounties" },
       {
-        label: "3. Share ideas for new features",
+        label: "💡 Sharing ideas for new features",
         value: "Share ideas for new features",
       },
-      { label: "4. Work on AI projects", value: "Work on AI projects" },
+      { label: "🤖 Working on AI projects", value: "Work on AI projects" },
       {
-        label: "5. Promote blockchain/Andromeda",
+        label: "📢 Promoting blockchain/Andromeda",
         value: "Promote blockchain/Andromeda",
       },
-      { label: "6. Learn about Andromeda", value: "Learn about Andromeda" },
+      {
+        label: "📚 Learning about Andromeda",
+        value: "Learn about Andromeda",
+      },
+      // { label: "🤔 Not sure yet—help me decide!", value: "Not sure" },
     ],
     isOptional: false,
   },
