@@ -91,11 +91,23 @@ const questions: QuestionDetail[] = [
       { label: "1. Natural Language Processing (NLP)", value: "NLP" },
       { label: "2. Computer Vision", value: "Computer Vision" },
       { label: "3. Smart Contract AI/Automation", value: "Smart Contract AI" },
-      { label: "4. Blockchain Data Science / Analytics", value: "Blockchain Analytics" },
+      {
+        label: "4. Blockchain Data Science / Analytics",
+        value: "Blockchain Analytics",
+      },
       { label: "5. Generative AI (NFTs, Art, Music)", value: "Generative AI" },
-      { label: "6. Decentralized AI / Federated Learning", value: "Decentralized AI" },
-      { label: "7. MLOps / Model Deployment (on-chain/off-chain)", value: "MLOps" },
-      { label: "8. Crypto Trading Bots / DeFi Automation", value: "DeFi Automation" },
+      {
+        label: "6. Decentralized AI / Federated Learning",
+        value: "Decentralized AI",
+      },
+      {
+        label: "7. MLOps / Model Deployment (on-chain/off-chain)",
+        value: "MLOps",
+      },
+      {
+        label: "8. Crypto Trading Bots / DeFi Automation",
+        value: "DeFi Automation",
+      },
       { label: "9. Other", value: "Other" },
     ],
     conditionalTriggerValue: "Other",
@@ -134,8 +146,7 @@ const questions: QuestionDetail[] = [
   // Index 7
   {
     index: 7,
-    text:
-      "Based on what you've shared so far, {name}, here are some paths where people like you often find success. Which of these would you like to focus on, or are you most curious about? (Pick what feels right—you can always explore more later!)",
+    text: "Based on what you've shared so far, {name}, here are some paths where people like you often find success. Which of these would you like to focus on, or are you most curious about? (Pick what feels right—you can always explore more later!)",
     inputMode: "buttons",
     options: [
       { label: "🚀 Building apps/dApps", value: "Build apps/dApps" },

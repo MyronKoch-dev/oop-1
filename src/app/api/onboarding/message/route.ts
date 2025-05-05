@@ -311,12 +311,24 @@ export async function POST(request: NextRequest) {
             break;
           case 3:
             parseBlockchain(
-              { buttonValue: (responseToParse as { buttonValue: string })?.buttonValue, selectedValues: (responseToParse as { selectedValues?: string[] })?.selectedValues },
+              {
+                buttonValue: (responseToParse as { buttonValue: string })
+                  ?.buttonValue,
+                selectedValues: (
+                  responseToParse as { selectedValues?: string[] }
+                )?.selectedValues,
+              },
               conditionalText,
               dataToUpdate,
             );
-            console.log("[PATCH] Stored blockchain_experience:", dataToUpdate.blockchain_experience);
-            console.log("[PATCH] Stored blockchain_platforms:", dataToUpdate.blockchain_platforms);
+            console.log(
+              "[PATCH] Stored blockchain_experience:",
+              dataToUpdate.blockchain_experience,
+            );
+            console.log(
+              "[PATCH] Stored blockchain_platforms:",
+              dataToUpdate.blockchain_platforms,
+            );
             break;
           case 4:
             parseAI(
