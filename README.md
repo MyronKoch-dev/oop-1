@@ -62,20 +62,20 @@ Here's a simplified diagram of the user onboarding flow:
 
 ```mermaid
 graph TD
-    A[User starts chat] --> B{Session Exists?}
+    A([User starts chat]) --> B[Session Exists?]
     B -- Yes --> C[Retrieve Session]
     B -- No --> D[Create New Session]
-    C --> E{Session Valid?}
+    C --> E[Session Valid?]
     D --> E
     E -- Yes --> F[Process User Response]
     E -- No --> G[Restart Flow (Session Expired)]
     G --> D
-    F --> H{Input Valid?}
+    F --> H[Input Valid?]
     H -- Yes --> I[Parse & Store Data]
-    H -- No --> J{Re-prompt Attempt?}
+    H -- No --> J[Re-prompt Attempt?]
     J -- Yes --> K[Re-prompt User]
     J -- No --> L[Halt Flow (e.g., Email Error)]
-    I --> M{All Questions Answered?}
+    I --> M[All Questions Answered?]
     K --> F
     M -- Yes --> N[Determine Path (Scoring Logic)]
     M -- No --> O[Get Next Question]
