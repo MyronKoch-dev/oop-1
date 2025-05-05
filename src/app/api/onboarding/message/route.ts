@@ -51,6 +51,16 @@ interface OnboardingResponsePayload {
   } | null;
   error?: string | null; // User-facing error message (validation failure, session expiry)
   haltFlow?: boolean; // True if the frontend should stop the flow (e.g., fatal email validation)
+  fieldErrors?: Record<string, string>;
+}
+
+// Type for batch contact info payload
+interface BatchContactPayload {
+  email: string;
+  github?: string;
+  telegram?: string;
+  x?: string;
+  batchContact: true;
 }
 
 // Normalize a social handle to always start with '@' if not empty/null
@@ -62,6 +72,16 @@ function normalizeHandle(handle: string | null | undefined): string | null {
     handle = "@" + handle;
   }
   return handle;
+}
+
+// Type guard for BatchContactPayload
+function isBatchContactPayload(obj: unknown): obj is BatchContactPayload {
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    (obj as BatchContactPayload).batchContact === true &&
+    typeof (obj as BatchContactPayload).email === "string"
+  );
 }
 
 export async function POST(request: NextRequest) {
@@ -152,245 +172,289 @@ export async function POST(request: NextRequest) {
       // Clear the reprompt flag before processing this attempt's validation
       let needsReprompt = false; // Flag to determine if we return a re-prompt response
 
-      // 2a. Validate Input
-      const isValid = validateInput(rawResponse, questionDetail.validationHint);
-      console.log(
-        `[Session: ${currentSessionId}] Validation result for Q${currentQuestionIndex}: ${isValid}`,
-      );
-
-      // 2b. Handle Validation Failure
-      if (!isValid) {
-        if (!isSecondAttempt && questionDetail.rePromptMessage) {
-          // --- First Failure: Set up for Re-prompt ---
-          console.warn(
-            `[Session: ${currentSessionId}] First validation failure for Q${currentQuestionIndex}. Setting re-prompt.`,
-          );
-          currentSessionState.repromptedIndex = currentQuestionIndex; // Set the flag
-          needsReprompt = true; // Signal to return re-prompt response later
-        } else {
-          // --- Second Failure (or no re-prompt message) ---
-          console.warn(
-            `[Session: ${currentSessionId}] Second validation failure (or no re-prompt) for Q${currentQuestionIndex}.`,
-          );
-          if (
-            currentQuestionIndex === 10 &&
-            questionDetail.validationHint === "email"
-          ) {
-            // --- HALT FLOW FOR EMAIL ---
-            console.error(
-              `[Session: ${currentSessionId}] Halting flow: Second email validation failed.`,
-            );
-            // Optionally delete session here, or let it expire
-            // await deleteSession(currentSessionId);
-            const responsePayload: OnboardingResponsePayload = {
-              sessionId: currentSessionId,
-              currentQuestionIndex: currentQuestionIndex,
-              error:
-                "A valid email address is required. Please refresh to start over.",
-              haltFlow: true, // Signal frontend to stop
-            };
-            // NOTE: We do NOT update the session state here, just return the halt response
-            return NextResponse.json(responsePayload);
-          } else {
-            // --- Proceed with NULL/default for other fields ---
-            console.log(
-              `[Session: ${currentSessionId}] Proceeding with null/default for Q${currentQuestionIndex} after second validation failure.`,
-            );
-            // Allow flow to continue, parsing logic will handle storing null/default.
-            // Ensure reprompt flag is cleared if it was somehow set
-            currentSessionState.repromptedIndex = null;
+      // Batch contact info form handling
+      if (currentQuestionIndex === 10 && isBatchContactPayload(rawResponse)) {
+        const batch = rawResponse;
+        const contactFields = [
+          { key: "email", index: 10, validationHint: "email" },
+          { key: "github", index: 11, validationHint: "github_username" },
+          { key: "telegram", index: 12, validationHint: "telegram_handle" },
+          { key: "x", index: 13, validationHint: "x_handle" },
+        ];
+        const errors: Record<string, string> = {};
+        // Validate all fields
+        for (const field of contactFields) {
+          const value = batch[field.key as keyof BatchContactPayload];
+          if (field.validationHint === "email") {
+            if (!validateInput(value, "email")) {
+              errors.email = "Please enter a valid email address.";
+            }
+          } else if (value && typeof value === "string") {
+            // Optionally add more validation for handles if needed
+            // For now, accept any string for optional handles
           }
         }
+        if (Object.keys(errors).length > 0) {
+          return NextResponse.json({
+            sessionId: currentSessionId,
+            currentQuestionIndex: 10,
+            error: Object.values(errors).join(" "),
+            fieldErrors: errors,
+          });
+        }
+        // Store all fields
+        const dataToUpdate = currentSessionState.accumulatedData;
+        dataToUpdate.email = batch.email?.trim();
+        dataToUpdate.github = batch.github?.trim() || null;
+        dataToUpdate.telegram = batch.telegram?.trim() || null;
+        dataToUpdate.x = batch.x?.trim() || null;
+        currentSessionState.questionIndex += 4;
+        await updateSession(currentSessionId, currentSessionState);
+        // Continue to completion logic below
       } else {
-        // Validation succeeded, clear any lingering reprompt flag
-        currentSessionState.repromptedIndex = null;
-      }
+        // 2a. Validate Input
+        const isValid = validateInput(
+          rawResponse,
+          questionDetail.validationHint,
+        );
+        console.log(
+          `[Session: ${currentSessionId}] Validation result for Q${currentQuestionIndex}: ${isValid}`,
+        );
 
-      // If we need to re-prompt based on the logic above, do it now *before* parsing/advancing
-      if (needsReprompt) {
-        await updateSession(currentSessionId, currentSessionState); // Save the reprompt flag state
-        const responsePayload: OnboardingResponsePayload = {
-          sessionId: currentSessionId,
-          currentQuestionIndex: currentQuestionIndex, // Stay on same question
-          nextQuestion: questionDetail.text,
-          inputMode: questionDetail.inputMode,
-          options: questionDetail.options ?? [],
-          conditionalTextInputLabel: questionDetail.conditionalTextInputLabel,
-          conditionalTriggerValue: questionDetail.conditionalTriggerValue,
-          isFinalQuestion: isFinalQuestion(currentQuestionIndex),
-          error: questionDetail.rePromptMessage, // Send re-prompt message
-          haltFlow: false,
-        };
-        return NextResponse.json(responsePayload);
-      }
-
-      // 2c. Parse and Store Response (Only if validation passed or it's a non-halting second failure)
-      console.log(
-        `[Session: ${currentSessionId}] Parsing and storing response for Q${currentQuestionIndex}`,
-      );
-      const dataToUpdate = currentSessionState.accumulatedData;
-      const responseToParse = isValid ? rawResponse : null; // Pass null to parsers if validation failed but we proceed
-
-      switch (currentQuestionIndex) {
-        case 0:
-          dataToUpdate.name =
-            typeof responseToParse === "string"
-              ? responseToParse.trim() || null
-              : null;
-          break;
-        case 1:
-          parseLanguages(responseToParse, dataToUpdate);
-          break;
-        case 2: {
-          // For blockchain platforms, pass selectedValues if available
-          let selectedValues: string[] | undefined = undefined;
-          let buttonValue = "";
-          if (Array.isArray(responseToParse)) {
-            selectedValues = responseToParse;
-            buttonValue = "Yes"; // Assume multi-select only happens if user said Yes
-          } else if (
-            typeof responseToParse === "object" &&
-            responseToParse !== null
-          ) {
+        // 2b. Handle Validation Failure
+        if (!isValid) {
+          if (!isSecondAttempt && questionDetail.rePromptMessage) {
+            // --- First Failure: Set up for Re-prompt ---
+            console.warn(
+              `[Session: ${currentSessionId}] First validation failure for Q${currentQuestionIndex}. Setting re-prompt.`,
+            );
+            currentSessionState.repromptedIndex = currentQuestionIndex; // Set the flag
+            needsReprompt = true; // Signal to return re-prompt response later
+          } else {
+            // --- Second Failure (or no re-prompt message) ---
+            console.warn(
+              `[Session: ${currentSessionId}] Second validation failure (or no re-prompt) for Q${currentQuestionIndex}.`,
+            );
             if (
-              "buttonValue" in responseToParse &&
-              typeof responseToParse.buttonValue === "string"
+              currentQuestionIndex === 10 &&
+              questionDetail.validationHint === "email"
             ) {
-              buttonValue = responseToParse.buttonValue;
+              // --- HALT FLOW FOR EMAIL ---
+              console.error(
+                `[Session: ${currentSessionId}] Halting flow: Second email validation failed.`,
+              );
+              // Optionally delete session here, or let it expire
+              // await deleteSession(currentSessionId);
+              const responsePayload: OnboardingResponsePayload = {
+                sessionId: currentSessionId,
+                currentQuestionIndex: currentQuestionIndex,
+                error:
+                  "A valid email address is required. Please refresh to start over.",
+                haltFlow: true, // Signal frontend to stop
+              };
+              // NOTE: We do NOT update the session state here, just return the halt response
+              return NextResponse.json(responsePayload);
+            } else {
+              // --- Proceed with NULL/default for other fields ---
+              console.log(
+                `[Session: ${currentSessionId}] Proceeding with null/default for Q${currentQuestionIndex} after second validation failure.`,
+              );
+              // Allow flow to continue, parsing logic will handle storing null/default.
+              // Ensure reprompt flag is cleared if it was somehow set
+              currentSessionState.repromptedIndex = null;
             }
-            if (
-              "selectedValues" in responseToParse &&
-              Array.isArray(responseToParse.selectedValues)
-            ) {
-              selectedValues = responseToParse.selectedValues;
-            }
-          } else if (typeof responseToParse === "string") {
-            buttonValue = responseToParse;
           }
-          parseBlockchain(
-            { buttonValue, selectedValues },
-            conditionalText,
-            dataToUpdate,
-          );
-          break;
+        } else {
+          // Validation succeeded, clear any lingering reprompt flag
+          currentSessionState.repromptedIndex = null;
         }
-        case 3:
-          parseAI(
-            responseToParse as { buttonValue: string } | null,
-            conditionalText,
-            dataToUpdate,
-          );
-          break;
-        case 4:
-          dataToUpdate.tools_familiarity =
-            (responseToParse as { buttonValue: string })?.buttonValue ?? null;
-          break;
-        case 5:
-          dataToUpdate.experience_level =
-            (responseToParse as { buttonValue: string })?.buttonValue ?? null;
-          break;
-        case 6:
-          dataToUpdate.hackathon =
-            (responseToParse as { buttonValue: string })?.buttonValue ?? null;
-          break;
-        case 7:
-          dataToUpdate.goal =
-            (responseToParse as { buttonValue: string })?.buttonValue ?? null;
-          break;
-        case 8:
-          if (typeof responseToParse === "string") {
-            const portfolio = responseToParse.trim();
-            if (
-              portfolio &&
-              !["none", "no", "n/a"].includes(portfolio.toLowerCase())
+
+        // If we need to re-prompt based on the logic above, do it now *before* parsing/advancing
+        if (needsReprompt) {
+          await updateSession(currentSessionId, currentSessionState); // Save the reprompt flag state
+          const responsePayload: OnboardingResponsePayload = {
+            sessionId: currentSessionId,
+            currentQuestionIndex: currentQuestionIndex, // Stay on same question
+            nextQuestion: questionDetail.text,
+            inputMode: questionDetail.inputMode,
+            options: questionDetail.options ?? [],
+            conditionalTextInputLabel: questionDetail.conditionalTextInputLabel,
+            conditionalTriggerValue: questionDetail.conditionalTriggerValue,
+            isFinalQuestion: isFinalQuestion(currentQuestionIndex),
+            error: questionDetail.rePromptMessage, // Send re-prompt message
+            haltFlow: false,
+          };
+          return NextResponse.json(responsePayload);
+        }
+
+        // 2c. Parse and Store Response (Only if validation passed or it's a non-halting second failure)
+        console.log(
+          `[Session: ${currentSessionId}] Parsing and storing response for Q${currentQuestionIndex}`,
+        );
+        const dataToUpdate = currentSessionState.accumulatedData;
+        const responseToParse = isValid ? rawResponse : null; // Pass null to parsers if validation failed but we proceed
+
+        switch (currentQuestionIndex) {
+          case 0:
+            dataToUpdate.name =
+              typeof responseToParse === "string"
+                ? responseToParse.trim() || null
+                : null;
+            break;
+          case 1:
+            parseLanguages(responseToParse, dataToUpdate);
+            break;
+          case 2: {
+            // For blockchain platforms, pass selectedValues if available
+            let selectedValues: string[] | undefined = undefined;
+            let buttonValue = "";
+            if (Array.isArray(responseToParse)) {
+              selectedValues = responseToParse;
+              buttonValue = "Yes"; // Assume multi-select only happens if user said Yes
+            } else if (
+              typeof responseToParse === "object" &&
+              responseToParse !== null
             ) {
-              dataToUpdate.portfolio = portfolio;
+              if (
+                "buttonValue" in responseToParse &&
+                typeof responseToParse.buttonValue === "string"
+              ) {
+                buttonValue = responseToParse.buttonValue;
+              }
+              if (
+                "selectedValues" in responseToParse &&
+                Array.isArray(responseToParse.selectedValues)
+              ) {
+                selectedValues = responseToParse.selectedValues;
+              }
+            } else if (typeof responseToParse === "string") {
+              buttonValue = responseToParse;
+            }
+            parseBlockchain(
+              { buttonValue, selectedValues },
+              conditionalText,
+              dataToUpdate,
+            );
+            break;
+          }
+          case 3:
+            parseAI(
+              responseToParse as { buttonValue: string } | null,
+              conditionalText,
+              dataToUpdate,
+            );
+            break;
+          case 4:
+            dataToUpdate.tools_familiarity =
+              (responseToParse as { buttonValue: string })?.buttonValue ?? null;
+            break;
+          case 5:
+            dataToUpdate.experience_level =
+              (responseToParse as { buttonValue: string })?.buttonValue ?? null;
+            break;
+          case 6:
+            dataToUpdate.hackathon =
+              (responseToParse as { buttonValue: string })?.buttonValue ?? null;
+            break;
+          case 7:
+            dataToUpdate.goal =
+              (responseToParse as { buttonValue: string })?.buttonValue ?? null;
+            break;
+          case 8:
+            if (typeof responseToParse === "string") {
+              const portfolio = responseToParse.trim();
+              if (
+                portfolio &&
+                !["none", "no", "n/a"].includes(portfolio.toLowerCase())
+              ) {
+                dataToUpdate.portfolio = portfolio;
+              } else {
+                dataToUpdate.portfolio = null;
+              }
             } else {
               dataToUpdate.portfolio = null;
             }
-          } else {
-            dataToUpdate.portfolio = null;
-          }
-          break;
-        case 9:
-          if (typeof responseToParse === "string") {
-            const additionalSkills = responseToParse.trim();
-            if (
-              additionalSkills &&
-              !["none", "no", "n/a"].includes(additionalSkills.toLowerCase())
-            ) {
-              dataToUpdate.additional_skills = additionalSkills;
+            break;
+          case 9:
+            if (typeof responseToParse === "string") {
+              const additionalSkills = responseToParse.trim();
+              if (
+                additionalSkills &&
+                !["none", "no", "n/a"].includes(additionalSkills.toLowerCase())
+              ) {
+                dataToUpdate.additional_skills = additionalSkills;
+              } else {
+                dataToUpdate.additional_skills = null;
+              }
             } else {
               dataToUpdate.additional_skills = null;
             }
-          } else {
-            dataToUpdate.additional_skills = null;
-          }
-          break;
-        case 10: // Email
-          if (isValid && typeof responseToParse === "string") {
-            dataToUpdate.email = responseToParse.trim();
-          } else if (!isValid && isSecondAttempt) {
-            console.error(
-              "Logic Error: Reached email storage after second validation failure!",
-            );
-            // Do not assign anything here; flow should have halted.
-          }
-          // No assignment needed on first failure (reprompt)
-          break;
-        case 11: // GitHub username
-          if (typeof responseToParse === "string") {
-            const githubUsername = responseToParse.trim().toLowerCase();
-            if (
-              githubUsername &&
-              !["none", "no", "n/a"].includes(githubUsername)
-            ) {
-              dataToUpdate.github = githubUsername.replace(/^@/, "");
+            break;
+          case 10: // Email
+            if (isValid && typeof responseToParse === "string") {
+              dataToUpdate.email = responseToParse.trim();
+            } else if (!isValid && isSecondAttempt) {
+              console.error(
+                "Logic Error: Reached email storage after second validation failure!",
+              );
+              // Do not assign anything here; flow should have halted.
+            }
+            // No assignment needed on first failure (reprompt)
+            break;
+          case 11: // GitHub username
+            if (typeof responseToParse === "string") {
+              const githubUsername = responseToParse.trim().toLowerCase();
+              if (
+                githubUsername &&
+                !["none", "no", "n/a"].includes(githubUsername)
+              ) {
+                dataToUpdate.github = githubUsername.replace(/^@/, "");
+              } else {
+                dataToUpdate.github = null;
+              }
             } else {
               dataToUpdate.github = null;
             }
-          } else {
-            dataToUpdate.github = null;
-          }
-          break;
-        case 12: // Telegram handle
-          if (typeof responseToParse === "string") {
-            const telegramHandle = responseToParse.trim().toLowerCase();
-            if (
-              telegramHandle &&
-              !["none", "no", "n/a"].includes(telegramHandle)
-            ) {
-              dataToUpdate.telegram = normalizeHandle(telegramHandle);
+            break;
+          case 12: // Telegram handle
+            if (typeof responseToParse === "string") {
+              const telegramHandle = responseToParse.trim().toLowerCase();
+              if (
+                telegramHandle &&
+                !["none", "no", "n/a"].includes(telegramHandle)
+              ) {
+                dataToUpdate.telegram = normalizeHandle(telegramHandle);
+              } else {
+                dataToUpdate.telegram = null;
+              }
             } else {
               dataToUpdate.telegram = null;
             }
-          } else {
-            dataToUpdate.telegram = null;
-          }
-          break;
-        case 13: // X/Twitter handle
-          if (typeof responseToParse === "string") {
-            const xHandle = responseToParse.trim().toLowerCase();
-            if (xHandle && !["none", "no", "n/a"].includes(xHandle)) {
-              dataToUpdate.x = normalizeHandle(xHandle);
+            break;
+          case 13: // X/Twitter handle
+            if (typeof responseToParse === "string") {
+              const xHandle = responseToParse.trim().toLowerCase();
+              if (xHandle && !["none", "no", "n/a"].includes(xHandle)) {
+                dataToUpdate.x = normalizeHandle(xHandle);
+              } else {
+                dataToUpdate.x = null;
+              }
             } else {
               dataToUpdate.x = null;
             }
-          } else {
-            dataToUpdate.x = null;
-          }
-          break;
-        default:
-          console.warn(
-            `[Session: ${currentSessionId}] No parsing/storing logic defined for question index ${currentQuestionIndex}`,
-          );
-      }
+            break;
+          default:
+            console.warn(
+              `[Session: ${currentSessionId}] No parsing/storing logic defined for question index ${currentQuestionIndex}`,
+            );
+        }
 
-      // 2d. Advance Question Index
-      currentSessionState.questionIndex++;
-      console.log(
-        `[Session: ${currentSessionId}] Advancing to index ${currentSessionState.questionIndex}`,
-      );
+        // 2d. Advance Question Index
+        currentSessionState.questionIndex++;
+        console.log(
+          `[Session: ${currentSessionId}] Advancing to index ${currentSessionState.questionIndex}`,
+        );
+      }
     } // End of processing block
 
     // --- 3. Check for Completion ---

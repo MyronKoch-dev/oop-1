@@ -328,7 +328,7 @@ describe("/api/onboarding/message API Route", () => {
     console.log("[Test Step 3] Answering Q1...");
     request = createMockRequest({
       sessionId: MOCK_SESSION_ID,
-      response: ['JavaScript', 'Python'],
+      response: ["JavaScript", "Python"],
     });
     response = await POST(request);
     body = await response.json();
