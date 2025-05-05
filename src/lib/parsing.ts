@@ -15,9 +15,9 @@ export function parseLanguages(
 ): void {
   // Reset fields
   currentData.languages = [];
-  currentData.other_languages = null;
 
   let selectedLanguages: string[] = [];
+  // Only accept valid language values from the questionnaire
   const validLanguages = [
     "Rust",
     "JavaScript",
@@ -26,44 +26,26 @@ export function parseLanguages(
     "Solidity",
     "TypeScript",
     "Java",
-    "C#",
-    "None",
-  ]; // Expected button values
-
+    "Others not listed",
+    "Not a programmer",
+  ];
   if (Array.isArray(rawResponse)) {
-    // If multiple buttons selected (frontend sends array of values)
     selectedLanguages = rawResponse;
   } else if (typeof rawResponse === "object" && rawResponse?.buttonValue) {
-    // If single button selected
     selectedLanguages.push(rawResponse.buttonValue);
   } else if (typeof rawResponse === "string") {
-    // If string value (less common)
     selectedLanguages.push(rawResponse);
-  } else if (rawResponse === null || rawResponse === undefined) {
-    // No primary selection made
-    console.log("Parsing Languages: No primary language selection received.");
-  } else {
-    // Unexpected rawResponse type - log warning
-    console.warn(
-      "Parsing Languages: Received unexpected rawResponse type:",
-      rawResponse,
-    );
   }
-
-  // Filter selected languages against the valid list from buttons
-  currentData.languages = selectedLanguages.filter((lang) =>
-    validLanguages.includes(lang),
-  );
-
-  // Ensure languages array is null if empty, for consistency
-  if (currentData.languages.length === 0) {
-    console.log("Parsing Languages: No standard languages selected.");
-    // currentData.languages = null; // Optional: Set to null instead of [] if preferred
+  // Filter to only valid values
+  const filtered = selectedLanguages.filter((lang) => validLanguages.includes(lang));
+  if (filtered.length !== selectedLanguages.length) {
+    console.warn("[parseLanguages] Ignored unexpected values:", selectedLanguages.filter((lang) => !validLanguages.includes(lang)));
   }
-
-  console.log("Parsed Languages Result:", {
-    languages: currentData.languages,
-  });
+  currentData.languages = filtered;
+  // Always store as array (empty if none selected)
+  if (!currentData.languages) currentData.languages = [];
+  // Debug log
+  console.log("[parseLanguages] Storing languages:", currentData.languages);
 }
 
 /**
@@ -82,23 +64,24 @@ export function parseBlockchain(
 ): void {
   // Reset fields
   currentData.blockchain_experience = null;
-  currentData.blockchain_platforms = null;
+  currentData.blockchain_platforms = [];
 
   if (rawResponse?.buttonValue) {
     currentData.blockchain_experience = rawResponse.buttonValue;
-    if (
-      rawResponse.buttonValue === "Yes" &&
-      Array.isArray(rawResponse.selectedValues)
-    ) {
+    if (Array.isArray(rawResponse.selectedValues)) {
       currentData.blockchain_platforms = rawResponse.selectedValues;
+    } else if (typeof rawResponse.buttonValue === "string") {
+      // If only one selected, store as array
+      currentData.blockchain_platforms = [rawResponse.buttonValue];
     }
+  } else if (Array.isArray(rawResponse)) {
+    currentData.blockchain_platforms = rawResponse;
   } else {
-    console.log("Parsing Blockchain: No valid button value received.");
+    currentData.blockchain_platforms = [];
   }
-  console.log("Parsed Blockchain Result:", {
-    exp: currentData.blockchain_experience,
-    plats: currentData.blockchain_platforms,
-  });
+  // Debug log
+  console.log("[parseBlockchain] Storing blockchain_experience:", currentData.blockchain_experience);
+  console.log("[parseBlockchain] Storing blockchain_platforms:", currentData.blockchain_platforms);
 }
 
 /**

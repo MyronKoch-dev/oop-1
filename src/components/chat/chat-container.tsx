@@ -734,7 +734,6 @@ export function ChatContainer({
     )
       return;
 
-    // Special handling for AI/ML (index 7): merge conditionalText if 'Other' is selected and custom text is provided
     let selections = multiSelectAnswers[currentQuestionIndex];
     if (
       currentQuestionIndex === 7 &&
@@ -766,15 +765,17 @@ export function ChatContainer({
     setInputDisabled(true);
     try {
       let payload;
-      if (currentQuestionIndex === 1) {
+      if (currentQuestionIndex === 2) {
         // Languages: send as array
         payload = { sessionId, response: selections };
-      } else if (currentQuestionIndex === 2) {
+        console.log("[PATCH] Sending languages payload:", payload);
+      } else if (currentQuestionIndex === 3) {
         // Blockchain platforms: send as { selectedValues, buttonValue }
         payload = {
           sessionId,
           response: { selectedValues: selections, buttonValue: "Yes" },
         };
+        console.log("[PATCH] Sending blockchain platforms payload:", payload);
       } else if (currentQuestionIndex === 6) {
         // Hackathon: send as { selectedValues }
         payload = { sessionId, response: { selectedValues: selections } };
