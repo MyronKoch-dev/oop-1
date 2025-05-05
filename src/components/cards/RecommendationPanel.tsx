@@ -19,7 +19,7 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
     <h2>
       🎉 <b>Congratulations!</b> 🎉
     </h2>
-    <p>Based on your responses, we recommend the:</p>
+    <p>Based on your responses, we recommend the following paths:</p>
     <p className={styles.path}>
       🌟 <span className={styles.highlight}>{pathName}</span> 🌟
     </p>
@@ -45,7 +45,7 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
     )}
 
     <p className={styles.thanks}>
-      Thank you for completing the onboarding process!
+      Thank you for completing the onboarding inquiry process! We hope this gives you a bit of guidance toward areas which you'll have the quickest success in. We look forward to hearing about what you build with Andromeda!
     </p>
     <h3>WELCOME TO ANDROMEDA 🎉</h3>
   </div>
