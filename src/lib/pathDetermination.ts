@@ -73,7 +73,7 @@ export function determinePath(data: OnboardingData): PathResult {
   const isHackerCandidate =
     (data.tools_familiarity === "Some experience" ||
       data.tools_familiarity === "Very familiar") && // Corrected typo from "Very Familiar" to "Very familiar"
-    (data.hackathon === "Winner" || data.hackathon === "Participant") &&
+    arrayIncludesAny(data.hackathon, ["Winner", "Web2", "Web3"]) &&
     data.goal === "Earn bounties";
 
   if (isHackerCandidate) {
