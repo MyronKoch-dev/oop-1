@@ -111,15 +111,6 @@ export async function getSession(
       console.log(
         `[Session: ${sessionId}] Session data retrieved successfully.`,
       );
-      // Optional: Add manual timestamp check if paranoia about TTL is high, but generally unnecessary
-      // const now = Date.now();
-      // if (now - data.lastInteractionTimestamp > SESSION_TTL_SECONDS * 1000) {
-      //     console.warn(`[Session: ${sessionId}] Session found but expired based on timestamp. Deleting.`);
-      //     await deleteSession(sessionId); // Clean up stale data if found
-      //     return null;
-      // }
-      // Note: Parsing is implicitly handled by <SessionState> type argument in .get if using @upstash/redis v1+
-      // If it returns a string, manual JSON.parse would be needed.
       return data;
     } else {
       console.log(

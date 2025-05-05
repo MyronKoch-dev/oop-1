@@ -172,6 +172,3 @@ export async function saveOnboardingResponse(
 }
 
 // Add other DB functions here if needed in the future (e.g., getResponseByEmail)
-// export async function getResponseByEmail(email: string): Promise<OnboardingResponseForDB | null> {
-//    // Implementation...
-// }

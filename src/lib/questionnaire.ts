@@ -242,19 +242,17 @@ export function isFinalQuestion(index: number): boolean {
 }
 
 // Lightweight reaction messages to show between questions for a more conversational flow
-export const reactionMessages: string[] = [
-  "👋 Let's get started!",
-  "🙌 Awesome, thanks!",
-  "🚀 Great choices!",
-  "🤖 AI is fascinating, right?",
-  "🔄 Switching gears...",
-  "💡 Good to know!",
-  "🏆 Hackathons are fun!",
-  "🎯 Got it!",
-  "🌐 Always cool to see projects!",
-  "📝 Noted!",
-  "📧 Thanks, we'll keep in touch!",
-  "🐙 Love seeing GitHub users!",
-  "✈️ Telegram, got it!",
-  "🐦 X/Twitter, awesome!",
-];
+// export const reactionMessages: string[] = [
+//   "👋 Let's get started!",
+//   "🙌 Awesome, thanks!",
+//   "🚀 Great choices!",
+//   "🤖 AI is fascinating, right?",
+//   "🔄 Switching gears...",
+//   "🏆 Hackathons are fun!",
+//   "👍 Good to know!",
+//   "🌟 Perfect! Moving on...",
+//   "📊 Almost there!",
+//   "📧 Excellent!"
+// ];
+
+// Helper function to generate a recommendation path based on accumulated data

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   Book,
@@ -209,44 +209,45 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
+  // AGENT BOTS - COMMENTED OUT FOR FUTURE USE (SOON BADGE FEATURE)
   // State for tracking which agent bot is focused via keyboard
-  const [focusedAgentIndex, setFocusedAgentIndex] = useState<number | null>(
-    null,
-  );
+  // const [focusedAgentIndex, setFocusedAgentIndex] = useState<number | null>(
+  //   null,
+  // );
 
-  // Handle keyboard navigation for agent bots
-  const handleAgentKeyDown = (e: React.KeyboardEvent) => {
-    switch (e.key) {
-      case "ArrowDown":
-        e.preventDefault();
-        setFocusedAgentIndex((prev) =>
-          prev === null || prev >= agentBots.length - 1 ? 0 : prev + 1,
-        );
-        break;
-      case "ArrowUp":
-        e.preventDefault();
-        setFocusedAgentIndex((prev) =>
-          prev === null || prev <= 0 ? agentBots.length - 1 : prev - 1,
-        );
-        break;
-      case "Tab":
-        // Reset focus when tabbing away
-        setFocusedAgentIndex(null);
-        break;
-      default:
-        break;
-    }
-  };
+  // // Handle keyboard navigation for agent bots
+  // const handleAgentKeyDown = (e: React.KeyboardEvent) => {
+  //   switch (e.key) {
+  //     case "ArrowDown":
+  //       e.preventDefault();
+  //       setFocusedAgentIndex((prev) =>
+  //         prev === null || prev >= agentBots.length - 1 ? 0 : prev + 1,
+  //       );
+  //       break;
+  //     case "ArrowUp":
+  //       e.preventDefault();
+  //       setFocusedAgentIndex((prev) =>
+  //         prev === null || prev <= 0 ? agentBots.length - 1 : prev - 1,
+  //       );
+  //       break;
+  //     case "Tab":
+  //       // Reset focus when tabbing away
+  //       setFocusedAgentIndex(null);
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
 
-  // Set up refs for agent bot elements
-  const agentRefs = useRef<Array<HTMLDivElement | null>>([]);
+  // // Set up refs for agent bot elements
+  // const agentRefs = useRef<Array<HTMLDivElement | null>>([]);
 
-  // Focus the currently selected agent bot
-  useEffect(() => {
-    if (focusedAgentIndex !== null && agentRefs.current[focusedAgentIndex]) {
-      agentRefs.current[focusedAgentIndex]?.focus();
-    }
-  }, [focusedAgentIndex]);
+  // // Focus the currently selected agent bot
+  // useEffect(() => {
+  //   if (focusedAgentIndex !== null && agentRefs.current[focusedAgentIndex]) {
+  //     agentRefs.current[focusedAgentIndex]?.focus();
+  //   }
+  // }, [focusedAgentIndex]);
 
   const [showPath, setShowPath] = useState(false);
   const [showAgent, setShowAgent] = useState(false);
@@ -508,16 +509,11 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               {agentBots.map((item, index) => (
                 <div
                   key={`agent-${index}`}
-                  className={`relative block w-full inline-flex items-center justify-start gap-2 px-4 py-2 bg-[#202020] text-gray-500 rounded-md cursor-not-allowed opacity-60 ${focusedAgentIndex === index ? "ring-2 ring-blue-500" : ""}`}
+                  className={`relative block w-full inline-flex items-center justify-start gap-2 px-4 py-2 bg-[#202020] text-gray-500 rounded-md cursor-not-allowed opacity-60`}
                   aria-label={`${item.label} - coming soon`}
                   role="button"
                   aria-disabled="true"
                   tabIndex={0}
-                  ref={(el) => {
-                    agentRefs.current[index] = el;
-                  }}
-                  onKeyDown={(e) => handleAgentKeyDown(e)}
-                  onFocus={() => setFocusedAgentIndex(index)}
                 >
                   {item.icon}
                   <span>{item.label}</span>
