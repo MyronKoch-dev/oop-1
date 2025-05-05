@@ -468,7 +468,7 @@ describe("/api/onboarding/message API Route", () => {
     expect(body.isFinalQuestion).toBe(false);
     expect(currentSessionState.questionIndex).toBe(8); // State advanced
     expect(currentSessionState.accumulatedData.goal).toBe(
-      "Share ideas for new features",
+      ["Share ideas for new features"],
     );
 
     // --- Simulation Step 10: Answer Q8 (Portfolio) ---
@@ -649,7 +649,7 @@ describe("/api/onboarding/message API Route", () => {
         name: "Visionary User",
         email: "visionary@example.com",
         experience_level: "Intermediate", // One of the criteria for Visionary Path
-        goal: "Share ideas for new features", // Main criteria for Visionary Path
+        goal: ["Share ideas for new features"], // Main criteria for Visionary Path
       },
       repromptedIndex: null,
       lastInteractionTimestamp: Date.now(),
@@ -682,7 +682,7 @@ describe("/api/onboarding/message API Route", () => {
     expect(mockDeterminePath).toHaveBeenCalledWith(
       expect.objectContaining({
         experience_level: "Intermediate",
-        goal: "Share ideas for new features",
+        goal: ["Share ideas for new features"],
       }),
     );
     expect(body.finalResult?.recommendedPath).toBe("Visionary Path");

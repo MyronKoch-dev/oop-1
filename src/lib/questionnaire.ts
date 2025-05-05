@@ -23,17 +23,29 @@ export interface QuestionDetail {
 
 // Define all questions based on Spec FR1.4
 const questions: QuestionDetail[] = [
-  // Index 0
+  // Index 0 (Name)
   {
     index: 0,
     text: "Hey there! What should I call you?",
     inputMode: "text",
     isOptional: false,
   },
-  // Index 1
+  // Index 1 (Technical expertise, moved up)
   {
     index: 1,
-    text: "Nice to meet you, {name}! Which programming languages do you feel most at home with? (Pick as many as you like, or 'None' if you're just starting out.)",
+    text: "If you had to rate your technical expertise, where would you put yourself?",
+    inputMode: "buttons",
+    options: [
+      { label: "1. Beginner", value: "Beginner" },
+      { label: "2. Intermediate", value: "Intermediate" },
+      { label: "3. Advanced", value: "Advanced" },
+    ],
+    isOptional: false,
+  },
+  // Index 2 (Programming Languages)
+  {
+    index: 2,
+    text: "Nice to meet you, {name}! If you are a programmer, which programming languages do you feel most at home with? (Pick as many as you like, or select 'I'm not a programmer.' if that's you.)",
     inputMode: "buttons",
     options: [
       { label: "1. Rust", value: "Rust" },
@@ -43,47 +55,47 @@ const questions: QuestionDetail[] = [
       { label: "5. Solidity", value: "Solidity" },
       { label: "6. TypeScript", value: "TypeScript" },
       { label: "7. Java", value: "Java" },
-      { label: "8. C#", value: "C#" },
-      { label: "9. None of these / No experience yet", value: "None" },
+      { label: "8. Others not listed", value: "Others not listed" },
+      { label: "9. I'm not a programmer.", value: "Not a programmer" },
     ],
     isOptional: false,
     validationHint: "languages",
     isMultiSelect: true,
   },
-  // Index 2
+  // Index 3
   {
-    index: 2,
+    index: 3,
     text: "How about blockchains? Have you tinkered with any of these platforms before? (Select all that apply, or 'None')",
     inputMode: "buttons",
     options: [
       { label: "1. Bitcoin", value: "Bitcoin" },
-      { label: "2. Ethereum", value: "Ethereum" },
+      { label: "2. Ethereum/EVMs", value: "Ethereum/EVMs" },
       { label: "3. Solana", value: "Solana" },
       { label: "4. SEI", value: "SEI" },
       { label: "5. Cosmos SDK chains", value: "Cosmos SDK chains" },
       { label: "6. XRP", value: "XRP" },
       { label: "7. BNB", value: "BNB" },
-      { label: "8. Polygon", value: "Polygon" },
+      { label: "8. Others not listed", value: "Others not listed" },
       { label: "9. None of these / No experience yet", value: "None" },
     ],
     isOptional: false,
     validationHint: "blockchain_platforms",
     isMultiSelect: true,
   },
-  // Index 3
+  // Index 4
   {
-    index: 3,
+    index: 4,
     text: "And what about AI or machine learning? Any hands-on experience beyond just chatting with ChatGPT? (Select all that fit, or 'Other' to specify)",
     inputMode: "buttons",
     options: [
       { label: "1. Natural Language Processing (NLP)", value: "NLP" },
       { label: "2. Computer Vision", value: "Computer Vision" },
-      { label: "3. Machine Learning (General)", value: "Machine Learning" },
-      { label: "4. Deep Learning", value: "Deep Learning" },
-      { label: "5. Reinforcement Learning", value: "Reinforcement Learning" },
-      { label: "6. Data Science / Analytics", value: "Data Science" },
-      { label: "7. MLOps / Model Deployment", value: "MLOps" },
-      { label: "8. Generative AI", value: "Generative AI" },
+      { label: "3. Smart Contract AI/Automation", value: "Smart Contract AI" },
+      { label: "4. Blockchain Data Science / Analytics", value: "Blockchain Analytics" },
+      { label: "5. Generative AI (NFTs, Art, Music)", value: "Generative AI" },
+      { label: "6. Decentralized AI / Federated Learning", value: "Decentralized AI" },
+      { label: "7. MLOps / Model Deployment (on-chain/off-chain)", value: "MLOps" },
+      { label: "8. Crypto Trading Bots / DeFi Automation", value: "DeFi Automation" },
       { label: "9. Other", value: "Other" },
     ],
     conditionalTriggerValue: "Other",
@@ -92,9 +104,9 @@ const questions: QuestionDetail[] = [
     isOptional: false,
     isMultiSelect: true,
   },
-  // Index 4
+  // Index 5
   {
-    index: 4,
+    index: 5,
     text: "Switching gears a bit—how familiar are you with Andromeda's tools so far?",
     inputMode: "buttons",
     options: [
@@ -102,18 +114,6 @@ const questions: QuestionDetail[] = [
       { label: "2. Some experience", value: "Some experience" },
       { label: "3. Beginner", value: "Beginner" },
       { label: "4. No idea", value: "No idea" },
-    ],
-    isOptional: false,
-  },
-  // Index 5
-  {
-    index: 5,
-    text: "If you had to rate your technical expertise, where would you put yourself?",
-    inputMode: "buttons",
-    options: [
-      { label: "1. Beginner", value: "Beginner" },
-      { label: "2. Intermediate", value: "Intermediate" },
-      { label: "3. Advanced", value: "Advanced" },
     ],
     isOptional: false,
   },
@@ -156,6 +156,7 @@ const questions: QuestionDetail[] = [
       // { label: "🤔 Not sure yet—help me decide!", value: "Not sure" },
     ],
     isOptional: false,
+    isMultiSelect: true,
   },
   // Index 8
   {

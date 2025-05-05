@@ -59,7 +59,7 @@ export function determinePath(data: OnboardingData): PathResult {
         (data.tools_familiarity === "Very familiar" ||
             data.tools_familiarity === "Some experience") &&
         data.experience_level === "Advanced" &&
-        data.goal === "Build apps/dApps";
+        data.goal?.includes("Build apps/dApps");
 
     if (isContractorCandidate) {
         console.log("Path determined: Contractor");
@@ -74,7 +74,7 @@ export function determinePath(data: OnboardingData): PathResult {
         (data.tools_familiarity === "Some experience" ||
             data.tools_familiarity === "Very familiar") && // Corrected typo from "Very Familiar" to "Very familiar"
         arrayIncludesAny(data.hackathon, ["Winner", "Web2", "Web3"]) &&
-        data.goal === "Earn bounties";
+        data.goal?.includes("Earn bounties");
 
     if (isHackerCandidate) {
         console.log("Path determined: Hacker");
@@ -86,7 +86,7 @@ export function determinePath(data: OnboardingData): PathResult {
 
     // App Suggester Rule Check (now Visionary)
     const isVisionaryPathCandidate =
-        data.goal === "Share ideas for new features" &&
+        data.goal?.includes("Share ideas for new features") &&
         (data.experience_level === "Beginner" ||
             data.experience_level === "Intermediate");
 
@@ -100,7 +100,7 @@ export function determinePath(data: OnboardingData): PathResult {
 
     // AI Experienced Rule Check
     const isAIExperiencedCandidate =
-        data.ai_experience === "Yes" && data.goal === "Work on AI projects";
+        data.ai_experience === "Yes" && data.goal?.includes("Work on AI projects");
 
     if (isAIExperiencedCandidate) {
         console.log("Path determined: AI Initiatives");
@@ -113,7 +113,7 @@ export function determinePath(data: OnboardingData): PathResult {
     // Ambassador Rule Check
     const isAmbassadorCandidate =
         data.blockchain_experience === "Yes" && // Check the button value
-        data.goal === "Promote blockchain/Andromeda";
+        data.goal?.includes("Promote blockchain/Andromeda");
 
     if (isAmbassadorCandidate) {
         console.log("Path determined: Ambassador");
@@ -125,7 +125,7 @@ export function determinePath(data: OnboardingData): PathResult {
 
     // Beginner Rule Check (now Explorer) (Acts as a prioritized fallback)
     const isExplorerPathCandidate =
-        data.goal === "Learn Web3 basics" || data.experience_level === "Beginner";
+        data.goal?.includes("Learn Web3 basics") || data.experience_level === "Beginner";
 
     if (isExplorerPathCandidate) {
         console.log("Path determined: Explorer");
