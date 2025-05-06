@@ -1,7 +1,5 @@
 # Andromeda Onboarding Chatbot
 
-**Last Updated: 2024-06-10**
-
 [![Vercel Deploy Button](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=YOUR_GITHUB_REPO_URL_HERE&env=OPENAI_API_KEY,GROQ_API_KEY,SUPABASE_URL,SUPABASE_ANON_KEY,SUPABASE_SERVICE_ROLE_KEY,KV_URL,KV_REST_API_URL,KV_REST_API_TOKEN,PATH_URL_CONTRACTOR,PATH_URL_HACKER,PATH_URL_VISIONARY_PATH,PATH_URL_AI_NAVIGATOR,PATH_URL_AMBASSADOR,PATH_URL_EXPLORER_PATH)
 
 **A modular, efficient, and user-friendly chatbot designed to onboard new users into the Andromeda ecosystem. It intelligently guides users through a questionnaire, determines the most suitable path using a weighted scoring system and hard requirements, and persists the data.**
