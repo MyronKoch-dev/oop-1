@@ -301,6 +301,7 @@ export function ChatMessages({
                         <RecommendationPanel
                           pathName={message.finalResult?.recommendedPath}
                           secondPathName={message.finalResult?.secondRecommendedPath}
+                          userName={userName}
                           onGetStarted={() => {
                             console.log(
                               `Opening primary path URL: ${message.finalResult?.recommendedPathUrl}`

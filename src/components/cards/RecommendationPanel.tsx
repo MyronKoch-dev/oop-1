@@ -7,6 +7,7 @@ interface RecommendationPanelProps {
   secondPathName?: string; // Second recommended path
   onGetStarted: () => void; // function to call when button is clicked
   onSecondPathSelected?: () => void; // function to call when second path is selected
+  userName?: string; // Add user's name for personalization
 }
 
 const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
@@ -14,12 +15,13 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
   secondPathName,
   onGetStarted,
   onSecondPathSelected,
+  userName,
 }) => (
   <div className={styles.panel}>
     <h2>
       🎉 <b>Congratulations!</b> 🎉
     </h2>
-    <p>Based on your responses, we recommend the following paths:</p>
+    <p>Thank you so much for your interest{userName ? `, ${userName}` : ''}! Below you&apos;ll find our recommendation and hopefully we&apos;ll see you in the community chats and online.</p>
     <p className={styles.path}>
       🌟 <span className={styles.highlight}>{pathName}</span> 🌟
     </p>
@@ -45,7 +47,7 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
     )}
 
     <p className={styles.thanks}>
-      Thank you for completing the onboarding inquiry process! We hope this gives you a bit of guidance toward areas which you can have the quickest success. We look forward to hearing about what you build with Andromeda!
+      We hope this gives you a bit of guidance toward areas where you can have the quickest success. We look forward to hearing about what you build with Andromeda!
     </p>
     <h3>WELCOME TO ANDROMEDA 🎉</h3>
   </div>

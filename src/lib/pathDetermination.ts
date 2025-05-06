@@ -33,8 +33,8 @@ function getPathUrl(pathKey: string): string {
         "Contractor": "/contractors",
         "Visionary": "/visionaries",
         "AI Navigator": "/ai-navigators",
-        "Ambassador": "/ambassadors",
-        "Explorer": "/explorers"
+        "Ambassador": "/ambassador",
+        "Explorer": "/explorer"
     };
 
     // Use the mapped route if available, otherwise fall back to a slugified version
