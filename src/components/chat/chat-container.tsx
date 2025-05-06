@@ -1161,7 +1161,28 @@ export function ChatContainer({
     setIsProcessing(false);
     setHighlightedButtonIndex(null); // Reset keyboard navigation
 
-  }, [currentQuestionIndex, isProcessing, messages, questionHistory.messages]);
+    // Notify the server about the navigation back to synchronize state
+    if (sessionId) {
+      fetch("/api/onboarding/back", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          sessionId,
+          targetQuestionIndex: prevIndex
+        }),
+      })
+        .then(response => {
+          if (!response.ok) {
+            console.error("Failed to synchronize back navigation with server:", response.statusText);
+          }
+        })
+        .catch(error => {
+          console.error("Error synchronizing back navigation:", error);
+        });
+    }
+  }, [currentQuestionIndex, isProcessing, messages, questionHistory.messages, sessionId]);
 
   // Add a handler to reset all chat state and start a new session
   const handleRestart = async () => {
