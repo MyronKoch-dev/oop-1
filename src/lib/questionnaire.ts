@@ -101,14 +101,11 @@ const questions: QuestionDetail[] = [
         value: "Decentralized AI",
       },
       {
-        label: "7. MLOps / Model Deployment (on-chain/off-chain)",
-        value: "MLOps",
-      },
-      {
-        label: "8. Crypto Trading Bots / DeFi Automation",
+        label: "7. Crypto Trading Bots / DeFi Automation",
         value: "DeFi Automation",
       },
-      { label: "9. Other", value: "Other" },
+      { label: "8. Other", value: "Other" },
+      { label: "9. No AI/ML experience yet", value: "No" },
     ],
     conditionalTriggerValue: "Other",
     conditionalTextInputLabel:
@@ -149,22 +146,22 @@ const questions: QuestionDetail[] = [
     text: "Based on what you've shared so far, {name}, here are some paths where people like you often find success. Which of these would you like to focus on, or are you most curious about? (Pick what feels right—you can always explore more later!)",
     inputMode: "buttons",
     options: [
-      { label: "🚀 Building apps/dApps", value: "Build apps/dApps" },
-      { label: "💰 Earning bounties", value: "Earn bounties" },
+      { label: "1. 🚀 Building apps/dApps", value: "Build apps/dApps" },
+      { label: "2. 💰 Earning bounties", value: "Earn bounties" },
       {
-        label: "💡 Sharing ideas for new features",
+        label: "3. 💡 Sharing ideas for new features",
         value: "Share ideas for new features",
       },
-      { label: "🤖 Working on AI projects", value: "Work on AI projects" },
+      { label: "4. 🤖 Working on AI projects", value: "Work on AI projects" },
       {
-        label: "📢 Promoting blockchain/Andromeda",
+        label: "5. 📢 Promoting blockchain/Andromeda",
         value: "Promote blockchain/Andromeda",
       },
       {
-        label: "📚 Learning about Andromeda",
+        label: "6. 📚 Learning about Andromeda",
         value: "Learn about Andromeda",
       },
-      // { label: "🤔 Not sure yet—help me decide!", value: "Not sure" },
+      { label: "7. 🤔 I'm still not sure", value: "Not sure yet" },
     ],
     isOptional: false,
     isMultiSelect: true,
