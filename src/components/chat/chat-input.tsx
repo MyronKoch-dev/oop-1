@@ -78,10 +78,29 @@ export function ChatInput({
 
   // Effect to focus main input when appropriate
   useEffect(() => {
+    console.log("Input focus effect", { disabled, showConditionalInput, inputMode });
     if (!disabled && !showConditionalInput && inputRef.current) {
-      inputRef.current.focus();
+      // Short delay to ensure the element is fully rendered and state is settled
+      setTimeout(() => {
+        if (inputRef.current) {
+          console.log("Focusing input field");
+          inputRef.current.focus();
+        }
+      }, 100);
     }
   }, [disabled, inputMode, showConditionalInput]);
+
+  // Add an explicit effect that runs when disabled changes from true to false
+  useEffect(() => {
+    if (!disabled && inputRef.current && !showConditionalInput) {
+      console.log("disabled changed to false, focusing input");
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      }, 150);
+    }
+  }, [disabled, showConditionalInput]);
 
   // Update the useEffect for conditional text focus
   useEffect(() => {
@@ -146,6 +165,14 @@ export function ChatInput({
       currentQuestionIndex === 12 ||
       currentQuestionIndex === 13;
 
+    console.log("handleSendMessage called", { disabled, message, isOptionalField, currentQuestionIndex });
+
+    // First check if we have callbacks to send the message
+    if (!onSendMessage && !onSendText) {
+      console.error("Cannot send message - no callback handlers available");
+      return;
+    }
+
     // Only send 'none' if the field is truly empty, otherwise send the actual value
     if (!disabled && (message.trim() || isOptionalField)) {
       const valueToSend = message.trim()
@@ -153,19 +180,40 @@ export function ChatInput({
         : isOptionalField
           ? "none"
           : "";
+      console.log("Sending message", { valueToSend, onSendMessage: !!onSendMessage, onSendText: !!onSendText });
       if (onSendMessage) {
         onSendMessage(valueToSend);
       } else {
         onSendText(valueToSend);
       }
       setMessage("");
+    } else {
+      console.log("Message not sent due to conditions not met");
     }
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    // Calculate isOptionalField here to match handleSendMessage
+    const isOptionalField =
+      currentQuestionIndex === 2 ||
+      currentQuestionIndex === 3 ||
+      currentQuestionIndex === 4 ||
+      currentQuestionIndex === 12 ||
+      currentQuestionIndex === 13;
+
+    console.log("Enter key pressed", { disabled, message, inputMode, currentQuestionIndex, onSendMessage: !!onSendMessage, onSendText: !!onSendText });
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      handleSendMessage();
+      console.log("Enter key handling", { willSend: !disabled && (message.trim() || isOptionalField) });
+
+      // Check if callbacks exist before attempting to send
+      if (!disabled && (message.trim() || isOptionalField)) {
+        if (typeof onSendMessage === 'function' || typeof onSendText === 'function') {
+          handleSendMessage();
+        } else {
+          console.error("No send handlers available for Enter key press");
+        }
+      }
     }
   };
 

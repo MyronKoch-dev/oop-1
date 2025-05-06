@@ -85,6 +85,9 @@ export function ChatContainer({
   }>({});
   const [userName, setUserName] = useState<string>("");
 
+  // Add a key state to force remount of the ChatInput component
+  const [chatInputKey, setChatInputKey] = useState<string>(`input-${Date.now()}`);
+
   // Add history state to track previous answers
   const [questionHistory, setQuestionHistory] = useState<{
     messages: ChatMessage[][];
@@ -151,14 +154,19 @@ export function ChatContainer({
 
   // Start the conversation by fetching the first question
   const startConversation = async () => {
+    console.log("startConversation called", { messagesLength: messages.length });
     // Check if we already have more than just the welcome message
     // This prevents duplicate initialization
     if (messages.length > 1) {
+      console.log("Skipping startConversation - messages already exist");
       return;
     }
 
     setIsProcessing(true);
+    setInputDisabled(true); // Ensure input is disabled during API call
+
     try {
+      console.log("Fetching first question from API");
       const response = await fetch("/api/onboarding/message", {
         method: "POST",
         headers: {
@@ -174,7 +182,17 @@ export function ChatContainer({
       }
 
       const data: OnboardingResponsePayload = await response.json();
+      console.log("Received API response:", {
+        sessionId: data.sessionId,
+        nextQuestion: !!data.nextQuestion,
+        inputMode: data.inputMode
+      });
+
       setSessionId(data.sessionId);
+      // Save sessionId to localStorage
+      if (data.sessionId) {
+        localStorage.setItem("onboarding-session-id", data.sessionId);
+      }
       setCurrentQuestionIndex(data.currentQuestionIndex);
 
       // Add the first question as a message
@@ -191,7 +209,9 @@ export function ChatContainer({
       }
 
       // Set input mode
-      setInputMode(data.inputMode || "text");
+      const mode = data.inputMode || "text";
+      console.log("Setting input mode to:", mode);
+      setInputMode(mode);
 
       // Set conditional text properties if applicable
       if (data.conditionalTextInputLabel) {
@@ -206,16 +226,27 @@ export function ChatContainer({
           : "Failed to start the conversation. Please try again.";
       console.error("Error starting conversation:", errorMessage);
     } finally {
+      console.log("startConversation complete, clearing isProcessing flag");
       setIsProcessing(false);
+
+      // Ensure input is enabled after a short delay
+      setTimeout(() => {
+        console.log("Re-enabling input after API call");
+        setInputDisabled(false);
+      }, 300);
     }
   };
 
   // Initialize chat with the initial message
   const initializeChat = () => {
+    console.log("initializeChat called");
     // Check if there's an existing sessionId in localStorage
     const existingSessionId = localStorage.getItem("onboarding-session-id");
     if (existingSessionId) {
+      console.log("Found existing sessionId in localStorage:", existingSessionId);
       setSessionId(existingSessionId);
+    } else {
+      console.log("No existing sessionId found in localStorage");
     }
 
     // Add the initial welcome message
@@ -228,6 +259,7 @@ export function ChatContainer({
     ]);
 
     // Start the conversation (first question)
+    console.log("Starting conversation");
     startConversation();
   };
 
@@ -237,7 +269,11 @@ export function ChatContainer({
   };
 
   const handleSendMessage = async (message: string) => {
-    if (isProcessing || !sessionId) return;
+    console.log("handleSendMessage called", { isProcessing, sessionId, message });
+    if (isProcessing || !sessionId) {
+      console.log("Not processing message due to:", { isProcessing, noSessionId: !sessionId });
+      return;
+    }
 
     // If answering the name question (index 0), store the name
     if (currentQuestionIndex === 0) {
@@ -388,6 +424,8 @@ export function ChatContainer({
       // If we got a new session ID (session expired), update it
       if (data.newSessionId) {
         setSessionId(data.newSessionId);
+        // Save new sessionId to localStorage
+        localStorage.setItem("onboarding-session-id", data.newSessionId);
       }
     } catch (error) {
       const errorMessage =
@@ -631,6 +669,8 @@ export function ChatContainer({
         // If we got a new session ID (session expired), update it
         if (data.newSessionId) {
           setSessionId(data.newSessionId);
+          // Save new sessionId to localStorage
+          localStorage.setItem("onboarding-session-id", data.newSessionId);
         }
       } catch (error) {
         const errorMessage =
@@ -814,6 +854,8 @@ export function ChatContainer({
       // Update session ID if needed
       if (data.newSessionId) {
         setSessionId(data.newSessionId);
+        // Save new sessionId to localStorage
+        localStorage.setItem("onboarding-session-id", data.newSessionId);
       }
     } catch (error) {
       const errorMessage =
@@ -976,6 +1018,8 @@ export function ChatContainer({
       }
       if (data.newSessionId) {
         setSessionId(data.newSessionId);
+        // Save new sessionId to localStorage
+        localStorage.setItem("onboarding-session-id", data.newSessionId);
       }
     } catch (error) {
       const errorMessage =
@@ -1120,15 +1164,17 @@ export function ChatContainer({
   }, [currentQuestionIndex, isProcessing, messages, questionHistory.messages]);
 
   // Add a handler to reset all chat state and start a new session
-  const handleRestart = () => {
+  const handleRestart = async () => {
+    console.log("Restarting chat...");
     // Clear saved conversation
     localStorage.removeItem("andromeda-onboarding-conversation");
     localStorage.removeItem("andromeda-onboarding-complete");
+    localStorage.removeItem("onboarding-session-id");
 
-    // Reset all state
+    // Reset all state with a timeout to ensure proper cleanup
     setMessages([]);
     setSessionId(null);
-    setInputDisabled(false);
+    setInputDisabled(true); // Keep disabled until we get a response
     setCurrentQuestionIndex(null);
     setMultiSelectAnswers({});
     setConditionalText("");
@@ -1137,17 +1183,78 @@ export function ChatContainer({
     setUserName("");
     setIsComplete(false);
 
+    // Generate a new unique key to force ChatInput remount
+    setChatInputKey(`input-${Date.now()}`);
+
     // Clear history state for back button
     setQuestionHistory({
       messages: [],
       answers: {},
     });
 
-    // Clear localStorage
-    localStorage.removeItem("onboarding-session-id");
+    try {
+      // Call the dedicated restart API endpoint
+      console.log("Calling restart API...");
+      const response = await fetch("/api/onboarding/restart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    // Start fresh
-    initializeChat();
+      if (!response.ok) {
+        throw new Error(`Failed to restart: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log("Restart API response:", data);
+
+      // Set the new session
+      setSessionId(data.sessionId);
+      localStorage.setItem("onboarding-session-id", data.sessionId);
+      setCurrentQuestionIndex(data.currentQuestionIndex);
+
+      // Add welcome message
+      setMessages([
+        {
+          id: generateMessageId("assistant"),
+          role: "assistant",
+          content: initialMessage,
+        },
+        {
+          id: generateMessageId("assistant"),
+          role: "assistant",
+          content: data.nextQuestion || "Let's get started!",
+          options: data.options,
+        },
+      ]);
+
+      // Set input mode
+      setInputMode(data.inputMode || "text");
+
+      // Set conditional text properties if applicable
+      if (data.conditionalTextInputLabel) {
+        setConditionalTextVisible(false);
+        setConditionalTriggerValue(data.conditionalTriggerValue || null);
+        setConditionalTextInputLabel(data.conditionalTextInputLabel);
+      }
+    } catch (error) {
+      console.error("Error restarting chat:", error);
+
+      // Add error message
+      setMessages([
+        {
+          id: generateMessageId("assistant"),
+          role: "assistant",
+          content: "Sorry, there was an error restarting the chat. Please refresh the page and try again.",
+        },
+      ]);
+    } finally {
+      // Enable input after a delay to ensure UI has updated
+      setTimeout(() => {
+        setInputDisabled(false);
+      }, 300);
+    }
   };
 
   // Add effect to open the sidebar when completion happens
@@ -1277,6 +1384,8 @@ export function ChatContainer({
                   }
                   if (data.newSessionId) {
                     setSessionId(data.newSessionId);
+                    // Save new sessionId to localStorage
+                    localStorage.setItem("onboarding-session-id", data.newSessionId);
                   }
                 } catch {
                   setMessages((prev) => prev.slice(0, -1));
@@ -1332,6 +1441,7 @@ export function ChatContainer({
                 getQuestionDetails(currentQuestionIndex ?? -1)?.placeholder ||
                 undefined
               }
+              key={chatInputKey}
             />
           ))}
       </div>
