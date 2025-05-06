@@ -33,7 +33,7 @@ const questions: QuestionDetail[] = [
   // Index 1 (Technical expertise, moved up)
   {
     index: 1,
-    text: "Nice to meet you, {name}! If you had to rate your technical expertise, where would you put yourself?",
+    text: "Nice to meet you, {name}! Let's determine your technical acumen so that we can point you in the right directions for quick success. If you had to rate your own technical expertise, where would you put yourself?",
     inputMode: "buttons",
     options: [
       { label: "1. Beginner", value: "Beginner" },
@@ -65,7 +65,7 @@ const questions: QuestionDetail[] = [
   // Index 3
   {
     index: 3,
-    text: "How about blockchains? Have you tinkered with any of these platforms before? (Select all that apply, or 'None')",
+    text: "How about blockchains? Have you tinkered with any of these platforms before? Andromeda's vision is decidedly multi-chain, so it'll help this suggestionprocess to know which ones you're familiar with. (Select all that apply, or 'None')",
     inputMode: "buttons",
     options: [
       { label: "1. Bitcoin", value: "Bitcoin" },
@@ -116,7 +116,7 @@ const questions: QuestionDetail[] = [
   // Index 5
   {
     index: 5,
-    text: "Switching gears a bit—how familiar are you with Andromeda's tools so far?",
+    text: "Switching gears a bit, now, {name} — how familiar are you with Andromeda's tools so far?",
     inputMode: "buttons",
     options: [
       { label: "1. Very familiar", value: "Very familiar" },
@@ -129,7 +129,7 @@ const questions: QuestionDetail[] = [
   // Index 6
   {
     index: 6,
-    text: "Ever tried your hand at a hackathon? (You can pick more than one if they apply!)",
+    text: "Ever tried your hand at a hackathon? Doing those says something about your experience level and willingness to take on new challenges. (You can pick more than one if they apply!)",
     inputMode: "buttons",
     options: [
       { label: "1. Yes, a web 2 one", value: "Web2" },
@@ -143,7 +143,7 @@ const questions: QuestionDetail[] = [
   // Index 7
   {
     index: 7,
-    text: "Based on what you've shared so far, {name}, here are some paths where people like you often find success. Which of these would you like to focus on, or are you most curious about? (Pick what feels right—you can always explore more later!)",
+    text: "Based on what you've shared so far, {name}, here are some paths where people like you often find success. Which of these strike you as interesting, or are you most curious about? (Pick what feels right—you can always explore more later!)",
     inputMode: "buttons",
     options: [
       { label: "1. 🚀 Building apps/dApps", value: "Build apps/dApps" },
