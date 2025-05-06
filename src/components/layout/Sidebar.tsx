@@ -145,7 +145,7 @@ const actionItems: NavItem[] = [
   },
   {
     href: "/ai-navigators",
-    label: "AI Initiatives",
+    label: "AI Navigator",
     icon: <BrainCircuit className="w-5 h-5" />,
   },
   {

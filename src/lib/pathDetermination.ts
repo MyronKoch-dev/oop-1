@@ -32,7 +32,7 @@ function getPathUrl(pathKey: string): string {
         "Hacker": "/hackers",
         "Contractor": "/contractors",
         "Visionary": "/visionaries",
-        "AI Initiatives": "/ai-initiatives",
+        "AI Navigator": "/ai-navigators",
         "Ambassador": "/ambassadors",
         "Explorer": "/explorers"
     };
@@ -70,7 +70,7 @@ const PATH_SCORING = {
         goal: { "Share ideas for new features": 2 },
         experience_level: { Beginner: 1, Intermediate: 1 },
     },
-    "AI Initiatives": {
+    "AI Navigator": {
         ai_experience: { Yes: 2 },
         goal: { "Work on AI projects": 2 },
     },
