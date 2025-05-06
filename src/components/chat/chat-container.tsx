@@ -101,6 +101,12 @@ export function ChatContainer({
   // Start the conversation by fetching the first question
   useEffect(() => {
     const startConversation = async () => {
+      // Check if we already have more than just the welcome message
+      // This prevents duplicate initialization
+      if (messages.length > 1) {
+        return;
+      }
+
       setIsProcessing(true);
       try {
         const response = await fetch("/api/onboarding/message", {
@@ -155,7 +161,7 @@ export function ChatContainer({
     };
 
     startConversation();
-  }, []);
+  }, [messages.length]);
 
   const handleConditionalTextChange = (text: string) => {
     // Update conditional text state

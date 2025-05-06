@@ -7,9 +7,9 @@ import { GitHubIssue } from "@/lib/github";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 export const metadata: Metadata = {
-  title: "AI Initiatives | Andromeda Protocol",
+  title: "AI Navigator Path | Andromeda Protocol",
   description:
-    "Explore and contribute to AI initiatives within the Andromeda Protocol ecosystem.",
+    "Explore and contribute as an AI Navigator within the Andromeda Protocol ecosystem.",
 };
 
 // Force dynamic rendering and revalidate every 10 minutes
@@ -34,27 +34,27 @@ export default async function AINavigatorsPage() {
   let fetchError = null;
 
   try {
-    // Fetch OPEN issues for the AI initiatives repository
+    // Fetch OPEN issues for the AI Navigator repository
     issues = await fetchGitHubIssues(
       "andromedaprotocol",
       "ai_initiatives",
       "open",
     );
   } catch (error) {
-    console.error("Failed to fetch AI initiatives issues:", error);
+    console.error("Failed to fetch AI Navigator issues:", error);
     fetchError =
       error instanceof Error
         ? error.message
-        : "Unknown error loading initiatives.";
+        : "Unknown error loading AI Navigator tasks.";
   }
 
   return (
     <main className="container mx-auto p-4 md:p-6 max-w-7xl min-h-screen bg-black text-white">
       <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold text-white mb-2">AI Initiatives</h1>
+        <h1 className="text-3xl font-bold text-white mb-2">AI Navigator Path</h1>
         <p className="text-gray-400 max-w-3xl mx-auto">
           Discover and contribute to AI-focused projects and bounties within the
-          Andromeda Protocol ecosystem. Join the AI revolution in the Andromeda
+          Andromeda Protocol ecosystem. Find your path as an AI Navigator in the Andromeda
           ecosystem.
         </p>
       </div>
@@ -80,10 +80,10 @@ export default async function AINavigatorsPage() {
             !fetchError && (
               <div className="flex flex-col items-center justify-center py-12 px-4 bg-[#1a1a1a] rounded-lg border border-[#333333]">
                 <h3 className="text-xl font-medium text-white mb-2">
-                  No Open AI Initiatives Available
+                  No Open AI Navigator Tasks Available
                 </h3>
                 <p className="text-gray-400 text-center max-w-md">
-                  There are currently no open AI initiatives available. Please
+                  There are currently no open AI Navigator tasks available. Please
                   check back later or explore other opportunities in the
                   Andromeda ecosystem.
                 </p>

@@ -32,7 +32,7 @@ gh repo create ${GITHUB_OWNER}/andromeda-app-ideas \
     --description "Community suggestions for Andromeda dApps and ADOs."
 if [ $? -eq 0 ]; then echo " -> Success. (Enable Discussions manually in GitHub settings)"; else echo " -> FAILED."; fi
 
-# Repository 4: AI Initiatives
+# Repository 4: AI Navigator
 # Issues enabled by default
 echo "Creating ${GITHUB_OWNER}/andromeda-ai-initiatives..."
 gh repo create ${GITHUB_OWNER}/andromeda-ai-initiatives \

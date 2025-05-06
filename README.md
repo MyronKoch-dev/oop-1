@@ -178,7 +178,7 @@ Based on user responses, the chatbot recommends one of the following paths:
 1.  **Contractor Path:** For technically proficient users with programming skills interested in building applications and contributing to projects.
 2.  **Hacker Path:** For technically inclined users interested in hackathons, bounties, and blockchain security.
 3.  **Visionary Path:** For users with a product-oriented mindset interested in suggesting new features and use cases for the Andromeda ecosystem.
-4.  **AI Experienced Path:** For users with experience in AI/ML who want to explore AI-related projects and integrations within Andromeda.
+4.  **AI Navigator Path:** For users with experience in AI/ML who want to explore AI-related projects and integrations within Andromeda.
 5.  **Ambassador Path:** For users passionate about community building and promoting Andromeda, even without deep technical expertise.
 6.  **Explorer Path:** A general introductory path for users new to Web3 or unsure of their specific goals, providing fundamental learning resources.
 
