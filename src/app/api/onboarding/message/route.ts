@@ -503,6 +503,9 @@ export async function POST(request: NextRequest) {
       const { recommendedPath, recommendedPathUrl, secondRecommendedPath, secondRecommendedPathUrl } = determinePath(finalData);
       finalData.recommendedPath = recommendedPath;
       finalData.recommendedPathUrl = recommendedPathUrl;
+      finalData.secondRecommendedPath = secondRecommendedPath;
+      finalData.secondRecommendedPathUrl = secondRecommendedPathUrl;
+
       console.log(
         `[Session: ${currentSessionId}] Determined Path: ${recommendedPath}`,
       );

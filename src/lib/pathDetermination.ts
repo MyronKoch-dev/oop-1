@@ -8,17 +8,39 @@ interface PathResult {
     secondRecommendedPathUrl?: string;
 }
 
-// Helper function to get URL from environment variables
+// Helper function to get URL from environment variables or use application routes
 function getPathUrl(pathKey: string): string {
-    const envVarName = `PATH_URL_${pathKey.toUpperCase().replace(/ /g, "_")}`;
+    // Format path key for environment variable lookup
+    const formattedKey = pathKey.toUpperCase().replace(/ /g, "_");
+    const envVarName = `PATH_URL_${formattedKey}`;
     const url = process.env[envVarName];
-    if (!url) {
-        console.warn(
-            `Environment variable ${envVarName} for path URL not set! Using placeholder.`,
-        );
-        return `https://example.com/placeholder/${pathKey.toLowerCase().replace(/ /g, "-")}`;
+
+    // Log which environment variable we're trying to access
+    console.log(`Looking for environment variable: ${envVarName}`);
+
+    // If environment variable exists, use it
+    if (url) {
+        console.log(`Found URL from environment: ${url}`);
+        return url;
     }
-    return url;
+
+    // Otherwise, map path names to application routes
+    console.warn(`Environment variable ${envVarName} not set. Using application routes.`);
+
+    // Map each path to its corresponding application route
+    const pathRoutes: Record<string, string> = {
+        "Hacker": "/hackers",
+        "Contractor": "/contractors",
+        "Visionary": "/visionaries",
+        "AI Initiatives": "/ai-initiatives",
+        "Ambassador": "/ambassadors",
+        "Explorer": "/explorers"
+    };
+
+    // Use the mapped route if available, otherwise fall back to a slugified version
+    const route = pathRoutes[pathKey] || `/${pathKey.toLowerCase().replace(/ /g, "-")}`;
+    console.log(`Using application route: ${route}`);
+    return route;
 }
 
 // ---
@@ -117,13 +139,20 @@ export function determinePath(data: OnboardingData): PathResult {
     const best = pathScores[0];
     const secondBest = pathScores[1];
 
+    // Get URLs for both paths
+    const primaryUrl = getPathUrl(best.path); // Pass the exact path name
+    const secondaryUrl = secondBest?.path ? getPathUrl(secondBest.path) : undefined;
+
+    console.log(`Primary path: ${best.path}, URL: ${primaryUrl}`);
+    if (secondBest?.path) {
+        console.log(`Secondary path: ${secondBest.path}, URL: ${secondaryUrl}`);
+    }
+
     return {
         recommendedPath: best.path,
-        recommendedPathUrl: getPathUrl(best.path.toUpperCase().replace(/ /g, "_")),
+        recommendedPathUrl: primaryUrl,
         secondRecommendedPath: secondBest?.path,
-        secondRecommendedPathUrl: secondBest?.path
-            ? getPathUrl(secondBest.path.toUpperCase().replace(/ /g, "_"))
-            : undefined,
+        secondRecommendedPathUrl: secondaryUrl,
     };
 }
 // ---
