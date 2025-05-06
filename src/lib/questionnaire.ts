@@ -33,7 +33,7 @@ const questions: QuestionDetail[] = [
   // Index 1 (Technical expertise, moved up)
   {
     index: 1,
-    text: "Nice to meet you, {name}! Let's determine your technical acumen so that we can point you in the right directions for quick success. If you had to rate your own technical expertise, where would you put yourself?",
+    text: "Nice to meet you, {name}! \n \n Let's determine your technical acumen so that we can point you in the right directions for quick success. Andromeda has a wide range of tools and platforms, so if you're highly technical, there's a path for you, and if you're not, there's a path for you too.  \n\ \n\ So, for starters, if you had to rate your own technical expertise, where would you put yourself?",
     inputMode: "buttons",
     options: [
       { label: "1. Beginner", value: "Beginner" },
@@ -45,7 +45,7 @@ const questions: QuestionDetail[] = [
   // Index 2 (Programming Languages)
   {
     index: 2,
-    text: "If you are a programmer, which programming languages do you feel most at home with? (Pick as many as you like, or select 'I'm not a programmer.' if that's you.)",
+    text: "If you are a programmer, which programming languages do you feel most at home with? (Pick as many as you like, or select '9. I'm not a programmer.' if that's you.)",
     inputMode: "buttons",
     options: [
       { label: "1. Rust", value: "Rust" },
@@ -65,7 +65,7 @@ const questions: QuestionDetail[] = [
   // Index 3
   {
     index: 3,
-    text: "How about blockchains? Have you tinkered with any of these platforms before? Andromeda's vision is decidedly multi-chain, so it'll help this suggestionprocess to know which ones you're familiar with. (Select all that apply, or 'None')",
+    text: "So, Andromeda is not only an L1 Cosmos SDK chain, but we've also created a multi-chain smart-contract deployment software. \n \n How about your experience with blockchains? Have you tinkered with any of these platforms before? Andromeda's vision is decidedly multi-chain, so it'll help this suggestion process to know which ones you're familiar with. (Select all that apply, or '9. None of these / No experience yet')",
     inputMode: "buttons",
     options: [
       { label: "1. Bitcoin", value: "Bitcoin" },
@@ -85,7 +85,7 @@ const questions: QuestionDetail[] = [
   // Index 4
   {
     index: 4,
-    text: "And what about AI or machine learning? Any hands-on experience beyond just chatting with ChatGPT? (Select all that fit, or 'Other' to specify)",
+    text: "And what about AI or machine learning? We're imbuing our systems with AI, so we'd like to ask… \n \n have you had any hands-on AI experience beyond just chatting with ChatGPT/Claude/Gemini commercial interfaces? (Select all that fit, or 'Other' to specify, or '9. No AI/ML experience yet')",
     inputMode: "buttons",
     options: [
       { label: "1. Natural Language Processing (NLP)", value: "NLP" },
@@ -129,7 +129,7 @@ const questions: QuestionDetail[] = [
   // Index 6
   {
     index: 6,
-    text: "Ever tried your hand at a hackathon? Doing those says something about your experience level and willingness to take on new challenges. (You can pick more than one if they apply!)",
+    text: "Ever tried your hand at a hackathon? \n\ \n\ Doing those says something about your experience level and willingness to take on new challenges. (You can pick more than one if they apply!)",
     inputMode: "buttons",
     options: [
       { label: "1. Yes, a web 2 one", value: "Web2" },
@@ -143,7 +143,7 @@ const questions: QuestionDetail[] = [
   // Index 7
   {
     index: 7,
-    text: "Based on what you've shared so far, {name}, here are some paths where people like you often find success. Which of these strike you as interesting, or are you most curious about? (Pick what feels right—you can always explore more later!)",
+    text: "Ok, sounds like you're ready to get started. \n \n Based on what you've shared so far, {name}, here are some paths where people like you often find success. Which of these strike you as interesting, or are you most curious about? (Pick what feels right—you can always explore more later!)",
     inputMode: "buttons",
     options: [
       { label: "1. 🚀 Building apps/dApps", value: "Build apps/dApps" },
@@ -169,21 +169,21 @@ const questions: QuestionDetail[] = [
   // Index 8
   {
     index: 8,
-    text: "Do you have a portfolio or any project links you'd like to share? (Totally optional, but I'd love to see your work!)",
+    text: "Do you have a portfolio or any project links you'd like to share? This won't count toward your score, but we'll see it during periodic reviews.  (Totally optional, but I'd love to see your work!)",
     inputMode: "text",
     isOptional: true,
   },
   // Index 9
   {
     index: 9,
-    text: "Is there anything else you'd like us to know about your skills or interests? (Optional, but I'm all ears!)",
+    text: "Is there anything else you'd like us to know about your skills or interests? Again, this won't count toward your score, but we'll see it during periodic reviews. (Optional, but I'm all ears!)",
     inputMode: "text",
     isOptional: true,
   },
   // Index 10
   {
     index: 10,
-    text: "What's the best email to reach you at, {name}?",
+    text: "We won't spam you, won't sell your data, and may not ever send you anything, but we're asking for emails for our own authentication. \n \n Email is mandatory, but all others (Telegram, GitHub, X) are optional, ok, {name}?",
     inputMode: "text",
     isOptional: false,
     validationHint: "email",
@@ -197,6 +197,7 @@ const questions: QuestionDetail[] = [
     inputMode: "text",
     isOptional: true,
     validationHint: "github_username",
+    placeholder: "andromedaprotocol",
   },
   // Index 12
   {
@@ -205,7 +206,7 @@ const questions: QuestionDetail[] = [
     inputMode: "text",
     isOptional: true,
     validationHint: "telegram_handle",
-    placeholder: "@yourhandle",
+    placeholder: "@andromedafanatic",
   },
   // Index 13
   {
@@ -214,7 +215,7 @@ const questions: QuestionDetail[] = [
     inputMode: "text",
     isOptional: true,
     validationHint: "x_handle",
-    placeholder: "@yourhandle",
+    placeholder: "@andromedaprot",
   },
 ];
 

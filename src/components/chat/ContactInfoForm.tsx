@@ -132,7 +132,7 @@ export function ContactInfoForm({
           onChange={handleChange}
           onKeyDown={(e) => handleKeyDown(e, "github")}
           disabled={isSubmitting}
-          placeholder="e.g. octocat"
+          placeholder="e.g. andromedaprotocol"
           ref={githubRef}
         />
         {errors.github && (
@@ -155,7 +155,7 @@ export function ContactInfoForm({
           onChange={handleChange}
           onKeyDown={(e) => handleKeyDown(e, "telegram")}
           disabled={isSubmitting}
-          placeholder="@yourhandle"
+          placeholder="@andromedafanatic"
           ref={telegramRef}
         />
         {errors.telegram && (
@@ -178,7 +178,7 @@ export function ContactInfoForm({
           onChange={handleChange}
           onKeyDown={(e) => handleKeyDown(e, "x")}
           disabled={isSubmitting}
-          placeholder="@yourhandle"
+          placeholder="@andromedaprot"
           ref={xRef}
         />
         {errors.x && (
