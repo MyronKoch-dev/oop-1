@@ -36,6 +36,14 @@ interface ChatContainerProps {
   className?: string;
 }
 
+// Define types for question answers
+interface ConditionalTextAnswer {
+  buttonValue: string;
+  conditionalText: string;
+}
+
+type QuestionAnswer = string | string[] | ConditionalTextAnswer;
+
 // Define a constant for total steps at the top of the component (below the imports)
 const TOTAL_STEPS = 14;
 
@@ -76,6 +84,15 @@ export function ChatContainer({
     [key: number]: string[];
   }>({});
   const [userName, setUserName] = useState<string>("");
+
+  // Add history state to track previous answers
+  const [questionHistory, setQuestionHistory] = useState<{
+    messages: ChatMessage[][];
+    answers: { [index: number]: QuestionAnswer };
+  }>({
+    messages: [],
+    answers: {},
+  });
 
   // Helper function to generate unique IDs for messages
   const generateMessageId = (role: string) =>
@@ -225,6 +242,25 @@ export function ChatContainer({
     // If answering the name question (index 0), store the name
     if (currentQuestionIndex === 0) {
       setUserName(message.trim());
+    }
+
+    // Save current state before proceeding to next question
+    if (currentQuestionIndex !== null) {
+      // Save the current messages for this question
+      const currentMessagesForQuestion = [...messages];
+
+      // Update question history
+      setQuestionHistory(prev => {
+        const updatedHistory = { ...prev };
+
+        // Save messages up to this point
+        updatedHistory.messages[currentQuestionIndex] = currentMessagesForQuestion;
+
+        // Save the answer for this question
+        updatedHistory.answers[currentQuestionIndex] = message;
+
+        return updatedHistory;
+      });
     }
 
     // Add user message to chat
@@ -385,6 +421,22 @@ export function ChatContainer({
     }
   };
 
+  // Get interactive message ID for keyboard shortcuts
+  const latestInteractiveMsgId = (() => {
+    // Find the last assistant message with options
+    const interactiveMessages = messages.filter(
+      (msg) => msg.role === "assistant" && msg.options && msg.options.length > 0,
+    );
+    return interactiveMessages.length > 0
+      ? interactiveMessages[interactiveMessages.length - 1].id
+      : null;
+  })();
+
+  // State for keyboard navigation of buttons
+  const [highlightedButtonIndex, setHighlightedButtonIndex] = useState<
+    number | null
+  >(null);
+
   const handleButtonSelect = useCallback(
     async (value: string) => {
       if (isProcessing || !sessionId) return;
@@ -446,6 +498,25 @@ export function ChatContainer({
         setConditionalTextVisible(false);
         setShowConditionalInput(false);
         setSelectedButtonValue(value);
+      }
+
+      // Save current state before proceeding to next question
+      if (currentQuestionIndex !== null) {
+        // Save the current messages for this question
+        const currentMessagesForQuestion = [...messages];
+
+        // Update question history
+        setQuestionHistory(prev => {
+          const updatedHistory = { ...prev };
+
+          // Save messages up to this point
+          updatedHistory.messages[currentQuestionIndex] = currentMessagesForQuestion;
+
+          // Save the answer for this question
+          updatedHistory.answers[currentQuestionIndex] = value;
+
+          return updatedHistory;
+        });
       }
 
       // Add user message to chat
@@ -547,14 +618,7 @@ export function ChatContainer({
           // Reset conditional text state
           setConditionalText("");
           setConditionalTextVisible(false);
-          setShowConditionalInput(false);
           setSelectedButtonValue(null);
-          if (typeof currentQuestionIndex === "number") {
-            setMultiSelectAnswers((prev) => ({
-              ...prev,
-              [currentQuestionIndex]: [],
-            }));
-          }
 
           // Set up conditional text if applicable
           if (data.conditionalTextInputLabel) {
@@ -572,59 +636,75 @@ export function ChatContainer({
         const errorMessage =
           error instanceof Error
             ? error.message
-            : "Error processing button selection. Please try again.";
-        console.error("Error sending button selection:", errorMessage);
+            : "Error sending message. Please try again.";
+        console.error("Error sending message:", errorMessage);
 
         // Remove the loading message
         setMessages((prev) => prev.slice(0, -1));
 
+        // Add error message
         setMessages((prev) => [
           ...prev,
           {
             id: generateMessageId("assistant"),
             role: "assistant",
             content:
-              "Sorry, there was an error processing your selection. Please try again.",
+              "Sorry, there was an error processing your message. Please try again.",
           },
         ]);
       } finally {
         setIsProcessing(false);
-        if (!isComplete) {
-          setInputDisabled(false);
-          // Add short delay before attempting to refocus
-          setTimeout(() => {
-            // Trigger a re-render to focus the input
-            setInputMode((prev) => prev);
-          }, 100);
-        }
+        setInputDisabled(false);
       }
     },
     [
       isProcessing,
       sessionId,
       currentQuestionIndex,
-      setSelectedButtonValue,
       inputMode,
       conditionalTriggerValue,
-      setConditionalTextVisible,
-      setShowConditionalInput,
-      setMessages,
-      setIsProcessing,
-      setInputDisabled,
       conditionalTextVisible,
       conditionalText,
-      setCurrentQuestionIndex,
-      setInputMode,
-      setConditionalText,
-      setConditionalTriggerValue,
-      setConditionalTextInputLabel,
-      isComplete,
-      setSessionId, // Added missing dependencies
+      messages,
     ],
   );
 
   const handleConditionalTextSubmit = () => {
-    if (!selectedButtonValue || !sessionId || isProcessing) return;
+    // Logic for conditional text submission
+
+    // If we're in the other/AI flow where there's both a button and text
+    if (selectedButtonValue && conditionalText) {
+      submitConditionalResponse();
+    } else if (conditionalTextVisible) {
+      // If we're only showing a text area for some other reason
+      handleSendMessage(conditionalText || "none");
+    }
+  };
+
+  const submitConditionalResponse = async () => {
+    if (isProcessing || !sessionId || !selectedButtonValue) return;
+
+    // Save current state before proceeding to next question
+    if (currentQuestionIndex !== null) {
+      // Save the current messages for this question
+      const currentMessagesForQuestion = [...messages];
+
+      // Update question history
+      setQuestionHistory(prev => {
+        const updatedHistory = { ...prev };
+
+        // Save messages up to this point
+        updatedHistory.messages[currentQuestionIndex] = currentMessagesForQuestion;
+
+        // Save the conditional answer with both button and text
+        updatedHistory.answers[currentQuestionIndex] = {
+          buttonValue: selectedButtonValue,
+          conditionalText: conditionalText
+        };
+
+        return updatedHistory;
+      });
+    }
 
     // Add user message to chat showing both the button selection and the conditional text
     setMessages((prev) => [
@@ -650,137 +730,114 @@ export function ChatContainer({
     setIsProcessing(true);
     setInputDisabled(true);
 
-    // Now make the API call with both the button value and conditional text
-    const submitConditionalResponse = async () => {
-      try {
-        const payload = {
-          sessionId,
-          response: { buttonValue: selectedButtonValue },
-          conditionalText: conditionalText,
-        };
+    try {
+      const payload = {
+        sessionId,
+        response: { buttonValue: selectedButtonValue },
+        conditionalText: conditionalText,
+      };
 
-        const response = await fetch("/api/onboarding/message", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        });
+      const response = await fetch("/api/onboarding/message", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
-        if (!response.ok) {
-          throw new Error(
-            `Failed to send message: ${response.status} ${response.statusText}`,
-          );
-        }
+      if (!response.ok) {
+        throw new Error(
+          `Failed to send message: ${response.status} ${response.statusText}`,
+        );
+      }
 
-        const data: OnboardingResponsePayload = await response.json();
+      const data: OnboardingResponsePayload = await response.json();
 
-        // Remove the loading message
-        setMessages((prev) => prev.slice(0, -1));
+      // Remove the loading message
+      setMessages((prev) => prev.slice(0, -1));
 
-        // Handle error if present
-        if (data.error) {
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: generateMessageId("assistant"),
-              role: "assistant",
-              content: data.error || "An error occurred",
-            },
-          ]);
-
-          // If flow should halt, disable input
-          if (data.haltFlow) {
-            setInputDisabled(true);
-          }
-        }
-        // Handle final result
-        else if (data.isFinalQuestion && data.finalResult) {
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: generateMessageId("assistant"),
-              role: "assistant",
-              content: `__FINAL_RECOMMENDATION__`,
-              finalResult: data.finalResult,
-            },
-          ]);
-          setInputDisabled(true);
-          setIsComplete(true);
-          setCurrentQuestionIndex(TOTAL_STEPS);
-        }
-        // Handle next question
-        else if (data.nextQuestion) {
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: generateMessageId("assistant"),
-              role: "assistant",
-              content: data.nextQuestion || "Let's continue",
-              options: data.options,
-            },
-          ]);
-
-          setCurrentQuestionIndex(data.currentQuestionIndex);
-          setInputMode(data.inputMode || "text");
-
-          // Reset conditional text state
-          setConditionalText("");
-          setConditionalTextVisible(false);
-          setShowConditionalInput(false);
-          setSelectedButtonValue(null);
-          if (typeof currentQuestionIndex === "number") {
-            setMultiSelectAnswers((prev) => ({
-              ...prev,
-              [currentQuestionIndex]: [],
-            }));
-          }
-
-          // Set up conditional text if applicable
-          if (data.conditionalTextInputLabel) {
-            setConditionalTextVisible(false);
-            setConditionalTriggerValue(data.conditionalTriggerValue || null);
-            setConditionalTextInputLabel(data.conditionalTextInputLabel);
-          }
-        }
-
-        // If we got a new session ID (session expired), update it
-        if (data.newSessionId) {
-          setSessionId(data.newSessionId);
-        }
-      } catch (error) {
-        const errorMessage =
-          error instanceof Error
-            ? error.message
-            : "Error processing your submission. Please try again.";
-        console.error("Error submitting conditional text:", errorMessage);
-
-        // Remove the loading message
-        setMessages((prev) => prev.slice(0, -1));
-
+      // Handle API response according to data
+      if (data.error) {
         setMessages((prev) => [
           ...prev,
           {
             id: generateMessageId("assistant"),
             role: "assistant",
-            content:
-              "Sorry, there was an error processing your submission. Please try again.",
+            content: data.error || "An error occurred",
           },
         ]);
-      } finally {
-        setIsProcessing(false);
-        if (!isComplete) {
-          setInputDisabled(false);
-          // Add short delay before attempting to refocus
-          setTimeout(() => {
-            // Trigger a re-render to focus the input
-            setInputMode((prev) => prev);
-          }, 100);
+
+        if (data.haltFlow) {
+          setInputDisabled(true);
+        }
+      } else if (data.isFinalQuestion && data.finalResult) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: generateMessageId("assistant"),
+            role: "assistant",
+            content: `__FINAL_RECOMMENDATION__`,
+            finalResult: data.finalResult,
+          },
+        ]);
+        setInputDisabled(true);
+        setIsComplete(true);
+        setCurrentQuestionIndex(TOTAL_STEPS);
+      } else if (data.nextQuestion) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: generateMessageId("assistant"),
+            role: "assistant",
+            content: data.nextQuestion || "Let's continue",
+            options: data.options,
+          },
+        ]);
+
+        setCurrentQuestionIndex(data.currentQuestionIndex);
+        setInputMode(data.inputMode || "text");
+
+        // Reset states
+        setConditionalText("");
+        setConditionalTextVisible(false);
+        setShowConditionalInput(false);
+        setSelectedButtonValue(null);
+
+        // Set up conditional text if applicable
+        if (data.conditionalTextInputLabel) {
+          setConditionalTextVisible(false);
+          setConditionalTriggerValue(data.conditionalTriggerValue || null);
+          setConditionalTextInputLabel(data.conditionalTextInputLabel);
         }
       }
-    };
 
-    submitConditionalResponse();
+      // Update session ID if needed
+      if (data.newSessionId) {
+        setSessionId(data.newSessionId);
+      }
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Error processing your submission. Please try again.";
+      console.error("Error submitting conditional text:", errorMessage);
+
+      // Remove the loading message
+      setMessages((prev) => prev.slice(0, -1));
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: generateMessageId("assistant"),
+          role: "assistant",
+          content:
+            "Sorry, there was an error processing your submission. Please try again.",
+        },
+      ]);
+    } finally {
+      setIsProcessing(false);
+      setInputDisabled(false);
+    }
   };
 
   const handleConfirmMultiSelect = async () => {
@@ -789,9 +846,25 @@ export function ChatContainer({
       !sessionId ||
       typeof currentQuestionIndex !== "number" ||
       !multiSelectAnswers[currentQuestionIndex] ||
-      multiSelectAnswers[currentQuestionIndex].length === 0
+      !multiSelectAnswers[currentQuestionIndex].length
     )
       return;
+
+    // Save current state before proceeding to next question
+    const currentMessagesForQuestion = [...messages];
+
+    // Update question history
+    setQuestionHistory(prev => {
+      const updatedHistory = { ...prev };
+
+      // Save messages up to this point
+      updatedHistory.messages[currentQuestionIndex] = currentMessagesForQuestion;
+
+      // Save the multiselect answer
+      updatedHistory.answers[currentQuestionIndex] = multiSelectAnswers[currentQuestionIndex];
+
+      return updatedHistory;
+    });
 
     let selections = multiSelectAnswers[currentQuestionIndex];
     if (
@@ -827,14 +900,12 @@ export function ChatContainer({
       if (currentQuestionIndex === 2) {
         // Languages: send as array
         payload = { sessionId, response: selections };
-        console.log("[PATCH] Sending languages payload:", payload);
       } else if (currentQuestionIndex === 3) {
         // Blockchain platforms: send as { selectedValues, buttonValue }
         payload = {
           sessionId,
           response: { selectedValues: selections, buttonValue: "Yes" },
         };
-        console.log("[PATCH] Sending blockchain platforms payload:", payload);
       } else if (currentQuestionIndex === 6) {
         // Hackathon: send as { selectedValues }
         payload = { sessionId, response: { selectedValues: selections } };
@@ -897,12 +968,6 @@ export function ChatContainer({
         setConditionalTextVisible(false);
         setShowConditionalInput(false);
         setSelectedButtonValue(null);
-        if (typeof currentQuestionIndex === "number") {
-          setMultiSelectAnswers((prev) => ({
-            ...prev,
-            [currentQuestionIndex]: [],
-          }));
-        }
         if (data.conditionalTextInputLabel) {
           setConditionalTextVisible(false);
           setConditionalTriggerValue(data.conditionalTriggerValue || null);
@@ -930,79 +995,48 @@ export function ChatContainer({
       ]);
     } finally {
       setIsProcessing(false);
-      if (!isComplete) {
-        setInputDisabled(false);
-        setTimeout(() => {
-          setInputMode((prev) => prev);
-        }, 100);
-      }
+      setInputDisabled(false);
     }
   };
 
+  // Add effect for keyboard shortcuts (1-9 keys to select options)
   useEffect(() => {
-    // Update showConditionalInput whenever conditionalTextVisible changes
-    setShowConditionalInput(conditionalTextVisible);
-  }, [conditionalTextVisible]);
-
-  useEffect(() => {
-    if (showConditionalInput && conditionalInputRef.current) {
-      setTimeout(() => {
-        conditionalInputRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, 100); // Small delay to ensure the DOM has updated
-    }
-  }, [showConditionalInput]);
-
-  // Find the latest message with options to determine which buttons should be active
-  const latestInteractiveMsgId =
-    messages
-      .filter(
-        (msg) =>
-          msg.role === "assistant" && msg.options && msg.options.length > 0,
-      )
-      .pop()?.id || null;
-
-  // State to track which button is being highlighted via keyboard
-  const [highlightedButtonIndex, setHighlightedButtonIndex] = useState<
-    number | null
-  >(null);
-
-  // Add keyboard shortcut handling for number keys 1-9
-  useEffect(() => {
-    // Calculate currentOptions inside the effect
-    const currentOptions =
-      messages.find((msg) => msg.id === latestInteractiveMsgId)?.options || [];
-
-    // Only enable keyboard shortcuts when we have options to select
-    // and the input isn't disabled
+    // Only apply keyboard shortcuts when:
+    // - Not processing a request
+    // - Input is not disabled
+    // - Latest message has interactive options
+    // - We're in button mode
     if (
-      (inputMode === "buttons" || inputMode === "conditionalText") &&
-      currentOptions.length > 0 &&
+      !isProcessing &&
       !inputDisabled &&
-      !isProcessing
+      latestInteractiveMsgId &&
+      inputMode === "buttons" &&
+      !showConditionalInput
     ) {
+      const currentOptions =
+        messages.find((msg) => msg.id === latestInteractiveMsgId)?.options || [];
+
       const handleKeyDown = (event: KeyboardEvent) => {
-        // Check if key press is a number between 1-9
-        if (/^[1-9]$/.test(event.key)) {
-          // Convert key to zero-based index (1 -> 0, 2 -> 1, etc.)
-          const optionIndex = parseInt(event.key) - 1;
+        // Map keys 1-9 to options 0-8 (array indices)
+        const optionIndex = parseInt(event.key) - 1;
+        if (
+          !isNaN(optionIndex) &&
+          optionIndex >= 0 &&
+          optionIndex < currentOptions.length
+        ) {
+          // Highlight the button visually first (for feedback)
+          setHighlightedButtonIndex(optionIndex);
 
-          // Check if this index exists in our options
-          if (optionIndex >= 0 && optionIndex < currentOptions.length) {
-            // Prevent default behavior (like scrolling)
-            event.preventDefault();
-
-            // Provide visual feedback by highlighting the button briefly
-            setHighlightedButtonIndex(optionIndex);
-
-            // Clear the highlight after a short delay
-            setTimeout(() => {
-              setHighlightedButtonIndex(null);
-            }, 200);
-
-            // Get the selected option and trigger the button selection
-            const selectedOption = currentOptions[optionIndex];
-            handleButtonSelect(selectedOption.value);
-          }
+          // Remove the highlight after a short delay
+          setTimeout(() => {
+            setHighlightedButtonIndex(null);
+            // Make sure conditional input is not open before handling button selection
+            if (!showConditionalInput && !isProcessing && !inputDisabled) {
+              // Get the selected option and trigger the button selection
+              const selectedOption = currentOptions[optionIndex];
+              handleButtonSelect(selectedOption.value);
+            }
+          }, 200);
         }
       };
 
@@ -1022,7 +1056,68 @@ export function ChatContainer({
     inputDisabled,
     isProcessing,
     handleButtonSelect,
+    showConditionalInput, // Add this dependency
   ]);
+
+  // Handle going back to the previous question
+  const handleBack = useCallback(() => {
+    if (currentQuestionIndex === null || currentQuestionIndex <= 0 || isProcessing) {
+      return; // Can't go back from first question or when processing
+    }
+
+    // Calculate the previous question index
+    const prevIndex = currentQuestionIndex - 1;
+
+    // Retrieve the previous messages for this question
+    const prevMessages = questionHistory.messages[prevIndex] || [];
+
+    // Set current question index to previous question
+    setCurrentQuestionIndex(prevIndex);
+
+    // Restore the UI state
+    const questionDetail = getQuestionDetails(prevIndex);
+    if (questionDetail) {
+      setInputMode(questionDetail.inputMode);
+
+      // Reset conditional text state
+      setConditionalText("");
+      setConditionalTextVisible(false);
+      setShowConditionalInput(false); // Make sure to reset this too
+      setSelectedButtonValue(null);
+
+      // If there were conditional text settings, restore them
+      if (questionDetail.conditionalTextInputLabel) {
+        setConditionalTriggerValue(questionDetail.conditionalTriggerValue || null);
+        setConditionalTextInputLabel(questionDetail.conditionalTextInputLabel);
+      }
+
+      // If this was a multi-select question, make sure we keep the previous selections
+      if (questionDetail.isMultiSelect && typeof prevIndex === 'number') {
+        // multiSelectAnswers state should already have the right values since we're not clearing it
+      }
+    }
+
+    // Update messages to show only up to the previous question's messages
+    if (prevMessages.length > 0) {
+      setMessages(prevMessages);
+    } else {
+      // If we don't have saved messages (unusual), at least go back to the question prompt
+      // Find the last assistant message before the current set of exchanges
+      const assistantMessages = messages.filter(m => m.role === "assistant");
+      if (assistantMessages.length >= 2) {
+        const lastIndex = messages.findIndex(m => m.id === assistantMessages[assistantMessages.length - 2].id);
+        if (lastIndex >= 0) {
+          setMessages(messages.slice(0, lastIndex + 1));
+        }
+      }
+    }
+
+    // Make sure input is enabled
+    setInputDisabled(false);
+    setIsProcessing(false);
+    setHighlightedButtonIndex(null); // Reset keyboard navigation
+
+  }, [currentQuestionIndex, isProcessing, messages, questionHistory.messages]);
 
   // Add a handler to reset all chat state and start a new session
   const handleRestart = () => {
@@ -1041,6 +1136,12 @@ export function ChatContainer({
     setSelectedButtonValue(null);
     setUserName("");
     setIsComplete(false);
+
+    // Clear history state for back button
+    setQuestionHistory({
+      messages: [],
+      answers: {},
+    });
 
     // Clear localStorage
     localStorage.removeItem("onboarding-session-id");
@@ -1075,6 +1176,8 @@ export function ChatContainer({
         currentStep={currentQuestionIndex || 0}
         totalSteps={TOTAL_STEPS}
         onRestart={handleRestart}
+        onBack={handleBack}
+        isComplete={isComplete}
       />
 
       <div className={`flex-1 overflow-hidden relative`}>

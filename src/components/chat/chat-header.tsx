@@ -1,4 +1,5 @@
 import { Progress } from "@/components/ui/progress";
+import { ArrowLeft } from "lucide-react";
 
 interface ChatHeaderProps {
   title: string;
@@ -7,6 +8,8 @@ interface ChatHeaderProps {
   totalSteps?: number;
   className?: string;
   onRestart?: () => void;
+  onBack?: () => void;
+  isComplete?: boolean;
 }
 
 export function ChatHeader({
@@ -16,6 +19,8 @@ export function ChatHeader({
   totalSteps = 12, // Default to 12 steps for your questionnaire
   className = "",
   onRestart,
+  onBack,
+  isComplete = false,
 }: ChatHeaderProps) {
   // Ensure currentStep doesn't exceed totalSteps and calculate progress percentage
   const normalizedStep = Math.min(currentStep, totalSteps);
@@ -45,15 +50,27 @@ export function ChatHeader({
             </p>
           )}
         </div>
-        {onRestart && (
-          <button
-            onClick={onRestart}
-            className="ml-4 px-3 py-1.5 rounded-md bg-[#232323] text-xs text-gray-300 border border-[#444] hover:bg-[#333] hover:text-white transition"
-            aria-label="Restart Onboarding"
-          >
-            Restart
-          </button>
-        )}
+        <div className="flex ml-4 space-x-2">
+          {onBack && currentStep > 0 && !isComplete && (
+            <button
+              onClick={onBack}
+              className="px-3 py-1.5 rounded-md bg-[#232323] text-xs text-gray-300 border border-[#444] hover:bg-[#333] hover:text-white transition flex items-center"
+              aria-label="Go Back"
+            >
+              <ArrowLeft className="h-3 w-3 mr-1" />
+              Back
+            </button>
+          )}
+          {onRestart && (
+            <button
+              onClick={onRestart}
+              className="px-3 py-1.5 rounded-md bg-[#232323] text-xs text-gray-300 border border-[#444] hover:bg-[#333] hover:text-white transition"
+              aria-label="Restart Onboarding"
+            >
+              Restart
+            </button>
+          )}
+        </div>
       </div>
       <div className="mt-3">
         <Progress value={progressPercentage} className="h-2 bg-[#2a2a2a]" />
