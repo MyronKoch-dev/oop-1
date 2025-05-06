@@ -49,13 +49,7 @@ export function ChatContainer({
   const { openRightSidebar, isRightSidebarOpen } = useSidebar();
 
   // State for messages and chat flow
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: "initial-message",
-      role: "assistant",
-      content: initialMessage,
-    },
-  ]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMode, setInputMode] = useState<InputMode>("text");
   const [conditionalText, setConditionalText] = useState("");
   const [selectedButtonValue, setSelectedButtonValue] = useState<string | null>(
@@ -98,70 +92,127 @@ export function ChatContainer({
     return () => clearTimeout(timeoutId);
   }, [messages]);
 
-  // Start the conversation by fetching the first question
+  // Load messages from localStorage on mount if conversation is complete
   useEffect(() => {
-    const startConversation = async () => {
-      // Check if we already have more than just the welcome message
-      // This prevents duplicate initialization
-      if (messages.length > 1) {
-        return;
-      }
+    const savedMessages = localStorage.getItem("andromeda-onboarding-conversation");
+    const savedComplete = localStorage.getItem("andromeda-onboarding-complete");
 
-      setIsProcessing(true);
+    if (savedMessages && savedComplete === "true") {
       try {
-        const response = await fetch("/api/onboarding/message", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ sessionId: null }),
-        });
+        const parsedMessages = JSON.parse(savedMessages);
+        setMessages(parsedMessages);
+        setIsComplete(true);
+        setInputDisabled(true);
+        setCurrentQuestionIndex(TOTAL_STEPS);
 
-        if (!response.ok) {
-          throw new Error(
-            `Failed to start conversation: ${response.status} ${response.statusText}`,
-          );
+        // Find the message containing the userName
+        const userNameMessage = parsedMessages.find(
+          (msg: ChatMessage) =>
+            msg.role === "user" &&
+            parsedMessages[parsedMessages.indexOf(msg) - 1]?.content?.includes("What should I call you")
+        );
+
+        if (userNameMessage) {
+          setUserName(userNameMessage.content);
         }
-
-        const data: OnboardingResponsePayload = await response.json();
-        setSessionId(data.sessionId);
-        setCurrentQuestionIndex(data.currentQuestionIndex);
-
-        // Add the first question as a message
-        if (data.nextQuestion) {
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: generateMessageId("assistant"),
-              role: "assistant",
-              content: data.nextQuestion || "Let's get started!",
-              options: data.options,
-            },
-          ]);
-        }
-
-        // Set input mode
-        setInputMode(data.inputMode || "text");
-
-        // Set conditional text properties if applicable
-        if (data.conditionalTextInputLabel) {
-          setConditionalTextVisible(false);
-          setConditionalTriggerValue(data.conditionalTriggerValue || null);
-          setConditionalTextInputLabel(data.conditionalTextInputLabel);
-        }
-      } catch (error) {
-        const errorMessage =
-          error instanceof Error
-            ? error.message
-            : "Failed to start the conversation. Please try again.";
-        console.error("Error starting conversation:", errorMessage);
-      } finally {
-        setIsProcessing(false);
+      } catch (e) {
+        console.error("Error parsing saved messages:", e);
+        initializeChat();
       }
-    };
+    } else {
+      initializeChat();
+    }
+  }, []);
 
+  // Effect to save conversation when complete
+  useEffect(() => {
+    if (isComplete && messages.length > 0) {
+      localStorage.setItem("andromeda-onboarding-conversation", JSON.stringify(messages));
+      localStorage.setItem("andromeda-onboarding-complete", "true");
+    }
+  }, [isComplete, messages]);
+
+  // Start the conversation by fetching the first question
+  const startConversation = async () => {
+    // Check if we already have more than just the welcome message
+    // This prevents duplicate initialization
+    if (messages.length > 1) {
+      return;
+    }
+
+    setIsProcessing(true);
+    try {
+      const response = await fetch("/api/onboarding/message", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ sessionId: null }),
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to start conversation: ${response.status} ${response.statusText}`,
+        );
+      }
+
+      const data: OnboardingResponsePayload = await response.json();
+      setSessionId(data.sessionId);
+      setCurrentQuestionIndex(data.currentQuestionIndex);
+
+      // Add the first question as a message
+      if (data.nextQuestion) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: generateMessageId("assistant"),
+            role: "assistant",
+            content: data.nextQuestion || "Let's get started!",
+            options: data.options,
+          },
+        ]);
+      }
+
+      // Set input mode
+      setInputMode(data.inputMode || "text");
+
+      // Set conditional text properties if applicable
+      if (data.conditionalTextInputLabel) {
+        setConditionalTextVisible(false);
+        setConditionalTriggerValue(data.conditionalTriggerValue || null);
+        setConditionalTextInputLabel(data.conditionalTextInputLabel);
+      }
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Failed to start the conversation. Please try again.";
+      console.error("Error starting conversation:", errorMessage);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  // Initialize chat with the initial message
+  const initializeChat = () => {
+    // Check if there's an existing sessionId in localStorage
+    const existingSessionId = localStorage.getItem("onboarding-session-id");
+    if (existingSessionId) {
+      setSessionId(existingSessionId);
+    }
+
+    // Add the initial welcome message
+    setMessages([
+      {
+        id: generateMessageId("assistant"),
+        role: "assistant",
+        content: initialMessage,
+      },
+    ]);
+
+    // Start the conversation (first question)
     startConversation();
-  }, [messages.length]);
+  };
 
   const handleConditionalTextChange = (text: string) => {
     // Update conditional text state
@@ -975,29 +1026,27 @@ export function ChatContainer({
 
   // Add a handler to reset all chat state and start a new session
   const handleRestart = () => {
-    setMessages([
-      {
-        id: "initial-message",
-        role: "assistant",
-        content: initialMessage,
-      },
-    ]);
-    setInputMode("text");
-    setConditionalText("");
-    setSelectedButtonValue(null);
-    setMultiSelectAnswers({});
+    // Clear saved conversation
+    localStorage.removeItem("andromeda-onboarding-conversation");
+    localStorage.removeItem("andromeda-onboarding-complete");
+
+    // Reset all state
+    setMessages([]);
     setSessionId(null);
     setInputDisabled(false);
-    setIsProcessing(false);
     setCurrentQuestionIndex(null);
+    setMultiSelectAnswers({});
+    setConditionalText("");
     setConditionalTextVisible(false);
-    setConditionalTriggerValue(null);
-    setConditionalTextInputLabel("Please provide more details:");
+    setSelectedButtonValue(null);
+    setUserName("");
     setIsComplete(false);
-    // Start a new onboarding session by re-running the effect
-    // (simulate by calling the same logic as on mount)
-    // You could also refactor the effect into a function and call it here
-    window.location.reload(); // Easiest way to fully reset for now
+
+    // Clear localStorage
+    localStorage.removeItem("onboarding-session-id");
+
+    // Start fresh
+    initializeChat();
   };
 
   // Add effect to open the sidebar when completion happens
