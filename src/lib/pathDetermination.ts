@@ -79,7 +79,7 @@ const PATH_SCORING = {
         goal: { "Promote blockchain/Andromeda": 2 },
     },
     Explorer: {
-        goal: { "Learn Web3 basics": 2 },
+        goal: { "Learn Web3 basics": 2, "Learn about Andromeda": 2, "Not sure yet": 3 },
         experience_level: { Beginner: 2 },
     },
 };
