@@ -284,25 +284,56 @@ export function ChatMessages({
 
                   {message.content === "__FINAL_RECOMMENDATION__" &&
                     message.finalResult != null ? (
-                    <RecommendationPanel
-                      pathName={message.finalResult?.recommendedPath}
-                      secondPathName={message.finalResult?.secondRecommendedPath}
-                      onGetStarted={() =>
-                        window.open(
-                          message.finalResult?.recommendedPathUrl,
-                          "_blank",
-                        )
-                      }
-                      onSecondPathSelected={
-                        message.finalResult?.secondRecommendedPathUrl
-                          ? () =>
-                            window.open(
-                              message.finalResult?.secondRecommendedPathUrl,
-                              "_blank",
-                            )
-                          : undefined
-                      }
-                    />
+                    (() => {
+                      // Debug info to console
+                      console.log("Recommended paths data:", {
+                        primary: {
+                          path: message.finalResult?.recommendedPath,
+                          url: message.finalResult?.recommendedPathUrl
+                        },
+                        secondary: {
+                          path: message.finalResult?.secondRecommendedPath,
+                          url: message.finalResult?.secondRecommendedPathUrl
+                        }
+                      });
+
+                      return (
+                        <RecommendationPanel
+                          pathName={message.finalResult?.recommendedPath}
+                          secondPathName={message.finalResult?.secondRecommendedPath}
+                          onGetStarted={() => {
+                            console.log(
+                              `Opening primary path URL: ${message.finalResult?.recommendedPathUrl}`
+                            );
+                            // Check if URL is absolute or relative
+                            const primaryUrl = message.finalResult?.recommendedPathUrl || '';
+                            if (primaryUrl.startsWith('http')) {
+                              window.open(primaryUrl, "_blank");
+                            } else {
+                              // For relative URLs, navigate within the application
+                              window.location.href = primaryUrl;
+                            }
+                          }}
+                          onSecondPathSelected={
+                            message.finalResult?.secondRecommendedPathUrl
+                              ? () => {
+                                console.log(
+                                  `Opening secondary path URL: ${message.finalResult?.secondRecommendedPathUrl}`
+                                );
+                                // Check if URL is absolute or relative
+                                const secondaryUrl = message.finalResult?.secondRecommendedPathUrl || '';
+                                if (secondaryUrl.startsWith('http')) {
+                                  window.open(secondaryUrl, "_blank");
+                                } else {
+                                  // For relative URLs, navigate within the application
+                                  window.location.href = secondaryUrl;
+                                }
+                              }
+                              : undefined
+                          }
+                        />
+                      );
+                    })()
                   ) : null}
                 </div>
               </div>

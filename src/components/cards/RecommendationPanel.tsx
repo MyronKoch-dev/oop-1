@@ -29,7 +29,7 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
 
     {secondPathName && (
       <div className={styles.secondPath}>
-        <p>We also think you might be interested inand secondarily, :</p>
+        <p>We also think you might be interested in:</p>
         <p className={styles.path}>
           <span className={styles.highlight}>{secondPathName}</span>
         </p>
