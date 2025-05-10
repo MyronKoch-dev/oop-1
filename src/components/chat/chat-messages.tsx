@@ -228,19 +228,6 @@ export function ChatMessages({
                         </div>
                       )}
 
-                      {/* Special handling for final recommendations */}
-                      {message.finalResult && (
-                        <RecommendationPanel
-                          pathName={message.finalResult.recommendedPath}
-                          secondPathName={message.finalResult.secondRecommendedPath}
-                          onGetStarted={() => window.open(message.finalResult?.recommendedPathUrl, '_blank')}
-                          onSecondPathSelected={message.finalResult.secondRecommendedPathUrl ?
-                            () => window.open(message.finalResult?.secondRecommendedPathUrl, '_blank') :
-                            undefined}
-                          userName={userName}
-                        />
-                      )}
-
                       {/* Add retry button for database save errors */}
                       {message.saveRetryNeeded && onRetrySave && (
                         <div className="mt-3">
