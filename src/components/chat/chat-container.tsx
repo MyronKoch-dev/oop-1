@@ -88,6 +88,9 @@ export function ChatContainer({
   const [userName, setUserName] = useState<string>("");
   // Add state for DB save retry
   const [isSaveRetrying, setIsSaveRetrying] = useState(false);
+  // State to track if the sidebar has been opened after completion
+  const [hasOpenedSidebarAfterCompletion, setHasOpenedSidebarAfterCompletion] =
+    useState(false);
 
   // Add a key state to force remount of the ChatInput component
   const [chatInputKey, setChatInputKey] = useState<string>(`input-${Date.now()}`);
@@ -120,6 +123,13 @@ export function ChatContainer({
   useEffect(() => {
     const savedMessages = localStorage.getItem("andromeda-onboarding-conversation");
     const savedComplete = localStorage.getItem("andromeda-onboarding-complete");
+    const savedHasOpenedSidebar = localStorage.getItem(
+      "andromeda-onboarding-sidebar-opened",
+    );
+
+    if (savedHasOpenedSidebar === "true") {
+      setHasOpenedSidebarAfterCompletion(true);
+    }
 
     if (savedMessages && savedComplete === "true") {
       try {
@@ -155,6 +165,14 @@ export function ChatContainer({
       localStorage.setItem("andromeda-onboarding-complete", "true");
     }
   }, [isComplete, messages]);
+
+  // Effect to save sidebar opened state
+  useEffect(() => {
+    localStorage.setItem(
+      "andromeda-onboarding-sidebar-opened",
+      String(hasOpenedSidebarAfterCompletion),
+    );
+  }, [hasOpenedSidebarAfterCompletion]);
 
   // Start the conversation by fetching the first question
   const startConversation = async () => {
@@ -1286,6 +1304,7 @@ export function ChatContainer({
     localStorage.removeItem("andromeda-onboarding-conversation");
     localStorage.removeItem("andromeda-onboarding-complete");
     localStorage.removeItem("onboarding-session-id");
+    localStorage.removeItem("andromeda-onboarding-sidebar-opened");
 
     // Reset all state with a timeout to ensure proper cleanup
     setMessages([]);
@@ -1298,6 +1317,7 @@ export function ChatContainer({
     setSelectedButtonValue(null);
     setUserName("");
     setIsComplete(false);
+    setHasOpenedSidebarAfterCompletion(false);
 
     // Generate a new unique key to force ChatInput remount
     setChatInputKey(`input-${Date.now()}`);
@@ -1375,13 +1395,14 @@ export function ChatContainer({
 
   // Add effect to open the sidebar when completion happens
   useEffect(() => {
-    if (isComplete) {
+    if (isComplete && !hasOpenedSidebarAfterCompletion) {
       // Add a slight delay so the congratulations panel appears first
       setTimeout(() => {
         openRightSidebar();
+        setHasOpenedSidebarAfterCompletion(true);
       }, 1000);
     }
-  }, [isComplete, openRightSidebar]);
+  }, [isComplete, openRightSidebar, hasOpenedSidebarAfterCompletion]);
 
   // Before the return statement, define currentQuestion:
   const currentQuestion =
