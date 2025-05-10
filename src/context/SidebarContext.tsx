@@ -9,7 +9,7 @@ type SidebarContextType = {
 
 // Default context value
 export const SidebarContext = createContext<SidebarContextType>({
-  openRightSidebar: () => {},
+  openRightSidebar: () => { },
   isRightSidebarOpen: false,
 });
 
