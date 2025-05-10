@@ -27,6 +27,8 @@ interface OnboardingResponsePayload {
     secondRecommendedPathUrl?: string;
   };
   newSessionId?: string;
+  // Flag to identify a save retry scenario
+  saveRetryNeeded?: boolean;
 }
 
 interface ChatContainerProps {
@@ -84,6 +86,8 @@ export function ChatContainer({
     [key: number]: string[];
   }>({});
   const [userName, setUserName] = useState<string>("");
+  // Add state for DB save retry
+  const [isSaveRetrying, setIsSaveRetrying] = useState(false);
 
   // Add a key state to force remount of the ChatInput component
   const [chatInputKey, setChatInputKey] = useState<string>(`input-${Date.now()}`);
@@ -268,6 +272,83 @@ export function ChatContainer({
     setConditionalText(text);
   };
 
+  // Function to retry saving to database
+  const retryDatabaseSave = async () => {
+    if (!sessionId || isSaveRetrying) return;
+
+    setIsSaveRetrying(true);
+
+    try {
+      // Replace last message with a loading message
+      setMessages((prev) => [
+        ...prev.slice(0, -1),
+        {
+          id: generateMessageId("assistant"),
+          role: "assistant",
+          content: "Retrying to save your data...",
+          isLoading: true,
+        },
+      ]);
+
+      const response = await fetch("/api/onboarding/retry-save", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ sessionId }),
+      });
+
+      const data = await response.json();
+
+      // Remove loading message
+      setMessages((prev) => prev.slice(0, -1));
+
+      if (data.success) {
+        // Show success message and keep completion state
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: generateMessageId("assistant"),
+            role: "assistant",
+            content: "Your profile data has been successfully saved! 🎉",
+          },
+        ]);
+        // No need for retry button anymore
+        const lastMessageIndex = messages.length - 1;
+        if (lastMessageIndex >= 0 && messages[lastMessageIndex].finalResult) {
+          const updatedMessages = [...messages];
+          updatedMessages[lastMessageIndex] = {
+            ...updatedMessages[lastMessageIndex],
+            saveRetryNeeded: false,
+          };
+          setMessages(updatedMessages);
+        }
+      } else {
+        // Show error message with retry button
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: generateMessageId("assistant"),
+            role: "assistant",
+            content: `${data.message || "Failed to save your data."} ${data.error ? `(${data.error})` : ""}`,
+          },
+        ]);
+      }
+    } catch (error) {
+      console.error("Error retrying save:", error);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: generateMessageId("assistant"),
+          role: "assistant",
+          content: "Something went wrong. Please try again later or contact support.",
+        },
+      ]);
+    } finally {
+      setIsSaveRetrying(false);
+    }
+  };
+
   const handleSendMessage = async (message: string) => {
     console.log("handleSendMessage called", { isProcessing, sessionId, message });
     if (isProcessing || !sessionId) {
@@ -364,12 +445,17 @@ export function ChatContainer({
 
       // Handle error if present
       if (data.error) {
+        const errorMessage = data.error;
+        const isSaveError = errorMessage.includes("profile saving failed");
+
         setMessages((prev) => [
           ...prev,
           {
             id: generateMessageId("assistant"),
             role: "assistant",
-            content: data.error || "An error occurred",
+            content: errorMessage,
+            // If this is a save error and we still have a valid session, show retry option
+            saveRetryNeeded: isSaveError && !data.haltFlow,
           },
         ]);
 
@@ -387,6 +473,8 @@ export function ChatContainer({
             role: "assistant",
             content: `__FINAL_RECOMMENDATION__`,
             finalResult: data.finalResult,
+            // If saveRetryNeeded is set by the backend
+            saveRetryNeeded: data.saveRetryNeeded,
           },
         ]);
         setInputDisabled(true);
@@ -609,12 +697,17 @@ export function ChatContainer({
 
         // Handle error if present
         if (data.error) {
+          const errorMessage = data.error;
+          const isSaveError = errorMessage.includes("profile saving failed");
+
           setMessages((prev) => [
             ...prev,
             {
               id: generateMessageId("assistant"),
               role: "assistant",
-              content: data.error || "An error occurred",
+              content: errorMessage,
+              // If this is a save error and we still have a valid session, show retry option
+              saveRetryNeeded: isSaveError && !data.haltFlow,
             },
           ]);
 
@@ -632,6 +725,8 @@ export function ChatContainer({
               role: "assistant",
               content: `__FINAL_RECOMMENDATION__`,
               finalResult: data.finalResult,
+              // If saveRetryNeeded is set by the backend
+              saveRetryNeeded: data.saveRetryNeeded,
             },
           ]);
           setInputDisabled(true);
@@ -1321,6 +1416,7 @@ export function ChatContainer({
           currentQuestionIndex={currentQuestionIndex}
           userName={userName}
           conditionalInputOpen={showConditionalInput}
+          onRetrySave={retryDatabaseSave}
         />
       </div>
 

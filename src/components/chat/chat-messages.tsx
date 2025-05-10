@@ -33,6 +33,7 @@ export interface ChatMessage {
     secondRecommendedPath?: string;
     secondRecommendedPathUrl?: string;
   } | null;
+  saveRetryNeeded?: boolean; // Flag to indicate if database save needs to be retried
 }
 
 // Defines the props expected by the ChatMessages component
@@ -47,6 +48,7 @@ interface ChatMessagesProps {
   multiSelectAnswers?: { [key: number]: string[] }; // New: all multi-select answers by question index
   currentQuestionIndex?: number | null; // Current question index for context-specific behavior
   userName?: string; // Add userName prop for personalization
+  onRetrySave?: () => void; // Callback to retry saving data to database
 }
 
 // Function to render message content with clickable links
@@ -104,6 +106,7 @@ export function ChatMessages({
   currentQuestionIndex = null, // Default to null if not provided
   userName,
   conditionalInputOpen = false, // NEW: pass this from parent
+  onRetrySave, // Pass the onRetrySave callback
 }: ChatMessagesProps & { conditionalInputOpen?: boolean }) {
   // Internal ref used only if messagesEndRef is not provided by the parent
   const internalScrollRef = useRef<HTMLDivElement>(null);
@@ -222,6 +225,23 @@ export function ChatMessages({
                             <ExternalLink className="w-4 h-4" />
                             Get Started
                           </button>
+                        </div>
+                      )}
+
+                      {/* Add retry button for database save errors */}
+                      {message.saveRetryNeeded && onRetrySave && (
+                        <div className="mt-3">
+                          <Button
+                            onClick={onRetrySave}
+                            variant="default"
+                            className="bg-blue-600 hover:bg-blue-700 text-white"
+                          >
+                            Retry Saving Your Data
+                          </Button>
+                          <p className="text-sm mt-2 text-gray-400">
+                            We had trouble saving your data, but your session is still active.
+                            Click the button above to try again.
+                          </p>
                         </div>
                       )}
                     </Card>
