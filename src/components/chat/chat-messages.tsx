@@ -320,6 +320,7 @@ export function ChatMessages({
                       return (
                         <RecommendationPanel
                           pathName={message.finalResult?.recommendedPath}
+                          pathLink={message.finalResult?.recommendedPath === "Ambassador" ? "/ambassador" : undefined}
                           secondPathName={message.finalResult?.secondRecommendedPath}
                           userName={userName}
                           onGetStarted={() => {

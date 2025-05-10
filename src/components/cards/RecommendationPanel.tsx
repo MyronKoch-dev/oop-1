@@ -5,6 +5,7 @@ import styles from "./RecommendationPanel.module.css";
 interface RecommendationPanelProps {
   pathName: string; // e.g., "Explorer Path"
   secondPathName?: string; // Second recommended path
+  pathLink?: string; // Optional link for the main path
   onGetStarted: () => void; // function to call when button is clicked
   onSecondPathSelected?: () => void; // function to call when second path is selected
   userName?: string; // Add user's name for personalization
@@ -13,6 +14,7 @@ interface RecommendationPanelProps {
 const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
   pathName,
   secondPathName,
+  pathLink,
   onGetStarted,
   onSecondPathSelected,
   userName,
@@ -25,9 +27,15 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
     <p className={styles.path}>
       🌟 <span className={styles.highlight}>{pathName}</span> 🌟
     </p>
-    <button className={styles.getStartedBtn} onClick={onGetStarted}>
-      Get Started 🚀
-    </button>
+    {pathLink ? (
+      <a href={pathLink} className={styles.getStartedBtn}>
+        Get Started 🚀
+      </a>
+    ) : (
+      <button className={styles.getStartedBtn} onClick={onGetStarted}>
+        Get Started 🚀
+      </button>
+    )}
 
     {secondPathName && (
       <div className={styles.secondPath}>
