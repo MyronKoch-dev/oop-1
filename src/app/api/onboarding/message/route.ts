@@ -553,15 +553,34 @@ export async function POST(request: NextRequest) {
         console.error(
           `DB Save failed for session ${currentSessionId}: ${dbSaveError}`,
         );
+
+        // Don't delete the session on save failure to allow for retry
+        // Return with error but maintain the session
+        return NextResponse.json(
+          createResponsePayload({
+            sessionId: currentSessionId,
+            currentQuestionIndex: nextQuestionIndex,
+            isFinalQuestion: true,
+            finalResult: {
+              recommendedPath,
+              recommendedPathUrl,
+              secondRecommendedPath,
+              secondRecommendedPathUrl
+            },
+            error: `Completed, but profile saving failed: ${dbSaveError}. Your data has been preserved for retry.`,
+            // Add a property to indicate this is a save retry scenario
+            haltFlow: false,
+          })
+        );
       }
 
-      // 3c. Delete Session (Important: do this AFTER saving attempt)
+      // Only delete the session if DB save was successful
       await deleteSession(currentSessionId);
       console.log(
-        `[Session: ${currentSessionId}] Session deleted after completion attempt.`,
+        `[Session: ${currentSessionId}] Session deleted after successful completion.`,
       );
 
-      // 3d. Return Final Result
+      // 3d. Return Final Result for successful saves
       return NextResponse.json(
         createResponsePayload({
           sessionId: currentSessionId,
@@ -573,9 +592,7 @@ export async function POST(request: NextRequest) {
             secondRecommendedPath,
             secondRecommendedPathUrl
           },
-          error: !dbSaveSuccess
-            ? `Completed, but profile saving failed: ${dbSaveError}`
-            : null,
+          error: null,
         })
       );
     }
