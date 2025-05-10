@@ -86,6 +86,36 @@ function isBatchContactPayload(obj: unknown): obj is BatchContactPayload {
   );
 }
 
+/**
+ * Helper function to create standardized response payloads
+ * Reduces code duplication and ensures consistency in responses
+ */
+function createResponsePayload(
+  params: Partial<OnboardingResponsePayload> & { sessionId: string; currentQuestionIndex: number }
+): OnboardingResponsePayload {
+  // Create payload with required fields
+  const payload: OnboardingResponsePayload = {
+    sessionId: params.sessionId,
+    currentQuestionIndex: params.currentQuestionIndex,
+    // Set defaults for optional fields
+    nextQuestion: params.nextQuestion ?? null,
+    inputMode: params.inputMode ?? "text",
+    options: params.options ?? [],
+    isFinalQuestion: params.isFinalQuestion ?? false,
+    finalResult: params.finalResult ?? null,
+    error: params.error ?? null,
+    haltFlow: params.haltFlow ?? false,
+  };
+
+  // Add optional fields only if they exist
+  if (params.newSessionId) payload.newSessionId = params.newSessionId;
+  if (params.conditionalTextInputLabel) payload.conditionalTextInputLabel = params.conditionalTextInputLabel;
+  if (params.conditionalTriggerValue) payload.conditionalTriggerValue = params.conditionalTriggerValue;
+  if (params.fieldErrors) payload.fieldErrors = params.fieldErrors;
+
+  return payload;
+}
+
 export async function POST(request: NextRequest) {
   const requestTimestamp = Date.now(); // For logging request time
   console.log(
@@ -135,22 +165,23 @@ export async function POST(request: NextRequest) {
           await createSession(); // Create a new one
         currentSessionState = newlyCreatedState; // Use the new state
         const firstQuestion = getQuestionDetails(0);
+
         // Return response immediately, indicating restart
-        const responsePayload: OnboardingResponsePayload = {
-          sessionId: newId,
-          newSessionId: newId, // Send the *new* ID back
-          currentQuestionIndex: 0,
-          nextQuestion:
-            firstQuestion?.text ?? "Error: Cannot load first question.",
-          inputMode: firstQuestion?.inputMode ?? "text",
-          options: firstQuestion?.options ?? [],
-          conditionalTextInputLabel: firstQuestion?.conditionalTextInputLabel,
-          conditionalTriggerValue: firstQuestion?.conditionalTriggerValue,
-          isFinalQuestion: isFinalQuestion(0),
-          error: "Your session expired. Please start again.",
-          haltFlow: false, // Allow restart
-        };
-        return NextResponse.json(responsePayload);
+        return NextResponse.json(
+          createResponsePayload({
+            sessionId: newId,
+            newSessionId: newId, // Send the *new* ID back
+            currentQuestionIndex: 0,
+            nextQuestion: firstQuestion?.text ?? "Error: Cannot load first question.",
+            inputMode: firstQuestion?.inputMode ?? "text",
+            options: firstQuestion?.options ?? [],
+            conditionalTextInputLabel: firstQuestion?.conditionalTextInputLabel,
+            conditionalTriggerValue: firstQuestion?.conditionalTriggerValue,
+            isFinalQuestion: isFinalQuestion(0),
+            error: "Your session expired. Please start again.",
+            haltFlow: false, // Allow restart
+          })
+        );
       }
       // Session retrieved successfully
       currentSessionState = retrievedState;
@@ -247,15 +278,14 @@ export async function POST(request: NextRequest) {
               );
               // Optionally delete session here, or let it expire
               // await deleteSession(currentSessionId);
-              const responsePayload: OnboardingResponsePayload = {
-                sessionId: currentSessionId,
-                currentQuestionIndex: currentQuestionIndex,
-                error:
-                  "A valid email address is required. Please refresh to start over.",
-                haltFlow: true, // Signal frontend to stop
-              };
-              // NOTE: We do NOT update the session state here, just return the halt response
-              return NextResponse.json(responsePayload);
+              return NextResponse.json(
+                createResponsePayload({
+                  sessionId: currentSessionId,
+                  currentQuestionIndex: currentQuestionIndex,
+                  error: "A valid email address is required. Please refresh to start over.",
+                  haltFlow: true, // Signal frontend to stop
+                })
+              );
             } else {
               // --- Proceed with NULL/default for other fields ---
               console.log(
@@ -274,19 +304,20 @@ export async function POST(request: NextRequest) {
         // If we need to re-prompt based on the logic above, do it now *before* parsing/advancing
         if (needsReprompt) {
           await updateSession(currentSessionId, currentSessionState); // Save the reprompt flag state
-          const responsePayload: OnboardingResponsePayload = {
-            sessionId: currentSessionId,
-            currentQuestionIndex: currentQuestionIndex, // Stay on same question
-            nextQuestion: questionDetail.text,
-            inputMode: questionDetail.inputMode,
-            options: questionDetail.options ?? [],
-            conditionalTextInputLabel: questionDetail.conditionalTextInputLabel,
-            conditionalTriggerValue: questionDetail.conditionalTriggerValue,
-            isFinalQuestion: isFinalQuestion(currentQuestionIndex),
-            error: questionDetail.rePromptMessage, // Send re-prompt message
-            haltFlow: false,
-          };
-          return NextResponse.json(responsePayload);
+          return NextResponse.json(
+            createResponsePayload({
+              sessionId: currentSessionId,
+              currentQuestionIndex: currentQuestionIndex, // Stay on same question
+              nextQuestion: questionDetail.text,
+              inputMode: questionDetail.inputMode,
+              options: questionDetail.options ?? [],
+              conditionalTextInputLabel: questionDetail.conditionalTextInputLabel,
+              conditionalTriggerValue: questionDetail.conditionalTriggerValue,
+              isFinalQuestion: isFinalQuestion(currentQuestionIndex),
+              error: questionDetail.rePromptMessage, // Send re-prompt message
+              haltFlow: false,
+            })
+          );
         }
 
         // 2c. Parse and Store Response (Only if validation passed or it's a non-halting second failure)
@@ -294,7 +325,7 @@ export async function POST(request: NextRequest) {
           `[Session: ${currentSessionId}] Parsing and storing response for Q${currentQuestionIndex}`,
         );
         const dataToUpdate = currentSessionState.accumulatedData;
-        const responseToParse = isValid ? rawResponse : null; // Pass null to parsers if validation failed but we proceed
+        const responseToParse = isValid ? rawResponse : null;
 
         switch (currentQuestionIndex) {
           case 0:
@@ -531,21 +562,22 @@ export async function POST(request: NextRequest) {
       );
 
       // 3d. Return Final Result
-      const finalResponsePayload: OnboardingResponsePayload = {
-        sessionId: currentSessionId,
-        currentQuestionIndex: nextQuestionIndex, // Index is now >= TOTAL_QUESTIONS
-        isFinalQuestion: true, // Signifies flow end
-        finalResult: {
-          recommendedPath,
-          recommendedPathUrl,
-          secondRecommendedPath,
-          secondRecommendedPathUrl
-        },
-        error: !dbSaveSuccess
-          ? `Completed, but profile saving failed: ${dbSaveError}`
-          : null,
-      };
-      return NextResponse.json(finalResponsePayload);
+      return NextResponse.json(
+        createResponsePayload({
+          sessionId: currentSessionId,
+          currentQuestionIndex: nextQuestionIndex, // Index is now >= TOTAL_QUESTIONS
+          isFinalQuestion: true, // Signifies flow end
+          finalResult: {
+            recommendedPath,
+            recommendedPathUrl,
+            secondRecommendedPath,
+            secondRecommendedPathUrl
+          },
+          error: !dbSaveSuccess
+            ? `Completed, but profile saving failed: ${dbSaveError}`
+            : null,
+        })
+      );
     }
 
     // --- 4. Prepare Response for Next Question ---
@@ -563,22 +595,20 @@ export async function POST(request: NextRequest) {
     }
 
     // --- 6. Return Next Question Details ---
-    const responsePayload: OnboardingResponsePayload = {
-      sessionId: currentSessionId,
-      // Conditionally add newSessionId if it's a new session
-      ...(isNewSession && { newSessionId: currentSessionId }),
-      currentQuestionIndex: nextQuestionIndex,
-      nextQuestion: nextQuestionDetail.text,
-      inputMode: nextQuestionDetail.inputMode,
-      options: nextQuestionDetail.options ?? [],
-      conditionalTextInputLabel: nextQuestionDetail.conditionalTextInputLabel,
-      conditionalTriggerValue: nextQuestionDetail.conditionalTriggerValue,
-      isFinalQuestion: isFinalQuestion(nextQuestionIndex),
-      finalResult: null,
-      error: null, // Clear any previous re-prompt error
-      haltFlow: false,
-    };
-    return NextResponse.json(responsePayload);
+    return NextResponse.json(
+      createResponsePayload({
+        sessionId: currentSessionId,
+        // Conditionally add newSessionId if it's a new session
+        ...(isNewSession && { newSessionId: currentSessionId }),
+        currentQuestionIndex: nextQuestionIndex,
+        nextQuestion: nextQuestionDetail.text,
+        inputMode: nextQuestionDetail.inputMode,
+        options: nextQuestionDetail.options ?? [],
+        conditionalTextInputLabel: nextQuestionDetail.conditionalTextInputLabel,
+        conditionalTriggerValue: nextQuestionDetail.conditionalTriggerValue,
+        isFinalQuestion: isFinalQuestion(nextQuestionIndex),
+      })
+    );
   } catch (error) {
     console.error(
       `API Error (Session: ${currentSessionIdForLog ?? "N/A"}):`,
