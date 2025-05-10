@@ -65,7 +65,9 @@ export default function RootLayout({
 
   // Function to expose via context that opens the right sidebar
   const openRightSidebar = () => {
-    setIsRightSidebarOpen(true);
+    if (!isMobile) {
+      setIsRightSidebarOpen(true);
+    }
   };
 
   return (
