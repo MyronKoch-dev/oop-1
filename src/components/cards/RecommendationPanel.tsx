@@ -11,6 +11,8 @@ interface RecommendationPanelProps {
   onGetStarted: () => void; // function to call when button is clicked
   onSecondPathSelected?: () => void; // function to call when second path is selected
   userName?: string; // Add user's name for personalization
+  appUrl?: string; // New: URL for the main web application
+  goToAppButtonText?: string; // New: Text for the "Go to App" button
 }
 
 const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
@@ -22,12 +24,14 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
   onGetStarted,
   onSecondPathSelected,
   userName,
+  appUrl,
+  goToAppButtonText = "Explore Andromeda Platform", // Default button text
 }) => (
   <div className={styles.panel}>
     <h2>
       🎉 <b>Congratulations!</b> 🎉
     </h2>
-    <p>Welcome{userName ? `, ${userName}` : ''}! Based on your responses, here&amp;apos;s a recommended starting path to help you make the most of Andromeda:</p>
+    <p>Welcome{userName ? `, ${userName}` : ''}! Based on your responses, here is a recommended starting path to help you make the most of Andromeda:</p>
     <p className={styles.path}>
       🌟 <span className={styles.highlight}>{pathName}</span> 🌟
     </p>
@@ -68,6 +72,16 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
       We hope this gives you a bit of guidance toward areas where you can have the quickest success. We look forward to hearing about what you build with Andromeda!
     </p>
     <h3>WELCOME TO ANDROMEDA 🎉</h3>
+    {appUrl && (
+      <a
+        href={appUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`${styles.secondaryBtn} mt-4`} // Use only secondaryBtn style + consistent top margin
+      >
+        {goToAppButtonText}
+      </a>
+    )}
   </div>
 );
 

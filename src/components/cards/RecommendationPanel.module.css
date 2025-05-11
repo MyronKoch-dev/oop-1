@@ -3,7 +3,8 @@
   color: #fff;
   border-radius: 24px;
   padding: 32px 40px;
-  max-width: 420px;
+  max-width: 600px;
+  /* Increased from 420px */
   margin: 40px auto;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
   text-align: center;
@@ -11,16 +12,33 @@
 }
 
 .panel h2 {
+  /* "Congratulations!" */
   margin-top: 0;
   font-size: 2rem;
   font-weight: 700;
+  margin-bottom: 16px;
+  /* Added consistent bottom margin */
+}
+
+/* Targets the "Welcome..." paragraph immediately after h2 */
+.panel>h2+p {
+  margin-top: 0;
+  /* h2 has bottom margin */
+  margin-bottom: 24px;
+  font-size: 1rem;
+  /* Ensure consistent font size for intro text */
+  color: #e0e0e0;
+  /* Slightly lighter than default for emphasis */
+  line-height: 1.6;
 }
 
 .path {
+  /* Path name like "Hacker" or "AI Navigator" */
   font-size: 1.3rem;
   font-weight: 600;
   color: #7ecfff;
-  margin: 16px 0;
+  margin: 24px 0 8px 0;
+  /* Increased top margin, reduced bottom before description */
 }
 
 .highlight {
@@ -28,6 +46,7 @@
 }
 
 .getStartedBtn {
+  /* Primary "Get Started" button */
   background: #3578e5;
   color: #fff;
   border: none;
@@ -38,6 +57,8 @@
   margin: 24px 0;
   cursor: pointer;
   transition: background 0.2s;
+  display: inline-block;
+  /* Ensure it respects margins properly */
 }
 
 .getStartedBtn:hover {
@@ -45,20 +66,38 @@
 }
 
 .secondPath {
-  margin-top: 36px;
+  /* Container for the secondary path recommendation */
+  margin-top: 32px;
   padding-top: 24px;
   border-top: 1px solid rgba(255, 255, 255, 0.15);
+  margin-bottom: 32px;
+  /* Added space after this section */
 }
 
-.secondPath p {
-  margin: 8px 0;
+/* Text within secondPath like "We also think..." */
+.secondPath>p:first-child {
+  margin-bottom: 8px;
+  /* Space before the second path name */
 }
+
 
 .secondaryBtn {
+  /* Used for "Explore This Path" and "Explore Andromeda Platform" */
   background: #2c64b9;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
   padding: 12px 24px;
   font-size: 1rem;
-  margin: 16px 0;
+  font-weight: 600;
+  /* Added for consistency */
+  cursor: pointer;
+  transition: background 0.2s;
+  display: inline-block;
+  /* Ensure it respects margins properly */
+  /* Vertical margins are handled by mt-X utility in JSX or specific context */
+  /* e.g. "Explore This Path" button will have margin from its parent .secondPath's structure */
+  /* e.g. "Explore Andromeda Platform" has mt-4 in JSX */
 }
 
 .secondaryBtn:hover {
@@ -66,22 +105,31 @@
 }
 
 .thanks {
-  margin-top: 16px;
+  /* "We hope this gives you..." paragraph */
+  margin: 32px 0 16px 0;
   font-size: 1rem;
   color: #b3c2e0;
+  line-height: 1.6;
 }
 
 .panel h3 {
-  margin: 12px 0 0 0;
+  /* "WELCOME TO ANDROMEDA" heading */
+  display: block;
+  width: 100%;
+  margin: 24px 0 16px 0;
+  /* Adjusted top margin for more space */
   font-size: 1.3rem;
   font-weight: 700;
   letter-spacing: 1px;
 }
 
 .description {
-  margin-top: 0.5rem;
-  margin-bottom: 1rem;
+  /* Text description for a recommended path */
+  margin: 0 auto 24px auto;
+  /* Centered text, margin below before button */
   font-size: 0.9rem;
   color: #cccccc;
   line-height: 1.6;
+  max-width: 90%;
+  /* Prevent descriptions from being too wide */
 }

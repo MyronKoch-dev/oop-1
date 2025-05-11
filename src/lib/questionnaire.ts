@@ -254,3 +254,12 @@ export function isFinalQuestion(index: number): boolean {
 // ];
 
 // Helper function to generate a recommendation path based on accumulated data
+
+export const PATH_DESCRIPTIONS: Record<string, string> = {
+  Explorer: "This path is for curious minds eager to dive deep into Andromeda's features, experiment with its capabilities, and uncover new possibilities. Chart your own course and discover what you can build!",
+  Visionary: "If you are a big thinker with groundbreaking ideas, the Visionary Path is for you. Learn how to leverage Andromeda to bring your innovative concepts to life and help shape the future of the platform.",
+  "AI Navigator": "Passionate about Artificial Intelligence? The AI Navigator path guides you in understanding, utilizing, and even steering AI-driven features and development within the Andromeda ecosystem.",
+  Ambassador: "Become an Andromeda Ambassador! This path is for those who love to connect, share knowledge, and build communities. Help others discover Andromeda and grow our collective success.",
+  Contractor: "The Contractor Path is designed for builders who need to deliver. Learn to efficiently use Andromeda's capabilities to complete projects, create powerful solutions, and achieve your development goals.",
+  Hacker: "Unleash your ingenuity with the Hacker Path. This journey is for those who love to explore, experiment, and find innovative solutions by creatively using and extending Andromeda's capabilities. Push the boundaries and see what is possible!",
+};

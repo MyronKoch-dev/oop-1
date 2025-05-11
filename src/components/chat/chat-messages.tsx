@@ -30,8 +30,10 @@ export interface ChatMessage {
   finalResult?: {
     recommendedPath: string;
     recommendedPathUrl: string;
+    recommendedPathDescription?: string; // New
     secondRecommendedPath?: string;
     secondRecommendedPathUrl?: string;
+    secondRecommendedPathDescription?: string; // New
   } | null;
   saveRetryNeeded?: boolean; // Flag to indicate if database save needs to be retried
 }
@@ -175,16 +177,16 @@ export function ChatMessages({
                         🌟 Welcome to Andromeda! 🌟
                       </h2>
                       <p className="text-lg mb-4">
-                        I&apos;m your Onboarding Assistant, here to help you get
+                        I am your Onboarding Assistant, here to help you get
                         started.
                         <br />
                         <br />
-                        I&apos;ll ask a few quick questions to learn about your
+                        Let me ask a few quick questions to learn about your
                         background and interests.
                         <br />
                         <br />
-                        Once I understand what you&apos;re looking for,
-                        I&apos;ll point you directly to the right spot in our
+                        Once I understand what you are looking for,
+                        I will point you directly to the right spot in our
                         community!
                         <br />
                         <br />
@@ -320,9 +322,13 @@ export function ChatMessages({
                       return (
                         <RecommendationPanel
                           pathName={message.finalResult?.recommendedPath}
+                          pathDescription={message.finalResult?.recommendedPathDescription}
                           pathLink={message.finalResult?.recommendedPath === "Ambassador" ? "/ambassador" : undefined}
                           secondPathName={message.finalResult?.secondRecommendedPath}
+                          secondPathDescription={message.finalResult?.secondRecommendedPathDescription}
                           userName={userName}
+                          appUrl="https://app.testnet.andromedaprotocol.io"
+                          goToAppButtonText="Explore Andromeda Platform"
                           onGetStarted={() => {
                             console.log(
                               `Opening primary path URL: ${message.finalResult?.recommendedPathUrl}`
