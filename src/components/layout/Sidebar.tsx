@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
   Book,
   BookOpen,
-  Sun,
+  Droplet,
   Layers,
   Command,
   HelpCircle,
@@ -54,13 +54,9 @@ const toolNavItems: NavItem[] = [
     icon: <Layers className="w-5 h-5" />,
   },
   {
-    href: "#",
-    label: "Assistant",
-    icon: <Bot className="w-5 h-5" />,
-    badge: {
-      text: "Soon",
-      description: "Chrome Extension",
-    },
+    href: "https://andromeda-testnet-faucet.vercel.app/",
+    label: "ANDR Faucet",
+    icon: <Droplet className="w-5 h-5" />,
   },
   {
     href: "https://app.testnet.andromedaprotocol.io/cli",
@@ -71,11 +67,6 @@ const toolNavItems: NavItem[] = [
     href: "https://github.com/andromedaprotocol/embeddable-marketplace-demo",
     label: "Install a Demo",
     icon: <Layers className="w-5 h-5" />,
-  },
-  {
-    href: "https://andromeda-testnet-faucet.vercel.app/",
-    label: "ANDR Faucet",
-    icon: <Sun className="w-5 h-5" />,
   },
 ];
 
