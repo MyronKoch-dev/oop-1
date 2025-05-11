@@ -22,7 +22,7 @@ import {
   parseAI,
   // Import other parsing functions if created
 } from "@/lib/parsing";
-import { determinePath } from "@/lib/pathDetermination";
+import { determinePath, getFinalRecommendationIntro } from "@/lib/pathDetermination"; // Added getFinalRecommendationIntro
 import { saveOnboardingResponse } from "@/lib/supabase";
 import { OnboardingData, SessionState } from "@/lib/types"; // Ensure all needed types are imported
 
@@ -593,10 +593,17 @@ export async function POST(request: NextRequest) {
       );
 
       // 3d. Return Final Result for successful saves
+      const introductoryMessage = getFinalRecommendationIntro(
+        finalData.name,
+        recommendedPath,
+        finalData.goal
+      );
+
       return NextResponse.json(
         createResponsePayload({
           sessionId: currentSessionId,
           currentQuestionIndex: nextQuestionIndex, // Index is now >= TOTAL_QUESTIONS
+          nextQuestion: introductoryMessage, // <-- ADDED THIS LINE
           isFinalQuestion: true, // Signifies flow end
           finalResult: {
             recommendedPath,

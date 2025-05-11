@@ -92,6 +92,9 @@ export function ChatContainer({
   const [hasOpenedSidebarAfterCompletion, setHasOpenedSidebarAfterCompletion] =
     useState(false);
 
+  // Ref to track if the initial conversation setup has successfully completed
+  const hasSuccessfullyStartedConversation = useRef(false);
+
   // Add a key state to force remount of the ChatInput component
   const [chatInputKey, setChatInputKey] = useState<string>(`input-${Date.now()}`);
 
@@ -123,11 +126,11 @@ export function ChatContainer({
   useEffect(() => {
     const savedMessages = localStorage.getItem("andromeda-onboarding-conversation");
     const savedComplete = localStorage.getItem("andromeda-onboarding-complete");
-    const savedHasOpenedSidebar = localStorage.getItem(
+    const savedHasOpenedSidebar = localStorage.getItem( // Load sidebar state
       "andromeda-onboarding-sidebar-opened",
     );
 
-    if (savedHasOpenedSidebar === "true") {
+    if (savedHasOpenedSidebar === "true") { // Restore sidebar state
       setHasOpenedSidebarAfterCompletion(true);
     }
 
@@ -149,12 +152,22 @@ export function ChatContainer({
         if (userNameMessage) {
           setUserName(userNameMessage.content);
         }
+        hasSuccessfullyStartedConversation.current = true; // Mark as started if loaded complete
+        console.log("Loaded completed conversation from localStorage, hasSuccessfullyStartedConversation set to true.");
       } catch (e) {
         console.error("Error parsing saved messages:", e);
+        // If parsing fails, treat as a fresh start
+        hasSuccessfullyStartedConversation.current = false;
         initializeChat();
       }
     } else {
-      initializeChat();
+      // Not complete or not saved, so initialize if not already started.
+      if (!hasSuccessfullyStartedConversation.current) {
+        console.log("No saved complete conversation, calling initializeChat.");
+        initializeChat();
+      } else {
+        console.log("No saved complete conversation, but hasSuccessfullyStartedConversation is true, skipping initializeChat.");
+      }
     }
   }, []);
 
@@ -176,13 +189,17 @@ export function ChatContainer({
 
   // Start the conversation by fetching the first question
   const startConversation = async () => {
-    console.log("startConversation called", { messagesLength: messages.length });
-    // Check if we already have more than just the welcome message
-    // This prevents duplicate initialization
-    if (messages.length > 1) {
-      console.log("Skipping startConversation - messages already exist");
+    console.log("startConversation called", { currentFlagState: hasSuccessfullyStartedConversation.current });
+    if (hasSuccessfullyStartedConversation.current) {
+      console.log("Skipping startConversation as it has already successfully started.");
       return;
     }
+
+    // Original guard, can be kept as a secondary check or removed if the ref is trusted
+    // if (messages.length > 1) {
+    //   console.log("Skipping startConversation - messages already exist (length check)");
+    //   return;
+    // }
 
     setIsProcessing(true);
     setInputDisabled(true); // Ensure input is disabled during API call
@@ -228,6 +245,12 @@ export function ChatContainer({
             options: data.options,
           },
         ]);
+        hasSuccessfullyStartedConversation.current = true; // Mark as successfully started
+        console.log("startConversation: First question added, hasSuccessfullyStartedConversation set to true.");
+      } else {
+        // If no next question, it didn't "successfully start" in terms of getting Q1.
+        // Consider if hasSuccessfullyStartedConversation should remain false or if this is an error state.
+        console.log("startConversation: No nextQuestion in API response.");
       }
 
       // Set input mode
@@ -271,17 +294,27 @@ export function ChatContainer({
       console.log("No existing sessionId found in localStorage");
     }
 
-    // Add the initial welcome message
-    setMessages([
-      {
-        id: generateMessageId("assistant"),
-        role: "assistant",
-        content: initialMessage,
-      },
-    ]);
+    // Add the initial welcome message only if messages are currently empty
+    // This helps prevent duplicating the welcome message if initializeChat is called multiple times
+    // by StrictMode before startConversation populates further.
+    setMessages((prevMessages) => {
+      if (prevMessages.length === 0) {
+        console.log("initializeChat: Setting initial welcome message.");
+        return [
+          {
+            id: generateMessageId("assistant"),
+            role: "assistant",
+            content: initialMessage,
+          },
+        ];
+      }
+      console.log("initializeChat: Welcome message already present or messages not empty; not re-adding welcome.");
+      return prevMessages;
+    });
 
     // Start the conversation (first question)
-    console.log("Starting conversation");
+    // startConversation itself will check hasSuccessfullyStartedConversation
+    console.log("initializeChat: Calling startConversation.");
     startConversation();
   };
 
@@ -1300,11 +1333,12 @@ export function ChatContainer({
   // Add a handler to reset all chat state and start a new session
   const handleRestart = async () => {
     console.log("Restarting chat...");
+    hasSuccessfullyStartedConversation.current = false; // Reset the flag
     // Clear saved conversation
     localStorage.removeItem("andromeda-onboarding-conversation");
     localStorage.removeItem("andromeda-onboarding-complete");
     localStorage.removeItem("onboarding-session-id");
-    localStorage.removeItem("andromeda-onboarding-sidebar-opened");
+    localStorage.removeItem("andromeda-onboarding-sidebar-opened"); // Clear sidebar state on restart
 
     // Reset all state with a timeout to ensure proper cleanup
     setMessages([]);
@@ -1317,7 +1351,7 @@ export function ChatContainer({
     setSelectedButtonValue(null);
     setUserName("");
     setIsComplete(false);
-    setHasOpenedSidebarAfterCompletion(false);
+    setHasOpenedSidebarAfterCompletion(false); // Reset sidebar state
 
     // Generate a new unique key to force ChatInput remount
     setChatInputKey(`input-${Date.now()}`);
@@ -1365,6 +1399,11 @@ export function ChatContainer({
         },
       ]);
 
+      if (data.nextQuestion) {
+        hasSuccessfullyStartedConversation.current = true; // Mark as started after restart
+        console.log("handleRestart: Restart successful, hasSuccessfullyStartedConversation set to true.");
+      }
+
       // Set input mode
       setInputMode(data.inputMode || "text");
 
@@ -1395,14 +1434,14 @@ export function ChatContainer({
 
   // Add effect to open the sidebar when completion happens
   useEffect(() => {
-    if (isComplete && !hasOpenedSidebarAfterCompletion) {
+    if (isComplete && !hasOpenedSidebarAfterCompletion) { // Check flag
       // Add a slight delay so the congratulations panel appears first
       setTimeout(() => {
         openRightSidebar();
-        setHasOpenedSidebarAfterCompletion(true);
+        setHasOpenedSidebarAfterCompletion(true); // Set flag after opening
       }, 1000);
     }
-  }, [isComplete, openRightSidebar, hasOpenedSidebarAfterCompletion]);
+  }, [isComplete, openRightSidebar, hasOpenedSidebarAfterCompletion]); // Add dependency
 
   // Before the return statement, define currentQuestion:
   const currentQuestion =
