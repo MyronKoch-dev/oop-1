@@ -77,3 +77,11 @@
   font-weight: 700;
   letter-spacing: 1px;
 }
+
+.description {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #cccccc;
+  line-height: 1.6;
+}

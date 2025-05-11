@@ -3,8 +3,10 @@ import styles from "./RecommendationPanel.module.css";
 
 // Props allow this panel to be reused for different recommendations
 interface RecommendationPanelProps {
-  pathName: string; // e.g., "Explorer Path"
-  secondPathName?: string; // Second recommended path
+  pathName: string;
+  pathDescription?: string; // New: Explanation of the path
+  secondPathName?: string;
+  secondPathDescription?: string; // New: Explanation of the second path
   pathLink?: string; // Optional link for the main path
   onGetStarted: () => void; // function to call when button is clicked
   onSecondPathSelected?: () => void; // function to call when second path is selected
@@ -13,7 +15,9 @@ interface RecommendationPanelProps {
 
 const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
   pathName,
+  pathDescription,
   secondPathName,
+  secondPathDescription,
   pathLink,
   onGetStarted,
   onSecondPathSelected,
@@ -23,10 +27,13 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
     <h2>
       🎉 <b>Congratulations!</b> 🎉
     </h2>
-    <p>Thank you so much for your interest{userName ? `, ${userName}` : ''}! Below you&apos;ll find our recommendation and hopefully we&apos;ll see you in the community chats and online.</p>
+    <p>Welcome{userName ? `, ${userName}` : ''}! Based on your responses, here&amp;apos;s a recommended starting path to help you make the most of Andromeda:</p>
     <p className={styles.path}>
       🌟 <span className={styles.highlight}>{pathName}</span> 🌟
     </p>
+    {pathDescription && (
+      <p className={styles.description}>{pathDescription}</p>
+    )}
     {pathLink ? (
       <a href={pathLink} className={styles.getStartedBtn}>
         Get Started 🚀
@@ -43,6 +50,9 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
         <p className={styles.path}>
           <span className={styles.highlight}>{secondPathName}</span>
         </p>
+        {secondPathDescription && (
+          <p className={styles.description}>{secondPathDescription}</p>
+        )}
         {onSecondPathSelected && (
           <button
             className={`${styles.getStartedBtn} ${styles.secondaryBtn}`}
