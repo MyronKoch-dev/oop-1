@@ -51,7 +51,8 @@ export default async function AINavigatorsPage() {
       description: "Propose and discuss novel AI concepts for Andromeda and Web3.",
       icon: Lightbulb,
       buttonText: "Share AI Idea",
-      colorScheme: "amber"
+      iconColor: "text-amber-500",
+      buttonClass: "bg-amber-600 hover:bg-amber-700 text-white"
     },
     {
       slug: "llm-agent-development",
@@ -59,7 +60,8 @@ export default async function AINavigatorsPage() {
       description: "Discuss building and integrating LLMs or AI agents within the ecosystem.",
       icon: Cpu,
       buttonText: "Discuss Development",
-      colorScheme: "sky"
+      iconColor: "text-blue-500",
+      buttonClass: "bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
     },
     {
       slug: "ai-tooling-frameworks",
@@ -67,7 +69,8 @@ export default async function AINavigatorsPage() {
       description: "Share and explore tools, libraries, and frameworks for AI development.",
       icon: Wrench,
       buttonText: "Explore Tools",
-      colorScheme: "indigo"
+      iconColor: "text-[#6366f1]",
+      buttonClass: "bg-[#6366f1] hover:bg-[#4f46e5] text-white"
     },
     {
       slug: "ai-web3-concepts",
@@ -75,7 +78,8 @@ export default async function AINavigatorsPage() {
       description: "Delve into the intersection of AI and Web3, exploring new possibilities.",
       icon: Brain,
       buttonText: "Explore Concepts",
-      colorScheme: "teal"
+      iconColor: "text-[#1abc9c]",
+      buttonClass: "bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
     },
     {
       slug: "project-showcases-ai",
@@ -83,7 +87,8 @@ export default async function AINavigatorsPage() {
       description: "Share your AI-powered projects built with or for Andromeda.",
       icon: Sparkles,
       buttonText: "Showcase Project",
-      colorScheme: "rose"
+      iconColor: "text-[#f39c12]",
+      buttonClass: "bg-[#f39c12] hover:bg-[#d35400] text-white"
     },
     {
       slug: "ethical-ai-in-blockchain",
@@ -91,7 +96,8 @@ export default async function AINavigatorsPage() {
       description: "Discuss responsible AI development and ethical considerations in Web3.",
       icon: ShieldCheck,
       buttonText: "Discuss Ethics",
-      colorScheme: "lime"
+      iconColor: "text-[#9b59b6]",
+      buttonClass: "bg-[#9b59b6] hover:bg-[#8e44ad] text-white"
     },
     {
       slug: "general-ai-chat",
@@ -99,7 +105,8 @@ export default async function AINavigatorsPage() {
       description: "Open forum for any other AI-related topics, questions, or discussions.",
       icon: MessageSquare,
       buttonText: "Start Chatting",
-      colorScheme: "gray"
+      iconColor: "text-gray-400",
+      buttonClass: "bg-[#333333] hover:bg-[#444444] text-white"
     },
   ];
 
@@ -117,24 +124,11 @@ export default async function AINavigatorsPage() {
         : "Unknown error loading AI Navigator tasks.";
   }
 
-  const getColorClasses = (scheme: string) => {
-    switch (scheme) {
-      case "amber": return { text: "text-amber-400", bg: "bg-amber-500 hover:bg-amber-600", border: "border-amber-500" };
-      case "sky": return { text: "text-sky-400", bg: "bg-sky-500 hover:bg-sky-600", border: "border-sky-500" };
-      case "indigo": return { text: "text-indigo-400", bg: "bg-indigo-500 hover:bg-indigo-600", border: "border-indigo-500" };
-      case "teal": return { text: "text-teal-400", bg: "bg-teal-500 hover:bg-teal-600", border: "border-teal-500" };
-      case "rose": return { text: "text-rose-400", bg: "bg-rose-500 hover:bg-rose-600", border: "border-rose-500" };
-      case "lime": return { text: "text-lime-400", bg: "bg-lime-500 hover:bg-lime-600", border: "border-lime-500" };
-      default: return { text: "text-gray-400", bg: "bg-gray-500 hover:bg-gray-600", border: "border-gray-500" };
-    }
-  };
-
-
   return (
     <main className="container mx-auto p-4 md:p-6 max-w-7xl min-h-screen bg-black text-white">
-      <div className="mb-12 text-center"> {/* Increased bottom margin */}
-        <h1 className="text-4xl font-bold text-white mb-3">AI Navigator Path</h1> {/* Slightly larger title */}
-        <p className="text-lg text-gray-400 max-w-3xl mx-auto"> {/* Slightly larger paragraph */}
+      <div className="mb-12 text-center">
+        <h1 className="text-4xl font-bold text-white mb-3">AI Navigator Path</h1>
+        <p className="text-lg text-gray-400 max-w-3xl mx-auto">
           Discover, discuss, and contribute to AI-focused projects, ideas, and bounties within the
           Andromeda Protocol ecosystem.
         </p>
@@ -150,15 +144,14 @@ export default async function AINavigatorsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {discussionCategories.map((category) => {
             const IconComponent = category.icon;
-            const colors = getColorClasses(category.colorScheme);
             return (
               <div key={category.slug} className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6 flex flex-col hover:shadow-lg hover:border-gray-500 transition-all duration-300">
-                <div className={`mb-4 ${colors.text}`}>
+                <div className={`mb-4 ${category.iconColor}`}>
                   <IconComponent className="w-10 h-10" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-white">{category.title}</h3>
                 <p className="text-gray-400 mb-6 flex-grow text-sm">{category.description}</p>
-                <Button asChild className={`w-full ${colors.bg} text-white`}>
+                <Button asChild className={`w-full ${category.buttonClass}`}>
                   <a
                     href={`${baseDiscussionUrl}${category.slug}`}
                     target="_blank"
