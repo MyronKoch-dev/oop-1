@@ -7,21 +7,21 @@ interface DiveInSectionProps {
 export function DiveInSection({ className = '' }: DiveInSectionProps) {
     return (
         <div className={`mt-10 flex flex-col items-center ${className}`}>
-            <div className="text-2xl font-bold text-primary mb-2 flex items-center justify-center gap-2">
+            <div className="text-2xl font-bold text-white mb-2 flex items-center justify-center gap-2">
                 <span role="img" aria-label="sparkles">
                     ✨
                 </span>
-                Are you just ready to dive on in?
+                Are you ready to dive on in?
                 <span role="img" aria-label="sparkles">
                     ✨
                 </span>
             </div>
-            <p className="text-lg text-foreground mb-6 max-w-xl text-center">
+            <p className="text-lg text-gray-400 mb-6 max-w-xl text-center">
                 <a
                     href="https://www.keplr.app/get"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="underline text-accent-foreground font-semibold hover:text-primary transition-colors"
+                    className="underline text-[#3498db] font-semibold hover:text-[#2980b9] transition-colors"
                 >
                     If you already have a Keplr wallet and the Chrome extension
                 </a>
@@ -36,7 +36,7 @@ export function DiveInSection({ className = '' }: DiveInSectionProps) {
                     href="https://andromeda-testnet-faucet.vercel.app/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-md hover:bg-primary/90 transition-colors text-lg flex items-center justify-center gap-2 shadow"
+                    className="flex-1 px-6 py-3 bg-[#3498db] text-white font-semibold rounded-md hover:bg-[#2980b9] transition-colors text-lg flex items-center justify-center gap-2 shadow"
                 >
                     <span role="img" aria-label="faucet">
                         🚰
@@ -47,7 +47,7 @@ export function DiveInSection({ className = '' }: DiveInSectionProps) {
                     href="https://app.testnet.andromedaprotocol.io/flex-builder"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 px-6 py-3 bg-accent text-accent-foreground font-semibold rounded-md hover:bg-accent/90 transition-colors text-lg flex items-center justify-center gap-2 shadow"
+                    className="flex-1 px-6 py-3 bg-[#2ecc71] text-white font-semibold rounded-md hover:bg-[#27ae60] transition-colors text-lg flex items-center justify-center gap-2 shadow"
                 >
                     <span role="img" aria-label="rocket">
                         🚀
