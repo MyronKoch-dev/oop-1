@@ -126,50 +126,69 @@ export function ChatContainer({
   useEffect(() => {
     const savedMessages = localStorage.getItem("andromeda-onboarding-conversation");
     const savedComplete = localStorage.getItem("andromeda-onboarding-complete");
-    const savedHasOpenedSidebar = localStorage.getItem( // Load sidebar state
-      "andromeda-onboarding-sidebar-opened",
+    const savedHasOpenedSidebar = localStorage.getItem(
+      "andromeda-onboarding-sidebar-opened"
     );
 
-    if (savedHasOpenedSidebar === "true") { // Restore sidebar state
+    const mounted = { current: true };
+
+    if (savedHasOpenedSidebar === "true") {
       setHasOpenedSidebarAfterCompletion(true);
+    }
+
+    // Add this condition to prevent re-initialization when we already have messages
+    if (messages.length > 0) {
+      console.log("Messages already exist, skipping initialization from localStorage");
+      return;
     }
 
     if (savedMessages && savedComplete === "true") {
       try {
         const parsedMessages = JSON.parse(savedMessages);
-        setMessages(parsedMessages);
-        setIsComplete(true);
-        setInputDisabled(true);
-        setCurrentQuestionIndex(TOTAL_STEPS);
 
-        // Find the message containing the userName
-        const userNameMessage = parsedMessages.find(
-          (msg: ChatMessage) =>
-            msg.role === "user" &&
-            parsedMessages[parsedMessages.indexOf(msg) - 1]?.content?.includes("What should I call you")
-        );
+        if (mounted.current) {
+          setMessages(parsedMessages);
+          setIsComplete(true);
+          setInputDisabled(true);
+          setCurrentQuestionIndex(TOTAL_STEPS);
 
-        if (userNameMessage) {
-          setUserName(userNameMessage.content);
+          // Find the message containing the userName
+          const userNameMessage = parsedMessages.find(
+            (msg: ChatMessage) =>
+              msg.role === "user" &&
+              parsedMessages[parsedMessages.indexOf(msg) - 1]?.content?.includes("What should I call you")
+          );
+
+          if (userNameMessage) {
+            setUserName(userNameMessage.content);
+          }
+          hasSuccessfullyStartedConversation.current = true; // Mark as started if loaded complete
+          console.log("Loaded completed conversation from localStorage, hasSuccessfullyStartedConversation set to true.");
         }
-        hasSuccessfullyStartedConversation.current = true; // Mark as started if loaded complete
-        console.log("Loaded completed conversation from localStorage, hasSuccessfullyStartedConversation set to true.");
       } catch (e) {
         console.error("Error parsing saved messages:", e);
         // If parsing fails, treat as a fresh start
         hasSuccessfullyStartedConversation.current = false;
-        initializeChat();
+        if (mounted.current) {
+          initializeChat();
+        }
       }
     } else {
       // Not complete or not saved, so initialize if not already started.
       if (!hasSuccessfullyStartedConversation.current) {
         console.log("No saved complete conversation, calling initializeChat.");
-        initializeChat();
+        if (mounted.current) {
+          initializeChat();
+        }
       } else {
         console.log("No saved complete conversation, but hasSuccessfullyStartedConversation is true, skipping initializeChat.");
       }
     }
-  }, []);
+
+    return () => {
+      mounted.current = false;
+    };
+  }, []); // Empty dependency array to ensure this only runs once on mount
 
   // Effect to save conversation when complete
   useEffect(() => {
@@ -196,11 +215,12 @@ export function ChatContainer({
     }
 
     // Original guard, can be kept as a secondary check or removed if the ref is trusted
-    // if (messages.length > 1) {
-    //   console.log("Skipping startConversation - messages already exist (length check)");
-    //   return;
-    // }
+    if (messages.length > 1) {
+      console.log("Skipping startConversation - messages already exist (length check)");
+      return;
+    }
 
+    const mounted = { current: true };
     setIsProcessing(true);
     setInputDisabled(true); // Ensure input is disabled during API call
 
@@ -214,6 +234,11 @@ export function ChatContainer({
         body: JSON.stringify({ sessionId: null }),
       });
 
+      if (!mounted.current) {
+        console.log("Component unmounted during API call, aborting");
+        return;
+      }
+
       if (!response.ok) {
         throw new Error(
           `Failed to start conversation: ${response.status} ${response.statusText}`,
@@ -221,6 +246,12 @@ export function ChatContainer({
       }
 
       const data: OnboardingResponsePayload = await response.json();
+
+      if (!mounted.current) {
+        console.log("Component unmounted during API response parsing, aborting");
+        return;
+      }
+
       console.log("Received API response:", {
         sessionId: data.sessionId,
         nextQuestion: !!data.nextQuestion,
@@ -265,26 +296,46 @@ export function ChatContainer({
         setConditionalTextInputLabel(data.conditionalTextInputLabel);
       }
     } catch (error) {
+      if (!mounted.current) {
+        console.log("Component unmounted during error handling, aborting");
+        return;
+      }
+
       const errorMessage =
         error instanceof Error
           ? error.message
           : "Failed to start the conversation. Please try again.";
       console.error("Error starting conversation:", errorMessage);
     } finally {
-      console.log("startConversation complete, clearing isProcessing flag");
-      setIsProcessing(false);
+      if (mounted.current) {
+        console.log("startConversation complete, clearing isProcessing flag");
+        setIsProcessing(false);
 
-      // Ensure input is enabled after a short delay
-      setTimeout(() => {
-        console.log("Re-enabling input after API call");
-        setInputDisabled(false);
-      }, 300);
+        // Ensure input is enabled after a short delay
+        setTimeout(() => {
+          if (mounted.current) {
+            console.log("Re-enabling input after API call");
+            setInputDisabled(false);
+          }
+        }, 300);
+      }
     }
+
+    return () => {
+      mounted.current = false;
+    };
   };
 
   // Initialize chat with the initial message
   const initializeChat = () => {
     console.log("initializeChat called");
+
+    // Check if we have an unmounted component flag
+    if (hasSuccessfullyStartedConversation.current) {
+      console.log("Conversation already started, skipping initialization");
+      return;
+    }
+
     // Check if there's an existing sessionId in localStorage
     const existingSessionId = localStorage.getItem("onboarding-session-id");
     if (existingSessionId) {
@@ -1448,6 +1499,20 @@ export function ChatContainer({
     typeof currentQuestionIndex === "number"
       ? getQuestionDetails(currentQuestionIndex)
       : null;
+
+  // Add a cleanup effect when the component unmounts
+  useEffect(() => {
+    return () => {
+      // This cleanup function runs when the component unmounts
+      console.log("ChatContainer unmounting - performing cleanup");
+
+      // Reset the conversation started flag to ensure proper initialization if remounted
+      hasSuccessfullyStartedConversation.current = false;
+
+      // Update the chatInputKey to ensure a fresh instance if remounted
+      setChatInputKey(`input-${Date.now()}`);
+    };
+  }, []);
 
   return (
     <div

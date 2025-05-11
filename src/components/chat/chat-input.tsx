@@ -78,36 +78,58 @@ export function ChatInput({
 
   // Effect to focus main input when appropriate
   useEffect(() => {
+    let focusTimeoutId: NodeJS.Timeout | null = null;
+
     console.log("Input focus effect", { disabled, showConditionalInput, inputMode });
     if (!disabled && !showConditionalInput && inputRef.current) {
       // Short delay to ensure the element is fully rendered and state is settled
-      setTimeout(() => {
-        if (inputRef.current) {
+      focusTimeoutId = setTimeout(() => {
+        if (inputRef.current && document.body.contains(inputRef.current)) {
           console.log("Focusing input field");
           inputRef.current.focus();
         }
       }, 100);
     }
+
+    // Cleanup function to prevent focus attempts on unmounted components
+    return () => {
+      if (focusTimeoutId) {
+        clearTimeout(focusTimeoutId);
+        focusTimeoutId = null;
+      }
+    };
   }, [disabled, inputMode, showConditionalInput]);
 
   // Add an explicit effect that runs when disabled changes from true to false
   useEffect(() => {
+    let focusTimeoutId: NodeJS.Timeout | null = null;
+
     if (!disabled && inputRef.current && !showConditionalInput) {
       console.log("disabled changed to false, focusing input");
-      setTimeout(() => {
-        if (inputRef.current) {
+      focusTimeoutId = setTimeout(() => {
+        if (inputRef.current && document.body.contains(inputRef.current)) {
           inputRef.current.focus();
         }
       }, 150);
     }
+
+    // Cleanup timeout on unmount
+    return () => {
+      if (focusTimeoutId) {
+        clearTimeout(focusTimeoutId);
+        focusTimeoutId = null;
+      }
+    };
   }, [disabled, showConditionalInput]);
 
   // Update the useEffect for conditional text focus
   useEffect(() => {
+    let focusTimeoutId: NodeJS.Timeout | null = null;
+
     if (showConditionalInput && !disabled && textareaRef.current) {
       // Short delay to ensure the element is fully rendered
-      setTimeout(() => {
-        if (textareaRef.current) {
+      focusTimeoutId = setTimeout(() => {
+        if (textareaRef.current && document.body.contains(textareaRef.current)) {
           textareaRef.current.focus();
           // Place cursor at the end of existing text
           const length = textareaRef.current.value.length;
@@ -115,20 +137,46 @@ export function ChatInput({
         }
       }, 50);
     }
+
+    // Cleanup timeout on unmount
+    return () => {
+      if (focusTimeoutId) {
+        clearTimeout(focusTimeoutId);
+        focusTimeoutId = null;
+      }
+    };
   }, [showConditionalInput, disabled, conditionalText]);
 
   // Add an effect to handle focus changes when input mode changes
   useEffect(() => {
+    let focusTimeoutId: NodeJS.Timeout | null = null;
+
     if (showConditionalInput && !disabled && textareaRef.current) {
-      textareaRef.current.focus();
+      focusTimeoutId = setTimeout(() => {
+        if (textareaRef.current && document.body.contains(textareaRef.current)) {
+          textareaRef.current.focus();
+        }
+      }, 50);
     } else if (
       !showConditionalInput &&
       !disabled &&
       !hideMainInput &&
       inputRef.current
     ) {
-      inputRef.current.focus();
+      focusTimeoutId = setTimeout(() => {
+        if (inputRef.current && document.body.contains(inputRef.current)) {
+          inputRef.current.focus();
+        }
+      }, 50);
     }
+
+    // Cleanup timeout on unmount
+    return () => {
+      if (focusTimeoutId) {
+        clearTimeout(focusTimeoutId);
+        focusTimeoutId = null;
+      }
+    };
   }, [inputMode, disabled, showConditionalInput, hideMainInput]);
 
   // Add keyboard event listener for the window when confirm button is shown
