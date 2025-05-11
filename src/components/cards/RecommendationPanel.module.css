@@ -1,14 +1,14 @@
 .panel {
-  background: #22305a;
-  color: #fff;
-  border-radius: 24px;
+  background: var(--card);
+  color: var(--card-foreground);
+  border-radius: var(--radius-xl);
   padding: 32px 40px;
   max-width: 600px;
   /* Increased from 420px */
   margin: 40px auto;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 24px var(--color-border);
   text-align: center;
-  font-family: "Inter", sans-serif;
+  font-family: var(--font-sans, "Inter, sans-serif");
 }
 
 .panel h2 {
@@ -27,7 +27,7 @@
   margin-bottom: 24px;
   font-size: 1rem;
   /* Ensure consistent font size for intro text */
-  color: #e0e0e0;
+  color: var(--muted-foreground);
   /* Slightly lighter than default for emphasis */
   line-height: 1.6;
 }
@@ -36,21 +36,28 @@
   /* Path name like "Hacker" or "AI Navigator" */
   font-size: 1.3rem;
   font-weight: 600;
-  color: #7ecfff;
+  color: var(--accent);
   margin: 24px 0 8px 0;
   /* Increased top margin, reduced bottom before description */
 }
 
 .highlight {
-  color: #ffe066;
+  color: var(--primary);
+}
+
+/* Yellow highlight for path names */
+.yellowHighlight {
+  color: #f8e16c;
+  /* Bright yellow color */
+  font-weight: 700;
 }
 
 .getStartedBtn {
   /* Primary "Get Started" button */
-  background: #3578e5;
-  color: #fff;
+  background: var(--primary);
+  color: var(--primary-foreground);
   border: none;
-  border-radius: 12px;
+  border-radius: var(--radius);
   padding: 16px 36px;
   font-size: 1.2rem;
   font-weight: 600;
@@ -62,14 +69,15 @@
 }
 
 .getStartedBtn:hover {
-  background: #285bb5;
+  background: var(--primary);
+  opacity: 0.9;
 }
 
 .secondPath {
   /* Container for the secondary path recommendation */
   margin-top: 32px;
   padding-top: 24px;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-top: 1px solid var(--border);
   margin-bottom: 32px;
   /* Added space after this section */
 }
@@ -83,10 +91,10 @@
 
 .secondaryBtn {
   /* Used for "Explore This Path" and "Explore Andromeda Platform" */
-  background: #2c64b9;
-  color: #fff;
+  background: var(--secondary);
+  color: var(--secondary-foreground);
   border: none;
-  border-radius: 12px;
+  border-radius: var(--radius);
   padding: 12px 24px;
   font-size: 1rem;
   font-weight: 600;
@@ -101,14 +109,15 @@
 }
 
 .secondaryBtn:hover {
-  background: #1d4580;
+  background: var(--secondary);
+  opacity: 0.9;
 }
 
 .thanks {
   /* "We hope this gives you..." paragraph */
   margin: 32px 0 16px 0;
   font-size: 1rem;
-  color: #b3c2e0;
+  color: var(--muted-foreground);
   line-height: 1.6;
 }
 
@@ -128,7 +137,7 @@
   margin: 0 auto 24px auto;
   /* Centered text, margin below before button */
   font-size: 0.9rem;
-  color: #cccccc;
+  color: var(--muted-foreground);
   line-height: 1.6;
   max-width: 90%;
   /* Prevent descriptions from being too wide */

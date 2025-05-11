@@ -1,7 +1,7 @@
 // src/app/page.tsx (Corrected to render ChatContainer)
 "use client"; // REQUIRED: Mark this as a Client Component for state and effects
 
-import React, { useState, useEffect } from "react"; // Import React hooks
+import React, { useState, useEffect, useMemo } from "react"; // Import React hooks
 
 // Import your main ChatContainer component using the correct path alias
 import { ChatContainer } from "@/components/chat/chat-container";
@@ -37,6 +37,9 @@ function useIsSidebarVisible() {
 export default function HomePage() {
   const isSidebarVisible = useIsSidebarVisible();
 
+  // Create a stable instance ID using useMemo to prevent regeneration on re-renders
+  const stableInstanceId = useMemo(() => `andromeda-chat-instance-${Date.now()}`, []);
+
   return (
     // Main container with dark theme colors matching Andromeda app - anchored to top on mobile
     <main className="flex min-h-screen flex-col items-start justify-start p-4 md:p-6 lg:p-8 bg-black transition-all pt-6">
@@ -66,6 +69,7 @@ export default function HomePage() {
           className="h-full"
           title="Onboarding Assistant"
           subtitle="Begin Your Journey With Andromeda Here."
+          key={stableInstanceId} // Use the stable instance ID as key
         />
       </div>
       {/* You could add a small footer outside the chat container if needed */}

@@ -33,7 +33,7 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
     </h2>
     <p>Welcome{userName ? `, ${userName}` : ''}! Based on your responses, here is a recommended starting path to help you make the most of Andromeda:</p>
     <p className={styles.path}>
-      🌟 <span className={styles.highlight}>{pathName}</span> 🌟
+      🌟 <span className={styles.yellowHighlight}>{pathName}</span> 🌟
     </p>
     {pathDescription && (
       <p className={styles.description}>{pathDescription}</p>
@@ -52,7 +52,7 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
       <div className={styles.secondPath}>
         <p>We also think you might be interested in:</p>
         <p className={styles.path}>
-          <span className={styles.highlight}>{secondPathName}</span>
+          🚀 <span className={styles.yellowHighlight}>{secondPathName}</span> 🚀
         </p>
         {secondPathDescription && (
           <p className={styles.description}>{secondPathDescription}</p>

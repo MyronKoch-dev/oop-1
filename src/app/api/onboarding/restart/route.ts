@@ -1,19 +1,21 @@
 import { NextResponse } from "next/server";
 import { createSession } from "@/lib/session";
 import { getQuestionDetails } from "@/lib/questionnaire";
+import { logger } from "@/lib/logger";
 
 export async function POST() {
-    console.log("Restart API endpoint called");
+    logger.info("Restart API endpoint called");
 
     try {
         // Create a new session
         const { sessionId } = await createSession();
-        console.log(`Created new session for restart: ${sessionId}`);
+        logger.info(`Created new session for restart`, { sessionId });
 
         // Get the first question
         const firstQuestion = getQuestionDetails(0);
 
         if (!firstQuestion) {
+            logger.error("Failed to initialize the first question", { sessionId });
             return NextResponse.json(
                 { error: "Could not initialize the first question." },
                 { status: 500 }
@@ -32,7 +34,7 @@ export async function POST() {
             conditionalTriggerValue: firstQuestion.conditionalTriggerValue,
         });
     } catch (error) {
-        console.error("Error creating new session for restart:", error);
+        logger.error("Error creating new session for restart", error);
         return NextResponse.json(
             { error: "Failed to restart the conversation. Please try again." },
             { status: 500 }

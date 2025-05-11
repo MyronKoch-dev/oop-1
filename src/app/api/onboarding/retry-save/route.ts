@@ -4,6 +4,7 @@ import type { NextRequest } from "next/server";
 import { getSession, deleteSession } from "@/lib/session";
 import { saveOnboardingResponse } from "@/lib/supabase";
 import { OnboardingData } from "@/lib/types";
+import { logger } from "@/lib/logger";
 
 export async function POST(request: NextRequest) {
     try {
@@ -32,7 +33,7 @@ export async function POST(request: NextRequest) {
 
         // Verify the email exists
         if (!finalData.email) {
-            console.error(`[Retry Save] Critical error: Missing email for session ${sessionId}`);
+            logger.error("Critical error: Missing email for session", { sessionId });
             return NextResponse.json(
                 { success: false, error: "Missing required email data" },
                 { status: 400 }
@@ -43,7 +44,7 @@ export async function POST(request: NextRequest) {
         const { success, error: saveError } = await saveOnboardingResponse(finalData);
 
         if (!success) {
-            console.error(`[Retry Save] Save failed again for session ${sessionId}: ${saveError}`);
+            logger.error("Save failed again for session", { sessionId, error: saveError });
             return NextResponse.json({
                 success: false,
                 error: `Save operation failed: ${saveError}`,
@@ -53,7 +54,7 @@ export async function POST(request: NextRequest) {
 
         // Success! Delete the session
         await deleteSession(sessionId);
-        console.log(`[Retry Save] Session ${sessionId} successfully saved and deleted`);
+        logger.info("Session successfully saved and deleted", { sessionId });
 
         return NextResponse.json({
             success: true,
@@ -61,7 +62,7 @@ export async function POST(request: NextRequest) {
         });
 
     } catch (error) {
-        console.error("Error in retry-save endpoint:", error);
+        logger.error("Error in retry-save endpoint", error);
         const errorMessage = error instanceof Error ? error.message : "Unknown error";
 
         return NextResponse.json(
