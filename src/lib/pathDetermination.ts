@@ -163,6 +163,29 @@ export function determinePath(data: OnboardingData): PathResult {
         secondRecommendedPathDescription,
     };
 }
+
+// New helper function
+export function getFinalRecommendationIntro(
+    userName: string | null | undefined,
+    recommendedPath: string,
+    userGoals?: string[] | null
+): string {
+    let intro = `Thanks${userName ? `, ${userName}` : ''}, for sharing your goals and interests! `;
+    intro += `Based on your responses, I recommend the **${recommendedPath}** for you. `;
+
+    // Add a more specific reason if possible (this is a simple example)
+    if (recommendedPath === "Visionary" && userGoals?.includes("Share ideas for new features")) {
+        intro += "This path is perfect for contributing your innovative ideas. ";
+    } else if (recommendedPath === "Hacker" && userGoals?.includes("Earn bounties")) {
+        intro += "This path will help you find challenges and earn bounties. ";
+    } else if (recommendedPath === "Explorer" && userGoals?.includes("Learn Web3 basics")) {
+        intro += "This path is great for learning the fundamentals. ";
+    }
+    // Add more conditions for other paths and goals as desired
+
+    intro += `Below, you will find more details and how to get started.`;
+    return intro;
+}
 // ---
 // For more details, see PATH_RULES_GUIDE.md in the root.
 // ---

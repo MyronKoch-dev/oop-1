@@ -304,8 +304,7 @@ export function ChatMessages({
                       </div>
                     )}
 
-                  {message.content === "__FINAL_RECOMMENDATION__" &&
-                    message.finalResult != null ? (
+                  {message.finalResult != null ? ( // Condition changed to only check for finalResult
                     (() => {
                       // Debug info to console
                       console.log("Recommended paths data:", {
