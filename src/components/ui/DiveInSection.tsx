@@ -47,7 +47,7 @@ export function DiveInSection({ className = '' }: DiveInSectionProps) {
                     href="https://app.testnet.andromedaprotocol.io/flex-builder"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 px-6 py-3 bg-[#2ecc71] text-white font-semibold rounded-md hover:bg-[#27ae60] transition-colors text-lg flex items-center justify-center gap-2 shadow"
+                    className="flex-1 px-6 py-3 bg-[#1a2b4a] text-[#6bbbff] font-semibold rounded-md hover:bg-[#213459] transition-colors text-lg flex items-center justify-center gap-2 shadow"
                 >
                     <span role="img" aria-label="rocket">
                         🚀
