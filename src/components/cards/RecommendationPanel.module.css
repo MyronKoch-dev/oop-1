@@ -8,7 +8,7 @@
   margin: 40px auto;
   box-shadow: 0 4px 24px var(--color-border);
   text-align: center;
-  font-family: var(--font-sans, "Inter, sans-serif");
+  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .panel h2 {
@@ -18,6 +18,7 @@
   font-weight: 700;
   margin-bottom: 16px;
   /* Added consistent bottom margin */
+  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* Targets the "Welcome..." paragraph immediately after h2 */
@@ -30,6 +31,7 @@
   color: var(--muted-foreground);
   /* Slightly lighter than default for emphasis */
   line-height: 1.6;
+  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .path {
@@ -39,6 +41,7 @@
   color: var(--accent);
   margin: 24px 0 8px 0;
   /* Increased top margin, reduced bottom before description */
+  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .highlight {
@@ -50,6 +53,7 @@
   color: #f8e16c;
   /* Bright yellow color */
   font-weight: 700;
+  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .getStartedBtn {
@@ -66,6 +70,7 @@
   transition: background 0.2s;
   display: inline-block;
   /* Ensure it respects margins properly */
+  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .getStartedBtn:hover {
@@ -86,6 +91,7 @@
 .secondPath>p:first-child {
   margin-bottom: 8px;
   /* Space before the second path name */
+  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 
@@ -106,6 +112,7 @@
   /* Vertical margins are handled by mt-X utility in JSX or specific context */
   /* e.g. "Explore This Path" button will have margin from its parent .secondPath's structure */
   /* e.g. "Explore Andromeda Platform" has mt-4 in JSX */
+  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .secondaryBtn:hover {
@@ -119,6 +126,7 @@
   font-size: 1rem;
   color: var(--muted-foreground);
   line-height: 1.6;
+  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .panel h3 {
@@ -130,6 +138,7 @@
   font-size: 1.3rem;
   font-weight: 700;
   letter-spacing: 1px;
+  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .description {
@@ -141,4 +150,5 @@
   line-height: 1.6;
   max-width: 90%;
   /* Prevent descriptions from being too wide */
+  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }

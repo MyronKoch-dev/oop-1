@@ -35,7 +35,7 @@ export default async function ContractorsPage() {
     <main className="container mx-auto p-4 md:p-6 max-w-7xl min-h-screen bg-black text-white">
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold text-white mb-2">
-          Contractor Bidding
+          💼 Contractor Bidding 💼
         </h1>
         <p className="text-gray-400 max-w-3xl mx-auto">
           Browse open contractor bidding opportunities with Andromeda Protocol.

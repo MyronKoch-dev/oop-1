@@ -1,13 +1,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Poppins, Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { RightSidebar } from "@/components/layout/RightSidebar";
 import { PanelRight } from "lucide-react";
 import "./globals.css";
 import { SidebarContext } from "@/context/SidebarContext";
+
+// Load Poppins with multiple weights for better typography
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-poppins',
+  display: 'swap',
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -73,7 +81,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black`}
+        className={`${poppins.variable} ${geistSans.variable} ${geistMono.variable} antialiased bg-black font-poppins`}
       >
         <SidebarContext.Provider
           value={{ openRightSidebar, isRightSidebarOpen }}
