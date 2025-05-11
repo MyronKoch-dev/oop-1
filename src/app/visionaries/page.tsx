@@ -80,7 +80,7 @@ export default function VisionariesPage() {
           </div>
 
           <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6 flex flex-col">
-            <div className="mb-4 text-green-500">
+            <div className="mb-4 text-[#e74c3c]">
               <UploadCloud className="w-10 h-10" />
             </div>
             <h2 className="text-xl font-semibold mb-3">
@@ -91,7 +91,7 @@ export default function VisionariesPage() {
             </p>
             <Button
               asChild
-              className="w-full bg-green-600 hover:bg-green-700 text-white"
+              className="w-full bg-[#e74c3c] hover:bg-[#c0392b] text-white"
             >
               <a
                 href={`${baseDiscussionUrl}ado-submissions`}
@@ -106,16 +106,16 @@ export default function VisionariesPage() {
           </div>
 
           <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6 flex flex-col">
-            <div className="mb-4 text-purple-400"> {/* Changed color for Show and Tell */}
-              <Sparkles className="w-10 h-10" /> {/* New Icon */}
+            <div className="mb-4 text-[#f39c12]">
+              <Sparkles className="w-10 h-10" />
             </div>
-            <h2 className="text-xl font-semibold mb-3">Show and Tell</h2> {/* New Title */}
+            <h2 className="text-xl font-semibold mb-3">Show and Tell</h2>
             <p className="text-gray-400 mb-6 flex-grow">
               Built something cool with Andromeda? Share your projects, demos, and creations with the community!
             </p>
             <Button
               asChild
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white" // New color scheme
+              className="w-full bg-[#f39c12] hover:bg-[#d35400] text-white"
             >
               <a
                 href={`${baseDiscussionUrl}show-and-tell`}
@@ -131,9 +131,9 @@ export default function VisionariesPage() {
 
           <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6 flex flex-col">
             <div className="mb-4 text-gray-400">
-              <MessageSquare className="w-10 h-10" /> {/* Changed Icon */}
+              <MessageSquare className="w-10 h-10" />
             </div>
-            <h2 className="text-xl font-semibold mb-3">General Discussion</h2> {/* Changed Title */}
+            <h2 className="text-xl font-semibold mb-3">General Discussion</h2>
             <p className="text-gray-400 mb-6 flex-grow">
               Have other feedback, questions, or topics to discuss with the Andromeda team and community?
             </p>
@@ -148,7 +148,7 @@ export default function VisionariesPage() {
                 className="flex items-center justify-center gap-2"
               >
                 <MessageSquare className="w-4 h-4" />
-                <span>Start Discussion</span> {/* Changed Button Text */}
+                <span>Start Discussion</span>
               </a>
             </Button>
           </div>
