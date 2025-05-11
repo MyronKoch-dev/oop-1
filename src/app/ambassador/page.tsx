@@ -13,12 +13,13 @@ export default function AmbassadorPage() {
       <div className="container mx-auto p-4 md:p-6">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold mb-4 text-white flex items-center justify-center gap-2">
-            🏆 <Award className="w-8 h-8 text-[#e74c3c]" /> Ambassador Path 🏆
+            🏆 <Award className="w-8 h-8 text-[#e74c3c]" /> Ambassador 🏆
           </h1>
           <p className="text-lg text-gray-400 mb-8 max-w-2xl mx-auto">
             Become an Andromeda Ambassador! Help grow the community, spread the
             word, and earn rewards. Explore the resources below to get started.
           </p>
+
         </div>
         <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6 mb-8 text-center">
           <a
