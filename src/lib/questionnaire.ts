@@ -33,7 +33,7 @@ const questions: QuestionDetail[] = [
   // Index 1 (Technical expertise, moved up)
   {
     index: 1,
-    text: "Nice to meet you, {name}! \n \n Let's determine your technical acumen so that we can point you in the right directions for quick success. Andromeda has a wide range of tools and platforms, so if you're highly technical, there's a path for you, and if you're not, there's a path for you too.  \n\ \n\ So, for starters, if you had to rate your own technical expertise, where would you put yourself?",
+    text: "Nice to meet you, {name}! \n \n Let me ask you a few questions, technical and non, so that we can point you in the right directions for quick success. Andromeda has a wide range of tools and platforms, so if you're highly technical, there's a path for you, and if you're not, there's a path for you too.  \n\ \n\ So, for starters, if you had to rate your own technical expertise, where would you put yourself?",
     inputMode: "buttons",
     options: [
       { label: "1. Beginner", value: "Beginner" },

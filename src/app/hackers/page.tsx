@@ -35,11 +35,12 @@ export default async function HackersPage() {
     <main className="container mx-auto p-4 md:p-6 max-w-7xl min-h-screen bg-black text-white">
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold text-white mb-2">
-          HackerBoard Bounties
+          💻 HackerBoard 💻
         </h1>
         <p className="text-gray-400 max-w-3xl mx-auto">
-          Browse open bounties and hacking challenges with Andromeda Protocol.
-          These are tasks that reward successful completion with bounties.
+          Hey hackers! Want to try your hand at coding and creation challenges with Andromeda Protocol, and possibly earn some scratch?
+          Browse these open bounties and hacking challenges.
+          They are tasks that reward successful completion with various and sundry rewards.
         </p>
       </div>
 

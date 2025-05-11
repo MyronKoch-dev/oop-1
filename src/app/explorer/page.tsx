@@ -13,10 +13,10 @@ export default function ExplorerPage() {
       <div className="container mx-auto p-4 md:p-6">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold mb-4 text-white flex items-center justify-center gap-2">
-            <BookOpen className="w-8 h-8 text-[#3498db]" /> Explorer Path
+            🗺️ <BookOpen className="w-8 h-8 text-[#3498db]" /> Explorer 🗺️
           </h1>
           <p className="text-lg text-gray-400 mb-8 max-w-2xl mx-auto">
-            Dive into the Andromeda ecosystem! Discover tutorials, guides, and
+            Hey, there, web3 and crypto explorers! Dive into the Andromeda ecosystem! Discover tutorials, guides, and
             learning resources to help you get started and grow your knowledge.
           </p>
         </div>

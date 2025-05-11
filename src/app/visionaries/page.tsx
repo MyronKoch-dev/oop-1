@@ -16,9 +16,10 @@ export default function VisionariesPage() {
       <div className="container mx-auto p-4 md:p-6">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold mb-4 text-white">
-            Share Your Ideas & Creations
+            💡 Visionary 💡
           </h1>
           <p className="text-lg text-gray-400 mb-8 max-w-3xl mx-auto">
+            Share Your Ideas & Creations!
             Help shape the future of Andromeda by proposing new ADOs (Andromeda
             Digital Objects), suggesting features, or sharing your projects. Start a discussion in the appropriate category on GitHub.
           </p>

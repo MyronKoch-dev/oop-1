@@ -127,16 +127,16 @@ export default async function AINavigatorsPage() {
   return (
     <main className="container mx-auto p-4 md:p-6 max-w-7xl min-h-screen bg-black text-white">
       <div className="mb-12 text-center">
-        <h1 className="text-4xl font-bold text-white mb-3">AI Navigator Path</h1>
+        <h1 className="text-4xl font-bold text-white mb-3">🧭 AI Navigator 🧭</h1>
         <p className="text-lg text-gray-400 max-w-3xl mx-auto">
-          Discover, discuss, and contribute to AI-focused projects, ideas, and bounties within the
-          Andromeda Protocol ecosystem.
+          🌟 Discover, discuss, and contribute to AI-focused projects, ideas, and bounties within the
+          Andromeda Protocol ecosystem. 🌟
         </p>
       </div>
 
       {/* New Discussions Section */}
       <div className="mb-16">
-        <h2 className="text-3xl font-semibold text-white mb-2 text-center">Join AI Discussions</h2>
+        <h2 className="text-3xl font-semibold text-white mb-2 text-center">💬 Join AI Discussions 💬</h2>
         <p className="text-gray-400 text-center mb-8 max-w-2xl mx-auto">
           Engage with the community, share your insights, and explore the future of AI in Web3.
           Select a category to start or join a discussion on GitHub.
@@ -170,7 +170,7 @@ export default async function AINavigatorsPage() {
 
       {/* Existing Issues Section */}
       <div className="mb-8 text-center">
-        <h2 className="text-3xl font-semibold text-white mb-2">AI Initiatives & Bounties</h2>
+        <h2 className="text-3xl font-semibold text-white mb-2">💰 AI Initiatives & Bounties 💰</h2>
         <p className="text-gray-400 max-w-3xl mx-auto">
           Find your path as an AI Navigator by contributing to these open tasks and projects.
         </p>
