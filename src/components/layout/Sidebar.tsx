@@ -249,10 +249,10 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
   //   }
   // }, [focusedAgentIndex]);
 
-  const [showPath, setShowPath] = useState(false);
+  const [showPath, setShowPath] = useState(() => actionItems.some((item) => item.href === pathname));
   const [showAgent, setShowAgent] = useState(false);
   const [showTools, setShowTools] = useState(true);
-  const [showResources, setShowResources] = useState(false);
+  const [showResources, setShowResources] = useState(() => resourceNavItems.some((item) => item.href === pathname));
 
   // Open the section containing the current path on mount
   useEffect(() => {
