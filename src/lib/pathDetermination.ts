@@ -1,11 +1,14 @@
 // src/lib/pathDetermination.ts
 import { OnboardingData } from "./types";
+import { PATH_DESCRIPTIONS } from "./questionnaire"; // Import descriptions
 
 interface PathResult {
     recommendedPath: string;
     recommendedPathUrl: string;
+    recommendedPathDescription?: string; // New
     secondRecommendedPath?: string;
     secondRecommendedPathUrl?: string;
+    secondRecommendedPathDescription?: string; // New
 }
 
 // Helper function to get URL from environment variables or use application routes
@@ -148,11 +151,16 @@ export function determinePath(data: OnboardingData): PathResult {
         console.log(`Secondary path: ${secondBest.path}, URL: ${secondaryUrl}`);
     }
 
+    const recommendedPathDescription = PATH_DESCRIPTIONS[best.path] || undefined;
+    const secondRecommendedPathDescription = secondBest?.path ? PATH_DESCRIPTIONS[secondBest.path] || undefined : undefined;
+
     return {
         recommendedPath: best.path,
         recommendedPathUrl: primaryUrl,
+        recommendedPathDescription,
         secondRecommendedPath: secondBest?.path,
         secondRecommendedPathUrl: secondaryUrl,
+        secondRecommendedPathDescription,
     };
 }
 // ---

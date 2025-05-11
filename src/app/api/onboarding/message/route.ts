@@ -48,8 +48,10 @@ interface OnboardingResponsePayload {
     // Present only on successful completion
     recommendedPath: string;
     recommendedPathUrl: string;
+    recommendedPathDescription?: string; // Added
     secondRecommendedPath?: string;
     secondRecommendedPathUrl?: string;
+    secondRecommendedPathDescription?: string; // Added
   } | null;
   error?: string | null; // User-facing error message (validation failure, session expiry)
   haltFlow?: boolean; // True if the frontend should stop the flow (e.g., fatal email validation)
@@ -531,9 +533,17 @@ export async function POST(request: NextRequest) {
       }
 
       // 3a. Determine Path
-      const { recommendedPath, recommendedPathUrl, secondRecommendedPath, secondRecommendedPathUrl } = determinePath(finalData);
+      const {
+        recommendedPath,
+        recommendedPathUrl,
+        recommendedPathDescription, // Added
+        secondRecommendedPath,
+        secondRecommendedPathUrl,
+        secondRecommendedPathDescription // Added
+      } = determinePath(finalData);
       finalData.recommendedPath = recommendedPath;
       finalData.recommendedPathUrl = recommendedPathUrl;
+      // Descriptions are not typically stored in finalData for DB, but used in response
       finalData.secondRecommendedPath = secondRecommendedPath;
       finalData.secondRecommendedPathUrl = secondRecommendedPathUrl;
 
@@ -564,8 +574,10 @@ export async function POST(request: NextRequest) {
             finalResult: {
               recommendedPath,
               recommendedPathUrl,
+              recommendedPathDescription, // Added
               secondRecommendedPath,
-              secondRecommendedPathUrl
+              secondRecommendedPathUrl,
+              secondRecommendedPathDescription // Added
             },
             error: `Completed, but profile saving failed: ${dbSaveError}. Your data has been preserved for retry.`,
             // Add a property to indicate this is a save retry scenario
@@ -589,8 +601,10 @@ export async function POST(request: NextRequest) {
           finalResult: {
             recommendedPath,
             recommendedPathUrl,
+            recommendedPathDescription, // Added
             secondRecommendedPath,
-            secondRecommendedPathUrl
+            secondRecommendedPathUrl,
+            secondRecommendedPathDescription // Added
           },
           error: null,
         })
