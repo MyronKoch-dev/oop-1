@@ -44,7 +44,7 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
       </a>
     ) : (
       <button className={styles.getStartedBtn} onClick={onGetStarted}>
-        Get Started 🚀
+        🚀 Get Started 🚀
       </button>
     )}
 
@@ -62,7 +62,7 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
             className={`${styles.getStartedBtn} ${styles.secondaryBtn}`}
             onClick={onSecondPathSelected}
           >
-            Explore This Path
+            🚀 Explore This Path 🚀
           </button>
         )}
       </div>
@@ -71,7 +71,7 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
     <p className={styles.thanks}>
       We hope this gives you a bit of guidance toward areas where you can have the quickest success. We look forward to hearing about what you build with Andromeda!
     </p>
-    <h3>WELCOME TO ANDROMEDA 🎉</h3>
+    <h3> 🎉 WELCOME TO ANDROMEDA 🎉</h3>
     {appUrl && (
       <a
         href={appUrl}
