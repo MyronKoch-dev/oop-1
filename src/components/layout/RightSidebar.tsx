@@ -60,7 +60,7 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                   number: "1",
                   title: "Join the Andromeda Developer Program",
                   description:
-                    "Joining our telegram is the first step in becoming a part of the Andromeda Developer Program. Here You will connect with like-minded individuals and gain access to exclusive resources.",
+                    "Join our Telegram to become part of the Andromeda Developer Program. Connect with fellow developers, get support, and unlock exclusive resources to accelerate your journey with Andromeda.",
                   link: {
                     href: "https://t.me/andromedaprotocol/3776",
                     text: "Join Andromeda Dev Telegram",
@@ -70,14 +70,14 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                   number: "2",
                   title: "Introduce Yourself in the Telegram",
                   description:
-                    "Once you're a member, introduce yourself by sharing your background and aspirations. Here, you'll make friends and receive real-time support from the community.",
+                    "Once you're a member, introduce yourself by sharing your background and what you aim to achieve. This helps you connect with the community, find collaborators, and get real-time support for your projects.",
                   link: null,
                 },
                 {
                   number: "3",
                   title: "Master ADO Building",
                   description:
-                    "Complete 8 comprehensive guides to understand the fundamentals of ADO development.",
+                    "Master Andromeda Digital Objects (ADOs) by completing these 8 guides. Understanding ADOs is key to building powerful, modular, and upgradeable applications on Andromeda.",
                   link: {
                     href: "https://docs.andromedaprotocol.io/guides/guides-and-examples/ado-builder",
                     text: "Start ADO Builder Guides",
@@ -87,7 +87,7 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                   number: "4",
                   title: "Build Your First App",
                   description:
-                    "Create a functional application using the Andromeda App Builder.",
+                    "Use the Andromeda App Builder to create your first functional application, like an NFT Auction Marketplace. This hands-on experience will show you how quickly you can bring ideas to life on Andromeda.",
                   link: {
                     href: "https://docs.andromedaprotocol.io/guides/guides-and-examples/app-builder/nft-auction-marketplace",
                     text: "Explore App Builder Guide",
@@ -96,7 +96,7 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                 {
                   number: "5",
                   title: "Explore Embeddables",
-                  description: "Learn how to create Andromeda embeddables.",
+                  description: "Discover Andromeda Embeddables – reusable UI components that can be easily integrated into any webpage. Learn to create them and add powerful Andromeda functionality to existing sites or new projects.",
                   link: {
                     href: "https://docs.andromedaprotocol.io/guides/guides-and-examples/embeddables/nft-auction",
                     text: "Try Embeddables Guide",
@@ -106,7 +106,7 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                   number: "6",
                   title: "Share Your Success",
                   description:
-                    "Showcase your achievements and get recognition from the community.",
+                    "Share your projects and achievements with the Andromeda community in our main Telegram channel. Get valuable feedback, inspire others, and gain recognition for your work!",
                   link: {
                     href: "https://t.me/andromedaprotocol/3776",
                     text: "Post in Main Telegram Channel",
@@ -116,7 +116,7 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                   number: "7",
                   title: "Launch Your Project",
                   description:
-                    "Take on real-world challenges and contribute to the ecosystem.",
+                    "Ready to make an impact? Visit our Hackerboard to find real-world challenges and bounties. Contribute to the Andromeda ecosystem, solve problems, and get rewarded for your skills.",
                   link: {
                     href: "https://github.com/andromedaprotocol/hackerboard_tasks/issues",
                     text: "Visit The 🔗🪓 Hackerboard",
@@ -161,7 +161,7 @@ export function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
                               Once you&apos;re a member, introduce yourself
                             </a>
                             {
-                              ", by sharing your background and aspirations. Here, you'll make friends and receive real-time support from the community."
+                              ", by sharing your background and what you aim to achieve. This helps you connect with the community, find collaborators, and get real-time support for your projects."
                             }
                           </>
                         ) : (
