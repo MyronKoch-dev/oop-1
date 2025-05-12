@@ -7,7 +7,6 @@ import {
   BookOpen,
   Droplet,
   Layers,
-  Command,
   HelpCircle,
   X,
   Youtube,
@@ -57,16 +56,6 @@ const toolNavItems: NavItem[] = [
     href: "https://andromeda-testnet-faucet.vercel.app/",
     label: "ANDR Faucet",
     icon: <Droplet className="w-5 h-5" />,
-  },
-  {
-    href: "https://app.testnet.andromedaprotocol.io/cli",
-    label: "Install the CLI",
-    icon: <Command className="w-5 h-5" />,
-  },
-  {
-    href: "https://github.com/andromedaprotocol/embeddable-marketplace-demo",
-    label: "Install a Demo",
-    icon: <Layers className="w-5 h-5" />,
   },
 ];
 
