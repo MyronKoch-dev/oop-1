@@ -295,14 +295,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
         <nav className="mt-2 py-2">
           {/* Tools section (collapsible) */}
-          <div
-            onMouseEnter={() => {
-              if (!showTools) setShowTools(true);
-            }}
-            onMouseLeave={() => {
-              if (!showTools) setShowTools(false);
-            }}
-          >
+          <div>
             <button
               className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-[#A084F7]"
               onClick={() => setShowTools((open) => !open)}
@@ -360,14 +353,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           </div>
           <hr className="my-4 border-[#333333]" />
           {/* Resources section (collapsible) */}
-          <div
-            onMouseEnter={() => {
-              if (!showResources) setShowResources(true);
-            }}
-            onMouseLeave={() => {
-              if (!showResources) setShowResources(false);
-            }}
-          >
+          <div>
             <button
               className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-[#3FB6E4]"
               onClick={() => setShowResources((open) => !open)}
@@ -413,14 +399,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           <hr className="my-4 border-[#333333]" />
 
           {/* Action items section title */}
-          <div
-            onMouseEnter={() => {
-              if (!showPath) setShowPath(true);
-            }}
-            onMouseLeave={() => {
-              if (!showPath) setShowPath(false);
-            }}
-          >
+          <div>
             <button
               className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-[#E43F7B]"
               onClick={() => setShowPath((open) => !open)}
@@ -470,14 +449,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           <hr className="my-4 border-[#333333]" />
 
           {/* Agent bots section title */}
-          <div
-            onMouseEnter={() => {
-              if (!showAgent) setShowAgent(true);
-            }}
-            onMouseLeave={() => {
-              if (!showAgent) setShowAgent(false);
-            }}
-          >
+          <div>
             <button
               className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-[#FFB300]"
               onClick={() => setShowAgent((open) => !open)}
