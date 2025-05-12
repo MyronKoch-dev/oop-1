@@ -38,7 +38,7 @@ export default async function ContractorsPage() {
           💼 Contractor Bidding 💼
         </h1>
         <p className="text-gray-400 max-w-3xl mx-auto">
-          Browse these open contractor bidding opportunities with Andromeda Protocol, and apply to any of them. These are tasks designed for skilled contributors to take on contract work.,
+          Browse these open contractor bidding opportunities with Andromeda Protocol, and apply to any of them. These are tasks designed for skilled contributors to take on contract work.
 
         </p>
       </div>
