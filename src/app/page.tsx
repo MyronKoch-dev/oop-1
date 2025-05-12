@@ -67,7 +67,7 @@ export default function HomePage() {
         {/* Render the ChatContainer component with full height and dark theme */}
         <ChatContainer
           className="h-full"
-          title="Onboarding Assistant"
+          title="Pulsar"
           subtitle="Begin Your Journey With Andromeda Here."
           key={stableInstanceId} // Use the stable instance ID as key
         />
