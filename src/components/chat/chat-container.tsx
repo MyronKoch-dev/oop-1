@@ -50,8 +50,8 @@ type QuestionAnswer = string | string[] | ConditionalTextAnswer;
 const TOTAL_STEPS = 14;
 
 export function ChatContainer({
-  initialMessage = `🌟 Welcome to Andromeda! 🌟\n\nI'm your Onboarding Assistant, here to help you get started.\n\nI'll ask a few quick questions to learn about your background and interests.\n\nOnce I understand what you're looking for, I'll point you directly to the right spot in our community!\n\nReady to dive in? 🚀`,
-  title = "Onboarding Assistant",
+  initialMessage = `🌟 Welcome to Andromeda! 🌟\n\nI'm Pulsar, your onboarding assistant, here to help you get started.\n\nI'll ask a few quick questions to learn about your background and interests.\n\nOnce I understand what you're looking for, I'll point you directly to the right spot in our community!\n\nReady to dive in? 🚀`,
+  title = "Pulsar",
   subtitle = "Answer a few questions to get started",
   className = "",
 }: ChatContainerProps) {

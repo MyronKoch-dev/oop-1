@@ -177,7 +177,7 @@ export function ChatMessages({
                         🌟 Welcome to Andromeda! 🌟
                       </h2>
                       <p className="text-lg mb-4">
-                        I am your Onboarding Assistant, here to help you get
+                        I am Pulsar, your onboarding assistant, here to help you get
                         started.
                         <br />
                         <br />
