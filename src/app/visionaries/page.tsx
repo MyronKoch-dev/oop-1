@@ -26,7 +26,7 @@ export default function VisionariesPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12"> {/* Changed to lg:grid-cols-3 for 5 items */}
-        <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6 flex flex-col">
+        <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6 flex flex-col hover:shadow-lg hover:border-gray-500 transition-all duration-300">
           <div className="mb-4 text-amber-500">
             <Lightbulb className="w-10 h-10" />
           </div>
@@ -53,7 +53,7 @@ export default function VisionariesPage() {
           </Button>
         </div>
 
-        <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6 flex flex-col">
+        <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6 flex flex-col hover:shadow-lg hover:border-gray-500 transition-all duration-300">
           <div className="mb-4 text-blue-500">
             <Wand2 className="w-10 h-10" />
           </div>
@@ -80,7 +80,7 @@ export default function VisionariesPage() {
           </Button>
         </div>
 
-        <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6 flex flex-col">
+        <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6 flex flex-col hover:shadow-lg hover:border-gray-500 transition-all duration-300">
           <div className="mb-4 text-[#e74c3c]">
             <UploadCloud className="w-10 h-10" />
           </div>
@@ -106,7 +106,7 @@ export default function VisionariesPage() {
           </Button>
         </div>
 
-        <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6 flex flex-col">
+        <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6 flex flex-col hover:shadow-lg hover:border-gray-500 transition-all duration-300">
           <div className="mb-4 text-[#f39c12]">
             <Sparkles className="w-10 h-10" />
           </div>
@@ -130,7 +130,7 @@ export default function VisionariesPage() {
           </Button>
         </div>
 
-        <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6 flex flex-col">
+        <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6 flex flex-col hover:shadow-lg hover:border-gray-500 transition-all duration-300">
           <div className="mb-4 text-gray-400">
             <MessageSquare className="w-10 h-10" />
           </div>
