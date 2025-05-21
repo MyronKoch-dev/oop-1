@@ -18,6 +18,25 @@ if (!supabaseServiceRoleKey) {
   );
 }
 
+// Log just the domain part of the URL for diagnostics (without exposing full URL with path)
+const urlObj = new URL(supabaseUrl);
+console.log(`Initializing Supabase client with domain: ${urlObj.hostname}`);
+
+// Custom fetch with timeout
+const customFetch = (url: RequestInfo | URL, init?: RequestInit) => {
+  const timeout = 10000; // 10 second timeout
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+  const fetchPromise = fetch(url, {
+    ...init,
+    signal: controller.signal,
+  }).finally(() => clearTimeout(timeoutId));
+
+  return fetchPromise;
+};
+
 // Create a single supabase admin client for server-side operations
 // Use the Service Role Key ONLY in server-side code (API routes, Server Actions)
 // NEVER expose the Service Role Key to the browser.
@@ -27,10 +46,10 @@ const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey, {
     autoRefreshToken: false,
     persistSession: false,
   },
-  // Optional: Add global fetch options if needed
-  // global: {
-  //   fetch: (...args) => fetch(...args),
-  // },
+  // Add global fetch options with timeout
+  global: {
+    fetch: customFetch,
+  },
 });
 console.log("Supabase Admin client initialized."); // Log initialization
 
@@ -102,58 +121,80 @@ export async function saveOnboardingResponse(
 
   while (attempts < maxAttempts) {
     attempts++;
-    const { error } = await supabaseAdmin.from(TABLE_NAME).insert([dbPayload]); // Insert the correctly typed payload as an array
+    try {
+      console.log(`Attempt ${attempts}: Making Supabase request to ${urlObj.hostname}...`);
+      const { error } = await supabaseAdmin.from(TABLE_NAME).insert([dbPayload]); // Insert the correctly typed payload as an array
 
-    // --- Handle Success ---
-    if (!error) {
-      console.log(
-        `Successfully saved onboarding response for email: ${dbPayload.email} on attempt ${attempts}`,
+      // --- Handle Success ---
+      if (!error) {
+        console.log(
+          `Successfully saved onboarding response for email: ${dbPayload.email} on attempt ${attempts}`,
+        );
+        return { success: true };
+      }
+
+      // --- Handle Supabase API Errors ---
+      console.warn(
+        `Supabase save attempt ${attempts} failed:`,
+        error.message,
+        `Code: ${error.code}`,
+        `Hint: ${error.hint}`,
       );
-      return { success: true };
-    }
 
-    // --- Handle Errors ---
-    console.warn(
-      `Supabase save attempt ${attempts} failed:`,
-      error.message,
-      `Code: ${error.code}`,
-      `Hint: ${error.hint}`,
-    );
+      // Specific Error Handling: Unique Constraint (Email already exists)
+      if (error.code === "23505") {
+        // Standard PostgreSQL unique violation code
+        console.error(
+          `DB Unique constraint violation (email likely already exists): ${dbPayload.email}`,
+        );
+        // Return success=false but with a specific error message
+        return {
+          success: false,
+          error: `Email already exists: ${dbPayload.email}. ${error.hint}`,
+        };
+      }
 
-    // Specific Error Handling: Unique Constraint (Email already exists)
-    if (error.code === "23505") {
-      // Standard PostgreSQL unique violation code
-      console.error(
-        `DB Unique constraint violation (email likely already exists): ${dbPayload.email}`,
-      );
-      // Return success=false but with a specific error message
-      return {
-        success: false,
-        error: `Email already exists: ${dbPayload.email}. ${error.hint}`,
-      };
-    }
+      // Specific Error Handling: Table doesn't exist (common setup issue)
+      if (error.code === "42P01") {
+        // Standard PostgreSQL undefined table code
+        console.error(
+          `DB Error: Table '${TABLE_NAME}' does not exist. Check Supabase schema setup.`,
+        );
+        return {
+          success: false,
+          error: `Database table not found: ${error.message}`,
+        };
+      }
+    } catch (err) {
+      // --- Handle Network/Fetch Errors ---
+      const error = err as Error;
+      console.error(`Network error during Supabase save attempt ${attempts}:`, {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+      });
 
-    // Specific Error Handling: Table doesn't exist (common setup issue)
-    if (error.code === "42P01") {
-      // Standard PostgreSQL undefined table code
-      console.error(
-        `DB Error: Table '${TABLE_NAME}' does not exist. Check Supabase schema setup.`,
-      );
-      return {
-        success: false,
-        error: `Database table not found: ${error.message}`,
-      };
+      if (error.name === 'AbortError') {
+        console.error(`Request timed out after 10 seconds`);
+      }
+
+      // Return immediately for certain fatal errors
+      if (error.message.includes('ENOTFOUND') || error.message.includes('getaddrinfo')) {
+        return {
+          success: false,
+          error: `Network connectivity issue - Unable to resolve Supabase host: ${error.message}`,
+        };
+      }
     }
 
     // --- Handle Retry ---
     if (attempts >= maxAttempts) {
       console.error(
-        `Supabase save failed after ${maxAttempts} attempts for email ${dbPayload.email}:`,
-        error,
+        `Supabase save failed after ${maxAttempts} attempts for email ${dbPayload.email}.`,
       );
       return {
         success: false,
-        error: `DB save failed after multiple attempts: ${error.message}`,
+        error: `DB save failed after multiple attempts: Network connectivity issues`,
       };
     }
 
