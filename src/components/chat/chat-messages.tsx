@@ -342,19 +342,44 @@ export function ChatMessages({
                             }
                           }}
                           onSecondPathSelected={
-                            message.finalResult?.secondRecommendedPathUrl
+                            message.finalResult?.secondRecommendedPath
                               ? () => {
-                                console.log(
-                                  `Opening secondary path URL: ${message.finalResult?.secondRecommendedPathUrl}`
-                                );
-                                // Check if URL is absolute or relative
-                                const secondaryUrl = message.finalResult?.secondRecommendedPathUrl || '';
-                                if (secondaryUrl.startsWith('http')) {
-                                  window.open(secondaryUrl, "_blank");
-                                } else {
-                                  // For relative URLs, navigate within the application
-                                  window.location.href = secondaryUrl;
+                                const secondaryPathName = message.finalResult?.secondRecommendedPath;
+                                let targetUrl = message.finalResult?.secondRecommendedPathUrl || '';
+
+                                // Determine the correct internal route based on the path name
+                                switch (secondaryPathName) {
+                                  case "Ambassador":
+                                    targetUrl = "/ambassador";
+                                    break;
+                                  case "Visionaries":
+                                    targetUrl = "/visionaries";
+                                    break;
+                                  case "Hackers":
+                                    targetUrl = "/hackers";
+                                    break;
+                                  case "Contractors":
+                                    targetUrl = "/contractors";
+                                    break;
+                                  case "Explorer":
+                                    targetUrl = "/explorer";
+                                    break;
+                                  case "AI Navigators":
+                                    targetUrl = "/ai-navigators";
+                                    break;
+                                  // If it's not a known internal path, use the provided URL and check if external
+                                  default:
+                                    if (targetUrl.startsWith('http')) {
+                                      window.open(targetUrl, "_blank");
+                                      return; // Exit the function after opening external link
+                                    }
+                                    // If it's not a known path and not an external URL, assume it's a relative internal path
+                                    break;
                                 }
+
+                                console.log(`Navigating to secondary path: ${targetUrl}`);
+                                // Navigate within the application for internal routes
+                                window.location.href = targetUrl;
                               }
                               : undefined
                           }

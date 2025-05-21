@@ -62,6 +62,7 @@ const PATH_SCORING = {
         tools_familiarity: { "Very familiar": 2, "Some experience": 1 },
         experience_level: { Advanced: 2 },
         goal: { "Build apps/dApps": 2 },
+        hackathon: { Winner: 2 },
     },
     Hacker: {
         languages: { TypeScript: 2 },
