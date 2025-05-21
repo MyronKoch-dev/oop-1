@@ -133,6 +133,39 @@ export default async function ContractorsPage() {
         </div>
       </div>
 
+      <div className="mb-12 max-w-4xl mx-auto">
+        <div className="bg-[#232060] rounded-lg border-2 border-[#4D3DF7] p-6 shadow-[0_0_15px_rgba(77,61,247,0.4)]">
+          <h2 className="text-2xl font-bold text-white mb-4 text-center">🚀 Ready to turn your build into $ANDR?</h2>
+          <p className="text-gray-200 mb-4">
+            For a limited time, we&apos;re rewarding builders who launch on aOS with 1,000 $ANDR for every ADO used in a completed and approved dApp. Whether you&apos;re creating a token, launching a marketplace, or building a full-on Web3 app, every active ADO you deploy stacks your rewards. Check out the ADOs below and start building.
+          </p>
+          <p className="text-gray-200 mb-6">
+            Not sure what to build? Complete one of our uses cases and earn 2,000 $ANDR
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <a
+              href="https://youtu.be/tfY8ni9uJSE"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#1a1a1a] hover:bg-[#252525] p-4 rounded-lg border border-[#333333] text-blue-400 flex items-center justify-center transition-colors"
+            >
+              <span className="mr-2">🎬</span> NFT Marketplace Use Case
+            </a>
+            <a
+              href="https://youtu.be/rOKXu_NNfyk"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#1a1a1a] hover:bg-[#252525] p-4 rounded-lg border border-[#333333] text-blue-400 flex items-center justify-center transition-colors"
+            >
+              <span className="mr-2">🎬</span> Token Staking Use Case
+            </a>
+          </div>
+          <p className="text-center text-white font-medium text-lg">
+            Start building, start earning.
+          </p>
+        </div>
+      </div>
+
       <div className="mb-8 text-center">
         <h2 className="text-2xl font-bold text-white mb-6">💼 Contractor Bidding 💼</h2>
         <p className="text-gray-400 max-w-3xl mx-auto mb-8">
