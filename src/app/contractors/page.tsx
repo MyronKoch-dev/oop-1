@@ -157,7 +157,7 @@ export default async function ContractorsPage() {
               rel="noopener noreferrer"
               className="bg-[#1a1a1a] hover:bg-[#252525] p-4 rounded-lg border border-[#333333] text-blue-400 flex items-center justify-center transition-colors"
             >
-              <span className="mr-2">🎬</span> Token Staking Use Case
+              <span className="mr-2">🎬</span> Crowdfunding App
             </a>
           </div>
           <p className="text-center text-white font-medium text-lg">
