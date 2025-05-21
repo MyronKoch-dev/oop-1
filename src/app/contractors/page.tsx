@@ -3,6 +3,7 @@ import { fetchGitHubIssues } from "@/lib/github";
 import { IssueCard } from "@/components/cards/IssueCard";
 import { IssueCardSkeleton } from "@/components/cards/IssueCardSkeleton";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { YouTubeVideo } from "@/components/ui/YouTubeVideo";
 
 export const metadata = {
   title: "Contractor Hub | Andromeda Protocol",
@@ -69,31 +70,41 @@ export default async function ContractorsPage() {
             </p>
             <div className="mt-4 space-y-3">
               <h4 className="text-lg font-medium text-white">Some refreshers on aOS:</h4>
-              <div className="space-y-2">
-                <a href="https://youtu.be/RhQfZnurGXo" target="_blank" rel="noopener noreferrer" className="block text-blue-400 hover:underline">
-                  • aOS Introduction Video
-                </a>
-                <a href="https://youtu.be/2ktG307EqEA" target="_blank" rel="noopener noreferrer" className="block text-blue-400 hover:underline">
-                  • aOS Core Concepts
-                </a>
-                <a href="https://youtu.be/uvvqX91VFS4" target="_blank" rel="noopener noreferrer" className="block text-blue-400 hover:underline">
-                  • Getting Started with aOS
-                </a>
-              </div>
-
-              <h4 className="text-lg font-medium text-white mt-6">Tutorials to try:</h4>
-              <div className="space-y-2">
-                <a href="https://youtu.be/QxMC-cygMaI" target="_blank" rel="noopener noreferrer" className="block text-blue-400 hover:underline">
-                  • Building Your First App with aOS
-                </a>
-                <a href="https://youtu.be/jV9XrStVBog" target="_blank" rel="noopener noreferrer" className="block text-blue-400 hover:underline">
-                  • Advanced aOS Features
-                </a>
+              <div className="space-y-4">
+                <YouTubeVideo
+                  videoId="RhQfZnurGXo"
+                  title="aOS Introduction Video"
+                />
+                <YouTubeVideo
+                  videoId="2ktG307EqEA"
+                  title="aOS Core Concepts"
+                />
+                <YouTubeVideo
+                  videoId="uvvqX91VFS4"
+                  title="Getting Started with aOS"
+                />
               </div>
             </div>
           </div>
 
           <div className="space-y-8">
+            <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6">
+              <h3 className="text-xl font-bold text-white mb-4">🎓 Tutorials to Try</h3>
+              <p className="text-gray-400 mb-4">
+                Ready to see aOS in action? These step-by-step tutorials will guide you through building real applications on the Andromeda platform.
+              </p>
+              <div className="space-y-4">
+                <YouTubeVideo
+                  videoId="QxMC-cygMaI"
+                  title="Building Your First App with aOS"
+                />
+                <YouTubeVideo
+                  videoId="jV9XrStVBog"
+                  title="Advanced aOS Features"
+                />
+              </div>
+            </div>
+
             <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6">
               <h3 className="text-xl font-bold text-white mb-4">🛠 Log On and Start Building</h3>
               <p className="text-gray-400 mb-4">
@@ -143,22 +154,14 @@ export default async function ContractorsPage() {
             Not sure what to build? Complete one of our uses cases and earn 2,000 $ANDR
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <a
-              href="https://youtu.be/tfY8ni9uJSE"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-[#1a1a1a] hover:bg-[#252525] p-4 rounded-lg border border-[#333333] text-blue-400 flex items-center justify-center transition-colors"
-            >
-              <span className="mr-2">🎬</span> NFT Marketplace Use Case
-            </a>
-            <a
-              href="https://youtu.be/rOKXu_NNfyk"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-[#1a1a1a] hover:bg-[#252525] p-4 rounded-lg border border-[#333333] text-blue-400 flex items-center justify-center transition-colors"
-            >
-              <span className="mr-2">🎬</span> Crowdfunding App
-            </a>
+            <YouTubeVideo
+              videoId="tfY8ni9uJSE"
+              title="NFT Marketplace Use Case"
+            />
+            <YouTubeVideo
+              videoId="rOKXu_NNfyk"
+              title="Crowdfunding App"
+            />
           </div>
           <p className="text-center text-white font-medium text-lg">
             Start building, start earning.
