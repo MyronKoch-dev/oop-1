@@ -62,10 +62,10 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* Outer container with dark theme and blue accents - adjusted height for mobile */}
+      {/* Outer container with dark theme and blue accents - full height for top scrolling */}
       <div
         id="chat-main-container"
-        className="mx-auto h-[75vh] md:h-[80vh] lg:h-[85vh] rounded-xl bg-[#1a1a1a] dark:bg-[#1a1a1a] overflow-hidden"
+        className="mx-auto h-[85vh] md:h-[90vh] lg:h-[95vh] rounded-xl bg-[#1a1a1a] dark:bg-[#1a1a1a] overflow-hidden"
         style={{
           width: '80vw',
           maxWidth: '80vw',
@@ -77,8 +77,6 @@ export default function HomePage() {
         {/* Render the ChatContainer component with full height and dark theme */}
         <ChatContainer
           className="h-full w-full"
-          title="Pulsar"
-          subtitle="Begin Your Journey With Andromeda Here."
           key={stableInstanceId} // Use the stable instance ID as key
         />
       </div>

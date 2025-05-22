@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Poppins, Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Sidebar } from "@/components/layout/Sidebar";
+
 import "./globals.css";
 import { SidebarContext } from "@/context/SidebarContext";
 
@@ -82,6 +83,8 @@ export default function RootLayout({
             </button>
 
             <Sidebar isOpen={isLeftSidebarOpen} onClose={toggleLeftSidebar} />
+
+
 
             <main
               className={`flex justify-center transition-all duration-300 ease-in-out lg:pl-64 ${"lg:pr-0"} ${(isLeftSidebarOpen) && isMobile ? "opacity-50 blur-sm pointer-events-none" : ""}`}

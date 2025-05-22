@@ -6,7 +6,7 @@ import { Avatar } from "@/components/ui/avatar"; // Assuming Shadcn setup create
 import { Button } from "@/components/ui/button"; // Assuming Shadcn setup created this
 import { Card } from "@/components/ui/card"; // Assuming Shadcn setup created this
 import { ScrollArea } from "@/components/ui/scroll-area"; // Assuming Shadcn setup created this
-import { User, ExternalLink } from "lucide-react"; // Ensure lucide-react is installed
+import { ExternalLink } from "lucide-react"; // Ensure lucide-react is installed
 import React from "react";
 import RecommendationPanel from "../cards/RecommendationPanel";
 
@@ -139,263 +139,266 @@ export function ChatMessages({
   }, [conditionalInputOpen /*, other deps as before */]);
 
   return (
-    // Use Shadcn ScrollArea for the main message list container with dark theme
-    <ScrollArea
-      className={`h-full w-full p-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] ${className}`}
-    >
-      <div className="space-y-4 pb-2 w-full">
-        {/* Map over the messages array to render each message */}
-        {messages.map((message, idx) => {
-          const isInitialAssistantMessage =
-            idx === 0 && message.role === "assistant";
-          return (
-            <div
-              key={message.id}
-              className={`flex ${message.role === "user" ? "justify-end" : "justify-start"} w-full`}
-            >
+    <div className="relative h-full w-full">
+      {/* Top fade gradient overlay */}
+      <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-[#1a1a1a] to-transparent z-10 pointer-events-none" />
+
+      {/* Use Shadcn ScrollArea for the main message list container with dark theme */}
+      <ScrollArea
+        className={`h-full w-full p-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] ${className}`}
+      >
+        <div className="space-y-4 pb-2 w-full pt-4">
+          {/* Map over the messages array to render each message */}
+          {messages.map((message, idx) => {
+            const isInitialAssistantMessage =
+              idx === 0 && message.role === "assistant";
+            return (
               <div
-                className={`flex gap-3 max-w-[90%] ${message.role === "user" ? "flex-row-reverse" : "flex-row"}`}
+                key={message.id}
+                className={`flex ${message.role === "user" ? "justify-end" : "justify-start"} w-full`}
               >
-                {/* Avatar for user/bot */}
-                <Avatar
-                  className={`h-8 w-8 flex items-center justify-center ${message.role === "user" ? "bg-blue-500 dark:bg-blue-500" : "bg-[#2a2a2a] dark:bg-[#2a2a2a]"}`}
+                <div
+                  className={`flex gap-3 max-w-[90%] ${message.role === "user" ? "flex-row-reverse" : "flex-row"}`}
                 >
-                  {message.role === "user" ? (
-                    <User className="h-4 w-4 text-white dark:text-white" />
-                  ) : (
-                    <img
-                      src="https://avatars.githubusercontent.com/u/86694044?s=200&v=4"
-                      alt="Andromeda Bot"
-                      className="h-6 w-6 rounded-full bg-[#232323]"
-                    />
-                  )}
-                </Avatar>
-                <div className="space-y-2 w-full">
-                  {isInitialAssistantMessage ? (
-                    <div className="p-6 bg-gradient-to-br from-[#1a2b4a] to-[#213459] rounded-xl shadow-lg text-center text-white border border-[#333333]">
-                      <h2 className="text-2xl font-bold mb-2">
-                        🌟 Welcome to Andromeda! 🌟
-                      </h2>
-                      <p className="text-lg mb-4">
-                        I am Pulsar, your onboarding assistant, here to help you get
-                        started.
-                        <br />
-                        <br />
-                        Let me ask a few quick questions to learn about your
-                        background and interests.
-                        <br />
-                        <br />
-                        Once I understand what you are looking for,
-                        I will point you directly to the right spot in our
-                        community!
-                        <br />
-                        <br />
-                        <span className="text-xl font-semibold text-blue-400">
-                          Ready to dive in? 🚀
-                        </span>
-                      </p>
-                    </div>
-                  ) : (
-                    // Render error/warning messages in red if they match known patterns
-                    <Card
-                      className={`p-3 ${message.role === "assistant" &&
-                        (message.content
-                          .toLowerCase()
-                          .includes("please provide a valid") ||
-                          message.content.toLowerCase().includes("error") ||
-                          message.content.toLowerCase().includes("required") ||
-                          message.content.toLowerCase().includes("sorry"))
-                        ? "bg-red-900/80 border-red-600 text-red-200" // Red style for warnings/errors
-                        : message.role === "user"
-                          ? "bg-[#1a2b4a] text-[#6bbbff]"
-                          : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white"
-                        } ${message.isLoading ? "animate-pulse" : ""}`}
+                  {/* Avatar only for assistant messages */}
+                  {message.role === "assistant" && (
+                    <Avatar
+                      className="h-8 w-8 flex items-center justify-center bg-[#2a2a2a] dark:bg-[#2a2a2a]"
                     >
-                      {/* Display message content with clickable links and name replacement */}
-                      {renderMessageContent(
-                        message.content,
-                        message.role === "assistant" ? userName : undefined,
-                      )}
-
-                      {/* Render URL as a button if present */}
-                      {message.url && (
-                        <div className="mt-4">
-                          <button
-                            onClick={() => window.open(message.url, "_blank")}
-                            className="w-full flex items-center justify-center gap-2 bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
-                          >
-                            <ExternalLink className="w-4 h-4" />
-                            Get Started
-                          </button>
-                        </div>
-                      )}
-
-                      {/* Add retry button for database save errors */}
-                      {message.saveRetryNeeded && onRetrySave && (
-                        <div className="mt-3">
-                          <Button
-                            onClick={onRetrySave}
-                            variant="default"
-                            className="bg-blue-600 hover:bg-blue-700 text-white"
-                          >
-                            Retry Saving Your Data
-                          </Button>
-                          <p className="text-sm mt-2 text-gray-400">
-                            We had trouble saving your data, but your session is still active.
-                            Click the button above to try again.
-                          </p>
-                        </div>
-                      )}
-                    </Card>
+                      <img
+                        src="https://avatars.githubusercontent.com/u/86694044?s=200&v=4"
+                        alt="Andromeda Bot"
+                        className="h-6 w-6 rounded-full bg-[#232323]"
+                      />
+                    </Avatar>
                   )}
-
-                  {/* Render buttons if options are provided for an assistant message */}
-                  {message.role === "assistant" &&
-                    message.options &&
-                    message.options.length > 0 && (
-                      <div className="flex flex-wrap gap-2 pt-1">
-                        {message.options.map((option, index) => {
-                          // Determine if this message has the latest interactive options
-                          const isActiveMessage =
-                            message.id === latestInteractiveMessageId;
-
-                          // Use selectedValues only if currentQuestionIndex is a number
-                          const selectedValues =
-                            typeof currentQuestionIndex === "number"
-                              ? multiSelectAnswers[currentQuestionIndex] || []
-                              : [];
-                          const isSelected = selectedValues.includes(
-                            option.value,
-                          );
-
-                          // Disable all buttons if conditional input is open
-                          const isDisabled =
-                            conditionalInputOpen ||
-                            !isActiveMessage ||
-                            (isActiveMessage && selectedButtonValue !== null);
-
-                          // Styling classes for disabled buttons
-                          const disabledClasses = !isActiveMessage
-                            ? "opacity-70 cursor-not-allowed"
-                            : "";
-
-                          // Check if this button is currently highlighted via keyboard
-                          const isHighlighted =
-                            isActiveMessage && highlightedButtonIndex === index;
-
-                          // Apply highlight style if this button is being pressed via keyboard
-                          const highlightClasses = isHighlighted
-                            ? "ring-2 ring-offset-1 ring-blue-500"
-                            : "";
-
-                          return (
-                            <Button
-                              key={option.value}
-                              variant={isSelected ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => onButtonClick(option.value)}
-                              disabled={isDisabled}
-                              className={`text-left h-auto py-1.5 ${isSelected ? "bg-[#1a2b4a] text-[#6bbbff]" : "bg-[#2a2a2a] dark:bg-[#2a2a2a] border-[#444444] dark:border-[#444444] text-white hover:bg-[#333333] hover:text-white"} ${disabledClasses} ${highlightClasses}`}
-                            >
-                              {option.label}
-                            </Button>
-                          );
-                        })}
+                  <div className="space-y-2 w-full">
+                    {isInitialAssistantMessage ? (
+                      <div className="p-6 bg-gradient-to-br from-[#1a2b4a] to-[#213459] rounded-xl shadow-lg text-center text-white border border-[#333333]">
+                        <h2 className="text-2xl font-bold mb-2">
+                          🌟 Welcome to Andromeda! 🌟
+                        </h2>
+                        <p className="text-lg mb-4">
+                          I am Pulsar, your onboarding assistant, here to help you get
+                          started.
+                          <br />
+                          <br />
+                          Let me ask a few quick questions to learn about your
+                          background and interests.
+                          <br />
+                          <br />
+                          Once I understand what you are looking for,
+                          I will point you directly to the right spot in our
+                          community!
+                          <br />
+                          <br />
+                          <span className="text-xl font-semibold text-blue-400">
+                            Ready to dive in? 🚀
+                          </span>
+                        </p>
                       </div>
+                    ) : (
+                      // Render error/warning messages in red if they match known patterns
+                      <Card
+                        className={`p-3 ${message.role === "assistant" &&
+                          (message.content
+                            .toLowerCase()
+                            .includes("please provide a valid") ||
+                            message.content.toLowerCase().includes("error") ||
+                            message.content.toLowerCase().includes("required") ||
+                            message.content.toLowerCase().includes("sorry"))
+                          ? "bg-red-900/80 border-red-600 text-red-200" // Red style for warnings/errors
+                          : message.role === "user"
+                            ? "bg-[#1a2b4a] text-[#6bbbff]"
+                            : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white"
+                          } ${message.isLoading ? "animate-pulse" : ""}`}
+                      >
+                        {/* Display message content with clickable links and name replacement */}
+                        {renderMessageContent(
+                          message.content,
+                          message.role === "assistant" ? userName : undefined,
+                        )}
+
+                        {/* Render URL as a button if present */}
+                        {message.url && (
+                          <div className="mt-4">
+                            <button
+                              onClick={() => window.open(message.url, "_blank")}
+                              className="w-full flex items-center justify-center gap-2 bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
+                            >
+                              <ExternalLink className="w-4 h-4" />
+                              Get Started
+                            </button>
+                          </div>
+                        )}
+
+                        {/* Add retry button for database save errors */}
+                        {message.saveRetryNeeded && onRetrySave && (
+                          <div className="mt-3">
+                            <Button
+                              onClick={onRetrySave}
+                              variant="default"
+                              className="bg-blue-600 hover:bg-blue-700 text-white"
+                            >
+                              Retry Saving Your Data
+                            </Button>
+                            <p className="text-sm mt-2 text-gray-400">
+                              We had trouble saving your data, but your session is still active.
+                              Click the button above to try again.
+                            </p>
+                          </div>
+                        )}
+                      </Card>
                     )}
 
-                  {message.finalResult != null ? ( // Condition changed to only check for finalResult
-                    (() => {
-                      // Debug info to console
-                      console.log("Recommended paths data:", {
-                        primary: {
-                          path: message.finalResult?.recommendedPath,
-                          url: message.finalResult?.recommendedPathUrl
-                        },
-                        secondary: {
-                          path: message.finalResult?.secondRecommendedPath,
-                          url: message.finalResult?.secondRecommendedPathUrl
-                        }
-                      });
+                    {/* Render buttons if options are provided for an assistant message */}
+                    {message.role === "assistant" &&
+                      message.options &&
+                      message.options.length > 0 && (
+                        <div className="flex flex-wrap gap-2 pt-1">
+                          {message.options.map((option, index) => {
+                            // Determine if this message has the latest interactive options
+                            const isActiveMessage =
+                              message.id === latestInteractiveMessageId;
 
-                      return (
-                        <RecommendationPanel
-                          pathName={message.finalResult?.recommendedPath}
-                          pathDescription={message.finalResult?.recommendedPathDescription}
-                          pathLink={message.finalResult?.recommendedPath === "Ambassador" ? "/ambassador" : undefined}
-                          secondPathName={message.finalResult?.secondRecommendedPath}
-                          secondPathDescription={message.finalResult?.secondRecommendedPathDescription}
-                          userName={userName}
-                          appUrl="https://app.testnet.andromedaprotocol.io"
-                          goToAppButtonText="Explore Andromeda Platform"
-                          onGetStarted={() => {
-                            console.log(
-                              `Opening primary path URL: ${message.finalResult?.recommendedPathUrl}`
+                            // Use selectedValues only if currentQuestionIndex is a number
+                            const selectedValues =
+                              typeof currentQuestionIndex === "number"
+                                ? multiSelectAnswers[currentQuestionIndex] || []
+                                : [];
+                            const isSelected = selectedValues.includes(
+                              option.value,
                             );
-                            // Check if URL is absolute or relative
-                            const primaryUrl = message.finalResult?.recommendedPathUrl || '';
-                            if (primaryUrl.startsWith('http')) {
-                              window.open(primaryUrl, "_blank");
-                            } else {
-                              // For relative URLs, navigate within the application
-                              window.location.href = primaryUrl;
-                            }
-                          }}
-                          onSecondPathSelected={
-                            message.finalResult?.secondRecommendedPath
-                              ? () => {
-                                const secondaryPathName = message.finalResult?.secondRecommendedPath;
-                                let targetUrl = message.finalResult?.secondRecommendedPathUrl || '';
 
-                                // Determine the correct internal route based on the path name
-                                switch (secondaryPathName) {
-                                  case "Ambassador":
-                                    targetUrl = "/ambassador";
-                                    break;
-                                  case "Visionaries":
-                                    targetUrl = "/visionaries";
-                                    break;
-                                  case "Hackers":
-                                    targetUrl = "/hackers";
-                                    break;
-                                  case "Contractors":
-                                    targetUrl = "/contractors";
-                                    break;
-                                  case "Explorer":
-                                    targetUrl = "/explorer";
-                                    break;
-                                  case "AI Navigators":
-                                    targetUrl = "/ai-navigators";
-                                    break;
-                                  // If it's not a known internal path, use the provided URL and check if external
-                                  default:
-                                    if (targetUrl.startsWith('http')) {
-                                      window.open(targetUrl, "_blank");
-                                      return; // Exit the function after opening external link
-                                    }
-                                    // If it's not a known path and not an external URL, assume it's a relative internal path
-                                    break;
-                                }
+                            // Disable all buttons if conditional input is open
+                            const isDisabled =
+                              conditionalInputOpen ||
+                              !isActiveMessage ||
+                              (isActiveMessage && selectedButtonValue !== null);
 
-                                console.log(`Navigating to secondary path: ${targetUrl}`);
-                                // Navigate within the application for internal routes
-                                window.location.href = targetUrl;
-                              }
-                              : undefined
+                            // Styling classes for disabled buttons
+                            const disabledClasses = !isActiveMessage
+                              ? "opacity-70 cursor-not-allowed"
+                              : "";
+
+                            // Check if this button is currently highlighted via keyboard
+                            const isHighlighted =
+                              isActiveMessage && highlightedButtonIndex === index;
+
+                            // Apply highlight style if this button is being pressed via keyboard
+                            const highlightClasses = isHighlighted
+                              ? "ring-2 ring-offset-1 ring-blue-500"
+                              : "";
+
+                            return (
+                              <Button
+                                key={option.value}
+                                variant={isSelected ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => onButtonClick(option.value)}
+                                disabled={isDisabled}
+                                className={`text-left h-auto py-1.5 ${isSelected ? "bg-[#1a2b4a] text-[#6bbbff]" : "bg-[#2a2a2a] dark:bg-[#2a2a2a] border-[#444444] dark:border-[#444444] text-white hover:bg-[#333333] hover:text-white"} ${disabledClasses} ${highlightClasses}`}
+                              >
+                                {option.label}
+                              </Button>
+                            );
+                          })}
+                        </div>
+                      )}
+
+                    {message.finalResult != null ? ( // Condition changed to only check for finalResult
+                      (() => {
+                        // Debug info to console
+                        console.log("Recommended paths data:", {
+                          primary: {
+                            path: message.finalResult?.recommendedPath,
+                            url: message.finalResult?.recommendedPathUrl
+                          },
+                          secondary: {
+                            path: message.finalResult?.secondRecommendedPath,
+                            url: message.finalResult?.secondRecommendedPathUrl
                           }
-                        />
-                      );
-                    })()
-                  ) : null}
+                        });
+
+                        return (
+                          <RecommendationPanel
+                            pathName={message.finalResult?.recommendedPath}
+                            pathDescription={message.finalResult?.recommendedPathDescription}
+                            pathLink={message.finalResult?.recommendedPath === "Ambassador" ? "/ambassador" : undefined}
+                            secondPathName={message.finalResult?.secondRecommendedPath}
+                            secondPathDescription={message.finalResult?.secondRecommendedPathDescription}
+                            userName={userName}
+                            appUrl="https://app.testnet.andromedaprotocol.io"
+                            goToAppButtonText="Explore Andromeda Platform"
+                            onGetStarted={() => {
+                              console.log(
+                                `Opening primary path URL: ${message.finalResult?.recommendedPathUrl}`
+                              );
+                              // Check if URL is absolute or relative
+                              const primaryUrl = message.finalResult?.recommendedPathUrl || '';
+                              if (primaryUrl.startsWith('http')) {
+                                window.open(primaryUrl, "_blank");
+                              } else {
+                                // For relative URLs, navigate within the application
+                                window.location.href = primaryUrl;
+                              }
+                            }}
+                            onSecondPathSelected={
+                              message.finalResult?.secondRecommendedPath
+                                ? () => {
+                                  const secondaryPathName = message.finalResult?.secondRecommendedPath;
+                                  let targetUrl = message.finalResult?.secondRecommendedPathUrl || '';
+
+                                  // Determine the correct internal route based on the path name
+                                  switch (secondaryPathName) {
+                                    case "Ambassador":
+                                      targetUrl = "/ambassador";
+                                      break;
+                                    case "Visionaries":
+                                      targetUrl = "/visionaries";
+                                      break;
+                                    case "Hackers":
+                                      targetUrl = "/hackers";
+                                      break;
+                                    case "Contractors":
+                                      targetUrl = "/contractors";
+                                      break;
+                                    case "Explorer":
+                                      targetUrl = "/explorer";
+                                      break;
+                                    case "AI Navigators":
+                                      targetUrl = "/ai-navigators";
+                                      break;
+                                    // If it's not a known internal path, use the provided URL and check if external
+                                    default:
+                                      if (targetUrl.startsWith('http')) {
+                                        window.open(targetUrl, "_blank");
+                                        return; // Exit the function after opening external link
+                                      }
+                                      // If it's not a known path and not an external URL, assume it's a relative internal path
+                                      break;
+                                  }
+
+                                  console.log(`Navigating to secondary path: ${targetUrl}`);
+                                  // Navigate within the application for internal routes
+                                  window.location.href = targetUrl;
+                                }
+                                : undefined
+                            }
+                          />
+                        );
+                      })()
+                    ) : null}
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
-        {/* Empty div at the end to attach the scroll ref */}
-        <div ref={scrollRef} className="h-4 w-full" />{" "}
-        {/* Add min-height to ensure scrolling */}
-      </div>
-    </ScrollArea>
+            );
+          })}
+          {/* Empty div at the end to attach the scroll ref */}
+          <div ref={scrollRef} className="h-4 w-full" />{" "}
+          {/* Add min-height to ensure scrolling */}
+        </div>
+      </ScrollArea>
+    </div>
   );
 }
