@@ -20,6 +20,10 @@ import {
   Github,
   ChevronDown,
   ChevronRight,
+  Wrench,
+  Library,
+  Navigation,
+  Cpu,
 } from "lucide-react";
 import { FaTelegramPlane } from "react-icons/fa";
 import { cn } from "@/lib/utils";
@@ -189,50 +193,11 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
-  // AGENT BOTS - COMMENTED OUT FOR FUTURE USE (SOON BADGE FEATURE)
-  // State for tracking which agent bot is focused via keyboard
-  // const [focusedAgentIndex, setFocusedAgentIndex] = useState<number | null>(
-  //   null,
-  // );
-
-  // // Handle keyboard navigation for agent bots
-  // const handleAgentKeyDown = (e: React.KeyboardEvent) => {
-  //   switch (e.key) {
-  //     case "ArrowDown":
-  //       e.preventDefault();
-  //       setFocusedAgentIndex((prev) =>
-  //         prev === null || prev >= agentBots.length - 1 ? 0 : prev + 1,
-  //       );
-  //       break;
-  //     case "ArrowUp":
-  //       e.preventDefault();
-  //       setFocusedAgentIndex((prev) =>
-  //         prev === null || prev <= 0 ? agentBots.length - 1 : prev - 1,
-  //       );
-  //       break;
-  //     case "Tab":
-  //       // Reset focus when tabbing away
-  //       setFocusedAgentIndex(null);
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // };
-
-  // // Set up refs for agent bot elements
-  // const agentRefs = useRef<Array<HTMLDivElement | null>>([]);
-
-  // // Focus the currently selected agent bot
-  // useEffect(() => {
-  //   if (focusedAgentIndex !== null && agentRefs.current[focusedAgentIndex]) {
-  //     agentRefs.current[focusedAgentIndex]?.focus();
-  //   }
-  // }, [focusedAgentIndex]);
-
+  // State variables for collapsible sections with original logic
+  const [showTools, setShowTools] = useState(false);
+  const [showResources, setShowResources] = useState(() => resourceNavItems.some((item) => item.href === pathname));
   const [showPath, setShowPath] = useState(() => actionItems.some((item) => item.href === pathname));
   const [showAgent, setShowAgent] = useState(false);
-  const [showTools, setShowTools] = useState(true);
-  const [showResources, setShowResources] = useState(() => resourceNavItems.some((item) => item.href === pathname));
 
   // Open the section containing the current path on mount
   useEffect(() => {
@@ -245,7 +210,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   return (
     <>
-      {/* Overlay that appears behind the sidebar on mobile when it's open */}
+      {/* Overlay - only visible on mobile when sidebar is open */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-30 lg:hidden transition-opacity duration-300"
@@ -256,12 +221,12 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
       <div
         className={cn(
-          "sidebar fixed top-0 left-0 h-full w-64 bg-[#121212] border-r border-[#333333] z-40 transition-transform duration-300 ease-in-out transform shadow-xl overflow-y-auto",
+          "sidebar fixed top-0 left-0 h-full w-64 bg-[#121212] z-40 transition-transform duration-300 ease-in-out transform shadow-xl overflow-y-auto flex flex-col",
           isOpen ? "translate-x-0" : "-translate-x-full",
           "lg:translate-x-0 lg:shadow-none", // Always show on large screens
         )}
       >
-        <div className="logo flex items-center gap-3 px-4 py-5 border-b border-[#333333]">
+        <div className="logo flex items-center gap-3 px-4 py-5 flex-shrink-0">
           <Link href="/" className="flex items-center gap-3">
             <img
               src="https://avatars.githubusercontent.com/u/86694044?s=200&v=4"
@@ -282,17 +247,17 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           </button>
         </div>
 
-        <nav className="mt-2 py-2">
+        <nav className="mt-2 py-2 flex-1 overflow-y-auto">
           {/* Tools section (collapsible) */}
           <div>
             <button
-              className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-[#A084F7]"
+              className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-white"
               onClick={() => setShowTools((open) => !open)}
               aria-expanded={showTools}
               aria-controls="sidebar-tools-section"
               tabIndex={0}
             >
-              <span>🛠️</span> Tools
+              <Wrench className="w-4 h-4" /> Tools
               {showTools ? (
                 <ChevronDown className="w-4 h-4 ml-auto" />
               ) : (
@@ -313,7 +278,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                     className={`nav-item flex items-center gap-3 px-4 py-3
                                             transition-all duration-400 ease-[cubic-bezier(.4,0,.2,1)] rounded-md
                                             hover:bg-[#232323] hover:text-white hover:scale-105 hover:opacity-90 hover:translate-x-1
-                                            ${isActive ? "bg-[#232323] text-[#A084F7] border-l-4 border-[#A084F7]" : "text-gray-300"}
+                                            ${isActive ? "bg-[#232323] text-white" : "text-gray-300"}
                                             ${item.badge ? "cursor-not-allowed opacity-75" : ""}`}
                     target={item.badge ? undefined : "_blank"}
                     rel={item.badge ? undefined : "noopener noreferrer"}
@@ -340,17 +305,17 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               })}
             </div>
           </div>
-          <hr className="my-4 border-[#333333]" />
+
           {/* Resources section (collapsible) */}
-          <div>
+          <div className="mt-4">
             <button
-              className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-[#3FB6E4]"
+              className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-white"
               onClick={() => setShowResources((open) => !open)}
               aria-expanded={showResources}
               aria-controls="sidebar-resources-section"
               tabIndex={0}
             >
-              <span>📚</span> Resources
+              <Library className="w-4 h-4" /> Resources
               {showResources ? (
                 <ChevronDown className="w-4 h-4 ml-auto" />
               ) : (
@@ -371,7 +336,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                     className={`nav-item flex items-center gap-3 px-4 py-3
                                             transition-all duration-400 ease-[cubic-bezier(.4,0,.2,1)] rounded-md
                                             hover:bg-[#232323] hover:text-white hover:scale-105 hover:opacity-90 hover:translate-x-1
-                                            ${isActive ? "bg-[#232323] text-[#3FB6E4] border-l-4 border-[#3FB6E4]" : "text-gray-300"}`}
+                                            ${isActive ? "bg-[#232323] text-white" : "text-gray-300"}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -384,19 +349,16 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             </div>
           </div>
 
-          {/* Visual separator */}
-          <hr className="my-4 border-[#333333]" />
-
           {/* Action items section title */}
-          <div>
+          <div className="mt-4">
             <button
-              className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-[#E43F7B]"
+              className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-white"
               onClick={() => setShowPath((open) => !open)}
               aria-expanded={showPath}
               aria-controls="sidebar-path-section"
               tabIndex={0}
             >
-              <span>🧭</span> Choose Your Path
+              <Navigation className="w-4 h-4" /> Choose Your Path
               {showPath ? (
                 <ChevronDown className="w-4 h-4 ml-auto" />
               ) : (
@@ -415,7 +377,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                     key={`action-${index}`}
                     href={item.href}
                     className={`block w-full inline-flex items-center justify-start gap-2 px-4 py-2 rounded-md transition-colors
-                                            ${isActive ? "bg-[#333333] text-[#FFB300] border-l-4 border-[#FFB300]" : "bg-[#2a2a2a] text-white hover:bg-[#333333]"}`}
+                                            ${isActive ? "bg-[#333333] text-white" : "bg-[#2a2a2a] text-white hover:bg-[#333333]"}`}
                     target={item.href.startsWith("/") ? undefined : "_blank"}
                     rel={
                       item.href.startsWith("/")
@@ -434,19 +396,16 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             </div>
           </div>
 
-          {/* Visual separator */}
-          <hr className="my-4 border-[#333333]" />
-
           {/* Agent bots section title */}
-          <div>
+          <div className="mt-4">
             <button
-              className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-[#FFB300]"
+              className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-white"
               onClick={() => setShowAgent((open) => !open)}
               aria-expanded={showAgent}
               aria-controls="sidebar-agent-section"
               tabIndex={0}
             >
-              <span>🤖</span> Choose Your Agent
+              <Cpu className="w-4 h-4" /> Choose Your Agent
               {showAgent ? (
                 <ChevronDown className="w-4 h-4 ml-auto" />
               ) : (
@@ -480,7 +439,9 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             </div>
           </div>
         </nav>
-        <div className="flex gap-4 px-4 py-4 border-t border-[#333333]">
+
+        {/* Social Links at bottom */}
+        <div className="flex justify-center gap-6 px-4 py-6 border-t border-[#2a2a2a] flex-shrink-0">
           {socialLinks.map((item) => (
             <a
               key={item.label}
@@ -489,7 +450,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               rel="noopener noreferrer"
               aria-label={item.label}
               title={item.label}
-              className="text-gray-400 hover:text-white transition-colors"
+              className="text-white hover:text-gray-300 transition-colors p-2 hover:bg-[#232323] rounded-md"
             >
               {item.icon}
             </a>
