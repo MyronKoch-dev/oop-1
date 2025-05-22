@@ -62,9 +62,9 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="h-full bg-[#1a1a1a]">
       <body
-        className={`${poppins.variable} ${geistSans.variable} ${geistMono.variable} antialiased bg-black font-poppins`}
+        className={`${poppins.variable} ${geistSans.variable} ${geistMono.variable} antialiased bg-[#1a1a1a] font-poppins min-h-screen w-full`}
       >
         <SidebarContext.Provider
           value={{ openRightSidebar, isRightSidebarOpen: false }}
