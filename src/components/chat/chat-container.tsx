@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { ChatHeader } from "./chat-header";
+
 import { ChatMessages, type ChatMessage } from "./chat-messages";
 import { ChatInput, type InputMode } from "./chat-input";
 import { getQuestionDetails } from "@/lib/questionnaire";
 import { useSidebar } from "@/context/SidebarContext";
 import { ContactInfoForm } from "./ContactInfoForm";
+import { TopProgressPanel } from "@/components/ui/top-progress-panel";
 
 // Define API response types
 interface OnboardingResponsePayload {
@@ -33,8 +34,6 @@ interface OnboardingResponsePayload {
 
 interface ChatContainerProps {
   initialMessage?: string;
-  title?: string;
-  subtitle?: string;
   className?: string;
 }
 
@@ -51,8 +50,6 @@ const TOTAL_STEPS = 14;
 
 export function ChatContainer({
   initialMessage = `🌟 Welcome to Andromeda! 🌟\n\nI'm Pulsar, your onboarding assistant, here to help you get started.\n\nI'll ask a few quick questions to learn about your background and interests.\n\nOnce I understand what you're looking for, I'll point you directly to the right spot in our community!\n\nReady to dive in? 🚀`,
-  title = "Pulsar",
-  subtitle = "Answer a few questions to get started",
   className = "",
 }: ChatContainerProps) {
   // Access the openRightSidebar function from context
@@ -1521,13 +1518,9 @@ export function ChatContainer({
   }, []);
 
   return (
-    <div
-      className={`flex flex-col h-full w-full bg-[#1a1a1a] dark:bg-[#1a1a1a] rounded-lg overflow-hidden text-white ${className}`}
-      style={{ width: '100%', height: '100%' }}
-    >
-      <ChatHeader
-        title={title}
-        subtitle={subtitle}
+    <>
+      {/* Top Progress Panel */}
+      <TopProgressPanel
         currentStep={currentQuestionIndex || 0}
         totalSteps={TOTAL_STEPS}
         onRestart={handleRestart}
@@ -1535,165 +1528,172 @@ export function ChatContainer({
         isComplete={isComplete}
       />
 
-      <div className={`flex-1 overflow-hidden relative`}>
-        <ChatMessages
-          messages={messages}
-          onButtonClick={handleButtonSelect}
-          selectedButtonValue={selectedButtonValue}
-          messagesEndRef={messagesEndRef}
-          className="h-full overflow-auto"
-          latestInteractiveMessageId={latestInteractiveMsgId}
-          highlightedButtonIndex={highlightedButtonIndex}
-          multiSelectAnswers={multiSelectAnswers}
-          currentQuestionIndex={currentQuestionIndex}
-          userName={userName}
-          conditionalInputOpen={showConditionalInput}
-          onRetrySave={retryDatabaseSave}
-        />
-      </div>
-
       <div
-        className={`relative transition-all duration-200 ${showConditionalInput ? "flex-shrink-0 max-h-[250px]" : "flex-shrink-0"}`}
-        ref={conditionalInputRef}
+        className={`flex flex-col h-full w-full bg-[#1a1a1a] dark:bg-[#1a1a1a] rounded-lg overflow-hidden text-white ${className}`}
+        style={{ width: '100%', height: '100%' }}
       >
-        {!isComplete &&
-          (currentQuestionIndex === 10 ? (
-            <ContactInfoForm
-              onSubmit={async (values) => {
-                setInputDisabled(true);
-                setIsProcessing(true);
-                // Add a message to the chat for the form submission
-                setMessages((prev) => [
-                  ...prev,
-                  {
-                    id: generateMessageId("user"),
-                    role: "user",
-                    content: `Contact Info Submitted`,
-                  },
-                  {
-                    id: generateMessageId("assistant"),
-                    role: "assistant",
-                    content: "Processing your contact info...",
-                    isLoading: true,
-                  },
-                ]);
-                // Send all four answers in a single API call
-                try {
-                  const response = await fetch("/api/onboarding/message", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                      sessionId,
-                      response: {
-                        email: values.email,
-                        github: values.github,
-                        telegram: values.telegram,
-                        x: values.x,
-                        batchContact: true,
-                      },
-                    }),
-                  });
-                  const data: OnboardingResponsePayload = await response.json();
-                  setMessages((prev) => prev.slice(0, -1)); // Remove loading
-                  if (data.error) {
-                    setMessages((prev) => [
-                      ...prev,
-                      {
-                        id: generateMessageId("assistant"),
-                        role: "assistant",
-                        content: data.error || "An error occurred",
-                      },
-                    ]);
-                    setInputDisabled(false);
-                  } else if (data.isFinalQuestion && data.finalResult) {
-                    setMessages((prev) => [
-                      ...prev,
-                      {
-                        id: generateMessageId("assistant"),
-                        role: "assistant",
-                        content: `__FINAL_RECOMMENDATION__`,
-                        finalResult: data.finalResult,
-                      },
-                    ]);
-                    setInputDisabled(true);
-                    setIsComplete(true);
-                    setCurrentQuestionIndex(TOTAL_STEPS);
-                  } else if (data.nextQuestion) {
-                    setMessages((prev) => [
-                      ...prev,
-                      {
-                        id: generateMessageId("assistant"),
-                        role: "assistant",
-                        content: data.nextQuestion || "Let's continue",
-                        options: data.options,
-                      },
-                    ]);
-                    setCurrentQuestionIndex(data.currentQuestionIndex);
-                    setInputMode(data.inputMode || "text");
-                  }
-                  if (data.newSessionId) {
-                    setSessionId(data.newSessionId);
-                    // Save new sessionId to localStorage
-                    localStorage.setItem("onboarding-session-id", data.newSessionId);
-                  }
-                } catch {
-                  setMessages((prev) => prev.slice(0, -1));
+
+
+        <div className={`flex-1 overflow-hidden relative`}>
+          <ChatMessages
+            messages={messages}
+            onButtonClick={handleButtonSelect}
+            selectedButtonValue={selectedButtonValue}
+            messagesEndRef={messagesEndRef}
+            className="h-full overflow-auto"
+            latestInteractiveMessageId={latestInteractiveMsgId}
+            highlightedButtonIndex={highlightedButtonIndex}
+            multiSelectAnswers={multiSelectAnswers}
+            currentQuestionIndex={currentQuestionIndex}
+            userName={userName}
+            conditionalInputOpen={showConditionalInput}
+            onRetrySave={retryDatabaseSave}
+          />
+        </div>
+
+        <div
+          className={`relative transition-all duration-200 ${showConditionalInput ? "flex-shrink-0 max-h-[250px]" : "flex-shrink-0"}`}
+          ref={conditionalInputRef}
+        >
+          {!isComplete &&
+            (currentQuestionIndex === 10 ? (
+              <ContactInfoForm
+                onSubmit={async (values) => {
+                  setInputDisabled(true);
+                  setIsProcessing(true);
+                  // Add a message to the chat for the form submission
                   setMessages((prev) => [
                     ...prev,
                     {
+                      id: generateMessageId("user"),
+                      role: "user",
+                      content: `Contact Info Submitted`,
+                    },
+                    {
                       id: generateMessageId("assistant"),
                       role: "assistant",
-                      content:
-                        "Sorry, there was an error submitting your contact info. Please try again.",
+                      content: "Processing your contact info...",
+                      isLoading: true,
                     },
                   ]);
-                  setInputDisabled(false);
-                } finally {
-                  setIsProcessing(false);
+                  // Send all four answers in a single API call
+                  try {
+                    const response = await fetch("/api/onboarding/message", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        sessionId,
+                        response: {
+                          email: values.email,
+                          github: values.github,
+                          telegram: values.telegram,
+                          x: values.x,
+                          batchContact: true,
+                        },
+                      }),
+                    });
+                    const data: OnboardingResponsePayload = await response.json();
+                    setMessages((prev) => prev.slice(0, -1)); // Remove loading
+                    if (data.error) {
+                      setMessages((prev) => [
+                        ...prev,
+                        {
+                          id: generateMessageId("assistant"),
+                          role: "assistant",
+                          content: data.error || "An error occurred",
+                        },
+                      ]);
+                      setInputDisabled(false);
+                    } else if (data.isFinalQuestion && data.finalResult) {
+                      setMessages((prev) => [
+                        ...prev,
+                        {
+                          id: generateMessageId("assistant"),
+                          role: "assistant",
+                          content: `__FINAL_RECOMMENDATION__`,
+                          finalResult: data.finalResult,
+                        },
+                      ]);
+                      setInputDisabled(true);
+                      setIsComplete(true);
+                      setCurrentQuestionIndex(TOTAL_STEPS);
+                    } else if (data.nextQuestion) {
+                      setMessages((prev) => [
+                        ...prev,
+                        {
+                          id: generateMessageId("assistant"),
+                          role: "assistant",
+                          content: data.nextQuestion || "Let's continue",
+                          options: data.options,
+                        },
+                      ]);
+                      setCurrentQuestionIndex(data.currentQuestionIndex);
+                      setInputMode(data.inputMode || "text");
+                    }
+                    if (data.newSessionId) {
+                      setSessionId(data.newSessionId);
+                      // Save new sessionId to localStorage
+                      localStorage.setItem("onboarding-session-id", data.newSessionId);
+                    }
+                  } catch {
+                    setMessages((prev) => prev.slice(0, -1));
+                    setMessages((prev) => [
+                      ...prev,
+                      {
+                        id: generateMessageId("assistant"),
+                        role: "assistant",
+                        content:
+                          "Sorry, there was an error submitting your contact info. Please try again.",
+                      },
+                    ]);
+                    setInputDisabled(false);
+                  } finally {
+                    setIsProcessing(false);
+                  }
+                }}
+                isSubmitting={isProcessing}
+              />
+            ) : (
+              <ChatInput
+                onSendText={handleSendMessage}
+                onConditionalTextChange={handleConditionalTextChange}
+                conditionalText={conditionalText}
+                disabled={inputDisabled}
+                inputMode={inputMode}
+                onSendMessage={handleSendMessage}
+                conditionalTextVisible={
+                  !!(
+                    currentQuestion?.conditionalTriggerValue &&
+                    typeof currentQuestionIndex === "number" &&
+                    Array.isArray(multiSelectAnswers[currentQuestionIndex]) &&
+                    multiSelectAnswers[currentQuestionIndex]?.includes(
+                      currentQuestion.conditionalTriggerValue,
+                    )
+                  )
                 }
-              }}
-              isSubmitting={isProcessing}
-            />
-          ) : (
-            <ChatInput
-              onSendText={handleSendMessage}
-              onConditionalTextChange={handleConditionalTextChange}
-              conditionalText={conditionalText}
-              disabled={inputDisabled}
-              inputMode={inputMode}
-              onSendMessage={handleSendMessage}
-              conditionalTextVisible={
-                !!(
-                  currentQuestion?.conditionalTriggerValue &&
+                setConditionalText={setConditionalText}
+                onConditionalTextSubmit={handleConditionalTextSubmit}
+                currentQuestionIndex={currentQuestionIndex}
+                conditionalTextInputLabel={conditionalTextInputLabel}
+                className={
+                  conditionalTextVisible ? "max-h-[200px] overflow-y-auto" : ""
+                }
+                showConfirmButton={
+                  currentQuestion?.isMultiSelect &&
                   typeof currentQuestionIndex === "number" &&
                   Array.isArray(multiSelectAnswers[currentQuestionIndex]) &&
-                  multiSelectAnswers[currentQuestionIndex]?.includes(
-                    currentQuestion.conditionalTriggerValue,
-                  )
-                )
-              }
-              setConditionalText={setConditionalText}
-              onConditionalTextSubmit={handleConditionalTextSubmit}
-              currentQuestionIndex={currentQuestionIndex}
-              conditionalTextInputLabel={conditionalTextInputLabel}
-              className={
-                conditionalTextVisible ? "max-h-[200px] overflow-y-auto" : ""
-              }
-              showConfirmButton={
-                currentQuestion?.isMultiSelect &&
-                typeof currentQuestionIndex === "number" &&
-                Array.isArray(multiSelectAnswers[currentQuestionIndex]) &&
-                multiSelectAnswers[currentQuestionIndex]?.length > 0
-              }
-              onConfirmLanguages={handleConfirmMultiSelect}
-              placeholder={
-                getQuestionDetails(currentQuestionIndex ?? -1)?.placeholder ||
-                undefined
-              }
-              key={chatInputKey}
-            />
-          ))}
+                  multiSelectAnswers[currentQuestionIndex]?.length > 0
+                }
+                onConfirmLanguages={handleConfirmMultiSelect}
+                placeholder={
+                  getQuestionDetails(currentQuestionIndex ?? -1)?.placeholder ||
+                  undefined
+                }
+                key={chatInputKey}
+              />
+            ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
