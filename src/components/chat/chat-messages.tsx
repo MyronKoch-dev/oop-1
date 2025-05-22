@@ -143,7 +143,7 @@ export function ChatMessages({
     <ScrollArea
       className={`h-full w-full p-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] ${className}`}
     >
-      <div className="space-y-4 pb-2">
+      <div className="space-y-4 pb-2 w-full">
         {/* Map over the messages array to render each message */}
         {messages.map((message, idx) => {
           const isInitialAssistantMessage =
@@ -151,10 +151,10 @@ export function ChatMessages({
           return (
             <div
               key={message.id}
-              className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+              className={`flex ${message.role === "user" ? "justify-end" : "justify-start"} w-full`}
             >
               <div
-                className={`flex gap-3 max-w-[85%] ${message.role === "user" ? "flex-row-reverse" : "flex-row"}`}
+                className={`flex gap-3 max-w-[90%] ${message.role === "user" ? "flex-row-reverse" : "flex-row"}`}
               >
                 {/* Avatar for user/bot */}
                 <Avatar
