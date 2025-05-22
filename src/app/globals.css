@@ -235,7 +235,7 @@
 
 /* Center the chat container now that sidebar is removed */
 .centered {
-  max-width: 900px;
+  max-width: 80%;
   margin: 0 auto;
   width: 100%;
 }

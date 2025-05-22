@@ -63,7 +63,7 @@ export default function HomePage() {
       )}
 
       {/* Outer container with dark theme and blue accents - adjusted height for mobile */}
-      <div className="w-full max-w-3xl mx-auto h-[75vh] md:h-[80vh] lg:h-[85vh] border border-[#333333] rounded-xl shadow-2xl bg-[#1a1a1a] dark:bg-[#1a1a1a] overflow-hidden">
+      <div className="w-full max-w-[80%] mx-auto h-[75vh] md:h-[80vh] lg:h-[85vh] rounded-xl bg-[#1a1a1a] dark:bg-[#1a1a1a] overflow-hidden">
         {/* Render the ChatContainer component with full height and dark theme */}
         <ChatContainer
           className="h-full"
