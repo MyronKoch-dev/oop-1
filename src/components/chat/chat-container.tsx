@@ -1523,6 +1523,7 @@ export function ChatContainer({
   return (
     <div
       className={`flex flex-col h-full w-full bg-[#1a1a1a] dark:bg-[#1a1a1a] rounded-lg overflow-hidden text-white ${className}`}
+      style={{ width: '100%', height: '100%' }}
     >
       <ChatHeader
         title={title}

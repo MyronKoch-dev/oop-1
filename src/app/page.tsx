@@ -45,7 +45,7 @@ export default function HomePage() {
     <main className="flex min-h-screen flex-col items-start justify-start p-4 md:p-6 lg:p-8 bg-[#1a1a1a] transition-all pt-6">
       {/* Andromeda logo and title above the chat - only show when sidebar is collapsed */}
       {!isSidebarVisible && (
-        <div className="w-full max-w-3xl mx-auto mb-4 flex flex-col items-center text-center">
+        <div className="w-full max-w-[80%] mx-auto mb-4 flex flex-col items-center text-center">
           <img
             src="https://avatars.githubusercontent.com/u/86694044?s=200&v=4"
             width="70"
@@ -63,10 +63,20 @@ export default function HomePage() {
       )}
 
       {/* Outer container with dark theme and blue accents - adjusted height for mobile */}
-      <div className="w-full max-w-[80%] mx-auto h-[75vh] md:h-[80vh] lg:h-[85vh] rounded-xl bg-[#1a1a1a] dark:bg-[#1a1a1a] overflow-hidden">
+      <div
+        id="chat-main-container"
+        className="mx-auto h-[75vh] md:h-[80vh] lg:h-[85vh] rounded-xl bg-[#1a1a1a] dark:bg-[#1a1a1a] overflow-hidden"
+        style={{
+          width: '80vw',
+          maxWidth: '80vw',
+          minWidth: '300px',
+          margin: '0 auto'
+        }}
+        data-chat-container="main"
+      >
         {/* Render the ChatContainer component with full height and dark theme */}
         <ChatContainer
-          className="h-full"
+          className="h-full w-full"
           title="Pulsar"
           subtitle="Begin Your Journey With Andromeda Here."
           key={stableInstanceId} // Use the stable instance ID as key

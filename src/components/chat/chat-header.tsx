@@ -37,7 +37,7 @@ export function ChatHeader({
 
   return (
     <div
-      className={`border-b border-[#333333] dark:border-[#333333] p-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] text-white ${className}`}
+      className={`p-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] text-white ${className}`}
     >
       <div className="flex items-center justify-between">
         <div className="flex-1 flex flex-col items-center space-y-1.5">

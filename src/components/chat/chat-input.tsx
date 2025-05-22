@@ -293,7 +293,7 @@ export function ChatInput({
 
   return (
     <div
-      className={`border-t border-[#333333] dark:border-[#333333] p-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] z-10 ${className}`}
+      className={`p-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] z-10 ${className}`}
     >
       {showConfirmButton && (
         <div className="mb-4">
