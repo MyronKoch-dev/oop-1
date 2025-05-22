@@ -56,7 +56,7 @@ export function ChatContainer({
   className = "",
 }: ChatContainerProps) {
   // Access the openRightSidebar function from context
-  const { openRightSidebar, isRightSidebarOpen } = useSidebar();
+  const { openRightSidebar } = useSidebar();
 
   // State for messages and chat flow
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -1485,12 +1485,18 @@ export function ChatContainer({
 
   // Add effect to open the sidebar when completion happens
   useEffect(() => {
-    if (isComplete && !hasOpenedSidebarAfterCompletion) { // Check flag
-      // Add a slight delay so the congratulations panel appears first
-      setTimeout(() => {
-        openRightSidebar();
-        setHasOpenedSidebarAfterCompletion(true); // Set flag after opening
+    if (
+      isComplete &&
+      !hasOpenedSidebarAfterCompletion &&
+      messages.length > 5
+    ) {
+      // Wait a second before opening the sidebar to ensure a smooth experience
+      const timer = setTimeout(() => {
+        openRightSidebar(); // This is now a no-op function
+        setHasOpenedSidebarAfterCompletion(true);
+        localStorage.setItem("andromeda-onboarding-sidebar-opened", "true");
       }, 1000);
+      return () => clearTimeout(timer);
     }
   }, [isComplete, openRightSidebar, hasOpenedSidebarAfterCompletion]); // Add dependency
 
@@ -1516,7 +1522,7 @@ export function ChatContainer({
 
   return (
     <div
-      className={`flex flex-col h-full bg-[#1a1a1a] dark:bg-[#1a1a1a] rounded-lg shadow-lg overflow-hidden border border-[#333333] dark:border-[#333333] text-white ${className} ${isRightSidebarOpen ? "adjust-for-sidebar" : "centered"}`}
+      className={`flex flex-col h-full bg-[#1a1a1a] dark:bg-[#1a1a1a] rounded-lg shadow-lg overflow-hidden border border-[#333333] dark:border-[#333333] text-white ${className} centered`}
     >
       <ChatHeader
         title={title}
