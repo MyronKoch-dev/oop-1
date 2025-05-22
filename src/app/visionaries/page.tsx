@@ -12,7 +12,7 @@ export default function VisionariesPage() {
   const baseDiscussionUrl = "https://github.com/andromedaprotocol/ado-database-hackerboard/discussions/new?category=";
 
   return (
-    <main className="container mx-auto p-4 md:p-6 max-w-7xl min-h-screen bg-black text-white">
+    <main className="container mx-auto p-4 md:p-6 max-w-7xl min-h-screen bg-[#1a1a1a] text-white">
       {/* Removed redundant inner container div */}
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold mb-4 text-white">

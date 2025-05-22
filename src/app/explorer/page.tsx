@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function ExplorerPage() {
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen bg-[#1a1a1a] text-white">
       <div className="container mx-auto p-4 md:p-6">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold mb-4 text-white flex items-center justify-center gap-2">
