@@ -370,7 +370,7 @@ export function ChatMessages({
                                     disabled={isDisabled}
                                     className={`
                                       rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200
-                                      ${selectedClasses} text-gray-800 hover:bg-[#c4c4c4]
+                                      ${selectedClasses} text-gray-800 hover:!bg-[#dcfaf5] hover:!text-gray-800
                                       ${highlightClasses}
                                       flex items-center gap-2
                                     `}
