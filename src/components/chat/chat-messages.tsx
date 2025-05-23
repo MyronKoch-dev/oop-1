@@ -149,9 +149,7 @@ export function ChatMessages({
       >
         <div className="space-y-4 pb-2 w-full pt-4">
           {/* Map over the messages array to render each message */}
-          {messages.map((message, idx) => {
-            const isInitialAssistantMessage =
-              idx === 0 && message.role === "assistant";
+          {messages.map((message) => {
             return (
               <div
                 key={message.id}
@@ -173,41 +171,18 @@ export function ChatMessages({
                     </Avatar>
                   )}
                   <div className="space-y-2 w-full">
-                    {isInitialAssistantMessage ? (
-                      <div className="p-6 bg-gradient-to-br from-[#1a2b4a] to-[#213459] rounded-xl shadow-lg text-center text-white border border-[#333333]">
-                        <h2 className="text-2xl font-bold mb-2">
-                          🌟 Welcome to Andromeda! 🌟
-                        </h2>
-                        <p className="text-lg mb-4">
-                          I am Pulsar, your onboarding assistant, here to help you get
-                          started.
-                          <br />
-                          <br />
-                          Let me ask a few quick questions to learn about your
-                          background and interests.
-                          <br />
-                          <br />
-                          Once I understand what you are looking for,
-                          I will point you directly to the right spot in our
-                          community!
-                          <br />
-                          <br />
-                          <span className="text-xl font-semibold text-blue-400">
-                            Ready to dive in? 🚀
-                          </span>
-                        </p>
-                      </div>
-                    ) : (
+                    {/* Always render as a regular card now */}
+                    {true && (
                       // Render error/warning messages in red if they match known patterns
                       <Card
-                        className={`p-3 ${message.role === "assistant" &&
+                        className={`p-3 border-none ${message.role === "assistant" &&
                           (message.content
                             .toLowerCase()
                             .includes("please provide a valid") ||
                             message.content.toLowerCase().includes("error") ||
                             message.content.toLowerCase().includes("required") ||
                             message.content.toLowerCase().includes("sorry"))
-                          ? "bg-red-900/80 border-red-600 text-red-200" // Red style for warnings/errors
+                          ? "bg-red-900/80 text-red-200" // Red style for warnings/errors
                           : message.role === "user"
                             ? "bg-[#1a2b4a] text-[#6bbbff]"
                             : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white"
@@ -238,7 +213,7 @@ export function ChatMessages({
                             <Button
                               onClick={onRetrySave}
                               variant="default"
-                              className="bg-blue-600 hover:bg-blue-700 text-white"
+                              className="bg-blue-600 hover:bg-blue-700 text-white border-none"
                             >
                               Retry Saving Your Data
                             </Button>
@@ -297,7 +272,7 @@ export function ChatMessages({
                                 size="sm"
                                 onClick={() => onButtonClick(option.value)}
                                 disabled={isDisabled}
-                                className={`text-left h-auto py-1.5 ${isSelected ? "bg-[#1a2b4a] text-[#6bbbff]" : "bg-[#2a2a2a] dark:bg-[#2a2a2a] border-[#444444] dark:border-[#444444] text-white hover:bg-[#333333] hover:text-white"} ${disabledClasses} ${highlightClasses}`}
+                                className={`text-left h-auto py-1.5 border-none ${isSelected ? "bg-[#1a2b4a] text-[#6bbbff]" : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white hover:bg-[#333333] hover:text-white"} ${disabledClasses} ${highlightClasses}`}
                               >
                                 {option.label}
                               </Button>

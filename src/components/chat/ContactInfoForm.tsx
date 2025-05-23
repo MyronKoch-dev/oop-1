@@ -89,7 +89,7 @@ export function ContactInfoForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-[#232b3a] border border-[#444] rounded-xl p-6 flex flex-col gap-4 shadow-lg"
+      className="bg-[#232b3a] border-none rounded-xl p-6 flex flex-col gap-4"
       autoComplete="off"
     >
       <div>
@@ -103,7 +103,7 @@ export function ContactInfoForm({
           id="email"
           name="email"
           type="email"
-          className="w-full px-3 py-2 rounded bg-[#2a2a2a] border border-[#444] text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-3 py-2 rounded bg-[#2a2a2a] border-none text-white placeholder:text-gray-400 focus:outline-none focus:ring-0"
           value={values.email}
           onChange={handleChange}
           onKeyDown={(e) => handleKeyDown(e, "email")}
@@ -127,7 +127,7 @@ export function ContactInfoForm({
           id="github"
           name="github"
           type="text"
-          className="w-full px-3 py-2 rounded bg-[#2a2a2a] border border-[#444] text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-3 py-2 rounded bg-[#2a2a2a] border-none text-white placeholder:text-gray-400 focus:outline-none focus:ring-0"
           value={values.github}
           onChange={handleChange}
           onKeyDown={(e) => handleKeyDown(e, "github")}
@@ -150,7 +150,7 @@ export function ContactInfoForm({
           id="telegram"
           name="telegram"
           type="text"
-          className="w-full px-3 py-2 rounded bg-[#2a2a2a] border border-[#444] text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-3 py-2 rounded bg-[#2a2a2a] border-none text-white placeholder:text-gray-400 focus:outline-none focus:ring-0"
           value={values.telegram}
           onChange={handleChange}
           onKeyDown={(e) => handleKeyDown(e, "telegram")}
@@ -173,7 +173,7 @@ export function ContactInfoForm({
           id="x"
           name="x"
           type="text"
-          className="w-full px-3 py-2 rounded bg-[#2a2a2a] border border-[#444] text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-3 py-2 rounded bg-[#2a2a2a] border-none text-white placeholder:text-gray-400 focus:outline-none focus:ring-0"
           value={values.x}
           onChange={handleChange}
           onKeyDown={(e) => handleKeyDown(e, "x")}
@@ -187,7 +187,7 @@ export function ContactInfoForm({
       </div>
       <button
         type="submit"
-        className="w-full mt-2 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white font-semibold transition disabled:opacity-60"
+        className="w-full mt-2 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white font-semibold transition disabled:opacity-60 border-none"
         disabled={isSubmitting}
       >
         Submit Contact Info
