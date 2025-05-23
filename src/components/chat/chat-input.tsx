@@ -323,7 +323,9 @@ export function ChatInput({
   };
 
   return (
-    <div className={`p-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] z-10 ${className}`}>
+    <div
+      className={`px-8 py-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] z-10 ${className}`}
+    >
       {showConfirmButton && (
         <div className="mb-4">
           <Button
@@ -369,7 +371,7 @@ export function ChatInput({
       )}
 
       {!hideMainInput && !showConfirmButton && (
-        <div className="relative">
+        <div className="relative max-w-4xl mx-auto">
           <Input
             ref={inputRef}
             value={message}
@@ -377,14 +379,14 @@ export function ChatInput({
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
             disabled={isMainInputDisabled}
-            className="w-full bg-[#2a2a2a] dark:bg-[#2a2a2a] border-none text-white placeholder:text-gray-400 pr-12 rounded-lg focus:ring-0 focus:border-none"
+            className="w-full bg-[#2a2a2a] dark:bg-[#2a2a2a] border-none text-white placeholder:text-gray-400 rounded-lg focus:ring-0 focus:border-none focus:outline-none h-12 pr-14"
           />
           <Button
             onClick={handleSendMessage}
             disabled={!message.trim() || isGenerating}
             size="icon"
             type="submit"
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-transparent hover:bg-transparent text-gray-400 hover:text-white border-none p-1 h-8 w-8"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 h-8 w-8 bg-[#d4d4d4] hover:bg-[#c4c4c4] text-gray-800 border-none rounded-lg"
           >
             <Send className="h-4 w-4" />
             <span className="sr-only">Send message</span>
