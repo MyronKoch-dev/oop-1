@@ -3,6 +3,8 @@ import { fetchGitHubIssues } from "@/lib/github";
 import { IssueCard } from "@/components/cards/IssueCard";
 import { IssueCardSkeleton } from "@/components/cards/IssueCardSkeleton";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { MissionCard } from "@/components/cards/MissionCard";
+import { MissionProgress } from "@/components/ui/MissionProgress";
 
 export const metadata = {
   title: "Contractor Hub | Andromeda Protocol",
@@ -23,6 +25,60 @@ function IssueCardsLoading() {
   );
 }
 
+// Mission data - these would typically come from an API or database
+const missions = [
+  {
+    id: 1,
+    title: "Join the Andromeda Developer Program",
+    description:
+      "Just starting with Web3? Check out how Andromeda's aOS makes it super easy to launch smart, scalable dApps without needing to write your own smart contracts.",
+    status: "completed" as const,
+    type: "onboarding" as const,
+    completionDate: "2024-01-15",
+  },
+  {
+    id: 2,
+    title: "Introduce Yourself in the Telegram",
+    description:
+      "Quick tutorial: Showcase yourself by sharing your background and what you aim to achieve. This helps you connect with the community that collaborates and gets real-time support for your projects.",
+    status: "in-progress" as const,
+    type: "community" as const,
+    progress: 60,
+  },
+  {
+    id: 3,
+    title: "Deploy Your First ADO using aOS",
+    description:
+      "We&apos;re giving away 1,000 $ANDR for every ADO used in a completed and approved dApp. Whether you&apos;re creating a token, launching a marketplace, or building a full Web3 app.",
+    status: "pending" as const,
+    type: "rewards" as const,
+  },
+  {
+    id: 4,
+    title: "Complete Documentation Review",
+    description:
+      "Review and understand the core Andromeda documentation. Get familiar with ADOs, app building concepts, and best practices for Web3 development.",
+    status: "pending" as const,
+    type: "onboarding" as const,
+  },
+  {
+    id: 5,
+    title: "Build Your First Marketplace",
+    description:
+      "Create a functional NFT marketplace using Andromeda&apos;s marketplace ADO. This hands-on project will demonstrate your understanding of the platform.",
+    status: "pending" as const,
+    type: "rewards" as const,
+  },
+  {
+    id: 6,
+    title: "Participate in Community Discussion",
+    description:
+      "Engage with the Andromeda community by participating in discussions, asking questions, and sharing your experiences with other developers.",
+    status: "pending" as const,
+    type: "community" as const,
+  },
+];
+
 export default async function ContractorsPage() {
   // Fetch issues from GitHub
   const issues = await fetchGitHubIssues(
@@ -33,6 +89,7 @@ export default async function ContractorsPage() {
 
   return (
     <main className="container mx-auto p-4 md:p-6 max-w-7xl min-h-screen bg-[#1a1a1a] text-white">
+      {/* Header Section */}
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold text-white mb-2">
           🚀 Contractor Command Center 🚀
@@ -49,6 +106,45 @@ export default async function ContractorsPage() {
         </div>
       </div>
 
+      {/* Your Missions Section */}
+      <div className="mb-16">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-3xl font-bold text-white">Your Missions</h2>
+          <div className="text-right">
+            <span className="text-gray-400 text-sm font-medium">
+              1 of {missions.length} completed
+            </span>
+          </div>
+        </div>
+
+        <p className="text-gray-400 mb-8 text-center max-w-4xl mx-auto">
+          Want to learn about aOS? Our docs walk you through every ADO, with
+          step-by-step guides for building everything from NFT marketplaces to
+          crowdfunds and DAOs. We&apos;ll tracking NFT marketplaces and DAOs
+          here!
+        </p>
+
+        <div className="space-y-4 mb-8">
+          {missions.map((mission) => (
+            <MissionCard key={mission.id} mission={mission} />
+          ))}
+        </div>
+
+        {/* Mission Progress */}
+        <MissionProgress currentStep={1} totalSteps={missions.length} />
+
+        {/* Action Buttons Section */}
+        <div className="mt-8 flex flex-wrap gap-4 justify-center">
+          <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center gap-2">
+            📚 Learn about the campaigns
+          </button>
+          <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center gap-2">
+            🏆 View Leaderboard
+          </button>
+        </div>
+      </div>
+
+      {/* Build with aOS Section */}
       <div className="mb-16">
         <h2 className="text-2xl font-bold text-white mb-6 text-center">
           Build with aOS
