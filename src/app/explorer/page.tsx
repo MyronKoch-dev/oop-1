@@ -16,8 +16,9 @@ export default function ExplorerPage() {
             🗺️ <BookOpen className="w-8 h-8 text-[#3498db]" /> Explorer 🗺️
           </h1>
           <p className="text-lg text-gray-400 mb-8 max-w-2xl mx-auto">
-            Hey, there, web3 and crypto explorers! Dive into the Andromeda ecosystem! Discover tutorials, guides, and
-            learning resources to help you get started and grow your knowledge.
+            Hey, there, web3 and crypto explorers! Dive into the Andromeda
+            ecosystem! Discover tutorials, guides, and learning resources to
+            help you get started and grow your knowledge.
           </p>
         </div>
         <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6 mb-8 text-center">

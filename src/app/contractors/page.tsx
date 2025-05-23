@@ -39,22 +39,31 @@ export default async function ContractorsPage() {
         </h1>
         <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6 mb-12 max-w-3xl mx-auto">
           <p className="text-white mb-4">
-            Congratulations! We&apos;ve determined that you have a contractor-grade set of skills, and can start building immediately!
+            Congratulations! We&apos;ve determined that you have a
+            contractor-grade set of skills, and can start building immediately!
           </p>
           <p className="text-gray-400">
-            This page will provide several options, Including diving into our toolset or tackling a contract for bid (when they are posted).
+            This page will provide several options, Including diving into our
+            toolset or tackling a contract for bid (when they are posted).
           </p>
         </div>
       </div>
 
       <div className="mb-16">
-        <h2 className="text-2xl font-bold text-white mb-6 text-center">Build with aOS</h2>
+        <h2 className="text-2xl font-bold text-white mb-6 text-center">
+          Build with aOS
+        </h2>
         <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6 mb-8 max-w-4xl mx-auto">
           <p className="text-gray-300 mb-4">
-            Andromeda&apos;s vision is that aOS makes Web3 development accessible to everyone. Whether you&apos;re a seasoned dev or just getting started, you can use pre-built, customizable modules to launch real on-chain apps, fast! It&apos;s intuitive, permissionless, and chain-agnostic.
+            Andromeda&apos;s vision is that aOS makes Web3 development
+            accessible to everyone. Whether you&apos;re a seasoned dev or just
+            getting started, you can use pre-built, customizable modules to
+            launch real on-chain apps, fast! It&apos;s intuitive,
+            permissionless, and chain-agnostic.
           </p>
           <p className="text-gray-300 mb-4">
-            No smart contract experience needed. Just an idea, a browser, and aOS.
+            No smart contract experience needed. Just an idea, a browser, and
+            aOS.
           </p>
           <p className="text-white font-medium">
             Check out different ways to get started on aOS today:
@@ -63,30 +72,63 @@ export default async function ContractorsPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
           <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6">
-            <h3 className="text-xl font-bold text-white mb-4">🎥 Watch the Intro Videos</h3>
+            <h3 className="text-xl font-bold text-white mb-4">
+              🎥 Watch the Intro Videos
+            </h3>
             <p className="text-gray-400 mb-4">
-              New to modular Web3 development? See what makes the Andromeda Operating System (aOS) the easiest way to launch smart, scalable dApps, without writing your own smart contracts.
+              New to modular Web3 development? See what makes the Andromeda
+              Operating System (aOS) the easiest way to launch smart, scalable
+              dApps, without writing your own smart contracts.
             </p>
             <div className="mt-4 space-y-3">
-              <h4 className="text-lg font-medium text-white">Some refreshers on aOS:</h4>
+              <h4 className="text-lg font-medium text-white">
+                Some refreshers on aOS:
+              </h4>
               <div className="space-y-2">
-                <a href="https://youtu.be/RhQfZnurGXo" target="_blank" rel="noopener noreferrer" className="block text-blue-400 hover:underline">
+                <a
+                  href="https://youtu.be/RhQfZnurGXo"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-blue-400 hover:underline"
+                >
                   • aOS Introduction Video
                 </a>
-                <a href="https://youtu.be/2ktG307EqEA" target="_blank" rel="noopener noreferrer" className="block text-blue-400 hover:underline">
+                <a
+                  href="https://youtu.be/2ktG307EqEA"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-blue-400 hover:underline"
+                >
                   • aOS Core Concepts
                 </a>
-                <a href="https://youtu.be/uvvqX91VFS4" target="_blank" rel="noopener noreferrer" className="block text-blue-400 hover:underline">
+                <a
+                  href="https://youtu.be/uvvqX91VFS4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-blue-400 hover:underline"
+                >
                   • Getting Started with aOS
                 </a>
               </div>
 
-              <h4 className="text-lg font-medium text-white mt-6">Tutorials to try:</h4>
+              <h4 className="text-lg font-medium text-white mt-6">
+                Tutorials to try:
+              </h4>
               <div className="space-y-2">
-                <a href="https://youtu.be/QxMC-cygMaI" target="_blank" rel="noopener noreferrer" className="block text-blue-400 hover:underline">
+                <a
+                  href="https://youtu.be/QxMC-cygMaI"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-blue-400 hover:underline"
+                >
                   • Building Your First App with aOS
                 </a>
-                <a href="https://youtu.be/jV9XrStVBog" target="_blank" rel="noopener noreferrer" className="block text-blue-400 hover:underline">
+                <a
+                  href="https://youtu.be/jV9XrStVBog"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-blue-400 hover:underline"
+                >
                   • Advanced aOS Features
                 </a>
               </div>
@@ -95,9 +137,13 @@ export default async function ContractorsPage() {
 
           <div className="space-y-8">
             <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6">
-              <h3 className="text-xl font-bold text-white mb-4">🛠 Log On and Start Building</h3>
+              <h3 className="text-xl font-bold text-white mb-4">
+                🛠 Log On and Start Building
+              </h3>
               <p className="text-gray-400 mb-4">
-                aOS lets you build full-stack Web3 applications fast—using plug-and-play ADOs (Andromeda Digital Objects) for tokens, staking, marketplaces, and more.
+                aOS lets you build full-stack Web3 applications fast—using
+                plug-and-play ADOs (Andromeda Digital Objects) for tokens,
+                staking, marketplaces, and more.
               </p>
               <p className="text-gray-400 mb-4">
                 No setup, no code barriers—just log on and launch.
@@ -113,9 +159,13 @@ export default async function ContractorsPage() {
             </div>
 
             <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6">
-              <h3 className="text-xl font-bold text-white mb-4">📚 Explore the Docs</h3>
+              <h3 className="text-xl font-bold text-white mb-4">
+                📚 Explore the Docs
+              </h3>
               <p className="text-gray-400 mb-4">
-                Want to know how aOS actually works? Our docs walk you through every ADO, with step-by-step guides for building everything from NFT marketplaces to crowdfunds and DAOs.
+                Want to know how aOS actually works? Our docs walk you through
+                every ADO, with step-by-step guides for building everything from
+                NFT marketplaces to crowdfunds and DAOs.
               </p>
               <p className="text-gray-400 mb-4">
                 Dive in and start experimenting!
@@ -135,12 +185,19 @@ export default async function ContractorsPage() {
 
       <div className="mb-12 max-w-4xl mx-auto">
         <div className="bg-[#232060] rounded-lg border-2 border-[#4D3DF7] p-6 shadow-[0_0_15px_rgba(77,61,247,0.4)]">
-          <h2 className="text-2xl font-bold text-white mb-4 text-center">🚀 Ready to turn your build into $ANDR?</h2>
+          <h2 className="text-2xl font-bold text-white mb-4 text-center">
+            🚀 Ready to turn your build into $ANDR?
+          </h2>
           <p className="text-gray-200 mb-4">
-            For a limited time, we&apos;re rewarding builders who launch on aOS with 1,000 $ANDR for every ADO used in a completed and approved dApp. Whether you&apos;re creating a token, launching a marketplace, or building a full-on Web3 app, every active ADO you deploy stacks your rewards. Check out the ADOs below and start building.
+            For a limited time, we&apos;re rewarding builders who launch on aOS
+            with 1,000 $ANDR for every ADO used in a completed and approved
+            dApp. Whether you&apos;re creating a token, launching a marketplace,
+            or building a full-on Web3 app, every active ADO you deploy stacks
+            your rewards. Check out the ADOs below and start building.
           </p>
           <p className="text-gray-200 mb-6">
-            Not sure what to build? Complete one of our uses cases and earn 2,000 $ANDR
+            Not sure what to build? Complete one of our uses cases and earn
+            2,000 $ANDR
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <a
@@ -169,7 +226,8 @@ export default async function ContractorsPage() {
       <div className="mb-12 max-w-4xl mx-auto">
         <details className="bg-[#1a1a1a] rounded-lg border border-[#333333] cursor-pointer group">
           <summary className="p-6 text-xl font-bold text-white hover:text-blue-400 transition-colors flex items-center justify-center">
-            🧩 What ADOs are available right now, and what do they do? Click here to find out!
+            🧩 What ADOs are available right now, and what do they do? Click
+            here to find out!
             <span className="ml-2 transform group-open:rotate-180 transition-transform duration-200">
               ▼
             </span>
@@ -178,122 +236,260 @@ export default async function ContractorsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-[#232323] p-4 rounded-lg border border-[#444444]">
                 <h3 className="text-lg font-bold text-white">CW20 (v2.1.0)</h3>
-                <p className="text-gray-400 my-2">Launch your own custom CW20 token in minutes, perfect for community tokens, DAOs, or utility assets.</p>
-                <p className="text-blue-400 italic">→ Ready to mint your vision? Start building today.</p>
+                <p className="text-gray-400 my-2">
+                  Launch your own custom CW20 token in minutes, perfect for
+                  community tokens, DAOs, or utility assets.
+                </p>
+                <p className="text-blue-400 italic">
+                  → Ready to mint your vision? Start building today.
+                </p>
               </div>
 
               <div className="bg-[#232323] p-4 rounded-lg border border-[#444444]">
-                <h3 className="text-lg font-bold text-white">CW20 Exchange (v2.1.0)</h3>
-                <p className="text-gray-400 my-2">Easily set up a decentralized exchange for your CW20 tokens. Define your rates and start swapping instantly.</p>
-                <p className="text-blue-400 italic">→ Power your own on-chain economy, build with the CW20 Exchange ADO.</p>
+                <h3 className="text-lg font-bold text-white">
+                  CW20 Exchange (v2.1.0)
+                </h3>
+                <p className="text-gray-400 my-2">
+                  Easily set up a decentralized exchange for your CW20 tokens.
+                  Define your rates and start swapping instantly.
+                </p>
+                <p className="text-blue-400 italic">
+                  → Power your own on-chain economy, build with the CW20
+                  Exchange ADO.
+                </p>
               </div>
 
               <div className="bg-[#232323] p-4 rounded-lg border border-[#444444]">
-                <h3 className="text-lg font-bold text-white">CW20 Staking (v2.1.0)</h3>
-                <p className="text-gray-400 my-2">Create a tailored staking program for any CW20 token. Customize lock-up periods, reward structures, and more.</p>
-                <p className="text-blue-400 italic">→ Engage your token holders, launch your staking app now.</p>
+                <h3 className="text-lg font-bold text-white">
+                  CW20 Staking (v2.1.0)
+                </h3>
+                <p className="text-gray-400 my-2">
+                  Create a tailored staking program for any CW20 token.
+                  Customize lock-up periods, reward structures, and more.
+                </p>
+                <p className="text-blue-400 italic">
+                  → Engage your token holders, launch your staking app now.
+                </p>
               </div>
 
               <div className="bg-[#232323] p-4 rounded-lg border border-[#444444]">
                 <h3 className="text-lg font-bold text-white">CW721 (v2.1.0)</h3>
-                <p className="text-gray-400 my-2">Deploy custom NFT collections with full control over minting and metadata. Ideal for art, gaming, and collectibles.</p>
-                <p className="text-blue-400 italic">→ Bring your NFT project to life, start building with CW721.</p>
+                <p className="text-gray-400 my-2">
+                  Deploy custom NFT collections with full control over minting
+                  and metadata. Ideal for art, gaming, and collectibles.
+                </p>
+                <p className="text-blue-400 italic">
+                  → Bring your NFT project to life, start building with CW721.
+                </p>
               </div>
 
               <div className="bg-[#232323] p-4 rounded-lg border border-[#444444]">
-                <h3 className="text-lg font-bold text-white">Fixed Amount Splitter (v1.2.0)</h3>
-                <p className="text-gray-400 my-2">Distribute funds automatically to multiple addresses with precision and transparency.</p>
-                <p className="text-blue-400 italic">→ Simplify payouts, build with the Fixed Amount Splitter ADO.</p>
+                <h3 className="text-lg font-bold text-white">
+                  Fixed Amount Splitter (v1.2.0)
+                </h3>
+                <p className="text-gray-400 my-2">
+                  Distribute funds automatically to multiple addresses with
+                  precision and transparency.
+                </p>
+                <p className="text-blue-400 italic">
+                  → Simplify payouts, build with the Fixed Amount Splitter ADO.
+                </p>
               </div>
 
               <div className="bg-[#232323] p-4 rounded-lg border border-[#444444]">
                 <h3 className="text-lg font-bold text-white">Graph (v0.1.0)</h3>
-                <p className="text-gray-400 my-2">Store and manage coordinate data on-chain. Great for mapping, location-based apps, and gaming logic.</p>
-                <p className="text-blue-400 italic">→ Plot your path forward, build with the Graph ADO.</p>
+                <p className="text-gray-400 my-2">
+                  Store and manage coordinate data on-chain. Great for mapping,
+                  location-based apps, and gaming logic.
+                </p>
+                <p className="text-blue-400 italic">
+                  → Plot your path forward, build with the Graph ADO.
+                </p>
               </div>
 
               <div className="bg-[#232323] p-4 rounded-lg border border-[#444444]">
                 <h3 className="text-lg font-bold text-white">Curve (v0.2.0)</h3>
-                <p className="text-gray-400 my-2">Define dynamic logic over time or input values, ideal for progressive pricing, reward scaling, and more.</p>
-                <p className="text-blue-400 italic">→ Shape your Web3 logic, build smarter with the Curve ADO.</p>
+                <p className="text-gray-400 my-2">
+                  Define dynamic logic over time or input values, ideal for
+                  progressive pricing, reward scaling, and more.
+                </p>
+                <p className="text-blue-400 italic">
+                  → Shape your Web3 logic, build smarter with the Curve ADO.
+                </p>
               </div>
 
               <div className="bg-[#232323] p-4 rounded-lg border border-[#444444]">
-                <h3 className="text-lg font-bold text-white">Address List (v2.1.0)</h3>
-                <p className="text-gray-400 my-2">Control access to your dApps and ADOs with whitelist and blacklist functionality.</p>
-                <p className="text-blue-400 italic">→ Build with security in mind, start using Address List today.</p>
+                <h3 className="text-lg font-bold text-white">
+                  Address List (v2.1.0)
+                </h3>
+                <p className="text-gray-400 my-2">
+                  Control access to your dApps and ADOs with whitelist and
+                  blacklist functionality.
+                </p>
+                <p className="text-blue-400 italic">
+                  → Build with security in mind, start using Address List today.
+                </p>
               </div>
 
               <div className="bg-[#232323] p-4 rounded-lg border border-[#444444]">
-                <h3 className="text-lg font-bold text-white">App Contract (v1.2.0)</h3>
-                <p className="text-gray-400 my-2">Launch full Web3 apps in one go, no smart contract experience required. Bundle ADOs into powerful dApps.</p>
-                <p className="text-blue-400 italic">→ One-click deploy your next big idea with the App ADO.</p>
+                <h3 className="text-lg font-bold text-white">
+                  App Contract (v1.2.0)
+                </h3>
+                <p className="text-gray-400 my-2">
+                  Launch full Web3 apps in one go, no smart contract experience
+                  required. Bundle ADOs into powerful dApps.
+                </p>
+                <p className="text-blue-400 italic">
+                  → One-click deploy your next big idea with the App ADO.
+                </p>
               </div>
 
               <div className="bg-[#232323] p-4 rounded-lg border border-[#444444]">
-                <h3 className="text-lg font-bold text-white">Auction (v2.2.5)</h3>
-                <p className="text-gray-400 my-2">Run customizable English auctions for NFTs with features like starting price, duration, and whitelists.</p>
-                <p className="text-blue-400 italic">→ Turn your NFTs into events, start building auctions now.</p>
+                <h3 className="text-lg font-bold text-white">
+                  Auction (v2.2.5)
+                </h3>
+                <p className="text-gray-400 my-2">
+                  Run customizable English auctions for NFTs with features like
+                  starting price, duration, and whitelists.
+                </p>
+                <p className="text-blue-400 italic">
+                  → Turn your NFTs into events, start building auctions now.
+                </p>
               </div>
 
               <div className="bg-[#232323] p-4 rounded-lg border border-[#444444]">
-                <h3 className="text-lg font-bold text-white">Lockdrop (v2.1.0)</h3>
-                <p className="text-gray-400 my-2">Run a fair, decentralized token sale with Lockdrop, buyers receive tokens based on proportional contributions, not fixed prices.</p>
-                <p className="text-blue-400 italic">→ Launch your next token the smart way, build with Lockdrop.</p>
+                <h3 className="text-lg font-bold text-white">
+                  Lockdrop (v2.1.0)
+                </h3>
+                <p className="text-gray-400 my-2">
+                  Run a fair, decentralized token sale with Lockdrop, buyers
+                  receive tokens based on proportional contributions, not fixed
+                  prices.
+                </p>
+                <p className="text-blue-400 italic">
+                  → Launch your next token the smart way, build with Lockdrop.
+                </p>
               </div>
 
               <div className="bg-[#232323] p-4 rounded-lg border border-[#444444]">
-                <h3 className="text-lg font-bold text-white">Marketplace (v2.3.0)</h3>
-                <p className="text-gray-400 my-2">Create your own NFT marketplace and list digital assets for direct purchase with full pricing control.</p>
-                <p className="text-blue-400 italic">→ Take your NFTs to market, start building with the Marketplace ADO.</p>
+                <h3 className="text-lg font-bold text-white">
+                  Marketplace (v2.3.0)
+                </h3>
+                <p className="text-gray-400 my-2">
+                  Create your own NFT marketplace and list digital assets for
+                  direct purchase with full pricing control.
+                </p>
+                <p className="text-blue-400 italic">
+                  → Take your NFTs to market, start building with the
+                  Marketplace ADO.
+                </p>
               </div>
 
               <div className="bg-[#232323] p-4 rounded-lg border border-[#444444]">
-                <h3 className="text-lg font-bold text-white">Validator Staking (v1.1.0)</h3>
-                <p className="text-gray-400 my-2">Enable staking directly to validators and support your network while earning rewards.</p>
-                <p className="text-blue-400 italic">→ Power up validator engagement, deploy Validator Staking today.</p>
+                <h3 className="text-lg font-bold text-white">
+                  Validator Staking (v1.1.0)
+                </h3>
+                <p className="text-gray-400 my-2">
+                  Enable staking directly to validators and support your network
+                  while earning rewards.
+                </p>
+                <p className="text-blue-400 italic">
+                  → Power up validator engagement, deploy Validator Staking
+                  today.
+                </p>
               </div>
 
               <div className="bg-[#232323] p-4 rounded-lg border border-[#444444]">
-                <h3 className="text-lg font-bold text-white">Vesting (v3.1.0)</h3>
-                <p className="text-gray-400 my-2">Design flexible vesting schedules for token allocations, ideal for teams, investors, or community rewards.</p>
-                <p className="text-blue-400 italic">→ Keep token distribution secure and strategic, build with the Vesting ADO.</p>
+                <h3 className="text-lg font-bold text-white">
+                  Vesting (v3.1.0)
+                </h3>
+                <p className="text-gray-400 my-2">
+                  Design flexible vesting schedules for token allocations, ideal
+                  for teams, investors, or community rewards.
+                </p>
+                <p className="text-blue-400 italic">
+                  → Keep token distribution secure and strategic, build with the
+                  Vesting ADO.
+                </p>
               </div>
 
               <div className="bg-[#232323] p-4 rounded-lg border border-[#444444]">
-                <h3 className="text-lg font-bold text-white">Merkle Airdrop (v2.1.0)</h3>
-                <p className="text-gray-400 my-2">Deliver CW20 tokens safely and efficiently with transparent Merkle-based airdrops.</p>
-                <p className="text-blue-400 italic">→ Airdrop with confidence, launch your campaign using the Airdrop ADO.</p>
+                <h3 className="text-lg font-bold text-white">
+                  Merkle Airdrop (v2.1.0)
+                </h3>
+                <p className="text-gray-400 my-2">
+                  Deliver CW20 tokens safely and efficiently with transparent
+                  Merkle-based airdrops.
+                </p>
+                <p className="text-blue-400 italic">
+                  → Airdrop with confidence, launch your campaign using the
+                  Airdrop ADO.
+                </p>
               </div>
 
               <div className="bg-[#232323] p-4 rounded-lg border border-[#444444]">
                 <h3 className="text-lg font-bold text-white">Point (v0.1.0)</h3>
-                <p className="text-gray-400 my-2">Record and reference single on-chain coordinates, simple yet essential for mapping logic and data.</p>
-                <p className="text-blue-400 italic">→ Build precise and geo-aware apps—start with the Point ADO.</p>
+                <p className="text-gray-400 my-2">
+                  Record and reference single on-chain coordinates, simple yet
+                  essential for mapping logic and data.
+                </p>
+                <p className="text-blue-400 italic">
+                  → Build precise and geo-aware apps—start with the Point ADO.
+                </p>
               </div>
 
               <div className="bg-[#232323] p-4 rounded-lg border border-[#444444]">
-                <h3 className="text-lg font-bold text-white">Primitive (v2.1.0)</h3>
-                <p className="text-gray-400 my-2">Store essential on-chain data with customizable access, strings, numbers, addresses, booleans, and more.</p>
-                <p className="text-blue-400 italic">→ Bring structure to your dApp, build with the versatile Primitive ADO.</p>
+                <h3 className="text-lg font-bold text-white">
+                  Primitive (v2.1.0)
+                </h3>
+                <p className="text-gray-400 my-2">
+                  Store essential on-chain data with customizable access,
+                  strings, numbers, addresses, booleans, and more.
+                </p>
+                <p className="text-blue-400 italic">
+                  → Bring structure to your dApp, build with the versatile
+                  Primitive ADO.
+                </p>
               </div>
 
               <div className="bg-[#232323] p-4 rounded-lg border border-[#444444]">
                 <h3 className="text-lg font-bold text-white">Rates (v2.0.4)</h3>
-                <p className="text-gray-400 my-2">Add customizable royalties and taxes to NFT sales across your dApps for seamless revenue sharing.</p>
-                <p className="text-blue-400 italic">→ Monetize your marketplace with built-in royalties, add the Rates ADO.</p>
+                <p className="text-gray-400 my-2">
+                  Add customizable royalties and taxes to NFT sales across your
+                  dApps for seamless revenue sharing.
+                </p>
+                <p className="text-blue-400 italic">
+                  → Monetize your marketplace with built-in royalties, add the
+                  Rates ADO.
+                </p>
               </div>
 
               <div className="bg-[#232323] p-4 rounded-lg border border-[#444444]">
-                <h3 className="text-lg font-bold text-white">Splitter (v2.3.0)</h3>
-                <p className="text-gray-400 my-2">Automatically distribute funds to multiple wallets based on custom percentages, great for teams, DAOs, and revenue-sharing apps.</p>
-                <p className="text-blue-400 italic">→ Streamline fund distribution, build with the Splitter ADO.</p>
+                <h3 className="text-lg font-bold text-white">
+                  Splitter (v2.3.0)
+                </h3>
+                <p className="text-gray-400 my-2">
+                  Automatically distribute funds to multiple wallets based on
+                  custom percentages, great for teams, DAOs, and revenue-sharing
+                  apps.
+                </p>
+                <p className="text-blue-400 italic">
+                  → Streamline fund distribution, build with the Splitter ADO.
+                </p>
               </div>
 
               <div className="bg-[#232323] p-4 rounded-lg border border-[#444444]">
-                <h3 className="text-lg font-bold text-white">Timelock (v2.1.0)</h3>
-                <p className="text-gray-400 my-2">Securely lock funds until a future date or condition is met, perfect for escrows, delayed payments, and more.</p>
-                <p className="text-blue-400 italic">→ Add trust to your transactions, launch with the Timelock ADO.</p>
+                <h3 className="text-lg font-bold text-white">
+                  Timelock (v2.1.0)
+                </h3>
+                <p className="text-gray-400 my-2">
+                  Securely lock funds until a future date or condition is met,
+                  perfect for escrows, delayed payments, and more.
+                </p>
+                <p className="text-blue-400 italic">
+                  → Add trust to your transactions, launch with the Timelock
+                  ADO.
+                </p>
               </div>
             </div>
           </div>
@@ -301,9 +497,13 @@ export default async function ContractorsPage() {
       </div>
 
       <div className="mb-8 text-center">
-        <h2 className="text-2xl font-bold text-white mb-6">💼 Contractor Bidding 💼</h2>
+        <h2 className="text-2xl font-bold text-white mb-6">
+          💼 Contractor Bidding 💼
+        </h2>
         <p className="text-gray-400 max-w-3xl mx-auto mb-8">
-          Browse these open contractor bidding opportunities with Andromeda Protocol, and apply to any of them. These are tasks designed for skilled contributors to take on contract work.
+          Browse these open contractor bidding opportunities with Andromeda
+          Protocol, and apply to any of them. These are tasks designed for
+          skilled contributors to take on contract work.
         </p>
       </div>
 

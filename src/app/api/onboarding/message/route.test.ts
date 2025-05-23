@@ -118,9 +118,19 @@ describe("/api/onboarding/message API Route", () => {
     // Inside beforeEach, after mockDeleteSession
     mockCreateSession.mockResolvedValue({
       sessionId: "test-session",
-      initialState: { questionIndex: 0, accumulatedData: {}, repromptedIndex: null, lastInteractionTimestamp: Date.now() },
+      initialState: {
+        questionIndex: 0,
+        accumulatedData: {},
+        repromptedIndex: null,
+        lastInteractionTimestamp: Date.now(),
+      },
     });
-    mockGetSession.mockResolvedValue({ questionIndex: 0, accumulatedData: {}, repromptedIndex: null, lastInteractionTimestamp: Date.now() });
+    mockGetSession.mockResolvedValue({
+      questionIndex: 0,
+      accumulatedData: {},
+      repromptedIndex: null,
+      lastInteractionTimestamp: Date.now(),
+    });
     mockDeleteSession.mockResolvedValue(undefined);
   });
 
@@ -146,11 +156,16 @@ describe("/api/onboarding/message API Route", () => {
       lastInteractionTimestamp: Date.now(),
     });
     mockIsFinalQuestion.mockReturnValue(true);
-    const request = createMockRequest({ sessionId: MOCK_SESSION_ID, response: 'final answer' });
+    const request = createMockRequest({
+      sessionId: MOCK_SESSION_ID,
+      response: "final answer",
+    });
     const response = await POST(request);
     const body = await response.json();
     expect(body.finalResult?.recommendedPath).toBe("Explorer");
-    expect(body.finalResult?.recommendedPathUrl).toBe("https://example.com/placeholder/explorer");
+    expect(body.finalResult?.recommendedPathUrl).toBe(
+      "https://example.com/placeholder/explorer",
+    );
   });
 
   test("should recommend Visionary Path based on appropriate inputs", async () => {
@@ -181,7 +196,9 @@ describe("/api/onboarding/message API Route", () => {
     const body = await response.json();
     expect(response.status).toBe(200);
     expect(body.finalResult?.recommendedPath).toBe("Visionary");
-    expect(body.finalResult?.recommendedPathUrl).toBe("https://example.com/placeholder/visionary");
+    expect(body.finalResult?.recommendedPathUrl).toBe(
+      "https://example.com/placeholder/visionary",
+    );
     // Check that a second path is recommended
     expect(body.finalResult?.secondRecommendedPath).toBeDefined();
     expect(body.finalResult?.secondRecommendedPathUrl).toBeDefined();
@@ -218,7 +235,9 @@ describe("/api/onboarding/message API Route", () => {
     const body = await response.json();
     expect(response.status).toBe(200);
     expect(body.finalResult?.recommendedPath).toBe("Contractor");
-    expect(body.finalResult?.recommendedPathUrl).toBe("https://example.com/placeholder/contractor");
+    expect(body.finalResult?.recommendedPathUrl).toBe(
+      "https://example.com/placeholder/contractor",
+    );
   });
 
   // --- NEW TEST: Session Expiry ---
@@ -342,7 +361,10 @@ describe("/api/onboarding/message API Route", () => {
     mockGetQuestionDetails.mockReturnValue(QUESTION_DETAIL);
     mockIsFinalQuestion.mockReturnValue(false);
 
-    const request = createMockRequest({ sessionId: SESSION_ID, response: "not-an-email" });
+    const request = createMockRequest({
+      sessionId: SESSION_ID,
+      response: "not-an-email",
+    });
     const response = await POST(request);
     const body = await response.json();
 
@@ -366,9 +388,19 @@ describe("/api/onboarding/message API Route", () => {
       // Arrange: createSession and getSession succeed
       mockCreateSession.mockResolvedValueOnce({
         sessionId: "ok-session",
-        initialState: { questionIndex: 0, accumulatedData: {}, repromptedIndex: null, lastInteractionTimestamp: Date.now() },
+        initialState: {
+          questionIndex: 0,
+          accumulatedData: {},
+          repromptedIndex: null,
+          lastInteractionTimestamp: Date.now(),
+        },
       });
-      mockGetSession.mockResolvedValueOnce({ questionIndex: 0, accumulatedData: {}, repromptedIndex: null, lastInteractionTimestamp: Date.now() });
+      mockGetSession.mockResolvedValueOnce({
+        questionIndex: 0,
+        accumulatedData: {},
+        repromptedIndex: null,
+        lastInteractionTimestamp: Date.now(),
+      });
       mockDeleteSession.mockResolvedValueOnce(undefined);
 
       // Act
@@ -385,7 +417,12 @@ describe("/api/onboarding/message API Route", () => {
       // Arrange: createSession succeeds, getSession returns null
       mockCreateSession.mockResolvedValueOnce({
         sessionId: "fail-session",
-        initialState: { questionIndex: 0, accumulatedData: {}, repromptedIndex: null, lastInteractionTimestamp: Date.now() },
+        initialState: {
+          questionIndex: 0,
+          accumulatedData: {},
+          repromptedIndex: null,
+          lastInteractionTimestamp: Date.now(),
+        },
       });
       mockGetSession.mockResolvedValueOnce(null);
 

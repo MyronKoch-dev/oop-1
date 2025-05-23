@@ -38,7 +38,10 @@ export default function HomePage() {
   const isSidebarVisible = useIsSidebarVisible();
 
   // Create a stable instance ID using useMemo to prevent regeneration on re-renders
-  const stableInstanceId = useMemo(() => `andromeda-chat-instance-${Date.now()}`, []);
+  const stableInstanceId = useMemo(
+    () => `andromeda-chat-instance-${Date.now()}`,
+    [],
+  );
 
   return (
     // Main container with dark theme colors matching Andromeda app - anchored to top on mobile
@@ -67,10 +70,10 @@ export default function HomePage() {
         id="chat-main-container"
         className="mx-auto h-[85vh] md:h-[90vh] lg:h-[95vh] rounded-xl bg-[#1a1a1a] dark:bg-[#1a1a1a] overflow-hidden"
         style={{
-          width: '80vw',
-          maxWidth: '80vw',
-          minWidth: '300px',
-          margin: '0 auto'
+          width: "80vw",
+          maxWidth: "80vw",
+          minWidth: "300px",
+          margin: "0 auto",
         }}
         data-chat-container="main"
       >

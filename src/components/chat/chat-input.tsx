@@ -80,7 +80,11 @@ export function ChatInput({
   useEffect(() => {
     let focusTimeoutId: NodeJS.Timeout | null = null;
 
-    console.log("Input focus effect", { disabled, showConditionalInput, inputMode });
+    console.log("Input focus effect", {
+      disabled,
+      showConditionalInput,
+      inputMode,
+    });
     if (!disabled && !showConditionalInput && inputRef.current) {
       // Short delay to ensure the element is fully rendered and state is settled
       focusTimeoutId = setTimeout(() => {
@@ -129,7 +133,10 @@ export function ChatInput({
     if (showConditionalInput && !disabled && textareaRef.current) {
       // Short delay to ensure the element is fully rendered
       focusTimeoutId = setTimeout(() => {
-        if (textareaRef.current && document.body.contains(textareaRef.current)) {
+        if (
+          textareaRef.current &&
+          document.body.contains(textareaRef.current)
+        ) {
           textareaRef.current.focus();
           // Place cursor at the end of existing text
           const length = textareaRef.current.value.length;
@@ -153,7 +160,10 @@ export function ChatInput({
 
     if (showConditionalInput && !disabled && textareaRef.current) {
       focusTimeoutId = setTimeout(() => {
-        if (textareaRef.current && document.body.contains(textareaRef.current)) {
+        if (
+          textareaRef.current &&
+          document.body.contains(textareaRef.current)
+        ) {
           textareaRef.current.focus();
         }
       }, 50);
@@ -213,7 +223,12 @@ export function ChatInput({
       currentQuestionIndex === 12 ||
       currentQuestionIndex === 13;
 
-    console.log("handleSendMessage called", { disabled, message, isOptionalField, currentQuestionIndex });
+    console.log("handleSendMessage called", {
+      disabled,
+      message,
+      isOptionalField,
+      currentQuestionIndex,
+    });
 
     // First check if we have callbacks to send the message
     if (!onSendMessage && !onSendText) {
@@ -228,7 +243,11 @@ export function ChatInput({
         : isOptionalField
           ? "none"
           : "";
-      console.log("Sending message", { valueToSend, onSendMessage: !!onSendMessage, onSendText: !!onSendText });
+      console.log("Sending message", {
+        valueToSend,
+        onSendMessage: !!onSendMessage,
+        onSendText: !!onSendText,
+      });
       if (onSendMessage) {
         onSendMessage(valueToSend);
       } else {
@@ -249,14 +268,26 @@ export function ChatInput({
       currentQuestionIndex === 12 ||
       currentQuestionIndex === 13;
 
-    console.log("Enter key pressed", { disabled, message, inputMode, currentQuestionIndex, onSendMessage: !!onSendMessage, onSendText: !!onSendText });
+    console.log("Enter key pressed", {
+      disabled,
+      message,
+      inputMode,
+      currentQuestionIndex,
+      onSendMessage: !!onSendMessage,
+      onSendText: !!onSendText,
+    });
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      console.log("Enter key handling", { willSend: !disabled && (message.trim() || isOptionalField) });
+      console.log("Enter key handling", {
+        willSend: !disabled && (message.trim() || isOptionalField),
+      });
 
       // Check if callbacks exist before attempting to send
       if (!disabled && (message.trim() || isOptionalField)) {
-        if (typeof onSendMessage === 'function' || typeof onSendText === 'function') {
+        if (
+          typeof onSendMessage === "function" ||
+          typeof onSendText === "function"
+        ) {
           handleSendMessage();
         } else {
           console.error("No send handlers available for Enter key press");
@@ -292,9 +323,7 @@ export function ChatInput({
   };
 
   return (
-    <div
-      className={`p-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] z-10 ${className}`}
-    >
+    <div className={`p-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] z-10 ${className}`}>
       {showConfirmButton && (
         <div className="mb-4">
           <Button

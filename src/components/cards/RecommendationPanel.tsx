@@ -15,6 +15,30 @@ interface RecommendationPanelProps {
   goToAppButtonText?: string; // New: Text for the "Go to App" button
 }
 
+// Path color mapping based on designer specifications
+const getPathColor = (pathName: string): string => {
+  const colorMap: Record<string, string> = {
+    "AI Navigator": "#f7d6eb", // Purple/pink from designer
+    "AI Navigators": "#f7d6eb",
+    Explorer: "#f9edd7", // Beige/tan from designer
+    Explorers: "#f9edd7",
+    Contractor: "#bde8f0", // Light blue from extended palette (#bde8f0)
+    Contractors: "#bde8f0",
+    Hacker: "#b6f7d2", // Light green from extended palette (#b6f7d2)
+    Hackers: "#b6f7d2",
+    Visionary: "#e6c9ff", // Light purple from extended palette (#cbbbe5)
+    Visionaries: "#e6c9ff",
+    Ambassador: "#ffd6b3", // Light orange from extended palette (#f0d1cc)
+    Ambassadors: "#ffd6b3",
+    // Additional colors from the extended palette
+    "Data Scientist": "#dcfaf5", // Light teal (#dcfaf5)
+    Designer: "#f0e5ff", // Light lavender (#f0e5ff)
+    Marketing: "#ffe5d1", // Light peach (#ffe5d1)
+    Community: "#d1f5e3", // Light mint (#d1f5e3)
+  };
+  return colorMap[pathName] || "#f0f0f0"; // Default gray if path not found
+};
+
 const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
   pathName,
   pathDescription,
@@ -23,66 +47,116 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
   pathLink,
   onGetStarted,
   onSecondPathSelected,
-  userName,
   appUrl,
-  goToAppButtonText = "Explore Andromeda Platform", // Default button text
-}) => (
-  <div className={styles.panel}>
-    <h2>
-      🎉 <b>Congratulations!</b> 🎉
-    </h2>
-    <p>Welcome{userName ? `, ${userName}` : ''}! Based on your responses, here is a recommended starting path to help you make the most of Andromeda:</p>
-    <p className={styles.path}>
-      🌟 <span className={styles.yellowHighlight}>{pathName}</span> 🌟
-    </p>
-    {pathDescription && (
-      <p className={styles.description}>{pathDescription}</p>
-    )}
-    {pathLink ? (
-      <a href={pathLink} className={styles.getStartedBtn}>
-        Get Started 🚀
-      </a>
-    ) : (
-      <button className={styles.getStartedBtn} onClick={onGetStarted}>
-        🚀 Get Started 🚀
-      </button>
-    )}
+  goToAppButtonText = "Go to Command Center", // Updated to match design
+}) => {
+  const primaryColor = getPathColor(pathName);
+  const secondaryColor = secondPathName
+    ? getPathColor(secondPathName)
+    : undefined;
 
-    {secondPathName && (
-      <div className={styles.secondPath}>
-        <p>We also think you might be interested in:</p>
-        <p className={styles.path}>
-          🚀 <span className={styles.yellowHighlight}>{secondPathName}</span> 🚀
+  return (
+    <div className={styles.recommendationContent}>
+      {/* Congratulations message inside the chat bubble */}
+      <div className={styles.congratsMessage}>
+        <p>
+          Congratulations! Based on your responses, I prepared a list of
+          recommended starting paths to help you make the most of Andromeda.
+          Select one of them to get started:
         </p>
-        {secondPathDescription && (
-          <p className={styles.description}>{secondPathDescription}</p>
-        )}
-        {onSecondPathSelected && (
-          <button
-            className={`${styles.getStartedBtn} ${styles.secondaryBtn}`}
-            onClick={onSecondPathSelected}
+      </div>
+
+      {/* Horizontal card layout */}
+      <div className={styles.pathCards}>
+        {/* Primary Path Card */}
+        <div
+          className={styles.pathCard}
+          style={{ backgroundColor: primaryColor }}
+        >
+          <div className={styles.pathCardHeader}>
+            <h3 className={styles.pathName}>{pathName}</h3>
+            <div className={styles.cardIcon}></div>
+          </div>
+          <div className={styles.pathCardContent}>
+            {pathDescription && (
+              <p className={styles.pathDescription}>{pathDescription}</p>
+            )}
+            {pathLink ? (
+              <a href={pathLink} className={styles.selectButton}>
+                Select and Start
+              </a>
+            ) : (
+              <button className={styles.selectButton} onClick={onGetStarted}>
+                Select and Start
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Secondary Path Card */}
+        {secondPathName && secondaryColor && (
+          <div
+            className={styles.pathCard}
+            style={{ backgroundColor: secondaryColor }}
           >
-            🚀 Explore This Path 🚀
-          </button>
+            <div className={styles.pathCardHeader}>
+              <h3 className={styles.pathName}>{secondPathName}</h3>
+              <div className={styles.cardIcon}></div>
+            </div>
+            <div className={styles.pathCardContent}>
+              {secondPathDescription && (
+                <p className={styles.pathDescription}>
+                  {secondPathDescription}
+                </p>
+              )}
+              {onSecondPathSelected && (
+                <button
+                  className={styles.selectButton}
+                  onClick={onSecondPathSelected}
+                >
+                  Select and Start
+                </button>
+              )}
+            </div>
+          </div>
         )}
       </div>
-    )}
 
-    <p className={styles.thanks}>
-      We hope this gives you a bit of guidance toward areas where you can have the quickest success. We look forward to hearing about what you build with Andromeda!
-    </p>
-    <h3> 🎉 WELCOME TO ANDROMEDA 🎉</h3>
-    {appUrl && (
-      <a
-        href={appUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`${styles.secondaryBtn} mt-4`} // Use only secondaryBtn style + consistent top margin
-      >
-        {goToAppButtonText}
-      </a>
-    )}
-  </div>
-);
+      {/* Indicator dots */}
+      <div className={styles.indicators}>
+        <div className={styles.dot}></div>
+        <div className={`${styles.dot} ${styles.activeDot}`}></div>
+        <div className={styles.dot}></div>
+      </div>
+
+      {/* Footer with minimal text */}
+      <div className={styles.footer}>
+        <p className={styles.reminderText}>
+          Remember you can always come back here or explore different paths
+        </p>
+
+        <p className={styles.encouragement}>
+          Hope this helps you find quick wins! Can&apos;t wait to see what you
+          create with Andromeda! 🎉
+        </p>
+
+        <p className={styles.commandCenter}>
+          You can now visit your Command Center:
+        </p>
+
+        {appUrl && (
+          <a
+            href={appUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.commandCenterButton}
+          >
+            {goToAppButtonText}
+          </a>
+        )}
+      </div>
+    </div>
+  );
+};
 
 export default RecommendationPanel;

@@ -122,8 +122,12 @@ export async function saveOnboardingResponse(
   while (attempts < maxAttempts) {
     attempts++;
     try {
-      console.log(`Attempt ${attempts}: Making Supabase request to ${urlObj.hostname}...`);
-      const { error } = await supabaseAdmin.from(TABLE_NAME).insert([dbPayload]); // Insert the correctly typed payload as an array
+      console.log(
+        `Attempt ${attempts}: Making Supabase request to ${urlObj.hostname}...`,
+      );
+      const { error } = await supabaseAdmin
+        .from(TABLE_NAME)
+        .insert([dbPayload]); // Insert the correctly typed payload as an array
 
       // --- Handle Success ---
       if (!error) {
@@ -174,12 +178,15 @@ export async function saveOnboardingResponse(
         stack: error.stack,
       });
 
-      if (error.name === 'AbortError') {
+      if (error.name === "AbortError") {
         console.error(`Request timed out after 10 seconds`);
       }
 
       // Return immediately for certain fatal errors
-      if (error.message.includes('ENOTFOUND') || error.message.includes('getaddrinfo')) {
+      if (
+        error.message.includes("ENOTFOUND") ||
+        error.message.includes("getaddrinfo")
+      ) {
         return {
           success: false,
           error: `Network connectivity issue - Unable to resolve Supabase host: ${error.message}`,
