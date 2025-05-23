@@ -114,7 +114,7 @@ export default async function ContractorsPage() {
         <h1 className="text-3xl font-bold text-white mb-2">
           Contractor Command Center
         </h1>
-        <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6 mb-12 w-full">
+        <div className="bg-[#1a1a1a] rounded-lg p-6 mb-12 w-full">
           <p className="text-gray-400">
             Hey there! Welcome to our learning dashboard. This is your go-to spot for missions, guides, and docs -- everything you need to dive into Andromeda smoothly.
           </p>
@@ -153,7 +153,7 @@ export default async function ContractorsPage() {
 
           {/* Build with aOS Section */}
           <div className="mb-16">
-            <div className="bg-[#2a2a2a] rounded-lg border border-[#333333] p-6 mb-8">
+            <div className="bg-[#2a2a2a] rounded-lg p-6 mb-8">
               <p className="text-gray-300 mb-4">
                 Andromeda&apos;s vision is that aOS makes Web3 development
                 accessible to everyone. Whether you&apos;re a seasoned dev or just
@@ -171,7 +171,7 @@ export default async function ContractorsPage() {
             </div>
 
             <div className="mb-12">
-              <div className="bg-[#2a2a2a] rounded-lg border border-[#333333] p-6">
+              <div className="bg-[#2a2a2a] rounded-lg p-6">
                 <h3 className="text-xl font-bold text-white mb-4">
                   🎥 Watch the Intro Videos
                 </h3>
@@ -258,7 +258,7 @@ export default async function ContractorsPage() {
                   href="https://youtu.be/tfY8ni9uJSE"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-[#1a1a1a] hover:bg-[#252525] p-4 rounded-lg border border-[#333333] text-blue-400 flex items-center justify-center transition-colors"
+                  className="bg-[#1a1a1a] hover:bg-[#252525] p-4 rounded-lg text-blue-400 flex items-center justify-center transition-colors"
                 >
                   <span className="mr-2">🎬</span> NFT Marketplace Use Case
                 </a>
@@ -266,7 +266,7 @@ export default async function ContractorsPage() {
                   href="https://youtu.be/rOKXu_NNfyk"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-[#1a1a1a] hover:bg-[#252525] p-4 rounded-lg border border-[#333333] text-blue-400 flex items-center justify-center transition-colors"
+                  className="bg-[#1a1a1a] hover:bg-[#252525] p-4 rounded-lg text-blue-400 flex items-center justify-center transition-colors"
                 >
                   <span className="mr-2">🎬</span> Crowdfunding App
                 </a>
@@ -278,7 +278,7 @@ export default async function ContractorsPage() {
           </div>
 
           <div className="mb-12">
-            <details className="bg-[#1a1a1a] rounded-lg border border-[#333333] cursor-pointer group">
+            <details className="bg-[#1a1a1a] rounded-lg cursor-pointer group">
               <summary className="p-6 text-xl font-bold text-white hover:text-blue-400 transition-colors flex items-center justify-center">
                 🧩 What ADOs are available right now, and what do they do? Click
                 here to find out!
@@ -552,7 +552,7 @@ export default async function ContractorsPage() {
 
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-white mb-6">
-              💼 Contractor Bidding 💼
+              💼 Contractor Bidding ��
             </h2>
             <p className="text-gray-400 mb-8">
               Browse these open contractor bidding opportunities with Andromeda
@@ -570,7 +570,7 @@ export default async function ContractorsPage() {
                   ))}
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center py-12 px-4 bg-[#1a1a1a] rounded-lg border border-[#333333]">
+                <div className="flex flex-col items-center justify-center py-12 px-4 bg-[#1a1a1a] rounded-lg">
                   <h3 className="text-xl font-medium text-white mb-2 text-center">
                     No Open Contracts Available
                   </h3>
@@ -603,7 +603,7 @@ export default async function ContractorsPage() {
         {/* Right Sidebar (1/4 width) */}
         <div className="w-1/4 space-y-6">
           {/* Docs Section */}
-          <div className="bg-[#2a2a2a] rounded-lg border border-gray-700/50 p-4">
+          <div className="bg-[#2a2a2a] rounded-lg p-4">
             <h3 className="text-lg font-bold text-white mb-3">📚 Explore the Docs</h3>
             <p className="text-gray-400 text-sm mb-3">
               Want to know how aOS actually works? Our docs walk you through every ADO, with step-by-step guides for building everything from NFT marketplaces to crowdfunds and DAOs.
@@ -615,14 +615,15 @@ export default async function ContractorsPage() {
               href="https://docs.andromedaprotocol.io/guides/guides-and-examples/ado-builder/building-your-first-app"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-center text-sm"
+              className="inline-block w-full px-4 py-2 bg-[#333333] text-white rounded-md hover:bg-[#444444] transition-colors text-center text-sm flex items-center justify-center gap-2"
             >
               Read the Docs
+              <span>→</span>
             </a>
           </div>
 
           {/* Builder Section */}
-          <div className="bg-[#2a2a2a] rounded-lg border border-gray-700/50 p-4">
+          <div className="bg-[#2a2a2a] rounded-lg p-4">
             <h3 className="text-lg font-bold text-white mb-3">🛠 Log On and Start Building</h3>
             <p className="text-gray-400 text-sm mb-3">
               aOS lets you build full-stack Web3 applications fast—using plug-and-play ADOs (Andromeda Digital Objects) for tokens, staking, marketplaces, and more.
@@ -634,27 +635,212 @@ export default async function ContractorsPage() {
               href="https://app.andromedaprotocol.io/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-center text-sm"
+              className="inline-block w-full px-4 py-2 bg-[#333333] text-white rounded-md hover:bg-[#444444] transition-colors text-center text-sm flex items-center justify-center gap-2"
             >
               Launch aOS Builder
+              <span>→</span>
             </a>
           </div>
 
           {/* Deploy, Hack and get rewarded Section */}
-          <div className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 rounded-lg border border-purple-500/30 p-4">
-            <h3 className="text-lg font-bold text-white mb-3">Deploy, Hack and get rewarded!</h3>
-            <p className="text-gray-300 text-sm mb-3">
-              We&apos;re giving away 1,000 $ANDR for every ADO used in a dApp on aOS!
-            </p>
-            <p className="text-gray-300 text-sm mb-4">
-              Want to dive into coding and tackle some fun challenges with Andromeda Protocol? Check out these open bounties and hacking challenges!
-            </p>
-            <button className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm transition-colors mb-3">
-              Learn about the campaign
-            </button>
-            <button className="w-full bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
-              View Hackerboard
-            </button>
+          <div className="bg-gradient-to-br from-black/95 to-gray-900/95 rounded-lg p-4 relative overflow-hidden">
+            {/* Particle tornado background */}
+            <div className="absolute inset-0 opacity-80">
+              {/* Back layer - lightest colors (furthest from viewer) */}
+              <div
+                className="absolute top-1/2 left-1/2 w-[140vw] h-[140vh] -translate-x-1/2 -translate-y-1/2 animate-spin"
+                style={{
+                  background: `radial-gradient(circle at 30% 40%, #522eaf 1px, transparent 1px),
+                               radial-gradient(circle at 70% 20%, #7a30a8 1px, transparent 1px),
+                               radial-gradient(circle at 20% 80%, #522eaf 1.5px, transparent 1.5px),
+                               radial-gradient(circle at 80% 60%, #7a30a8 1px, transparent 1px),
+                               radial-gradient(circle at 50% 10%, #522eaf 1.5px, transparent 1.5px),
+                               radial-gradient(circle at 10% 50%, #7a30a8 1px, transparent 1px)`,
+                  backgroundSize: '24px 24px, 32px 32px, 28px 28px, 36px 36px, 20px 20px, 40px 40px',
+                  animationDuration: '117s'
+                }}
+              ></div>
+
+              {/* Second layer - lighter purples */}
+              <div
+                className="absolute top-1/2 left-1/2 w-[120vw] h-[120vh] -translate-x-1/2 -translate-y-1/2 animate-spin"
+                style={{
+                  background: `radial-gradient(circle at 25% 35%, #7a30a8 1.5px, transparent 1.5px),
+                               radial-gradient(circle at 75% 25%, #522eaf 1px, transparent 1px),
+                               radial-gradient(circle at 15% 75%, #7a30a8 1px, transparent 1px),
+                               radial-gradient(circle at 85% 65%, #522eaf 2px, transparent 2px),
+                               radial-gradient(circle at 55% 15%, #7a30a8 1.5px, transparent 1.5px)`,
+                  backgroundSize: '20px 20px, 28px 28px, 24px 24px, 32px 32px, 16px 16px',
+                  animationDuration: '73s',
+                  animationDirection: 'reverse'
+                }}
+              ></div>
+
+              {/* Third layer - medium purples */}
+              <div
+                className="absolute top-1/2 left-1/2 w-[100vw] h-[100vh] -translate-x-1/2 -translate-y-1/2 animate-spin"
+                style={{
+                  background: `radial-gradient(circle at 20% 30%, #492ca4 1px, transparent 1px),
+                               radial-gradient(circle at 80% 20%, #7a30a8 2px, transparent 2px),
+                               radial-gradient(circle at 10% 70%, #492ca4 1.5px, transparent 1.5px),
+                               radial-gradient(circle at 90% 80%, #7a30a8 1px, transparent 1px),
+                               radial-gradient(circle at 60% 10%, #492ca4 1.5px, transparent 1.5px)`,
+                  backgroundSize: '16px 16px, 24px 24px, 20px 20px, 28px 28px, 12px 12px',
+                  animationDuration: '91s',
+                  animationDirection: 'reverse'
+                }}
+              ></div>
+
+              {/* Fourth layer - dark grays */}
+              <div
+                className="absolute top-1/2 left-1/2 w-[110vw] h-[110vh] -translate-x-1/2 -translate-y-1/2 animate-spin"
+                style={{
+                  background: `radial-gradient(circle at 30% 40%, #2a2a2a 1.5px, transparent 1.5px),
+                               radial-gradient(circle at 70% 30%, #492ca4 1px, transparent 1px),
+                               radial-gradient(circle at 20% 80%, #2a2a2a 2px, transparent 2px),
+                               radial-gradient(circle at 80% 70%, #492ca4 1px, transparent 1px)`,
+                  backgroundSize: '12px 12px, 20px 20px, 16px 16px, 24px 24px',
+                  animationDuration: '47s'
+                }}
+              ></div>
+
+              {/* Black particle layer 1 */}
+              <div
+                className="absolute top-1/2 left-1/2 w-[130vw] h-[130vh] -translate-x-1/2 -translate-y-1/2 animate-spin"
+                style={{
+                  background: `radial-gradient(circle at 15% 25%, #000000 1px, transparent 1px),
+                               radial-gradient(circle at 65% 15%, #1a1a1a 1.5px, transparent 1.5px),
+                               radial-gradient(circle at 35% 75%, #000000 1px, transparent 1px),
+                               radial-gradient(circle at 85% 85%, #1a1a1a 1px, transparent 1px)`,
+                  backgroundSize: '18px 18px, 26px 26px, 22px 22px, 30px 30px',
+                  animationDuration: '83s',
+                  animationDirection: 'reverse'
+                }}
+              ></div>
+
+              {/* Black particle layer 2 */}
+              <div
+                className="absolute top-1/2 left-1/2 w-[105vw] h-[105vh] -translate-x-1/2 -translate-y-1/2 animate-spin"
+                style={{
+                  background: `radial-gradient(circle at 45% 35%, #000000 1.5px, transparent 1.5px),
+                               radial-gradient(circle at 25% 65%, #1a1a1a 1px, transparent 1px),
+                               radial-gradient(circle at 75% 45%, #000000 2px, transparent 2px),
+                               radial-gradient(circle at 55% 85%, #1a1a1a 1px, transparent 1px)`,
+                  backgroundSize: '14px 14px, 20px 20px, 16px 16px, 24px 24px',
+                  animationDuration: '39s'
+                }}
+              ></div>
+
+              {/* Dark blue-grey layer */}
+              <div
+                className="absolute top-1/2 left-1/2 w-[125vw] h-[125vh] -translate-x-1/2 -translate-y-1/2 animate-spin"
+                style={{
+                  background: `radial-gradient(circle at 35% 20%, #1a1a2e 1px, transparent 1px),
+                               radial-gradient(circle at 80% 40%, #16213e 1.5px, transparent 1.5px),
+                               radial-gradient(circle at 20% 70%, #1a1a2e 1px, transparent 1px),
+                               radial-gradient(circle at 70% 80%, #16213e 1px, transparent 1px),
+                               radial-gradient(circle at 50% 30%, #1a1a2e 2px, transparent 2px)`,
+                  backgroundSize: '22px 22px, 30px 30px, 18px 18px, 26px 26px, 34px 34px',
+                  animationDuration: '67s',
+                  animationDirection: 'reverse'
+                }}
+              ></div>
+
+              {/* Dark grey layer */}
+              <div
+                className="absolute top-1/2 left-1/2 w-[108vw] h-[108vh] -translate-x-1/2 -translate-y-1/2 animate-spin"
+                style={{
+                  background: `radial-gradient(circle at 40% 45%, #374151 1.5px, transparent 1.5px),
+                               radial-gradient(circle at 15% 25%, #1f2937 1px, transparent 1px),
+                               radial-gradient(circle at 85% 65%, #374151 1px, transparent 1px),
+                               radial-gradient(circle at 60% 85%, #1f2937 2px, transparent 2px)`,
+                  backgroundSize: '16px 16px, 24px 24px, 20px 20px, 28px 28px',
+                  animationDuration: '53s'
+                }}
+              ></div>
+
+              {/* Very dark blue layer */}
+              <div
+                className="absolute top-1/2 left-1/2 w-[118vw] h-[118vh] -translate-x-1/2 -translate-y-1/2 animate-spin"
+                style={{
+                  background: `radial-gradient(circle at 25% 55%, #0f172a 1px, transparent 1px),
+                               radial-gradient(circle at 75% 25%, #111827 1.5px, transparent 1.5px),
+                               radial-gradient(circle at 45% 75%, #0f172a 2px, transparent 2px),
+                               radial-gradient(circle at 85% 45%, #111827 1px, transparent 1px),
+                               radial-gradient(circle at 15% 85%, #0f172a 1px, transparent 1px)`,
+                  backgroundSize: '12px 12px, 20px 20px, 16px 16px, 24px 24px, 18px 18px',
+                  animationDuration: '79s',
+                  animationDirection: 'reverse'
+                }}
+              ></div>
+
+              {/* Front layer - darkest colors (closest to viewer) */}
+              <div
+                className="absolute top-1/2 left-1/2 w-[115vw] h-[115vh] -translate-x-1/2 -translate-y-1/2 animate-spin"
+                style={{
+                  background: `radial-gradient(circle at 25% 25%, #2a2a41 1px, transparent 1px),
+                               radial-gradient(circle at 75% 25%, #2a2a2a 1.5px, transparent 1.5px),
+                               radial-gradient(circle at 25% 75%, #2a2a41 2px, transparent 2px),
+                               radial-gradient(circle at 75% 75%, #2a2a2a 1px, transparent 1px)`,
+                  backgroundSize: '8px 8px, 16px 16px, 12px 12px, 20px 20px',
+                  animationDuration: '31s',
+                  animationDirection: 'reverse'
+                }}
+              ></div>
+
+              {/* Core tornado eye */}
+              <div
+                className="absolute top-1/2 left-1/2 w-8 h-8 -translate-x-1/2 -translate-y-1/2 rounded-full animate-pulse"
+                style={{
+                  background: 'radial-gradient(circle, #2a2a2a 0%, transparent 100%)'
+                }}
+              ></div>
+
+              {/* Swirling particle streams */}
+              <div
+                className="absolute top-1/2 left-1/2 w-40 h-40 -translate-x-1/2 -translate-y-1/2 animate-spin"
+                style={{
+                  background: `conic-gradient(from 0deg, transparent, #2a2a41, transparent, #492ca4, transparent, #7a30a8, transparent)`,
+                  mask: `radial-gradient(circle at 20% 20%, #2a2a41 1px, transparent 1px),
+                          radial-gradient(circle at 60% 40%, #492ca4 1px, transparent 1px),
+                          radial-gradient(circle at 40% 80%, #7a30a8 1px, transparent 1px),
+                          radial-gradient(circle at 80% 60%, #522eaf 1px, transparent 1px)`,
+                  maskSize: '20px 20px, 24px 24px, 18px 18px, 22px 22px',
+                  animationDuration: '25s'
+                }}
+              ></div>
+
+              {/* Additional particle stream */}
+              <div
+                className="absolute top-1/2 left-1/2 w-32 h-32 -translate-x-1/2 -translate-y-1/2 animate-spin"
+                style={{
+                  background: `conic-gradient(from 180deg, transparent, #522eaf, transparent, #2a2a2a, transparent)`,
+                  mask: `radial-gradient(circle at 30% 30%, #522eaf 1.5px, transparent 1.5px),
+                          radial-gradient(circle at 70% 50%, #2a2a2a 1.5px, transparent 1.5px),
+                          radial-gradient(circle at 50% 70%, #7a30a8 1.5px, transparent 1.5px)`,
+                  maskSize: '16px 16px, 20px 20px, 14px 14px',
+                  animationDuration: '18s',
+                  animationDirection: 'reverse'
+                }}
+              ></div>
+            </div>
+
+            {/* Content with relative positioning to stay above background */}
+            <div className="relative z-10">
+              <h3 className="text-lg font-bold text-white mb-3">Deploy, Hack and get rewarded!</h3>
+              <p className="text-gray-300 text-sm mb-3">
+                We&apos;re giving away 1,000 $ANDR for every ADO used in a dApp on aOS!
+              </p>
+              <p className="text-gray-300 text-sm mb-4">
+                Want to dive into coding and tackle some fun challenges with Andromeda Protocol? Check out these open bounties and hacking challenges!
+              </p>
+              <button className="w-full bg-gray-600/40 hover:bg-gray-500/50 text-gray-200 px-4 py-2 rounded-lg text-sm transition-colors mb-3 backdrop-blur-sm">
+                Learn about the campaign
+              </button>
+              <button className="w-full bg-gray-600/40 hover:bg-gray-500/50 text-gray-200 px-4 py-2 rounded-lg text-sm transition-colors backdrop-blur-sm">
+                View Hackerboard
+              </button>
+            </div>
           </div>
         </div>
       </div>

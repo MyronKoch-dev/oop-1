@@ -87,20 +87,20 @@
 .dark {
   --background: oklch(0.086 0 0);
   --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
+  --card: #2a2a2a;
   --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
+  --popover: #2a2a2a;
   --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.35 0.22 280);
+  --primary: #99a1af;
   --primary-foreground: oklch(0.98 0.005 250);
-  --secondary: oklch(0.25 0.05 260);
+  --secondary: #2a2a2a;
   --secondary-foreground: oklch(0.984 0.003 247.858);
+  --muted: #2a2a2a;
+  --muted-foreground: #99a1af;
   --accent: oklch(0.4 0.25 190);
   --accent-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
+  --border: transparent;
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.551 0.027 264.364);
   --chart-1: oklch(0.488 0.243 264.376);
@@ -270,7 +270,7 @@ div[data-chat-container="main"] {
 }
 
 /* Target the specific container structure */
-main > div[data-chat-container="main"] {
+main>div[data-chat-container="main"] {
   max-width: 80% !important;
   width: 100% !important;
 }
