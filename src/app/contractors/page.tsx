@@ -153,10 +153,7 @@ export default async function ContractorsPage() {
 
           {/* Build with aOS Section */}
           <div className="mb-16">
-            <h2 className="text-2xl font-bold text-white mb-6">
-              Build with aOS
-            </h2>
-            <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6 mb-8">
+            <div className="bg-[#2a2a2a] rounded-lg border border-[#333333] p-6 mb-8">
               <p className="text-gray-300 mb-4">
                 Andromeda&apos;s vision is that aOS makes Web3 development
                 accessible to everyone. Whether you&apos;re a seasoned dev or just
@@ -174,7 +171,7 @@ export default async function ContractorsPage() {
             </div>
 
             <div className="mb-12">
-              <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6">
+              <div className="bg-[#2a2a2a] rounded-lg border border-[#333333] p-6">
                 <h3 className="text-xl font-bold text-white mb-4">
                   🎥 Watch the Intro Videos
                 </h3>
@@ -606,7 +603,7 @@ export default async function ContractorsPage() {
         {/* Right Sidebar (1/4 width) */}
         <div className="w-1/4 space-y-6">
           {/* Docs Section */}
-          <div className="bg-gray-900/50 rounded-lg border border-gray-700/50 p-4">
+          <div className="bg-[#2a2a2a] rounded-lg border border-gray-700/50 p-4">
             <h3 className="text-lg font-bold text-white mb-3">📚 Explore the Docs</h3>
             <p className="text-gray-400 text-sm mb-3">
               Want to know how aOS actually works? Our docs walk you through every ADO, with step-by-step guides for building everything from NFT marketplaces to crowdfunds and DAOs.
@@ -625,7 +622,7 @@ export default async function ContractorsPage() {
           </div>
 
           {/* Builder Section */}
-          <div className="bg-gray-900/50 rounded-lg border border-gray-700/50 p-4">
+          <div className="bg-[#2a2a2a] rounded-lg border border-gray-700/50 p-4">
             <h3 className="text-lg font-bold text-white mb-3">🛠 Log On and Start Building</h3>
             <p className="text-gray-400 text-sm mb-3">
               aOS lets you build full-stack Web3 applications fast—using plug-and-play ADOs (Andromeda Digital Objects) for tokens, staking, marketplaces, and more.
