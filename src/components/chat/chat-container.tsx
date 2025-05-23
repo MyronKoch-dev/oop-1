@@ -49,7 +49,7 @@ type QuestionAnswer = string | string[] | ConditionalTextAnswer;
 const TOTAL_STEPS = 14;
 
 export function ChatContainer({
-  initialMessage = `🌟 Welcome to Andromeda! 🌟\n\nI'm Pulsar, your onboarding assistant, here to help you get started.\n\nI'll ask a few quick questions to learn about your background and interests.\n\nOnce I understand what you're looking for, I'll point you directly to the right spot in our community!\n\nReady to dive in? 🚀`,
+  initialMessage = `Welcome to Andromeda! I'm Pulsar, your onboarding assistant!`,
   className = "",
 }: ChatContainerProps) {
   // Access the openRightSidebar function from context
@@ -342,21 +342,26 @@ export function ChatContainer({
       console.log("No existing sessionId found in localStorage");
     }
 
-    // Add the initial welcome message only if messages are currently empty
+    // Add the initial welcome messages only if messages are currently empty
     // This helps prevent duplicating the welcome message if initializeChat is called multiple times
     // by StrictMode before startConversation populates further.
     setMessages((prevMessages) => {
       if (prevMessages.length === 0) {
-        console.log("initializeChat: Setting initial welcome message.");
+        console.log("initializeChat: Setting initial welcome messages.");
         return [
           {
             id: generateMessageId("assistant"),
             role: "assistant",
             content: initialMessage,
           },
+          {
+            id: generateMessageId("assistant"),
+            role: "assistant",
+            content: "I'll ask a few quick questions to learn about you. Once I know what you're looking for, I'll guide you to the right place in our community.\n\nReady to get started? 🚀",
+          },
         ];
       }
-      console.log("initializeChat: Welcome message already present or messages not empty; not re-adding welcome.");
+      console.log("initializeChat: Welcome messages already present or messages not empty; not re-adding welcome.");
       return prevMessages;
     });
 
@@ -1432,12 +1437,17 @@ export function ChatContainer({
       localStorage.setItem("onboarding-session-id", data.sessionId);
       setCurrentQuestionIndex(data.currentQuestionIndex);
 
-      // Add welcome message
+      // Add welcome messages
       setMessages([
         {
           id: generateMessageId("assistant"),
           role: "assistant",
           content: initialMessage,
+        },
+        {
+          id: generateMessageId("assistant"),
+          role: "assistant",
+          content: "I'll ask a few quick questions to learn about you. Once I know what you're looking for, I'll guide you to the right place in our community.\n\nReady to get started? 🚀",
         },
         {
           id: generateMessageId("assistant"),

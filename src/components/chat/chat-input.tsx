@@ -300,7 +300,7 @@ export function ChatInput({
           <Button
             onClick={onConfirmLanguages}
             disabled={disabled}
-            className="w-full bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
+            className="w-full bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff] border-none"
           >
             {confirmOptionText || "Confirm Selection (or press Enter)"}
           </Button>
@@ -308,7 +308,7 @@ export function ChatInput({
       )}
 
       {showConditionalInput && (
-        <div className="mb-4 max-h-[150px] overflow-y-auto bg-[#232b3a] border border-[#444] rounded-xl p-4 flex flex-col gap-3 shadow-lg">
+        <div className="mb-4 max-h-[150px] overflow-y-auto bg-[#232b3a] border-none rounded-xl p-4 flex flex-col gap-3">
           <Label
             htmlFor="conditional-input"
             className="block text-sm font-medium mb-1 text-white"
@@ -322,7 +322,7 @@ export function ChatInput({
             onChange={handleConditionalChange}
             onKeyDown={handleConditionalKeyDown}
             placeholder="Type additional details here..."
-            className="min-h-[80px] max-h-[120px] resize-none bg-[#2a2a2a] dark:bg-[#2a2a2a] border-[#444444] dark:border-[#444444] text-white placeholder:text-gray-400 mb-2"
+            className="min-h-[80px] max-h-[120px] resize-none bg-[#2a2a2a] dark:bg-[#2a2a2a] border-none text-white placeholder:text-gray-400 mb-2 focus:ring-0"
             disabled={disabled || !conditionalTextVisible}
           />
           <p className="text-xs text-gray-400 dark:text-gray-400 text-center mb-2">
@@ -331,7 +331,7 @@ export function ChatInput({
           <Button
             onClick={handleConditionalSubmit}
             disabled={disabled}
-            className="w-full bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff] mt-2"
+            className="w-full bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff] mt-2 border-none"
             type="submit"
           >
             Submit Details
@@ -340,7 +340,7 @@ export function ChatInput({
       )}
 
       {!hideMainInput && !showConfirmButton && (
-        <div className="flex items-center space-x-2">
+        <div className="relative">
           <Input
             ref={inputRef}
             value={message}
@@ -348,14 +348,14 @@ export function ChatInput({
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
             disabled={isMainInputDisabled}
-            className="flex-1 bg-[#2a2a2a] dark:bg-[#2a2a2a] border-[#444444] dark:border-[#444444] text-white placeholder:text-gray-400"
+            className="w-full bg-[#2a2a2a] dark:bg-[#2a2a2a] border-none text-white placeholder:text-gray-400 pr-12 rounded-lg focus:ring-0 focus:border-none"
           />
           <Button
             onClick={handleSendMessage}
             disabled={!message.trim() || isGenerating}
             size="icon"
             type="submit"
-            className="bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-transparent hover:bg-transparent text-gray-400 hover:text-white border-none p-1 h-8 w-8"
           >
             <Send className="h-4 w-4" />
             <span className="sr-only">Send message</span>
@@ -365,7 +365,7 @@ export function ChatInput({
 
       {onSkipQuestion && (
         <Button
-          className="w-full sticky bottom-0 bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff]"
+          className="w-full sticky bottom-0 bg-[#1a2b4a] hover:bg-[#213459] text-[#6bbbff] border-none"
           onClick={onSkipQuestion}
         >
           {conditionalAction?.skipText || "Skip this Question"}
