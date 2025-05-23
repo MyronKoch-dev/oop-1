@@ -223,63 +223,81 @@ export function ChatMessages({
                             </p>
                           </div>
                         )}
+
+                        {/* Render buttons inside the chat bubble if options are provided for an assistant message */}
+                        {message.role === "assistant" &&
+                          message.options &&
+                          message.options.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mt-4">
+                              {message.options.map((option, index) => {
+                                // Determine if this message has the latest interactive options
+                                const isActiveMessage =
+                                  message.id === latestInteractiveMessageId;
+
+                                // Use selectedValues only if currentQuestionIndex is a number
+                                const selectedValues =
+                                  typeof currentQuestionIndex === "number"
+                                    ? multiSelectAnswers[currentQuestionIndex] || []
+                                    : [];
+                                const isSelected = selectedValues.includes(
+                                  option.value,
+                                );
+
+                                // Disable all buttons if conditional input is open
+                                const isDisabled =
+                                  conditionalInputOpen ||
+                                  !isActiveMessage ||
+                                  (isActiveMessage && selectedButtonValue !== null);
+
+                                // Styling classes for disabled buttons
+                                const disabledClasses = !isActiveMessage
+                                  ? "opacity-50 cursor-not-allowed"
+                                  : "";
+
+                                // Check if this button is currently highlighted via keyboard
+                                const isHighlighted =
+                                  isActiveMessage && highlightedButtonIndex === index;
+
+                                // Apply highlight style if this button is being pressed via keyboard
+                                const highlightClasses = isHighlighted
+                                  ? "ring-2 ring-offset-1 ring-blue-400"
+                                  : "";
+
+                                return (
+                                  <Button
+                                    key={option.value}
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => onButtonClick(option.value)}
+                                    disabled={isDisabled}
+                                    className={`
+                                      rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200
+                                      ${isSelected
+                                        ? "bg-blue-500 text-white hover:bg-blue-600"
+                                        : "bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200"
+                                      } 
+                                      ${disabledClasses} 
+                                      ${highlightClasses}
+                                      flex items-center gap-2
+                                    `}
+                                  >
+                                    <span className={`
+                                      w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold border-2 shadow-sm
+                                      ${isSelected
+                                        ? "bg-white text-blue-500 border-gray-300"
+                                        : "bg-gray-200 text-gray-700 border-gray-300"
+                                      }
+                                    `}>
+                                      {option.label.match(/^\d+/) ? option.label.match(/^\d+/)?.[0] : index + 1}
+                                    </span>
+                                    {option.label.replace(/^\d+\.\s*/, '')}
+                                  </Button>
+                                );
+                              })}
+                            </div>
+                          )}
                       </Card>
                     )}
-
-                    {/* Render buttons if options are provided for an assistant message */}
-                    {message.role === "assistant" &&
-                      message.options &&
-                      message.options.length > 0 && (
-                        <div className="flex flex-wrap gap-2 pt-1">
-                          {message.options.map((option, index) => {
-                            // Determine if this message has the latest interactive options
-                            const isActiveMessage =
-                              message.id === latestInteractiveMessageId;
-
-                            // Use selectedValues only if currentQuestionIndex is a number
-                            const selectedValues =
-                              typeof currentQuestionIndex === "number"
-                                ? multiSelectAnswers[currentQuestionIndex] || []
-                                : [];
-                            const isSelected = selectedValues.includes(
-                              option.value,
-                            );
-
-                            // Disable all buttons if conditional input is open
-                            const isDisabled =
-                              conditionalInputOpen ||
-                              !isActiveMessage ||
-                              (isActiveMessage && selectedButtonValue !== null);
-
-                            // Styling classes for disabled buttons
-                            const disabledClasses = !isActiveMessage
-                              ? "opacity-70 cursor-not-allowed"
-                              : "";
-
-                            // Check if this button is currently highlighted via keyboard
-                            const isHighlighted =
-                              isActiveMessage && highlightedButtonIndex === index;
-
-                            // Apply highlight style if this button is being pressed via keyboard
-                            const highlightClasses = isHighlighted
-                              ? "ring-2 ring-offset-1 ring-blue-500"
-                              : "";
-
-                            return (
-                              <Button
-                                key={option.value}
-                                variant={isSelected ? "default" : "outline"}
-                                size="sm"
-                                onClick={() => onButtonClick(option.value)}
-                                disabled={isDisabled}
-                                className={`text-left h-auto py-1.5 border-none ${isSelected ? "bg-[#1a2b4a] text-[#6bbbff]" : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white hover:bg-[#333333] hover:text-white"} ${disabledClasses} ${highlightClasses}`}
-                              >
-                                {option.label}
-                              </Button>
-                            );
-                          })}
-                        </div>
-                      )}
 
                     {message.finalResult != null ? ( // Condition changed to only check for finalResult
                       (() => {
