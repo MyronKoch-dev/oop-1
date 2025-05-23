@@ -47,8 +47,6 @@ interface ChatMessagesProps {
   messagesEndRef?: RefObject<HTMLDivElement | null>; // Optional ref passed from parent for scrolling
   latestInteractiveMessageId?: string | null; // ID of the most recent message with options
   highlightedButtonIndex?: number | null; // Index of button to highlight (for keyboard shortcut feedback)
-  multiSelectAnswers?: { [key: number]: string[] }; // New: all multi-select answers by question index
-  currentQuestionIndex?: number | null; // Current question index for context-specific behavior
   userName?: string; // Add userName prop for personalization
   onRetrySave?: () => void; // Callback to retry saving data to database
 }
@@ -104,8 +102,6 @@ export function ChatMessages({
   messagesEndRef, // Accept the potentially null-containing ref
   latestInteractiveMessageId = null, // Default to null if not provided
   highlightedButtonIndex = null, // Default to null if not provided
-  multiSelectAnswers = {}, // Default to empty object if not provided
-  currentQuestionIndex = null, // Default to null if not provided
   userName,
   conditionalInputOpen = false, // NEW: pass this from parent
   onRetrySave, // Pass the onRetrySave callback
@@ -145,7 +141,7 @@ export function ChatMessages({
 
       {/* Use Shadcn ScrollArea for the main message list container with dark theme */}
       <ScrollArea
-        className={`h-full w-full p-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] ${className}`}
+        className={`h-full w-full px-8 py-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] ${className}`}
       >
         <div className="space-y-4 pb-2 w-full pt-4">
           {/* Map over the messages array to render each message */}
@@ -156,7 +152,7 @@ export function ChatMessages({
                 className={`flex ${message.role === "user" ? "justify-end" : "justify-start"} w-full`}
               >
                 <div
-                  className={`flex gap-3 max-w-[90%] ${message.role === "user" ? "flex-row-reverse" : "flex-row"}`}
+                  className={`flex gap-3 max-w-[70%] ${message.role === "user" ? "flex-row-reverse" : "flex-row"}`}
                 >
                   {/* Avatar only for assistant messages */}
                   {message.role === "assistant" && (
@@ -324,28 +320,12 @@ export function ChatMessages({
                                 const isActiveMessage =
                                   message.id === latestInteractiveMessageId;
 
-                                // Use selectedValues only if currentQuestionIndex is a number
-                                const selectedValues =
-                                  typeof currentQuestionIndex === "number"
-                                    ? multiSelectAnswers[
-                                    currentQuestionIndex
-                                    ] || []
-                                    : [];
-                                const isSelected = selectedValues.includes(
-                                  option.value,
-                                );
-
                                 // Disable all buttons if conditional input is open
                                 const isDisabled =
                                   conditionalInputOpen ||
                                   !isActiveMessage ||
                                   (isActiveMessage &&
                                     selectedButtonValue !== null);
-
-                                // Styling classes for disabled buttons
-                                const disabledClasses = !isActiveMessage
-                                  ? "opacity-50 cursor-not-allowed"
-                                  : "";
 
                                 // Check if this button is currently highlighted via keyboard
                                 const isHighlighted =
@@ -366,11 +346,7 @@ export function ChatMessages({
                                     disabled={isDisabled}
                                     className={`
                                       rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200
-                                      ${isSelected
-                                        ? "bg-blue-500 text-white hover:bg-blue-600"
-                                        : "bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200"
-                                      } 
-                                      ${disabledClasses} 
+                                      bg-[#d4d4d4] text-gray-800 hover:bg-[#c4c4c4] border border-[#b4b4b4]
                                       ${highlightClasses}
                                       flex items-center gap-2
                                     `}
@@ -378,10 +354,7 @@ export function ChatMessages({
                                     <span
                                       className={`
                                       w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold border-2 shadow-sm
-                                      ${isSelected
-                                          ? "bg-white text-blue-500 border-gray-300"
-                                          : "bg-gray-200 text-gray-700 border-gray-300"
-                                        }
+                                      bg-white text-gray-800 border-[#b4b4b4]
                                     `}
                                     >
                                       {option.label.match(/^\d+/)

@@ -1616,8 +1616,6 @@ export function ChatContainer({
             className="h-full overflow-auto"
             latestInteractiveMessageId={latestInteractiveMsgId}
             highlightedButtonIndex={highlightedButtonIndex}
-            multiSelectAnswers={multiSelectAnswers}
-            currentQuestionIndex={currentQuestionIndex}
             userName={userName}
             conditionalInputOpen={showConditionalInput}
             onRetrySave={retryDatabaseSave}
