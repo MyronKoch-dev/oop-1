@@ -9,7 +9,6 @@ import {
   Layers,
   HelpCircle,
   X,
-  Youtube,
   ExternalLink,
   Briefcase,
   Target,
@@ -17,15 +16,12 @@ import {
   BrainCircuit,
   Award,
   Bot,
-  Github,
   ChevronDown,
   ChevronRight,
   Wrench,
   Library,
   Navigation,
-  Cpu,
 } from "lucide-react";
-import { FaTelegramPlane } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 
@@ -86,29 +82,7 @@ const resourceNavItems: NavItem[] = [
   },
 ];
 
-// Social links as a separate array
-const socialLinks = [
-  {
-    href: "https://www.youtube.com/@AndromedaProtocol?sub_confirmation=1",
-    icon: <Youtube className="w-5 h-5" />,
-    label: "YouTube",
-  },
-  {
-    href: "https://twitter.com/intent/follow?screen_name=AndromedaProt",
-    icon: <X className="w-5 h-5" />,
-    label: "X (Twitter)",
-  },
-  {
-    href: "https://github.com/andromedaprotocol",
-    icon: <Github className="w-5 h-5" />,
-    label: "GitHub",
-  },
-  {
-    href: "https://t.me/andromedaprotocol/1",
-    icon: <FaTelegramPlane className="w-5 h-5" />,
-    label: "Telegram",
-  },
-];
+
 
 // Action items for the bottom section
 const actionItems: NavItem[] = [
@@ -396,65 +370,58 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             </div>
           </div>
 
-          {/* Agent bots section title */}
-          <div className="mt-4">
-            <button
-              className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-white"
-              onClick={() => setShowAgent((open) => !open)}
-              aria-expanded={showAgent}
-              aria-controls="sidebar-agent-section"
-              tabIndex={0}
-            >
-              <Cpu className="w-4 h-4" /> Choose Your Agent
-              {showAgent ? (
-                <ChevronDown className="w-4 h-4 ml-auto" />
-              ) : (
-                <ChevronRight className="w-4 h-4 ml-auto" />
-              )}
-            </button>
-            <div
-              id="sidebar-agent-section"
-              className={`px-4 space-y-3 mt-2 transition-all duration-400 ease-[cubic-bezier(.4,0,.2,1)] overflow-hidden
-                                ${showAgent ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"}`}
-            >
-              {agentBots.map((item, index) => (
-                <div
-                  key={`agent-${index}`}
-                  className={`relative block w-full inline-flex items-center justify-start gap-2 px-4 py-2 bg-[#202020] text-gray-500 rounded-md cursor-not-allowed opacity-60`}
-                  aria-label={`${item.label} - coming soon`}
-                  role="button"
-                  aria-disabled="true"
-                  tabIndex={0}
-                >
-                  {item.icon}
-                  <span>{item.label}</span>
-                  <span
-                    className="absolute top-0 right-0 bg-gray-700 text-gray-300 text-[10px] px-1.5 py-0.5 rounded-bl-md rounded-tr-md"
-                    aria-hidden="true"
-                  >
-                    Soon
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
+
         </nav>
 
-        {/* Social Links at bottom */}
-        <div className="flex justify-center gap-6 px-4 py-6 border-t border-[#2a2a2a] flex-shrink-0">
-          {socialLinks.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={item.label}
-              title={item.label}
-              className="text-white hover:text-gray-300 transition-colors p-2 hover:bg-[#232323] rounded-md"
-            >
-              {item.icon}
-            </a>
-          ))}
+        {/* Agents section at bottom */}
+        <div className="mt-4 px-4">
+          <button
+            className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-white"
+            onClick={() => setShowAgent((open) => !open)}
+            aria-expanded={showAgent}
+            aria-controls="sidebar-agent-section"
+            tabIndex={0}
+          >
+            Agents
+            {showAgent ? (
+              <ChevronDown className="w-4 h-4 ml-auto" />
+            ) : (
+              <ChevronRight className="w-4 h-4 ml-auto" />
+            )}
+          </button>
+          <div
+            id="sidebar-agent-section"
+            className={`px-4 space-y-3 mt-2 transition-all duration-400 ease-[cubic-bezier(.4,0,.2,1)] overflow-hidden
+                                ${showAgent ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"}`}
+          >
+            {agentBots.map((item, index) => (
+              <div
+                key={`agent-${index}`}
+                className={`relative block w-full inline-flex items-center justify-start gap-2 px-4 py-2 bg-[#202020] text-gray-500 rounded-md cursor-not-allowed opacity-60`}
+                aria-label={`${item.label} - coming soon`}
+                role="button"
+                aria-disabled="true"
+                tabIndex={0}
+              >
+                {item.icon}
+                <span>{item.label}</span>
+                <span
+                  className="absolute top-0 right-0 bg-gray-700 text-gray-300 text-[10px] px-1.5 py-0.5 rounded-bl-md rounded-tr-md"
+                  aria-hidden="true"
+                >
+                  Soon
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Spacer that doesn't reach edges */}
+        <div className="mx-4 my-4 border-t border-[#2a2a2a] flex-shrink-0"></div>
+
+        {/* App version at bottom */}
+        <div className="px-8 py-4 flex-shrink-0">
+          <span className="text-gray-400 text-sm">Andromeda App 1.5.0</span>
         </div>
       </div>
     </>
