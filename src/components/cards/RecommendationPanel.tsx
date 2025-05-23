@@ -11,8 +11,6 @@ interface RecommendationPanelProps {
   onGetStarted: () => void; // function to call when button is clicked
   onSecondPathSelected?: () => void; // function to call when second path is selected
   userName?: string; // Add user's name for personalization
-  appUrl?: string; // New: URL for the main web application
-  goToAppButtonText?: string; // New: Text for the "Go to App" button
 }
 
 // Path color mapping based on designer specifications
@@ -47,8 +45,6 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
   pathLink,
   onGetStarted,
   onSecondPathSelected,
-  appUrl,
-  goToAppButtonText = "Go to Command Center", // Updated to match design
 }) => {
   const primaryColor = getPathColor(pathName);
   const secondaryColor = secondPathName
@@ -57,15 +53,6 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
 
   return (
     <div className={styles.recommendationContent}>
-      {/* Congratulations message inside the chat bubble */}
-      <div className={styles.congratsMessage}>
-        <p>
-          Congratulations! Based on your responses, I prepared a list of
-          recommended starting paths to help you make the most of Andromeda.
-          Select one of them to get started:
-        </p>
-      </div>
-
       {/* Horizontal card layout */}
       <div className={styles.pathCards}>
         {/* Primary Path Card */}
@@ -127,37 +114,6 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
         <div className={styles.dot}></div>
         <div className={`${styles.dot} ${styles.activeDot}`}></div>
         <div className={styles.dot}></div>
-      </div>
-
-      {/* Footer with minimal text */}
-      <div className={styles.footer}>
-        <p className={styles.reminderText}>
-          Remember you can always come back here or explore different paths
-        </p>
-
-        <p className={styles.encouragement}>
-          Hope this helps you find quick wins! Can&apos;t wait to see what you
-          create with Andromeda! 🎉
-        </p>
-
-        <p className={styles.commandCenter}>
-          You can now visit your Command Center:
-        </p>
-
-        {appUrl && (
-          <a
-            href={appUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.commandCenterButton}
-            onClick={() => {
-              console.log("Button clicked!", appUrl);
-              // Let the default behavior (opening link) proceed
-            }}
-          >
-            {goToAppButtonText}
-          </a>
-        )}
       </div>
     </div>
   );
