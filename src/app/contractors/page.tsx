@@ -4,12 +4,62 @@ import { IssueCard } from "@/components/cards/IssueCard";
 import { IssueCardSkeleton } from "@/components/cards/IssueCardSkeleton";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { MissionCard } from "@/components/cards/MissionCard";
+import VideoCarousel from "@/components/VideoCarousel";
 
 export const metadata = {
   title: "Contractor Hub | Andromeda Protocol",
   description:
     "Browse open contractor bidding opportunities and access building tools with Andromeda Protocol",
 };
+
+// Video data for the carousel
+const generalVideos = [
+  {
+    id: "1",
+    title: "aOS Introduction Video",
+    url: "https://youtu.be/RhQfZnurGXo",
+    description: "New to modular Web3 development? Learn about the Andromeda Operating System."
+  },
+  {
+    id: "2",
+    title: "aOS Core Concepts",
+    url: "https://youtu.be/2ktG307EqEA",
+    description: "Understanding the fundamental concepts behind aOS architecture."
+  },
+  {
+    id: "3",
+    title: "Getting Started with aOS",
+    url: "https://youtu.be/uvvqX91VFS4",
+    description: "Your first steps into the Andromeda ecosystem."
+  }
+];
+
+const tutorialVideos = [
+  {
+    id: "4",
+    title: "Building Your First App with aOS",
+    url: "https://youtu.be/QxMC-cygMaI",
+    description: "Step-by-step tutorial to create your first application on aOS."
+  },
+  {
+    id: "5",
+    title: "Advanced aOS Features",
+    url: "https://youtu.be/jV9XrStVBog",
+    description: "Explore advanced features and capabilities of the Andromeda OS."
+  },
+  {
+    id: "6",
+    title: "NFT Marketplace Use Case",
+    url: "https://youtu.be/tfY8ni9uJSE",
+    description: "Learn how to build an NFT marketplace using aOS."
+  },
+  {
+    id: "7",
+    title: "Crowdfunding App",
+    url: "https://youtu.be/rOKXu_NNfyk",
+    description: "Create a crowdfunding application with Andromeda tools."
+  }
+];
 
 // Skeleton grid for loading state
 function IssueCardsLoading() {
@@ -151,90 +201,12 @@ export default async function ContractorsPage() {
             </div>
           </div>
 
-          {/* Build with aOS Section */}
+          {/* Videos Section */}
           <div className="mb-16">
-            <div className="bg-[#2a2a2a] rounded-lg p-6 mb-8">
-              <p className="text-gray-300 mb-4">
-                Andromeda&apos;s vision is that aOS makes Web3 development
-                accessible to everyone. Whether you&apos;re a seasoned dev or just
-                getting started, you can use pre-built, customizable modules to
-                launch real on-chain apps, fast! It&apos;s intuitive,
-                permissionless, and chain-agnostic.
-              </p>
-              <p className="text-gray-300 mb-4">
-                No smart contract experience needed. Just an idea, a browser, and
-                aOS.
-              </p>
-              <p className="text-white font-medium">
-                Check out different ways to get started on aOS today:
-              </p>
-            </div>
-
-            <div className="mb-12">
-              <div className="bg-[#2a2a2a] rounded-lg p-6">
-                <h3 className="text-xl font-bold text-white mb-4">
-                  🎥 Watch the Intro Videos
-                </h3>
-                <p className="text-gray-400 mb-4">
-                  New to modular Web3 development? See what makes the Andromeda
-                  Operating System (aOS) the easiest way to launch smart, scalable
-                  dApps, without writing your own smart contracts.
-                </p>
-                <div className="mt-4 space-y-3">
-                  <h4 className="text-lg font-medium text-white">
-                    Some refreshers on aOS:
-                  </h4>
-                  <div className="space-y-2">
-                    <a
-                      href="https://youtu.be/RhQfZnurGXo"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block text-blue-400 hover:underline"
-                    >
-                      • aOS Introduction Video
-                    </a>
-                    <a
-                      href="https://youtu.be/2ktG307EqEA"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block text-blue-400 hover:underline"
-                    >
-                      • aOS Core Concepts
-                    </a>
-                    <a
-                      href="https://youtu.be/uvvqX91VFS4"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block text-blue-400 hover:underline"
-                    >
-                      • Getting Started with aOS
-                    </a>
-                  </div>
-
-                  <h4 className="text-lg font-medium text-white mt-6">
-                    Tutorials to try:
-                  </h4>
-                  <div className="space-y-2">
-                    <a
-                      href="https://youtu.be/QxMC-cygMaI"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block text-blue-400 hover:underline"
-                    >
-                      • Building Your First App with aOS
-                    </a>
-                    <a
-                      href="https://youtu.be/jV9XrStVBog"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block text-blue-400 hover:underline"
-                    >
-                      • Advanced aOS Features
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <VideoCarousel
+              generalVideos={generalVideos}
+              tutorialVideos={tutorialVideos}
+            />
           </div>
 
           <div className="mb-12">
@@ -253,23 +225,10 @@ export default async function ContractorsPage() {
                 Not sure what to build? Complete one of our uses cases and earn
                 2,000 $ANDR
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <a
-                  href="https://youtu.be/tfY8ni9uJSE"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-[#1a1a1a] hover:bg-[#252525] p-4 rounded-lg text-blue-400 flex items-center justify-center transition-colors"
-                >
-                  <span className="mr-2">🎬</span> NFT Marketplace Use Case
-                </a>
-                <a
-                  href="https://youtu.be/rOKXu_NNfyk"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-[#1a1a1a] hover:bg-[#252525] p-4 rounded-lg text-blue-400 flex items-center justify-center transition-colors"
-                >
-                  <span className="mr-2">🎬</span> Crowdfunding App
-                </a>
+              <div className="text-center mb-6">
+                <p className="text-gray-200 text-sm">
+                  Check out our video tutorials above to see examples of NFT Marketplaces and Crowdfunding apps!
+                </p>
               </div>
               <p className="text-center text-white font-medium text-lg">
                 Start building, start earning.
