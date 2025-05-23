@@ -61,7 +61,7 @@ export function TopProgressPanel({
         <div className="flex items-center gap-2 flex-1">
           <Progress
             value={progressPercentage}
-            className="flex-1 h-2 bg-[#404040] [&>[data-slot=progress-indicator]]:bg-blue-500"
+            className="flex-1 h-2 bg-[#404040] [&>[data-slot=progress-indicator]]:bg-gray-300"
           />
           <span className="text-white text-sm font-semibold min-w-[30px] text-right">
             {progressPercentage}%
