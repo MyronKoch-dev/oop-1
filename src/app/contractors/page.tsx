@@ -10,6 +10,9 @@ export const metadata = {
   title: "Contractor Hub | Andromeda Protocol",
   description:
     "Browse open contractor bidding opportunities and access building tools with Andromeda Protocol",
+  other: {
+    "Content-Security-Policy": "img-src 'self' data: https://img.youtube.com https://i.ytimg.com https://*.youtube.com;"
+  }
 };
 
 // Video data for the carousel

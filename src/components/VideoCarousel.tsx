@@ -26,9 +26,7 @@ const VideoCarousel: React.FC<VideoCarouselProps> = ({
 
     const getYouTubeVideoId = (url: string): string => {
         const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);
-        const videoId = match ? match[1] : "";
-        console.log(`Extracting video ID from ${url}: ${videoId}`);
-        return videoId;
+        return match ? match[1] : "";
     };
 
     const getYouTubeThumbnail = (url: string): string => {
@@ -141,61 +139,53 @@ const VideoCarousel: React.FC<VideoCarouselProps> = ({
                     </button>
                 </div>
 
-                {/* Thumbnail Carousel */}
+                {/* Thumbnail Carousel - STEP 1: Remove debug panel but keep simplified structure */}
                 {activeVideos.length > 1 && (
                     <div className="mt-6">
                         <div className="flex space-x-3 overflow-x-auto pb-2">
-                            {activeVideos.map((video, index) => (
-                                <button
-                                    key={video.id}
-                                    onClick={() => setCurrentVideoIndex(index)}
-                                    className={`flex-shrink-0 relative transition-all ${index === currentVideoIndex
-                                        ? "ring-2 ring-[#4D3DF7]"
-                                        : "hover:ring-2 hover:ring-gray-500"
-                                        }`}
-                                >
-                                    <div className="w-32 h-20 bg-gray-700 rounded-lg overflow-hidden relative border-2 border-gray-600">
+                            {activeVideos.map((video, index) => {
+                                const thumbnailUrl = getYouTubeThumbnail(video.url);
+                                return (
+                                    <button
+                                        key={video.id}
+                                        onClick={() => setCurrentVideoIndex(index)}
+                                        className={`flex-shrink-0 relative transition-all ${index === currentVideoIndex
+                                            ? "ring-2 ring-[#4D3DF7]"
+                                            : "hover:ring-2 hover:ring-gray-500"
+                                            }`}
+                                    >
+                                        {/* Keep simple structure - just img without complex containers */}
                                         <img
-                                            src={getYouTubeThumbnail(video.url)}
+                                            src={thumbnailUrl}
                                             alt={video.title}
-                                            className="w-full h-full object-cover"
+                                            className="w-32 h-20 object-cover rounded-lg bg-red-500 border-2 border-yellow-500"
                                             onError={(e) => {
-                                                console.error(`Failed to load thumbnail for ${video.title}:`, getYouTubeThumbnail(video.url));
+                                                console.error(`❌ FAILED: ${video.title}`, thumbnailUrl);
                                                 const target = e.target as HTMLImageElement;
-                                                target.style.display = 'none';
-                                                // Add a fallback text
-                                                const parent = target.parentElement;
-                                                if (parent) {
-                                                    parent.innerHTML = `
-                                                <div class="absolute inset-0 flex items-center justify-center text-gray-300 text-xs">
-                                                    <div class="text-center">
-                                                        <div>📺</div>
-                                                        <div>Thumbnail</div>
-                                                        <div>Unavailable</div>
-                                                    </div>
-                                                </div>
-                                            `;
-                                                }
+                                                target.className = "w-32 h-20 rounded-lg bg-red-800 border-2 border-red-500 flex items-center justify-center text-white text-xs";
+                                                target.src = "";
+                                                target.style.display = "flex";
+                                                target.style.alignItems = "center";
+                                                target.style.justifyContent = "center";
+                                                target.textContent = "FAILED";
                                             }}
-                                            onLoad={(e) => {
-                                                console.log(`✅ Successfully loaded thumbnail for ${video.title}`);
-                                                // Hide the loading placeholder
-                                                const target = e.target as HTMLImageElement;
-                                                const parent = target.parentElement;
-                                                const loadingPlaceholder = parent?.querySelector('.loading-placeholder');
-                                                if (loadingPlaceholder) {
-                                                    (loadingPlaceholder as HTMLElement).style.display = 'none';
-                                                }
+                                            onLoad={() => {
+                                                console.log(`✅ SUCCESS: ${video.title}`, thumbnailUrl);
+                                            }}
+                                            style={{
+                                                minHeight: '80px',
+                                                minWidth: '128px',
+                                                backgroundColor: '#ef4444'
                                             }}
                                         />
-                                        {/* Always show a loading state initially */}
-                                        <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-xs bg-gray-800 loading-placeholder">
-                                            Loading...
+
+                                        {/* Keep debug ID for now */}
+                                        <div className="absolute bottom-0 left-0 bg-black bg-opacity-75 text-white text-xs p-1 rounded max-w-32 truncate">
+                                            ID: {getYouTubeVideoId(video.url)}
                                         </div>
-                                    </div>
-                                    <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all rounded-lg"></div>
-                                </button>
-                            ))}
+                                    </button>
+                                );
+                            })}
                         </div>
                     </div>
                 )}
