@@ -44,9 +44,10 @@ This guide explains how to tweak, expand, or make more granular the logic that d
 ```ts
 // Example: Add points for each relevant answer
 let contractorScore = 0;
-if (arrayIncludesAny(data.languages, ['Rust', 'Solidity', 'Python'])) contractorScore++;
-if (data.tools_familiarity === 'Very familiar') contractorScore++;
-if (data.experience_level === 'Advanced') contractorScore++;
+if (arrayIncludesAny(data.languages, ["Rust", "Solidity", "Python"]))
+  contractorScore++;
+if (data.tools_familiarity === "Very familiar") contractorScore++;
+if (data.experience_level === "Advanced") contractorScore++;
 // ...
 // Then compare scores for all paths and pick the highest
 ```
@@ -64,15 +65,15 @@ if (data.experience_level === 'Advanced') contractorScore++;
 
 ```ts
 const isDataScientistCandidate =
-    arrayIncludesAny(data.languages, ['Python']) &&
-    data.goal === 'Work on AI projects' &&
-    data.ai_experience === 'Yes';
+  arrayIncludesAny(data.languages, ["Python"]) &&
+  data.goal === "Work on AI projects" &&
+  data.ai_experience === "Yes";
 
 if (isDataScientistCandidate) {
-    return {
-        recommendedPath: "Data Scientist",
-        recommendedPathUrl: getPathUrl("DATA_SCIENTIST")
-    };
+  return {
+    recommendedPath: "Data Scientist",
+    recommendedPathUrl: getPathUrl("DATA_SCIENTIST"),
+  };
 }
 ```
 
@@ -87,4 +88,4 @@ if (isDataScientistCandidate) {
 
 ---
 
-**For more details, see inline comments in `src/lib/pathDetermination.ts`.** 
+**For more details, see inline comments in `src/lib/pathDetermination.ts`.**
