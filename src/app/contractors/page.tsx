@@ -5,6 +5,7 @@ import { IssueCardSkeleton } from "@/components/cards/IssueCardSkeleton";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { MissionCard } from "@/components/cards/MissionCard";
 import VideoCarousel from "@/components/VideoCarousel";
+import { CampaignModal } from "@/components/CampaignModal";
 
 export const metadata = {
   title: "Contractor Hub | Andromeda Protocol",
@@ -790,9 +791,11 @@ export default async function ContractorsPage() {
               <p className="text-gray-300 text-sm mb-4">
                 Want to dive into coding and tackle some fun challenges with Andromeda Protocol? Check out these open bounties and hacking challenges!
               </p>
-              <button className="w-full bg-gray-600/40 hover:bg-gray-500/50 text-gray-200 px-4 py-2 rounded-lg text-sm transition-colors mb-3 backdrop-blur-sm">
-                Learn about the campaign
-              </button>
+              <CampaignModal>
+                <button className="w-full bg-gray-600/40 hover:bg-gray-500/50 text-gray-200 px-4 py-2 rounded-lg text-sm transition-colors mb-3 backdrop-blur-sm">
+                  Learn about the campaign
+                </button>
+              </CampaignModal>
               <button className="w-full bg-gray-600/40 hover:bg-gray-500/50 text-gray-200 px-4 py-2 rounded-lg text-sm transition-colors backdrop-blur-sm">
                 View Hackerboard
               </button>
