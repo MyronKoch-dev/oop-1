@@ -33,11 +33,13 @@
   margin-bottom: 20px;
   justify-content: center;
   flex-wrap: wrap;
+  align-items: stretch;
 }
 
 .pathCard {
-  width: 320px;
-  height: 280px;
+  width: 100%;
+  max-width: 400px;
+  min-height: 320px;
   border-radius: 12px;
   padding: 0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -83,7 +85,6 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 .pathDescription {
@@ -109,6 +110,7 @@
   font-family: inherit;
   width: 100%;
   text-align: center;
+  margin-top: auto;
 }
 
 .selectButton:hover {
@@ -165,10 +167,10 @@
 }
 
 .commandCenterButton {
-  background: var(--muted);
-  color: var(--muted-foreground);
+  background: #d4d4d4;
+  color: #333;
   border: none;
-  border-radius: 8px;
+  border-radius: 25px;
   padding: 12px 24px;
   font-size: 1rem;
   font-weight: 500;
@@ -180,8 +182,8 @@
 }
 
 .commandCenterButton:hover {
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: #c4c4c4;
+  color: #333;
 }
 
 /* Mobile responsiveness */
@@ -194,7 +196,7 @@
 
   .pathCard {
     width: 100%;
-    max-width: 320px;
+    max-width: 400px;
     height: auto;
     min-height: 240px;
   }
@@ -212,9 +214,12 @@
 @media (min-width: 769px) {
   .pathCards {
     justify-content: center;
+    align-items: stretch;
   }
 
   .pathCard {
     flex-shrink: 0;
+    width: 400px;
+    height: 320px;
   }
 }

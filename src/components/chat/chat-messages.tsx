@@ -170,18 +170,18 @@ export function ChatMessages({
                       // Render error/warning messages in red if they match known patterns
                       <Card
                         className={`p-3 border-none ${message.role === "assistant" &&
-                            (message.content
+                          (message.content
+                            .toLowerCase()
+                            .includes("please provide a valid") ||
+                            message.content.toLowerCase().includes("error") ||
+                            message.content
                               .toLowerCase()
-                              .includes("please provide a valid") ||
-                              message.content.toLowerCase().includes("error") ||
-                              message.content
-                                .toLowerCase()
-                                .includes("required") ||
-                              message.content.toLowerCase().includes("sorry"))
-                            ? "bg-red-900/80 text-red-200" // Red style for warnings/errors
-                            : message.role === "user"
-                              ? "bg-[#1a2b4a] text-[#6bbbff]"
-                              : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white"
+                              .includes("required") ||
+                            message.content.toLowerCase().includes("sorry"))
+                          ? "bg-red-900/80 text-red-200" // Red style for warnings/errors
+                          : message.role === "user"
+                            ? "bg-[#1a2b4a] text-[#6bbbff]"
+                            : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white"
                           } ${message.isLoading ? "animate-pulse" : ""}`}
                       >
                         {/* Display message content with clickable links and name replacement - hide if finalResult exists */}
