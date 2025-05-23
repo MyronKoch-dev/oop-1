@@ -88,7 +88,7 @@ export function ContactInfoForm({
 
   return (
     <div className="w-full flex justify-center p-4">
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-xl">
         <form
           onSubmit={handleSubmit}
           className="bg-[#232b3a] border-none rounded-xl p-6 flex flex-col gap-4"
