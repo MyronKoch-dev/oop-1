@@ -11,9 +11,11 @@ const nextConfig = {
   // Example: experimental: { serverActions: true }, // If using Server Actions
   // === End of custom configurations ===
   images: {
-    domains: ["img.youtube.com"],
+    domains: ["img.youtube.com", "i.ytimg.com"],
+    unoptimized: false,
   },
 };
 
 // Export the configuration object using CommonJS syntax
 module.exports = nextConfig;
+
