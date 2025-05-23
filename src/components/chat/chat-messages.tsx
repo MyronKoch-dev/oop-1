@@ -170,7 +170,7 @@ export function ChatMessages({
                   )}
                   <div className="space-y-2 w-full">
                     {/* Always render as a regular card now */}
-                    {true && (
+                    {!message.finalResult && (
                       // Render error/warning messages in red if they match known patterns
                       <Card
                         className={`p-3 border-none ${message.role === "assistant" &&
@@ -188,12 +188,11 @@ export function ChatMessages({
                               : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white"
                           } ${message.isLoading ? "animate-pulse" : ""}`}
                       >
-                        {/* Display message content with clickable links and name replacement - hide if finalResult exists */}
-                        {!message.finalResult &&
-                          renderMessageContent(
-                            message.content,
-                            message.role === "assistant" ? userName : undefined,
-                          )}
+                        {/* Display message content with clickable links and name replacement */}
+                        {renderMessageContent(
+                          message.content,
+                          message.role === "assistant" ? userName : undefined,
+                        )}
 
                         {/* Render URL as a button if present */}
                         {message.url && (
@@ -226,8 +225,93 @@ export function ChatMessages({
                           </div>
                         )}
 
-                        {/* Render the RecommendationPanel directly inside the chat bubble if finalResult exists */}
-                        {message.finalResult && (
+                        {/* Render buttons inside the chat bubble if options are provided for an assistant message */}
+                        {message.role === "assistant" &&
+                          message.options &&
+                          message.options.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mt-4">
+                              {message.options.map((option, index) => {
+                                // Determine if this message has the latest interactive options
+                                const isActiveMessage =
+                                  message.id === latestInteractiveMessageId;
+
+                                // Disable all buttons if conditional input is open
+                                const isDisabled =
+                                  conditionalInputOpen || !isActiveMessage;
+
+                                // Check if this button is currently selected
+                                // Use multiSelectAnswers only if currentQuestionIndex is a number
+                                const selectedValues =
+                                  typeof currentQuestionIndex === "number" &&
+                                    multiSelectAnswers
+                                    ? multiSelectAnswers[
+                                    currentQuestionIndex
+                                    ] || []
+                                    : [];
+
+                                const isSelected =
+                                  selectedButtonValue === option.value || // Single select
+                                  selectedValues.includes(option.value); // Multi select
+
+                                // Check if this button is currently highlighted via keyboard
+                                const isHighlighted =
+                                  isActiveMessage &&
+                                  highlightedButtonIndex === index;
+
+                                // Apply highlight style if this button is being pressed via keyboard
+                                const highlightClasses = isHighlighted
+                                  ? "ring-2 ring-offset-1 ring-blue-400"
+                                  : "";
+
+                                // Apply selected style for visual feedback
+                                const selectedClasses = isSelected
+                                  ? "bg-[#a4a4a4] border-[#949494]" // Darker shade when selected
+                                  : "bg-[#d4d4d4] border-[#b4b4b4]"; // Normal #d4d4d4 when not selected
+
+                                return (
+                                  <Button
+                                    key={option.value}
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => onButtonClick(option.value)}
+                                    disabled={isDisabled}
+                                    className={`
+                                      rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200
+                                      ${selectedClasses} text-gray-800 hover:!bg-[#dcfaf5] hover:!text-gray-800
+                                      ${highlightClasses}
+                                      flex items-center gap-2
+                                    `}
+                                  >
+                                    <span
+                                      className={`
+                                      w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold border-2 shadow-sm
+                                      bg-white text-gray-800 border-[#b4b4b4]
+                                    `}
+                                    >
+                                      {option.label.match(/^\d+/)
+                                        ? option.label.match(/^\d+/)?.[0]
+                                        : index + 1}
+                                    </span>
+                                    {option.label.replace(/^\d+\.\s*/, "")}
+                                  </Button>
+                                );
+                              })}
+                            </div>
+                          )}
+                      </Card>
+                    )}
+
+                    {/* First bubble: Congratulations + RecommendationPanel together if finalResult exists */}
+                    {message.finalResult && (
+                      <Card className="p-4 border-none bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white mt-2">
+                        <div className="space-y-4">
+                          <p>
+                            Congratulations! Based on your responses, I prepared
+                            a list of recommended starting paths to help you
+                            make the most of Andromeda. Select one of them to
+                            get started:
+                          </p>
+
                           <RecommendationPanel
                             pathName={message.finalResult?.recommendedPath}
                             pathDescription={
@@ -247,8 +331,6 @@ export function ChatMessages({
                                 ?.secondRecommendedPathDescription
                             }
                             userName={userName}
-                            appUrl="https://app.testnet.andromedaprotocol.io"
-                            goToAppButtonText="Explore Andromeda Platform"
                             onGetStarted={() => {
                               console.log(
                                 `Opening primary path URL: ${message.finalResult?.recommendedPathUrl}`,
@@ -312,84 +394,44 @@ export function ChatMessages({
                                 : undefined
                             }
                           />
-                        )}
+                        </div>
+                      </Card>
+                    )}
 
-                        {/* Render buttons inside the chat bubble if options are provided for an assistant message */}
-                        {message.role === "assistant" &&
-                          message.options &&
-                          message.options.length > 0 && (
-                            <div className="flex flex-wrap gap-2 mt-4">
-                              {message.options.map((option, index) => {
-                                // Determine if this message has the latest interactive options
-                                const isActiveMessage =
-                                  message.id === latestInteractiveMessageId;
+                    {/* Second bubble: Just the "Remember" message if finalResult exists */}
+                    {message.finalResult && (
+                      <Card className="p-4 border-none bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white mt-2">
+                        <p>
+                          Remember you can always come back here or explore
+                          different paths
+                        </p>
+                      </Card>
+                    )}
 
-                                // Disable all buttons if conditional input is open
-                                const isDisabled =
-                                  conditionalInputOpen ||
-                                  !isActiveMessage ||
-                                  (isActiveMessage &&
-                                    selectedButtonValue !== null);
+                    {/* Third bubble: "Hope this helps" message + button if finalResult exists */}
+                    {message.finalResult && (
+                      <Card className="p-4 border-none bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white mt-2">
+                        <div className="space-y-4">
+                          <p className="text-base">
+                            Hope this helps you find quick wins! Can&apos;t wait
+                            to see what you create with Andromeda! 🎉
+                          </p>
 
-                                // Check if this button is currently selected
-                                // Use multiSelectAnswers only if currentQuestionIndex is a number
-                                const selectedValues =
-                                  typeof currentQuestionIndex === "number" &&
-                                    multiSelectAnswers
-                                    ? multiSelectAnswers[
-                                    currentQuestionIndex
-                                    ] || []
-                                    : [];
+                          <p className="text-sm">
+                            You can now visit your Command Center:
+                          </p>
 
-                                const isSelected =
-                                  selectedButtonValue === option.value || // Single select
-                                  selectedValues.includes(option.value); // Multi select
-
-                                // Check if this button is currently highlighted via keyboard
-                                const isHighlighted =
-                                  isActiveMessage &&
-                                  highlightedButtonIndex === index;
-
-                                // Apply highlight style if this button is being pressed via keyboard
-                                const highlightClasses = isHighlighted
-                                  ? "ring-2 ring-offset-1 ring-blue-400"
-                                  : "";
-
-                                // Apply selected style for visual feedback
-                                const selectedClasses = isSelected
-                                  ? "bg-[#a4a4a4] border-[#949494]" // Darker shade when selected
-                                  : "bg-[#d4d4d4] border-[#b4b4b4]"; // Normal #d4d4d4 when not selected
-
-                                return (
-                                  <Button
-                                    key={option.value}
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => onButtonClick(option.value)}
-                                    disabled={isDisabled}
-                                    className={`
-                                      rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200
-                                      ${selectedClasses} text-gray-800 hover:!bg-[#dcfaf5] hover:!text-gray-800
-                                      ${highlightClasses}
-                                      flex items-center gap-2
-                                    `}
-                                  >
-                                    <span
-                                      className={`
-                                      w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold border-2 shadow-sm
-                                      bg-white text-gray-800 border-[#b4b4b4]
-                                    `}
-                                    >
-                                      {option.label.match(/^\d+/)
-                                        ? option.label.match(/^\d+/)?.[0]
-                                        : index + 1}
-                                    </span>
-                                    {option.label.replace(/^\d+\.\s*/, "")}
-                                  </Button>
-                                );
-                              })}
-                            </div>
-                          )}
+                          <div className="pt-2">
+                            <a
+                              href="https://app.testnet.andromedaprotocol.io"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-block px-6 py-3 bg-[#d4d4d4] hover:bg-[#c4c4c4] text-gray-800 rounded-full font-medium transition-colors duration-200"
+                            >
+                              Explore Andromeda Platform
+                            </a>
+                          </div>
+                        </div>
                       </Card>
                     )}
                   </div>

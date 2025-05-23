@@ -334,7 +334,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               aria-controls="sidebar-path-section"
               tabIndex={0}
             >
-              <Navigation className="w-4 h-4" /> Choose Your Path
+              <Navigation className="w-4 h-4" /> Command Center
               {showPath ? (
                 <ChevronDown className="w-4 h-4 ml-auto" />
               ) : (
