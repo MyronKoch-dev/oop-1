@@ -26,7 +26,7 @@ const questions: QuestionDetail[] = [
   // Index 0 (Name)
   {
     index: 0,
-    text: "Hey there! What should I call you?",
+    text: "What should I call you?",
     inputMode: "text",
     isOptional: false,
   },
