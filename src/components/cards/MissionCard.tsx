@@ -19,13 +19,13 @@ interface MissionCardProps {
 const getStatusIcon = (status: Mission["status"]) => {
   switch (status) {
     case "completed":
-      return <CheckCircle className="w-5 h-5 text-green-600" />;
+      return <CheckCircle className="w-5 h-5 text-green-700" />;
     case "in-progress":
-      return <Clock className="w-5 h-5 text-blue-600" />;
+      return <Clock className="w-5 h-5 text-blue-700" />;
     case "pending":
-      return <CircleDot className="w-5 h-5 text-gray-500" />;
+      return <CircleDot className="w-5 h-5 text-gray-700" />;
     default:
-      return <CircleDot className="w-5 h-5 text-gray-500" />;
+      return <CircleDot className="w-5 h-5 text-gray-700" />;
   }
 };
 
@@ -45,13 +45,13 @@ const getStatusText = (status: Mission["status"]) => {
 const getCardStyles = (status: Mission["status"]) => {
   switch (status) {
     case "completed":
-      return "bg-green-100 border-green-300";
+      return "bg-[#bfffaa]";
     case "in-progress":
-      return "bg-blue-100 border-blue-300";
+      return "bg-[#aadeff]";
     case "pending":
-      return "bg-yellow-100 border-yellow-300";
+      return "bg-[#aadeff]";
     default:
-      return "bg-gray-100 border-gray-300";
+      return "bg-[#aadeff]";
   }
 };
 
@@ -72,7 +72,7 @@ export function MissionCard({ mission }: MissionCardProps) {
   return (
     <div
       className={`
-        relative p-6 rounded-xl border-2 
+        relative p-6 rounded-xl
         ${getCardStyles(mission.status)}
         transition-all duration-200 hover:scale-[1.01]
         flex items-center justify-between
@@ -100,13 +100,13 @@ export function MissionCard({ mission }: MissionCardProps) {
           {/* Progress bar for in-progress missions */}
           {mission.status === "in-progress" && mission.progress && (
             <div className="mb-2 max-w-md">
-              <div className="flex justify-between text-xs text-gray-600 mb-1">
+              <div className="flex justify-between text-xs text-gray-800 mb-1">
                 <span className="font-medium">Progress</span>
                 <span className="font-bold">{mission.progress}%</span>
               </div>
-              <div className="w-full bg-white rounded-full h-2 border border-gray-300">
+              <div className="w-full bg-white/50 rounded-full h-2 border border-white/30">
                 <div
-                  className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                   style={{ width: `${mission.progress}%` }}
                 />
               </div>
@@ -119,12 +119,12 @@ export function MissionCard({ mission }: MissionCardProps) {
       <div className="flex items-center gap-3">
         <button
           className={`
-            py-2 px-6 rounded-lg text-sm font-semibold 
+            py-2 px-6 rounded-full text-sm font-semibold 
             transition-colors duration-200
             ${
               mission.status === "completed"
                 ? "bg-green-500 text-white cursor-default"
-                : "bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400"
+                : "bg-black/20 text-black hover:bg-black/30"
             }
           `}
           disabled={mission.status === "completed"}
@@ -132,12 +132,12 @@ export function MissionCard({ mission }: MissionCardProps) {
           {getStatusText(mission.status)}
         </button>
 
-        <ChevronDown className="w-5 h-5 text-gray-500" />
+        <ChevronDown className="w-5 h-5 text-gray-700" />
       </div>
 
       {/* Completion date (if completed) */}
       {mission.completionDate && (
-        <div className="absolute bottom-2 right-6 text-xs text-gray-500 font-medium">
+        <div className="absolute bottom-2 right-6 text-xs text-gray-700 font-medium">
           ✓ Completed: {new Date(mission.completionDate).toLocaleDateString()}
         </div>
       )}
