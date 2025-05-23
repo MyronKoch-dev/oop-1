@@ -150,6 +150,10 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
             target="_blank"
             rel="noopener noreferrer"
             className={styles.commandCenterButton}
+            onClick={() => {
+              console.log("Button clicked!", appUrl);
+              // Let the default behavior (opening link) proceed
+            }}
           >
             {goToAppButtonText}
           </a>

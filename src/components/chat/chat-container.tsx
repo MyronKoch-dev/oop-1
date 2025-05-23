@@ -1619,6 +1619,8 @@ export function ChatContainer({
             userName={userName}
             conditionalInputOpen={showConditionalInput}
             onRetrySave={retryDatabaseSave}
+            multiSelectAnswers={multiSelectAnswers}
+            currentQuestionIndex={currentQuestionIndex}
           />
         </div>
 

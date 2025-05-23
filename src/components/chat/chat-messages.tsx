@@ -49,6 +49,8 @@ interface ChatMessagesProps {
   highlightedButtonIndex?: number | null; // Index of button to highlight (for keyboard shortcut feedback)
   userName?: string; // Add userName prop for personalization
   onRetrySave?: () => void; // Callback to retry saving data to database
+  multiSelectAnswers?: { [key: number]: string[] }; // Track multi-select answers
+  currentQuestionIndex?: number | null; // Current question index
 }
 
 // Function to render message content with clickable links
@@ -105,6 +107,8 @@ export function ChatMessages({
   userName,
   conditionalInputOpen = false, // NEW: pass this from parent
   onRetrySave, // Pass the onRetrySave callback
+  multiSelectAnswers, // Pass the multiSelectAnswers prop
+  currentQuestionIndex, // Pass the currentQuestionIndex prop
 }: ChatMessagesProps & { conditionalInputOpen?: boolean }) {
   // Internal ref used only if messagesEndRef is not provided by the parent
   const internalScrollRef = useRef<HTMLDivElement>(null);
@@ -169,7 +173,8 @@ export function ChatMessages({
                     {true && (
                       // Render error/warning messages in red if they match known patterns
                       <Card
-                        className={`p-3 border-none ${message.role === "assistant" &&
+                        className={`p-3 border-none ${
+                          message.role === "assistant" &&
                           (message.content
                             .toLowerCase()
                             .includes("please provide a valid") ||
@@ -178,11 +183,11 @@ export function ChatMessages({
                               .toLowerCase()
                               .includes("required") ||
                             message.content.toLowerCase().includes("sorry"))
-                          ? "bg-red-900/80 text-red-200" // Red style for warnings/errors
-                          : message.role === "user"
-                            ? "bg-[#1a2b4a] text-[#6bbbff]"
-                            : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white"
-                          } ${message.isLoading ? "animate-pulse" : ""}`}
+                            ? "bg-red-900/80 text-red-200" // Red style for warnings/errors
+                            : message.role === "user"
+                              ? "bg-[#1a2b4a] text-[#6bbbff]"
+                              : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white"
+                        } ${message.isLoading ? "animate-pulse" : ""}`}
                       >
                         {/* Display message content with clickable links and name replacement - hide if finalResult exists */}
                         {!message.finalResult &&
@@ -231,7 +236,7 @@ export function ChatMessages({
                             }
                             pathLink={
                               message.finalResult?.recommendedPath ===
-                                "Ambassador"
+                              "Ambassador"
                                 ? "/ambassador"
                                 : undefined
                             }
@@ -262,49 +267,49 @@ export function ChatMessages({
                             onSecondPathSelected={
                               message.finalResult?.secondRecommendedPath
                                 ? () => {
-                                  const secondaryPathName =
-                                    message.finalResult
-                                      ?.secondRecommendedPath;
-                                  let targetUrl =
-                                    message.finalResult
-                                      ?.secondRecommendedPathUrl || "";
+                                    const secondaryPathName =
+                                      message.finalResult
+                                        ?.secondRecommendedPath;
+                                    let targetUrl =
+                                      message.finalResult
+                                        ?.secondRecommendedPathUrl || "";
 
-                                  // Determine the correct internal route based on the path name
-                                  switch (secondaryPathName) {
-                                    case "Ambassador":
-                                      targetUrl = "/ambassador";
-                                      break;
-                                    case "Visionaries":
-                                      targetUrl = "/visionaries";
-                                      break;
-                                    case "Hackers":
-                                      targetUrl = "/hackers";
-                                      break;
-                                    case "Contractors":
-                                      targetUrl = "/contractors";
-                                      break;
-                                    case "Explorer":
-                                      targetUrl = "/explorer";
-                                      break;
-                                    case "AI Navigators":
-                                      targetUrl = "/ai-navigators";
-                                      break;
-                                    // If it's not a known internal path, use the provided URL and check if external
-                                    default:
-                                      if (targetUrl.startsWith("http")) {
-                                        window.open(targetUrl, "_blank");
-                                        return; // Exit the function after opening external link
-                                      }
-                                      // If it's not a known path and not an external URL, assume it's a relative internal path
-                                      break;
+                                    // Determine the correct internal route based on the path name
+                                    switch (secondaryPathName) {
+                                      case "Ambassador":
+                                        targetUrl = "/ambassador";
+                                        break;
+                                      case "Visionaries":
+                                        targetUrl = "/visionaries";
+                                        break;
+                                      case "Hackers":
+                                        targetUrl = "/hackers";
+                                        break;
+                                      case "Contractors":
+                                        targetUrl = "/contractors";
+                                        break;
+                                      case "Explorer":
+                                        targetUrl = "/explorer";
+                                        break;
+                                      case "AI Navigators":
+                                        targetUrl = "/ai-navigators";
+                                        break;
+                                      // If it's not a known internal path, use the provided URL and check if external
+                                      default:
+                                        if (targetUrl.startsWith("http")) {
+                                          window.open(targetUrl, "_blank");
+                                          return; // Exit the function after opening external link
+                                        }
+                                        // If it's not a known path and not an external URL, assume it's a relative internal path
+                                        break;
+                                    }
+
+                                    console.log(
+                                      `Navigating to secondary path: ${targetUrl}`,
+                                    );
+                                    // Navigate within the application for internal routes
+                                    window.location.href = targetUrl;
                                   }
-
-                                  console.log(
-                                    `Navigating to secondary path: ${targetUrl}`,
-                                  );
-                                  // Navigate within the application for internal routes
-                                  window.location.href = targetUrl;
-                                }
                                 : undefined
                             }
                           />
@@ -327,6 +332,20 @@ export function ChatMessages({
                                   (isActiveMessage &&
                                     selectedButtonValue !== null);
 
+                                // Check if this button is currently selected
+                                // Use multiSelectAnswers only if currentQuestionIndex is a number
+                                const selectedValues =
+                                  typeof currentQuestionIndex === "number" &&
+                                  multiSelectAnswers
+                                    ? multiSelectAnswers[
+                                        currentQuestionIndex
+                                      ] || []
+                                    : [];
+
+                                const isSelected =
+                                  selectedButtonValue === option.value || // Single select
+                                  selectedValues.includes(option.value); // Multi select
+
                                 // Check if this button is currently highlighted via keyboard
                                 const isHighlighted =
                                   isActiveMessage &&
@@ -337,6 +356,11 @@ export function ChatMessages({
                                   ? "ring-2 ring-offset-1 ring-blue-400"
                                   : "";
 
+                                // Apply selected style for visual feedback
+                                const selectedClasses = isSelected
+                                  ? "bg-[#a4a4a4] border-[#949494]" // Darker shade when selected
+                                  : "bg-[#d4d4d4] border-[#b4b4b4]"; // Normal #d4d4d4 when not selected
+
                                 return (
                                   <Button
                                     key={option.value}
@@ -346,7 +370,7 @@ export function ChatMessages({
                                     disabled={isDisabled}
                                     className={`
                                       rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200
-                                      bg-[#d4d4d4] text-gray-800 hover:bg-[#c4c4c4] border border-[#b4b4b4]
+                                      ${selectedClasses} text-gray-800 hover:bg-[#c4c4c4]
                                       ${highlightClasses}
                                       flex items-center gap-2
                                     `}
