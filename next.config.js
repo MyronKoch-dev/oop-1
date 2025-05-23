@@ -10,6 +10,9 @@ const nextConfig = {
   // Example: images: { domains: ['example.com'] },
   // Example: experimental: { serverActions: true }, // If using Server Actions
   // === End of custom configurations ===
+  images: {
+    domains: ["img.youtube.com"],
+  },
 };
 
 // Export the configuration object using CommonJS syntax

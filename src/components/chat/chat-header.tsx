@@ -9,12 +9,8 @@ export function ChatHeader({
   subtitle,
   className = "",
 }: ChatHeaderProps) {
-
-
   return (
-    <div
-      className={`p-4 bg-transparent text-white ${className}`}
-    >
+    <div className={`p-4 bg-transparent text-white ${className}`}>
       <div className="flex items-center justify-between">
         <div className="flex-1 flex flex-col items-center space-y-1.5">
           <h2 className="text-lg font-semibold text-white text-center">
@@ -30,7 +26,6 @@ export function ChatHeader({
           {/* Back button moved to TopProgressPanel */}
         </div>
       </div>
-
     </div>
   );
 }

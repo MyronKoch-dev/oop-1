@@ -22,7 +22,10 @@ import {
   parseAI,
   // Import other parsing functions if created
 } from "@/lib/parsing";
-import { determinePath, getFinalRecommendationIntro } from "@/lib/pathDetermination"; // Added getFinalRecommendationIntro
+import {
+  determinePath,
+  getFinalRecommendationIntro,
+} from "@/lib/pathDetermination"; // Added getFinalRecommendationIntro
 import { saveOnboardingResponse } from "@/lib/supabase";
 import { OnboardingData, SessionState } from "@/lib/types"; // Ensure all needed types are imported
 
@@ -93,7 +96,10 @@ function isBatchContactPayload(obj: unknown): obj is BatchContactPayload {
  * Reduces code duplication and ensures consistency in responses
  */
 function createResponsePayload(
-  params: Partial<OnboardingResponsePayload> & { sessionId: string; currentQuestionIndex: number }
+  params: Partial<OnboardingResponsePayload> & {
+    sessionId: string;
+    currentQuestionIndex: number;
+  },
 ): OnboardingResponsePayload {
   // Create payload with required fields
   const payload: OnboardingResponsePayload = {
@@ -111,8 +117,10 @@ function createResponsePayload(
 
   // Add optional fields only if they exist
   if (params.newSessionId) payload.newSessionId = params.newSessionId;
-  if (params.conditionalTextInputLabel) payload.conditionalTextInputLabel = params.conditionalTextInputLabel;
-  if (params.conditionalTriggerValue) payload.conditionalTriggerValue = params.conditionalTriggerValue;
+  if (params.conditionalTextInputLabel)
+    payload.conditionalTextInputLabel = params.conditionalTextInputLabel;
+  if (params.conditionalTriggerValue)
+    payload.conditionalTriggerValue = params.conditionalTriggerValue;
   if (params.fieldErrors) payload.fieldErrors = params.fieldErrors;
 
   return payload;
@@ -174,7 +182,8 @@ export async function POST(request: NextRequest) {
             sessionId: newId,
             newSessionId: newId, // Send the *new* ID back
             currentQuestionIndex: 0,
-            nextQuestion: firstQuestion?.text ?? "Error: Cannot load first question.",
+            nextQuestion:
+              firstQuestion?.text ?? "Error: Cannot load first question.",
             inputMode: firstQuestion?.inputMode ?? "text",
             options: firstQuestion?.options ?? [],
             conditionalTextInputLabel: firstQuestion?.conditionalTextInputLabel,
@@ -182,7 +191,7 @@ export async function POST(request: NextRequest) {
             isFinalQuestion: isFinalQuestion(0),
             error: "Your session expired. Please start again.",
             haltFlow: false, // Allow restart
-          })
+          }),
         );
       }
       // Session retrieved successfully
@@ -284,9 +293,10 @@ export async function POST(request: NextRequest) {
                 createResponsePayload({
                   sessionId: currentSessionId,
                   currentQuestionIndex: currentQuestionIndex,
-                  error: "A valid email address is required. Please refresh to start over.",
+                  error:
+                    "A valid email address is required. Please refresh to start over.",
                   haltFlow: true, // Signal frontend to stop
-                })
+                }),
               );
             } else {
               // --- Proceed with NULL/default for other fields ---
@@ -313,12 +323,13 @@ export async function POST(request: NextRequest) {
               nextQuestion: questionDetail.text,
               inputMode: questionDetail.inputMode,
               options: questionDetail.options ?? [],
-              conditionalTextInputLabel: questionDetail.conditionalTextInputLabel,
+              conditionalTextInputLabel:
+                questionDetail.conditionalTextInputLabel,
               conditionalTriggerValue: questionDetail.conditionalTriggerValue,
               isFinalQuestion: isFinalQuestion(currentQuestionIndex),
               error: questionDetail.rePromptMessage, // Send re-prompt message
               haltFlow: false,
-            })
+            }),
           );
         }
 
@@ -539,7 +550,7 @@ export async function POST(request: NextRequest) {
         recommendedPathDescription, // Added
         secondRecommendedPath,
         secondRecommendedPathUrl,
-        secondRecommendedPathDescription // Added
+        secondRecommendedPathDescription, // Added
       } = determinePath(finalData);
       finalData.recommendedPath = recommendedPath;
       finalData.recommendedPathUrl = recommendedPathUrl;
@@ -577,12 +588,12 @@ export async function POST(request: NextRequest) {
               recommendedPathDescription, // Added
               secondRecommendedPath,
               secondRecommendedPathUrl,
-              secondRecommendedPathDescription // Added
+              secondRecommendedPathDescription, // Added
             },
             error: `Completed, but profile saving failed: ${dbSaveError}. Your data has been preserved for retry.`,
             // Add a property to indicate this is a save retry scenario
             haltFlow: false,
-          })
+          }),
         );
       }
 
@@ -596,7 +607,7 @@ export async function POST(request: NextRequest) {
       const introductoryMessage = getFinalRecommendationIntro(
         finalData.name,
         recommendedPath,
-        finalData.goal
+        finalData.goal,
       );
 
       return NextResponse.json(
@@ -611,10 +622,10 @@ export async function POST(request: NextRequest) {
             recommendedPathDescription, // Added
             secondRecommendedPath,
             secondRecommendedPathUrl,
-            secondRecommendedPathDescription // Added
+            secondRecommendedPathDescription, // Added
           },
           error: null,
-        })
+        }),
       );
     }
 
@@ -645,7 +656,7 @@ export async function POST(request: NextRequest) {
         conditionalTextInputLabel: nextQuestionDetail.conditionalTextInputLabel,
         conditionalTriggerValue: nextQuestionDetail.conditionalTriggerValue,
         isFinalQuestion: isFinalQuestion(nextQuestionIndex),
-      })
+      }),
     );
   } catch (error) {
     console.error(

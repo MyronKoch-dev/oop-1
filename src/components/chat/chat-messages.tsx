@@ -160,9 +160,7 @@ export function ChatMessages({
                 >
                   {/* Avatar only for assistant messages */}
                   {message.role === "assistant" && (
-                    <Avatar
-                      className="h-8 w-8 flex items-center justify-center bg-[#2a2a2a] dark:bg-[#2a2a2a]"
-                    >
+                    <Avatar className="h-8 w-8 flex items-center justify-center bg-[#2a2a2a] dark:bg-[#2a2a2a]">
                       <img
                         src="https://avatars.githubusercontent.com/u/86694044?s=200&v=4"
                         alt="Andromeda Bot"
@@ -176,23 +174,26 @@ export function ChatMessages({
                       // Render error/warning messages in red if they match known patterns
                       <Card
                         className={`p-3 border-none ${message.role === "assistant" &&
-                          (message.content
-                            .toLowerCase()
-                            .includes("please provide a valid") ||
-                            message.content.toLowerCase().includes("error") ||
-                            message.content.toLowerCase().includes("required") ||
-                            message.content.toLowerCase().includes("sorry"))
-                          ? "bg-red-900/80 text-red-200" // Red style for warnings/errors
-                          : message.role === "user"
-                            ? "bg-[#1a2b4a] text-[#6bbbff]"
-                            : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white"
+                            (message.content
+                              .toLowerCase()
+                              .includes("please provide a valid") ||
+                              message.content.toLowerCase().includes("error") ||
+                              message.content
+                                .toLowerCase()
+                                .includes("required") ||
+                              message.content.toLowerCase().includes("sorry"))
+                            ? "bg-red-900/80 text-red-200" // Red style for warnings/errors
+                            : message.role === "user"
+                              ? "bg-[#1a2b4a] text-[#6bbbff]"
+                              : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white"
                           } ${message.isLoading ? "animate-pulse" : ""}`}
                       >
-                        {/* Display message content with clickable links and name replacement */}
-                        {renderMessageContent(
-                          message.content,
-                          message.role === "assistant" ? userName : undefined,
-                        )}
+                        {/* Display message content with clickable links and name replacement - hide if finalResult exists */}
+                        {!message.finalResult &&
+                          renderMessageContent(
+                            message.content,
+                            message.role === "assistant" ? userName : undefined,
+                          )}
 
                         {/* Render URL as a button if present */}
                         {message.url && (
@@ -218,10 +219,99 @@ export function ChatMessages({
                               Retry Saving Your Data
                             </Button>
                             <p className="text-sm mt-2 text-gray-400">
-                              We had trouble saving your data, but your session is still active.
-                              Click the button above to try again.
+                              We had trouble saving your data, but your session
+                              is still active. Click the button above to try
+                              again.
                             </p>
                           </div>
+                        )}
+
+                        {/* Render the RecommendationPanel directly inside the chat bubble if finalResult exists */}
+                        {message.finalResult && (
+                          <RecommendationPanel
+                            pathName={message.finalResult?.recommendedPath}
+                            pathDescription={
+                              message.finalResult?.recommendedPathDescription
+                            }
+                            pathLink={
+                              message.finalResult?.recommendedPath ===
+                                "Ambassador"
+                                ? "/ambassador"
+                                : undefined
+                            }
+                            secondPathName={
+                              message.finalResult?.secondRecommendedPath
+                            }
+                            secondPathDescription={
+                              message.finalResult
+                                ?.secondRecommendedPathDescription
+                            }
+                            userName={userName}
+                            appUrl="https://app.testnet.andromedaprotocol.io"
+                            goToAppButtonText="Explore Andromeda Platform"
+                            onGetStarted={() => {
+                              console.log(
+                                `Opening primary path URL: ${message.finalResult?.recommendedPathUrl}`,
+                              );
+                              // Check if URL is absolute or relative
+                              const primaryUrl =
+                                message.finalResult?.recommendedPathUrl || "";
+                              if (primaryUrl.startsWith("http")) {
+                                window.open(primaryUrl, "_blank");
+                              } else {
+                                // For relative URLs, navigate within the application
+                                window.location.href = primaryUrl;
+                              }
+                            }}
+                            onSecondPathSelected={
+                              message.finalResult?.secondRecommendedPath
+                                ? () => {
+                                  const secondaryPathName =
+                                    message.finalResult
+                                      ?.secondRecommendedPath;
+                                  let targetUrl =
+                                    message.finalResult
+                                      ?.secondRecommendedPathUrl || "";
+
+                                  // Determine the correct internal route based on the path name
+                                  switch (secondaryPathName) {
+                                    case "Ambassador":
+                                      targetUrl = "/ambassador";
+                                      break;
+                                    case "Visionaries":
+                                      targetUrl = "/visionaries";
+                                      break;
+                                    case "Hackers":
+                                      targetUrl = "/hackers";
+                                      break;
+                                    case "Contractors":
+                                      targetUrl = "/contractors";
+                                      break;
+                                    case "Explorer":
+                                      targetUrl = "/explorer";
+                                      break;
+                                    case "AI Navigators":
+                                      targetUrl = "/ai-navigators";
+                                      break;
+                                    // If it's not a known internal path, use the provided URL and check if external
+                                    default:
+                                      if (targetUrl.startsWith("http")) {
+                                        window.open(targetUrl, "_blank");
+                                        return; // Exit the function after opening external link
+                                      }
+                                      // If it's not a known path and not an external URL, assume it's a relative internal path
+                                      break;
+                                  }
+
+                                  console.log(
+                                    `Navigating to secondary path: ${targetUrl}`,
+                                  );
+                                  // Navigate within the application for internal routes
+                                  window.location.href = targetUrl;
+                                }
+                                : undefined
+                            }
+                          />
                         )}
 
                         {/* Render buttons inside the chat bubble if options are provided for an assistant message */}
@@ -237,7 +327,9 @@ export function ChatMessages({
                                 // Use selectedValues only if currentQuestionIndex is a number
                                 const selectedValues =
                                   typeof currentQuestionIndex === "number"
-                                    ? multiSelectAnswers[currentQuestionIndex] || []
+                                    ? multiSelectAnswers[
+                                    currentQuestionIndex
+                                    ] || []
                                     : [];
                                 const isSelected = selectedValues.includes(
                                   option.value,
@@ -247,7 +339,8 @@ export function ChatMessages({
                                 const isDisabled =
                                   conditionalInputOpen ||
                                   !isActiveMessage ||
-                                  (isActiveMessage && selectedButtonValue !== null);
+                                  (isActiveMessage &&
+                                    selectedButtonValue !== null);
 
                                 // Styling classes for disabled buttons
                                 const disabledClasses = !isActiveMessage
@@ -256,7 +349,8 @@ export function ChatMessages({
 
                                 // Check if this button is currently highlighted via keyboard
                                 const isHighlighted =
-                                  isActiveMessage && highlightedButtonIndex === index;
+                                  isActiveMessage &&
+                                  highlightedButtonIndex === index;
 
                                 // Apply highlight style if this button is being pressed via keyboard
                                 const highlightClasses = isHighlighted
@@ -281,16 +375,20 @@ export function ChatMessages({
                                       flex items-center gap-2
                                     `}
                                   >
-                                    <span className={`
+                                    <span
+                                      className={`
                                       w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold border-2 shadow-sm
                                       ${isSelected
-                                        ? "bg-white text-blue-500 border-gray-300"
-                                        : "bg-gray-200 text-gray-700 border-gray-300"
-                                      }
-                                    `}>
-                                      {option.label.match(/^\d+/) ? option.label.match(/^\d+/)?.[0] : index + 1}
+                                          ? "bg-white text-blue-500 border-gray-300"
+                                          : "bg-gray-200 text-gray-700 border-gray-300"
+                                        }
+                                    `}
+                                    >
+                                      {option.label.match(/^\d+/)
+                                        ? option.label.match(/^\d+/)?.[0]
+                                        : index + 1}
                                     </span>
-                                    {option.label.replace(/^\d+\.\s*/, '')}
+                                    {option.label.replace(/^\d+\.\s*/, "")}
                                   </Button>
                                 );
                               })}
@@ -298,90 +396,6 @@ export function ChatMessages({
                           )}
                       </Card>
                     )}
-
-                    {message.finalResult != null ? ( // Condition changed to only check for finalResult
-                      (() => {
-                        // Debug info to console
-                        console.log("Recommended paths data:", {
-                          primary: {
-                            path: message.finalResult?.recommendedPath,
-                            url: message.finalResult?.recommendedPathUrl
-                          },
-                          secondary: {
-                            path: message.finalResult?.secondRecommendedPath,
-                            url: message.finalResult?.secondRecommendedPathUrl
-                          }
-                        });
-
-                        return (
-                          <RecommendationPanel
-                            pathName={message.finalResult?.recommendedPath}
-                            pathDescription={message.finalResult?.recommendedPathDescription}
-                            pathLink={message.finalResult?.recommendedPath === "Ambassador" ? "/ambassador" : undefined}
-                            secondPathName={message.finalResult?.secondRecommendedPath}
-                            secondPathDescription={message.finalResult?.secondRecommendedPathDescription}
-                            userName={userName}
-                            appUrl="https://app.testnet.andromedaprotocol.io"
-                            goToAppButtonText="Explore Andromeda Platform"
-                            onGetStarted={() => {
-                              console.log(
-                                `Opening primary path URL: ${message.finalResult?.recommendedPathUrl}`
-                              );
-                              // Check if URL is absolute or relative
-                              const primaryUrl = message.finalResult?.recommendedPathUrl || '';
-                              if (primaryUrl.startsWith('http')) {
-                                window.open(primaryUrl, "_blank");
-                              } else {
-                                // For relative URLs, navigate within the application
-                                window.location.href = primaryUrl;
-                              }
-                            }}
-                            onSecondPathSelected={
-                              message.finalResult?.secondRecommendedPath
-                                ? () => {
-                                  const secondaryPathName = message.finalResult?.secondRecommendedPath;
-                                  let targetUrl = message.finalResult?.secondRecommendedPathUrl || '';
-
-                                  // Determine the correct internal route based on the path name
-                                  switch (secondaryPathName) {
-                                    case "Ambassador":
-                                      targetUrl = "/ambassador";
-                                      break;
-                                    case "Visionaries":
-                                      targetUrl = "/visionaries";
-                                      break;
-                                    case "Hackers":
-                                      targetUrl = "/hackers";
-                                      break;
-                                    case "Contractors":
-                                      targetUrl = "/contractors";
-                                      break;
-                                    case "Explorer":
-                                      targetUrl = "/explorer";
-                                      break;
-                                    case "AI Navigators":
-                                      targetUrl = "/ai-navigators";
-                                      break;
-                                    // If it's not a known internal path, use the provided URL and check if external
-                                    default:
-                                      if (targetUrl.startsWith('http')) {
-                                        window.open(targetUrl, "_blank");
-                                        return; // Exit the function after opening external link
-                                      }
-                                      // If it's not a known path and not an external URL, assume it's a relative internal path
-                                      break;
-                                  }
-
-                                  console.log(`Navigating to secondary path: ${targetUrl}`);
-                                  // Navigate within the application for internal routes
-                                  window.location.href = targetUrl;
-                                }
-                                : undefined
-                            }
-                          />
-                        );
-                      })()
-                    ) : null}
                   </div>
                 </div>
               </div>

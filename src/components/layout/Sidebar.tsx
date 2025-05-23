@@ -82,8 +82,6 @@ const resourceNavItems: NavItem[] = [
   },
 ];
 
-
-
 // Action items for the bottom section
 const actionItems: NavItem[] = [
   {
@@ -169,8 +167,12 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   // State variables for collapsible sections with original logic
   const [showTools, setShowTools] = useState(false);
-  const [showResources, setShowResources] = useState(() => resourceNavItems.some((item) => item.href === pathname));
-  const [showPath, setShowPath] = useState(() => actionItems.some((item) => item.href === pathname));
+  const [showResources, setShowResources] = useState(() =>
+    resourceNavItems.some((item) => item.href === pathname),
+  );
+  const [showPath, setShowPath] = useState(() =>
+    actionItems.some((item) => item.href === pathname),
+  );
   const [showAgent, setShowAgent] = useState(false);
 
   // Open the section containing the current path on mount
@@ -369,8 +371,6 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               })}
             </div>
           </div>
-
-
         </nav>
 
         {/* Agents section at bottom */}

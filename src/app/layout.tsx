@@ -10,10 +10,10 @@ import { SidebarContext } from "@/context/SidebarContext";
 
 // Load Poppins with multiple weights for better typography
 const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-poppins',
-  display: 'swap',
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-poppins",
+  display: "swap",
 });
 
 const geistSans = Geist({
@@ -84,10 +84,8 @@ export default function RootLayout({
 
             <Sidebar isOpen={isLeftSidebarOpen} onClose={toggleLeftSidebar} />
 
-
-
             <main
-              className={`flex justify-center transition-all duration-300 ease-in-out lg:pl-64 ${"lg:pr-0"} ${(isLeftSidebarOpen) && isMobile ? "opacity-50 blur-sm pointer-events-none" : ""}`}
+              className={`flex justify-center transition-all duration-300 ease-in-out lg:pl-64 ${"lg:pr-0"} ${isLeftSidebarOpen && isMobile ? "opacity-50 blur-sm pointer-events-none" : ""}`}
             >
               {children}
             </main>

@@ -1,154 +1,220 @@
-.panel {
-  background: var(--card);
-  color: var(--card-foreground);
-  border-radius: var(--radius-xl);
-  padding: 32px 40px;
-  max-width: 600px;
-  /* Increased from 420px */
-  margin: 40px auto;
-  box-shadow: 0 4px 24px var(--color-border);
-  text-align: center;
-  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+/* Main content container - no background since it's inside chat bubble */
+.recommendationContent {
+  width: 100%;
+  padding: 0;
+  font-family:
+    var(--font-poppins),
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
 }
 
-.panel h2 {
-  /* "Congratulations!" */
-  margin-top: 0;
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 16px;
-  /* Added consistent bottom margin */
-  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-}
-
-/* Targets the "Welcome..." paragraph immediately after h2 */
-.panel>h2+p {
-  margin-top: 0;
-  /* h2 has bottom margin */
+/* Congratulations message styling */
+.congratsMessage {
   margin-bottom: 24px;
-  font-size: 1rem;
-  /* Ensure consistent font size for intro text */
-  color: var(--muted-foreground);
-  /* Slightly lighter than default for emphasis */
-  line-height: 1.6;
-  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
-.path {
-  /* Path name like "Hacker" or "AI Navigator" */
-  font-size: 1.3rem;
+.congratsMessage p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--foreground);
+}
+
+/* Horizontal card layout */
+.pathCards {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.pathCard {
+  width: 320px;
+  height: 280px;
+  border-radius: 12px;
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.pathCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.pathCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 24px 24px 0 24px;
+}
+
+.pathName {
+  font-size: 1.4rem;
   font-weight: 600;
-  color: var(--accent);
-  margin: 24px 0 8px 0;
-  /* Increased top margin, reduced bottom before description */
-  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: #333;
+  margin: 0;
+  line-height: 1.3;
 }
 
-.highlight {
-  color: var(--primary);
+.cardIcon {
+  width: 16px;
+  height: 16px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 3px;
+  flex-shrink: 0;
 }
 
-/* Yellow highlight for path names */
-.yellowHighlight {
-  color: #f8e16c;
-  /* Bright yellow color */
-  font-weight: 700;
-  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+.pathCardContent {
+  padding: 16px 24px 24px 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.getStartedBtn {
-  /* Primary "Get Started" button */
-  background: var(--primary);
-  color: var(--primary-foreground);
+.pathDescription {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #555;
+  margin: 0 0 20px 0;
+  flex-grow: 1;
+}
+
+.selectButton {
+  background: #333;
+  color: white;
   border: none;
-  border-radius: var(--radius);
-  padding: 16px 36px;
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin: 24px 0;
-  cursor: pointer;
-  transition: background 0.2s;
-  display: inline-block;
-  /* Ensure it respects margins properly */
-  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-}
-
-.getStartedBtn:hover {
-  background: var(--primary);
-  opacity: 0.9;
-}
-
-.secondPath {
-  /* Container for the secondary path recommendation */
-  margin-top: 32px;
-  padding-top: 24px;
-  border-top: 1px solid var(--border);
-  margin-bottom: 32px;
-  /* Added space after this section */
-}
-
-/* Text within secondPath like "We also think..." */
-.secondPath>p:first-child {
-  margin-bottom: 8px;
-  /* Space before the second path name */
-  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-}
-
-
-.secondaryBtn {
-  /* Used for "Explore This Path" and "Explore Andromeda Platform" */
-  background: var(--secondary);
-  color: var(--secondary-foreground);
-  border: none;
-  border-radius: var(--radius);
+  border-radius: 8px;
   padding: 12px 24px;
   font-size: 1rem;
-  font-weight: 600;
-  /* Added for consistency */
+  font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s ease;
+  text-decoration: none;
   display: inline-block;
-  /* Ensure it respects margins properly */
-  /* Vertical margins are handled by mt-X utility in JSX or specific context */
-  /* e.g. "Explore This Path" button will have margin from its parent .secondPath's structure */
-  /* e.g. "Explore Andromeda Platform" has mt-4 in JSX */
-  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-}
-
-.secondaryBtn:hover {
-  background: var(--secondary);
-  opacity: 0.9;
-}
-
-.thanks {
-  /* "We hope this gives you..." paragraph */
-  margin: 32px 0 16px 0;
-  font-size: 1rem;
-  color: var(--muted-foreground);
-  line-height: 1.6;
-  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-}
-
-.panel h3 {
-  /* "WELCOME TO ANDROMEDA" heading */
-  display: block;
+  font-family: inherit;
   width: 100%;
-  margin: 24px 0 16px 0;
-  /* Adjusted top margin for more space */
-  font-size: 1.3rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  text-align: center;
 }
 
-.description {
-  /* Text description for a recommended path */
-  margin: 0 auto 24px auto;
-  /* Centered text, margin below before button */
+.selectButton:hover {
+  background: #444;
+}
+
+/* Indicator dots */
+.indicators {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--muted-foreground);
+  opacity: 0.3;
+  transition: opacity 0.2s ease;
+}
+
+.activeDot {
+  background: var(--primary);
+  opacity: 1;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.reminderText {
   font-size: 0.9rem;
   color: var(--muted-foreground);
-  line-height: 1.6;
-  max-width: 90%;
-  /* Prevent descriptions from being too wide */
-  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  margin: 0 0 16px 0;
+  line-height: 1.5;
+}
+
+.encouragement {
+  font-size: 1rem;
+  color: var(--foreground);
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+}
+
+.commandCenter {
+  font-size: 0.9rem;
+  color: var(--foreground);
+  margin: 0 0 16px 0;
+}
+
+.commandCenterButton {
+  background: var(--muted);
+  color: var(--muted-foreground);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+  font-family: inherit;
+}
+
+.commandCenterButton:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .pathCards {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .pathCard {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    min-height: 240px;
+  }
+
+  .congratsMessage p {
+    font-size: 0.9rem;
+  }
+
+  .pathName {
+    font-size: 1.3rem;
+  }
+}
+
+/* Ensure proper aspect ratio and layout */
+@media (min-width: 769px) {
+  .pathCards {
+    justify-content: center;
+  }
+
+  .pathCard {
+    flex-shrink: 0;
+  }
 }

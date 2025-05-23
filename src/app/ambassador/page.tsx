@@ -19,7 +19,6 @@ export default function AmbassadorPage() {
             Become an Andromeda Ambassador! Help grow the community, spread the
             word, and earn rewards. Explore the resources below to get started.
           </p>
-
         </div>
         <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6 mb-8 text-center">
           <a

@@ -93,7 +93,9 @@ export function ChatContainer({
   const hasSuccessfullyStartedConversation = useRef(false);
 
   // Add a key state to force remount of the ChatInput component
-  const [chatInputKey, setChatInputKey] = useState<string>(`input-${Date.now()}`);
+  const [chatInputKey, setChatInputKey] = useState<string>(
+    `input-${Date.now()}`,
+  );
 
   // Add history state to track previous answers
   const [questionHistory, setQuestionHistory] = useState<{
@@ -121,10 +123,12 @@ export function ChatContainer({
 
   // Load messages from localStorage on mount if conversation is complete
   useEffect(() => {
-    const savedMessages = localStorage.getItem("andromeda-onboarding-conversation");
+    const savedMessages = localStorage.getItem(
+      "andromeda-onboarding-conversation",
+    );
     const savedComplete = localStorage.getItem("andromeda-onboarding-complete");
     const savedHasOpenedSidebar = localStorage.getItem(
-      "andromeda-onboarding-sidebar-opened"
+      "andromeda-onboarding-sidebar-opened",
     );
 
     const mounted = { current: true };
@@ -135,7 +139,9 @@ export function ChatContainer({
 
     // Add this condition to prevent re-initialization when we already have messages
     if (messages.length > 0) {
-      console.log("Messages already exist, skipping initialization from localStorage");
+      console.log(
+        "Messages already exist, skipping initialization from localStorage",
+      );
       return;
     }
 
@@ -153,14 +159,18 @@ export function ChatContainer({
           const userNameMessage = parsedMessages.find(
             (msg: ChatMessage) =>
               msg.role === "user" &&
-              parsedMessages[parsedMessages.indexOf(msg) - 1]?.content?.includes("What should I call you")
+              parsedMessages[
+                parsedMessages.indexOf(msg) - 1
+              ]?.content?.includes("What should I call you"),
           );
 
           if (userNameMessage) {
             setUserName(userNameMessage.content);
           }
           hasSuccessfullyStartedConversation.current = true; // Mark as started if loaded complete
-          console.log("Loaded completed conversation from localStorage, hasSuccessfullyStartedConversation set to true.");
+          console.log(
+            "Loaded completed conversation from localStorage, hasSuccessfullyStartedConversation set to true.",
+          );
         }
       } catch (e) {
         console.error("Error parsing saved messages:", e);
@@ -178,7 +188,9 @@ export function ChatContainer({
           initializeChat();
         }
       } else {
-        console.log("No saved complete conversation, but hasSuccessfullyStartedConversation is true, skipping initializeChat.");
+        console.log(
+          "No saved complete conversation, but hasSuccessfullyStartedConversation is true, skipping initializeChat.",
+        );
       }
     }
 
@@ -190,7 +202,10 @@ export function ChatContainer({
   // Effect to save conversation when complete
   useEffect(() => {
     if (isComplete && messages.length > 0) {
-      localStorage.setItem("andromeda-onboarding-conversation", JSON.stringify(messages));
+      localStorage.setItem(
+        "andromeda-onboarding-conversation",
+        JSON.stringify(messages),
+      );
       localStorage.setItem("andromeda-onboarding-complete", "true");
     }
   }, [isComplete, messages]);
@@ -205,15 +220,21 @@ export function ChatContainer({
 
   // Start the conversation by fetching the first question
   const startConversation = async () => {
-    console.log("startConversation called", { currentFlagState: hasSuccessfullyStartedConversation.current });
+    console.log("startConversation called", {
+      currentFlagState: hasSuccessfullyStartedConversation.current,
+    });
     if (hasSuccessfullyStartedConversation.current) {
-      console.log("Skipping startConversation as it has already successfully started.");
+      console.log(
+        "Skipping startConversation as it has already successfully started.",
+      );
       return;
     }
 
     // Original guard, can be kept as a secondary check or removed if the ref is trusted
     if (messages.length > 1) {
-      console.log("Skipping startConversation - messages already exist (length check)");
+      console.log(
+        "Skipping startConversation - messages already exist (length check)",
+      );
       return;
     }
 
@@ -245,14 +266,16 @@ export function ChatContainer({
       const data: OnboardingResponsePayload = await response.json();
 
       if (!mounted.current) {
-        console.log("Component unmounted during API response parsing, aborting");
+        console.log(
+          "Component unmounted during API response parsing, aborting",
+        );
         return;
       }
 
       console.log("Received API response:", {
         sessionId: data.sessionId,
         nextQuestion: !!data.nextQuestion,
-        inputMode: data.inputMode
+        inputMode: data.inputMode,
       });
 
       setSessionId(data.sessionId);
@@ -274,7 +297,9 @@ export function ChatContainer({
           },
         ]);
         hasSuccessfullyStartedConversation.current = true; // Mark as successfully started
-        console.log("startConversation: First question added, hasSuccessfullyStartedConversation set to true.");
+        console.log(
+          "startConversation: First question added, hasSuccessfullyStartedConversation set to true.",
+        );
       } else {
         // If no next question, it didn't "successfully start" in terms of getting Q1.
         // Consider if hasSuccessfullyStartedConversation should remain false or if this is an error state.
@@ -336,7 +361,10 @@ export function ChatContainer({
     // Check if there's an existing sessionId in localStorage
     const existingSessionId = localStorage.getItem("onboarding-session-id");
     if (existingSessionId) {
-      console.log("Found existing sessionId in localStorage:", existingSessionId);
+      console.log(
+        "Found existing sessionId in localStorage:",
+        existingSessionId,
+      );
       setSessionId(existingSessionId);
     } else {
       console.log("No existing sessionId found in localStorage");
@@ -357,11 +385,14 @@ export function ChatContainer({
           {
             id: generateMessageId("assistant"),
             role: "assistant",
-            content: "I'll ask a few quick questions to learn about you. Once I know what you're looking for, I'll guide you to the right place in our community.\n\nReady to get started? 🚀",
+            content:
+              "I'll ask a few quick questions to learn about you. Once I know what you're looking for, I'll guide you to the right place in our community.\n\nReady to get started? 🚀",
           },
         ];
       }
-      console.log("initializeChat: Welcome messages already present or messages not empty; not re-adding welcome.");
+      console.log(
+        "initializeChat: Welcome messages already present or messages not empty; not re-adding welcome.",
+      );
       return prevMessages;
     });
 
@@ -445,7 +476,8 @@ export function ChatContainer({
         {
           id: generateMessageId("assistant"),
           role: "assistant",
-          content: "Something went wrong. Please try again later or contact support.",
+          content:
+            "Something went wrong. Please try again later or contact support.",
         },
       ]);
     } finally {
@@ -454,9 +486,16 @@ export function ChatContainer({
   };
 
   const handleSendMessage = async (message: string) => {
-    console.log("handleSendMessage called", { isProcessing, sessionId, message });
+    console.log("handleSendMessage called", {
+      isProcessing,
+      sessionId,
+      message,
+    });
     if (isProcessing || !sessionId) {
-      console.log("Not processing message due to:", { isProcessing, noSessionId: !sessionId });
+      console.log("Not processing message due to:", {
+        isProcessing,
+        noSessionId: !sessionId,
+      });
       return;
     }
 
@@ -471,11 +510,12 @@ export function ChatContainer({
       const currentMessagesForQuestion = [...messages];
 
       // Update question history
-      setQuestionHistory(prev => {
+      setQuestionHistory((prev) => {
         const updatedHistory = { ...prev };
 
         // Save messages up to this point
-        updatedHistory.messages[currentQuestionIndex] = currentMessagesForQuestion;
+        updatedHistory.messages[currentQuestionIndex] =
+          currentMessagesForQuestion;
 
         // Save the answer for this question
         updatedHistory.answers[currentQuestionIndex] = message;
@@ -655,7 +695,8 @@ export function ChatContainer({
   const latestInteractiveMsgId = (() => {
     // Find the last assistant message with options
     const interactiveMessages = messages.filter(
-      (msg) => msg.role === "assistant" && msg.options && msg.options.length > 0,
+      (msg) =>
+        msg.role === "assistant" && msg.options && msg.options.length > 0,
     );
     return interactiveMessages.length > 0
       ? interactiveMessages[interactiveMessages.length - 1].id
@@ -736,11 +777,12 @@ export function ChatContainer({
         const currentMessagesForQuestion = [...messages];
 
         // Update question history
-        setQuestionHistory(prev => {
+        setQuestionHistory((prev) => {
           const updatedHistory = { ...prev };
 
           // Save messages up to this point
-          updatedHistory.messages[currentQuestionIndex] = currentMessagesForQuestion;
+          updatedHistory.messages[currentQuestionIndex] =
+            currentMessagesForQuestion;
 
           // Save the answer for this question
           updatedHistory.answers[currentQuestionIndex] = value;
@@ -929,16 +971,17 @@ export function ChatContainer({
       const currentMessagesForQuestion = [...messages];
 
       // Update question history
-      setQuestionHistory(prev => {
+      setQuestionHistory((prev) => {
         const updatedHistory = { ...prev };
 
         // Save messages up to this point
-        updatedHistory.messages[currentQuestionIndex] = currentMessagesForQuestion;
+        updatedHistory.messages[currentQuestionIndex] =
+          currentMessagesForQuestion;
 
         // Save the conditional answer with both button and text
         updatedHistory.answers[currentQuestionIndex] = {
           buttonValue: selectedButtonValue,
-          conditionalText: conditionalText
+          conditionalText: conditionalText,
         };
 
         return updatedHistory;
@@ -1095,14 +1138,16 @@ export function ChatContainer({
     const currentMessagesForQuestion = [...messages];
 
     // Update question history
-    setQuestionHistory(prev => {
+    setQuestionHistory((prev) => {
       const updatedHistory = { ...prev };
 
       // Save messages up to this point
-      updatedHistory.messages[currentQuestionIndex] = currentMessagesForQuestion;
+      updatedHistory.messages[currentQuestionIndex] =
+        currentMessagesForQuestion;
 
       // Save the multiselect answer
-      updatedHistory.answers[currentQuestionIndex] = multiSelectAnswers[currentQuestionIndex];
+      updatedHistory.answers[currentQuestionIndex] =
+        multiSelectAnswers[currentQuestionIndex];
 
       return updatedHistory;
     });
@@ -1257,7 +1302,8 @@ export function ChatContainer({
       !showConditionalInput
     ) {
       const currentOptions =
-        messages.find((msg) => msg.id === latestInteractiveMsgId)?.options || [];
+        messages.find((msg) => msg.id === latestInteractiveMsgId)?.options ||
+        [];
 
       const handleKeyDown = (event: KeyboardEvent) => {
         // Map keys 1-9 to options 0-8 (array indices)
@@ -1304,7 +1350,11 @@ export function ChatContainer({
 
   // Handle going back to the previous question
   const handleBack = useCallback(() => {
-    if (currentQuestionIndex === null || currentQuestionIndex <= 0 || isProcessing) {
+    if (
+      currentQuestionIndex === null ||
+      currentQuestionIndex <= 0 ||
+      isProcessing
+    ) {
       return; // Can't go back from first question or when processing
     }
 
@@ -1330,12 +1380,14 @@ export function ChatContainer({
 
       // If there were conditional text settings, restore them
       if (questionDetail.conditionalTextInputLabel) {
-        setConditionalTriggerValue(questionDetail.conditionalTriggerValue || null);
+        setConditionalTriggerValue(
+          questionDetail.conditionalTriggerValue || null,
+        );
         setConditionalTextInputLabel(questionDetail.conditionalTextInputLabel);
       }
 
       // If this was a multi-select question, make sure we keep the previous selections
-      if (questionDetail.isMultiSelect && typeof prevIndex === 'number') {
+      if (questionDetail.isMultiSelect && typeof prevIndex === "number") {
         // multiSelectAnswers state should already have the right values since we're not clearing it
       }
     }
@@ -1346,9 +1398,11 @@ export function ChatContainer({
     } else {
       // If we don't have saved messages (unusual), at least go back to the question prompt
       // Find the last assistant message before the current set of exchanges
-      const assistantMessages = messages.filter(m => m.role === "assistant");
+      const assistantMessages = messages.filter((m) => m.role === "assistant");
       if (assistantMessages.length >= 2) {
-        const lastIndex = messages.findIndex(m => m.id === assistantMessages[assistantMessages.length - 2].id);
+        const lastIndex = messages.findIndex(
+          (m) => m.id === assistantMessages[assistantMessages.length - 2].id,
+        );
         if (lastIndex >= 0) {
           setMessages(messages.slice(0, lastIndex + 1));
         }
@@ -1369,19 +1423,28 @@ export function ChatContainer({
         },
         body: JSON.stringify({
           sessionId,
-          targetQuestionIndex: prevIndex
+          targetQuestionIndex: prevIndex,
         }),
       })
-        .then(response => {
+        .then((response) => {
           if (!response.ok) {
-            console.error("Failed to synchronize back navigation with server:", response.statusText);
+            console.error(
+              "Failed to synchronize back navigation with server:",
+              response.statusText,
+            );
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.error("Error synchronizing back navigation:", error);
         });
     }
-  }, [currentQuestionIndex, isProcessing, messages, questionHistory.messages, sessionId]);
+  }, [
+    currentQuestionIndex,
+    isProcessing,
+    messages,
+    questionHistory.messages,
+    sessionId,
+  ]);
 
   // Add a handler to reset all chat state and start a new session
   const handleRestart = async () => {
@@ -1426,7 +1489,9 @@ export function ChatContainer({
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to restart: ${response.status} ${response.statusText}`);
+        throw new Error(
+          `Failed to restart: ${response.status} ${response.statusText}`,
+        );
       }
 
       const data = await response.json();
@@ -1447,7 +1512,8 @@ export function ChatContainer({
         {
           id: generateMessageId("assistant"),
           role: "assistant",
-          content: "I'll ask a few quick questions to learn about you. Once I know what you're looking for, I'll guide you to the right place in our community.\n\nReady to get started? 🚀",
+          content:
+            "I'll ask a few quick questions to learn about you. Once I know what you're looking for, I'll guide you to the right place in our community.\n\nReady to get started? 🚀",
         },
         {
           id: generateMessageId("assistant"),
@@ -1459,7 +1525,9 @@ export function ChatContainer({
 
       if (data.nextQuestion) {
         hasSuccessfullyStartedConversation.current = true; // Mark as started after restart
-        console.log("handleRestart: Restart successful, hasSuccessfullyStartedConversation set to true.");
+        console.log(
+          "handleRestart: Restart successful, hasSuccessfullyStartedConversation set to true.",
+        );
       }
 
       // Set input mode
@@ -1479,7 +1547,8 @@ export function ChatContainer({
         {
           id: generateMessageId("assistant"),
           role: "assistant",
-          content: "Sorry, there was an error restarting the chat. Please refresh the page and try again.",
+          content:
+            "Sorry, there was an error restarting the chat. Please refresh the page and try again.",
         },
       ]);
     } finally {
@@ -1492,11 +1561,7 @@ export function ChatContainer({
 
   // Add effect to open the sidebar when completion happens
   useEffect(() => {
-    if (
-      isComplete &&
-      !hasOpenedSidebarAfterCompletion &&
-      messages.length > 5
-    ) {
+    if (isComplete && !hasOpenedSidebarAfterCompletion && messages.length > 5) {
       // Wait a second before opening the sidebar to ensure a smooth experience
       const timer = setTimeout(() => {
         openRightSidebar(); // This is now a no-op function
@@ -1540,10 +1605,8 @@ export function ChatContainer({
 
       <div
         className={`flex flex-col h-full w-full bg-[#1a1a1a] dark:bg-[#1a1a1a] rounded-lg overflow-hidden text-white ${className}`}
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: "100%", height: "100%" }}
       >
-
-
         <div className={`flex-1 overflow-hidden relative`}>
           <ChatMessages
             messages={messages}
@@ -1602,7 +1665,8 @@ export function ChatContainer({
                         },
                       }),
                     });
-                    const data: OnboardingResponsePayload = await response.json();
+                    const data: OnboardingResponsePayload =
+                      await response.json();
                     setMessages((prev) => prev.slice(0, -1)); // Remove loading
                     if (data.error) {
                       setMessages((prev) => [
@@ -1643,7 +1707,10 @@ export function ChatContainer({
                     if (data.newSessionId) {
                       setSessionId(data.newSessionId);
                       // Save new sessionId to localStorage
-                      localStorage.setItem("onboarding-session-id", data.newSessionId);
+                      localStorage.setItem(
+                        "onboarding-session-id",
+                        data.newSessionId,
+                      );
                     }
                   } catch {
                     setMessages((prev) => prev.slice(0, -1));

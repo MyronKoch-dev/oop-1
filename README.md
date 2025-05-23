@@ -22,7 +22,7 @@ project_root/
 │   │   ├── api/
 │   │   │   └── onboarding/
 │   │   │       ├── message/
-│   │   │       │   └── route.ts         # Main API Route Handler 
+│   │   │       │   └── route.ts         # Main API Route Handler
 │   │   │       ├── back/                # API route for going back in the questionnaire
 │   │   │       ├── restart/             # API route for restarting the questionnaire
 │   │   │       └── retry-save/          # API route for retrying failed data saves
@@ -114,7 +114,7 @@ flowchart TD
    npm install -g pnpm
    # Or with corepack (recommended for Node 16.13+)
    corepack enable && corepack prepare pnpm@latest --activate
-   
+
    # Install project dependencies
    pnpm install
    ```
@@ -189,6 +189,7 @@ pnpm test
 ## Technology Stack
 
 - **Frontend:**
+
   - Next.js 15+
   - React 19
   - TypeScript 5
@@ -197,6 +198,7 @@ pnpm test
   - next-themes for dark/light mode
 
 - **Backend:**
+
   - Next.js App Router API Routes
   - Upstash Redis for session management
   - Supabase for data persistence
