@@ -87,111 +87,115 @@ export function ContactInfoForm({
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="bg-[#232b3a] border-none rounded-xl p-6 flex flex-col gap-4"
-      autoComplete="off"
-    >
-      <div>
-        <label
-          className="block text-sm font-medium text-white mb-1"
-          htmlFor="email"
+    <div className="w-full flex justify-center p-4">
+      <div className="w-full max-w-xl">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-[#232b3a] border-none rounded-xl p-6 flex flex-col gap-4"
+          autoComplete="off"
         >
-          Email <span className="text-red-400">*</span>
-        </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          className="w-full px-3 py-2 rounded bg-[#2a2a2a] border-none text-white placeholder:text-gray-400 focus:outline-none focus:ring-0"
-          value={values.email}
-          onChange={handleChange}
-          onKeyDown={(e) => handleKeyDown(e, "email")}
-          disabled={isSubmitting}
-          required
-          ref={emailRef}
-          autoFocus
-        />
-        {errors.email && (
-          <div className="text-red-400 text-xs mt-1">{errors.email}</div>
-        )}
+          <div>
+            <label
+              className="block text-sm font-medium text-white mb-1"
+              htmlFor="email"
+            >
+              Email <span className="text-red-400">*</span>
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              className="w-full px-3 py-2 rounded bg-[#2a2a2a] border-none text-white placeholder:text-gray-400 focus:outline-none focus:ring-0"
+              value={values.email}
+              onChange={handleChange}
+              onKeyDown={(e) => handleKeyDown(e, "email")}
+              disabled={isSubmitting}
+              required
+              ref={emailRef}
+              autoFocus
+            />
+            {errors.email && (
+              <div className="text-red-400 text-xs mt-1">{errors.email}</div>
+            )}
+          </div>
+          <div>
+            <label
+              className="block text-sm font-medium text-white mb-1"
+              htmlFor="github"
+            >
+              GitHub Username (optional)
+            </label>
+            <input
+              id="github"
+              name="github"
+              type="text"
+              className="w-full px-3 py-2 rounded bg-[#2a2a2a] border-none text-white placeholder:text-gray-400 focus:outline-none focus:ring-0"
+              value={values.github}
+              onChange={handleChange}
+              onKeyDown={(e) => handleKeyDown(e, "github")}
+              disabled={isSubmitting}
+              placeholder="e.g. andromedaprotocol"
+              ref={githubRef}
+            />
+            {errors.github && (
+              <div className="text-red-400 text-xs mt-1">{errors.github}</div>
+            )}
+          </div>
+          <div>
+            <label
+              className="block text-sm font-medium text-white mb-1"
+              htmlFor="telegram"
+            >
+              Telegram Handle (optional)
+            </label>
+            <input
+              id="telegram"
+              name="telegram"
+              type="text"
+              className="w-full px-3 py-2 rounded bg-[#2a2a2a] border-none text-white placeholder:text-gray-400 focus:outline-none focus:ring-0"
+              value={values.telegram}
+              onChange={handleChange}
+              onKeyDown={(e) => handleKeyDown(e, "telegram")}
+              disabled={isSubmitting}
+              placeholder="@andromedafanatic"
+              ref={telegramRef}
+            />
+            {errors.telegram && (
+              <div className="text-red-400 text-xs mt-1">{errors.telegram}</div>
+            )}
+          </div>
+          <div>
+            <label
+              className="block text-sm font-medium text-white mb-1"
+              htmlFor="x"
+            >
+              X/Twitter Handle (optional)
+            </label>
+            <input
+              id="x"
+              name="x"
+              type="text"
+              className="w-full px-3 py-2 rounded bg-[#2a2a2a] border-none text-white placeholder:text-gray-400 focus:outline-none focus:ring-0"
+              value={values.x}
+              onChange={handleChange}
+              onKeyDown={(e) => handleKeyDown(e, "x")}
+              disabled={isSubmitting}
+              placeholder="@andromedaprot"
+              ref={xRef}
+            />
+            {errors.x && (
+              <div className="text-red-400 text-xs mt-1">{errors.x}</div>
+            )}
+          </div>
+          <button
+            type="submit"
+            className="w-full mt-2 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white font-semibold transition disabled:opacity-60 border-none"
+            disabled={isSubmitting}
+          >
+            Submit Contact Info
+          </button>
+        </form>
       </div>
-      <div>
-        <label
-          className="block text-sm font-medium text-white mb-1"
-          htmlFor="github"
-        >
-          GitHub Username (optional)
-        </label>
-        <input
-          id="github"
-          name="github"
-          type="text"
-          className="w-full px-3 py-2 rounded bg-[#2a2a2a] border-none text-white placeholder:text-gray-400 focus:outline-none focus:ring-0"
-          value={values.github}
-          onChange={handleChange}
-          onKeyDown={(e) => handleKeyDown(e, "github")}
-          disabled={isSubmitting}
-          placeholder="e.g. andromedaprotocol"
-          ref={githubRef}
-        />
-        {errors.github && (
-          <div className="text-red-400 text-xs mt-1">{errors.github}</div>
-        )}
-      </div>
-      <div>
-        <label
-          className="block text-sm font-medium text-white mb-1"
-          htmlFor="telegram"
-        >
-          Telegram Handle (optional)
-        </label>
-        <input
-          id="telegram"
-          name="telegram"
-          type="text"
-          className="w-full px-3 py-2 rounded bg-[#2a2a2a] border-none text-white placeholder:text-gray-400 focus:outline-none focus:ring-0"
-          value={values.telegram}
-          onChange={handleChange}
-          onKeyDown={(e) => handleKeyDown(e, "telegram")}
-          disabled={isSubmitting}
-          placeholder="@andromedafanatic"
-          ref={telegramRef}
-        />
-        {errors.telegram && (
-          <div className="text-red-400 text-xs mt-1">{errors.telegram}</div>
-        )}
-      </div>
-      <div>
-        <label
-          className="block text-sm font-medium text-white mb-1"
-          htmlFor="x"
-        >
-          X/Twitter Handle (optional)
-        </label>
-        <input
-          id="x"
-          name="x"
-          type="text"
-          className="w-full px-3 py-2 rounded bg-[#2a2a2a] border-none text-white placeholder:text-gray-400 focus:outline-none focus:ring-0"
-          value={values.x}
-          onChange={handleChange}
-          onKeyDown={(e) => handleKeyDown(e, "x")}
-          disabled={isSubmitting}
-          placeholder="@andromedaprot"
-          ref={xRef}
-        />
-        {errors.x && (
-          <div className="text-red-400 text-xs mt-1">{errors.x}</div>
-        )}
-      </div>
-      <button
-        type="submit"
-        className="w-full mt-2 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white font-semibold transition disabled:opacity-60 border-none"
-        disabled={isSubmitting}
-      >
-        Submit Contact Info
-      </button>
-    </form>
+    </div>
   );
 }
