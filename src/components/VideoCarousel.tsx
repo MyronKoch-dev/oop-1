@@ -62,7 +62,7 @@ const VideoCarousel: React.FC<VideoCarouselProps> = ({
     return (
         <div className="bg-[#2a2a2a] rounded-lg p-6">
             <h3 className="text-xl font-bold text-white mb-4">
-                📹 Videos & Video Guides
+                Videos & Video Guides
             </h3>
             <p className="text-gray-400 mb-6">
                 Just starting with Web3? Check out how Andromeda OS (aOS) makes it super easy to launch smart, scalable dApps without needing to code your own smart contracts!

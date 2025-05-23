@@ -566,12 +566,9 @@ export default async function ContractorsPage() {
         <div className="w-1/4 space-y-6">
           {/* Docs Section */}
           <div className="bg-[#2a2a2a] rounded-lg p-4">
-            <h3 className="text-lg font-bold text-white mb-3">📚 Explore the Docs</h3>
+            <h3 className="text-lg font-bold text-white mb-3">Docs</h3>
             <p className="text-gray-400 text-sm mb-3">
-              Want to know how aOS actually works? Our docs walk you through every ADO, with step-by-step guides for building everything from NFT marketplaces to crowdfunds and DAOs.
-            </p>
-            <p className="text-gray-400 text-sm mb-3">
-              Dive in and start experimenting!
+              Want to learn about aOS? Our docs have simple guides for building NFT marketplaces and DAOs. Dive in!
             </p>
             <a
               href="https://docs.andromedaprotocol.io/guides/guides-and-examples/ado-builder/building-your-first-app"
@@ -579,19 +576,16 @@ export default async function ContractorsPage() {
               rel="noopener noreferrer"
               className="inline-block w-full px-4 py-2 bg-[#333333] text-white rounded-md hover:bg-[#444444] transition-colors text-center text-sm flex items-center justify-center gap-2"
             >
-              Read the Docs
+              View Docs
               <span>→</span>
             </a>
           </div>
 
           {/* Builder Section */}
           <div className="bg-[#2a2a2a] rounded-lg p-4">
-            <h3 className="text-lg font-bold text-white mb-3">🛠 Log On and Start Building</h3>
+            <h3 className="text-lg font-bold text-white mb-3">Builder</h3>
             <p className="text-gray-400 text-sm mb-3">
-              aOS lets you build full-stack Web3 applications fast—using plug-and-play ADOs (Andromeda Digital Objects) for tokens, staking, marketplaces, and more.
-            </p>
-            <p className="text-gray-400 text-sm mb-3">
-              No setup, no code barriers—just log on and launch.
+              New to Web3? Discover how Andromeda OS (aOS) simplifies launching smart dApps without coding your own contracts!
             </p>
             <a
               href="https://app.andromedaprotocol.io/"
@@ -599,7 +593,7 @@ export default async function ContractorsPage() {
               rel="noopener noreferrer"
               className="inline-block w-full px-4 py-2 bg-[#333333] text-white rounded-md hover:bg-[#444444] transition-colors text-center text-sm flex items-center justify-center gap-2"
             >
-              Launch aOS Builder
+              Launch Builder
               <span>→</span>
             </a>
           </div>

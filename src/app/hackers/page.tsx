@@ -138,15 +138,10 @@ export default async function HackersPage() {
           <div className="space-y-8">
             <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6">
               <h3 className="text-xl font-bold text-white mb-4">
-                🛠 Log On and Start Building
+                Builder
               </h3>
               <p className="text-gray-400 mb-4">
-                aOS lets you build full-stack Web3 applications fast—using
-                plug-and-play ADOs (Andromeda Digital Objects) for tokens,
-                staking, marketplaces, and more.
-              </p>
-              <p className="text-gray-400 mb-4">
-                No setup, no code barriers—just log on and launch.
+                New to Web3? Discover how Andromeda OS (aOS) simplifies launching smart dApps without coding your own contracts!
               </p>
               <a
                 href="https://app.andromedaprotocol.io/"
@@ -154,21 +149,16 @@ export default async function HackersPage() {
                 rel="noopener noreferrer"
                 className="inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
               >
-                Launch aOS Builder
+                Launch Builder
               </a>
             </div>
 
             <div className="bg-[#1a1a1a] rounded-lg border border-[#333333] p-6">
               <h3 className="text-xl font-bold text-white mb-4">
-                📚 Explore the Docs
+                Docs
               </h3>
               <p className="text-gray-400 mb-4">
-                Want to know how aOS actually works? Our docs walk you through
-                every ADO, with step-by-step guides for building everything from
-                NFT marketplaces to crowdfunds and DAOs.
-              </p>
-              <p className="text-gray-400 mb-4">
-                Dive in and start experimenting!
+                Want to learn about aOS? Our docs have simple guides for building NFT marketplaces and DAOs. Dive in!
               </p>
               <a
                 href="https://docs.andromedaprotocol.io/guides/guides-and-examples/ado-builder/building-your-first-app"
@@ -176,7 +166,7 @@ export default async function HackersPage() {
                 rel="noopener noreferrer"
                 className="inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
               >
-                Read the Docs
+                View Docs
               </a>
             </div>
           </div>
