@@ -4,7 +4,6 @@ import { IssueCard } from "@/components/cards/IssueCard";
 import { IssueCardSkeleton } from "@/components/cards/IssueCardSkeleton";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { MissionCard } from "@/components/cards/MissionCard";
-import { MissionProgress } from "@/components/ui/MissionProgress";
 
 export const metadata = {
   title: "Contractor Hub | Andromeda Protocol",
@@ -110,8 +109,8 @@ export default async function ContractorsPage() {
       <div className="mb-16">
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-3xl font-bold text-white">Your Missions</h2>
-          <div className="text-right">
-            <span className="text-gray-400 text-sm font-medium">
+          <div className="bg-gray-800/50 px-4 py-2 rounded-full">
+            <span className="text-gray-300 text-sm font-medium">
               1 of {missions.length} completed
             </span>
           </div>
@@ -129,9 +128,6 @@ export default async function ContractorsPage() {
             <MissionCard key={mission.id} mission={mission} />
           ))}
         </div>
-
-        {/* Mission Progress */}
-        <MissionProgress currentStep={1} totalSteps={missions.length} />
 
         {/* Action Buttons Section */}
         <div className="mt-8 flex flex-wrap gap-4 justify-center">

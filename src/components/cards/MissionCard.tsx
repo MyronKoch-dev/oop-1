@@ -96,22 +96,6 @@ export function MissionCard({ mission }: MissionCardProps) {
           <h3 className="text-lg font-bold text-gray-900 mb-1 leading-tight">
             {mission.title}
           </h3>
-
-          {/* Progress bar for in-progress missions */}
-          {mission.status === "in-progress" && mission.progress && (
-            <div className="mb-2 max-w-md">
-              <div className="flex justify-between text-xs text-gray-800 mb-1">
-                <span className="font-medium">Progress</span>
-                <span className="font-bold">{mission.progress}%</span>
-              </div>
-              <div className="w-full bg-white/50 rounded-full h-2 border border-white/30">
-                <div
-                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${mission.progress}%` }}
-                />
-              </div>
-            </div>
-          )}
         </div>
       </div>
 
