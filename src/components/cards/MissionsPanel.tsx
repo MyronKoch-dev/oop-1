@@ -37,9 +37,6 @@ export function MissionsPanel({ missions }: MissionsPanelProps) {
             if (newCompleted.size === missions.length && !prev.has(missionId)) {
                 // Trigger celebration
                 setShowCelebration(true);
-
-                // Auto-hide celebration after 6 seconds
-                setTimeout(() => setShowCelebration(false), 6000);
             }
 
             return newCompleted;
@@ -57,32 +54,67 @@ export function MissionsPanel({ missions }: MissionsPanelProps) {
 
     return (
         <div className="mb-16 relative">
-            {/* CSS-based Celebration Animation */}
+            <style dangerouslySetInnerHTML={{
+                __html: `
+                    .mission-scroll::-webkit-scrollbar {
+                        width: 8px;
+                    }
+                    .mission-scroll::-webkit-scrollbar-track {
+                        background: #1F2937;
+                        border-radius: 4px;
+                    }
+                    .mission-scroll::-webkit-scrollbar-thumb {
+                        background: #4B5563;
+                        border-radius: 4px;
+                    }
+                    .mission-scroll::-webkit-scrollbar-thumb:hover {
+                        background: #6B7280;
+                    }
+                `
+            }} />
+            {/* Clean Professional Celebration */}
             {showCelebration && (
-                <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
-                    {/* Floating Emojis Animation */}
-                    <div className="absolute inset-0 overflow-hidden">
-                        <div className="animate-bounce delay-100 absolute top-20 left-1/4 text-4xl">🎉</div>
-                        <div className="animate-bounce delay-200 absolute top-32 right-1/4 text-4xl">✨</div>
-                        <div className="animate-bounce delay-300 absolute top-16 left-1/3 text-3xl">🚀</div>
-                        <div className="animate-bounce delay-400 absolute top-28 right-1/3 text-3xl">⭐</div>
-                        <div className="animate-bounce delay-500 absolute top-24 left-1/5 text-3xl">🎊</div>
-                        <div className="animate-bounce delay-600 absolute top-36 right-1/5 text-3xl">💫</div>
-                        <div className="animate-pulse delay-700 absolute top-20 left-2/3 text-4xl">🌟</div>
-                        <div className="animate-pulse delay-800 absolute top-32 right-2/3 text-4xl">🎆</div>
-                    </div>
-
-                    {/* Central Congratulations Message */}
-                    <div className="bg-gradient-to-r from-green-400 via-green-500 to-green-600 text-white px-12 py-8 rounded-3xl shadow-2xl transform animate-pulse border-4 border-green-300">
-                        <div className="text-center">
-                            <div className="text-4xl font-bold mb-4 animate-bounce">🎉 CONGRATULATIONS! 🎉</div>
-                            <div className="text-xl mb-2">You&apos;ve completed all your missions!</div>
-                            <div className="text-lg opacity-90 mb-4">Welcome to the Andromeda ecosystem!</div>
-                            <div className="flex justify-center space-x-2 text-2xl animate-bounce">
-                                <span className="animate-spin">⭐</span>
-                                <span className="animate-pulse">🚀</span>
-                                <span className="animate-spin">⭐</span>
+                <div
+                    className="fixed inset-0 flex items-center justify-center z-50 bg-black/60 backdrop-blur-sm"
+                    onClick={() => setShowCelebration(false)}
+                >
+                    <div
+                        className="bg-gradient-to-br from-gray-900 to-black border border-green-500/30 rounded-2xl p-8 max-w-md mx-4 shadow-2xl"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="text-center space-y-4">
+                            <div className="w-16 h-16 mx-auto bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center">
+                                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
                             </div>
+
+                            <h3 className="text-2xl font-bold text-white">
+                                Congratulations! 🎯
+                            </h3>
+
+                            <p className="text-gray-300 text-lg">
+                                You&apos;ve completed all missions.
+                            </p>
+
+                            <p className="text-green-400 font-semibold text-xl">
+                                Welcome to the Andromeda ecosystem!
+                            </p>
+
+                            <div className="pt-4 border-t border-gray-700">
+                                <p className="text-gray-400 text-sm">
+                                    You&apos;re now ready to build amazing dApps with aOS
+                                </p>
+                            </div>
+
+                            <a
+                                href="https://app.andromedaprotocol.io"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-block mt-4 px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 font-medium"
+                            >
+                                Continue Building
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -93,8 +125,8 @@ export function MissionsPanel({ missions }: MissionsPanelProps) {
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-3xl font-bold text-white">Your Missions</h2>
                     <div className={`px-4 py-2 rounded-full transition-all duration-500 ${allCompleted
-                            ? "bg-gradient-to-r from-green-500 to-green-600 animate-pulse shadow-lg shadow-green-500/30"
-                            : "bg-gray-800/50"
+                        ? "bg-gradient-to-r from-green-500 to-green-600 animate-pulse shadow-lg shadow-green-500/30"
+                        : "bg-gray-800/50"
                         }`}>
                         <span className={`text-sm font-medium transition-colors duration-300 ${allCompleted ? "text-white" : "text-[#99a1af]"
                             }`}>
@@ -112,14 +144,25 @@ export function MissionsPanel({ missions }: MissionsPanelProps) {
                 </p>
 
                 {/* Scrollable missions container - fixed height to show 4 tasks */}
-                <div className="h-96 overflow-y-auto space-y-4 pr-2">
-                    {updatedMissions.map((mission) => (
-                        <MissionCard
-                            key={mission.id}
-                            mission={mission}
-                            onComplete={markMissionComplete}
-                        />
-                    ))}
+                <div className="relative">
+                    <div
+                        className="h-96 overflow-y-auto space-y-4 pr-2 mission-scroll"
+                        style={{
+                            scrollbarWidth: 'thin',
+                            scrollbarColor: '#4B5563 #1F2937'
+                        }}
+                    >
+                        {updatedMissions.map((mission) => (
+                            <MissionCard
+                                key={mission.id}
+                                mission={mission}
+                                onComplete={markMissionComplete}
+                            />
+                        ))}
+                    </div>
+
+                    {/* Bottom fade gradient to indicate more content */}
+                    <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#2a2a2a] to-transparent pointer-events-none"></div>
                 </div>
             </div>
         </div>
