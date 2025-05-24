@@ -53,7 +53,7 @@ export function ChatInput({
   conditionalTextVisible = false,
   setConditionalText,
   onConditionalTextSubmit,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   currentQuestionIndex,
   conditionalTextInputLabel,
   showConfirmButton = false,
