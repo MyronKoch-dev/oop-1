@@ -241,10 +241,21 @@ export function ChatContainer({
     // Check localStorage for session initialization state (persists across remounts)
     const sessionInitialized = localStorage.getItem("chat-session-initialized");
     const existingSessionId = localStorage.getItem("onboarding-session-id");
+    const savedMessages = localStorage.getItem(
+      "andromeda-onboarding-conversation",
+    );
+    const savedComplete = localStorage.getItem("andromeda-onboarding-complete");
 
-    if (sessionInitialized && existingSessionId) {
+    // If we have an active session but the conversation isn't complete,
+    // let it continue normally (don't skip API call)
+    if (
+      sessionInitialized &&
+      existingSessionId &&
+      savedComplete === "true" &&
+      savedMessages
+    ) {
       console.log(
-        "Session already initialized in localStorage, skipping API call",
+        "Completed session found in localStorage, conversation already finished",
       );
       hasSuccessfullyStartedConversation.current = true;
       setSessionId(existingSessionId);
@@ -319,8 +330,7 @@ export function ChatContainer({
       // Save sessionId to localStorage
       if (data.sessionId) {
         localStorage.setItem("onboarding-session-id", data.sessionId);
-        // Mark session as initialized to prevent duplicate API calls
-        localStorage.setItem("chat-session-initialized", "true");
+        // Don't mark as initialized yet - wait until user actually starts answering
       }
       setCurrentQuestionIndex(data.currentQuestionIndex);
 
@@ -541,9 +551,11 @@ export function ChatContainer({
       return;
     }
 
-    // If answering the name question (index 0), store the name
+    // If answering the name question (index 0), store the name and mark session as active
     if (currentQuestionIndex === 0) {
       setUserName(message.trim());
+      // Mark session as initialized now that user has started answering
+      localStorage.setItem("chat-session-initialized", "true");
     }
 
     // Save current state before proceeding to next question
@@ -811,6 +823,11 @@ export function ChatContainer({
         setConditionalTextVisible(false);
         setShowConditionalInput(false);
         setSelectedButtonValue(value);
+      }
+
+      // Mark session as initialized when user starts answering (first interaction)
+      if (currentQuestionIndex === 0) {
+        localStorage.setItem("chat-session-initialized", "true");
       }
 
       // Save current state before proceeding to next question
