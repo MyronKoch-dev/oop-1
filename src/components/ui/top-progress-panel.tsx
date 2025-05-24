@@ -30,7 +30,7 @@ export function TopProgressPanel({
 
   return (
     <div
-      className={`fixed top-4 right-4 z-50 flex items-center gap-3 ${className}`}
+      className={`fixed top-6 left-16 right-4 lg:top-4 lg:left-auto lg:right-4 z-50 flex items-center justify-end lg:justify-start gap-3 ${className}`}
     >
       {/* Back button */}
       {onBack && currentStep > 0 && !isComplete && (
