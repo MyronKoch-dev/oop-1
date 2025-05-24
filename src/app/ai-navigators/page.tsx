@@ -6,6 +6,7 @@ import { Metadata } from "next";
 import { GitHubIssue } from "@/lib/github";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Button } from "@/components/ui/button";
+import { CommandCenterNav } from "@/components/layout/CommandCenterNav";
 import {
   Lightbulb,
   Wrench, // For AI Tooling & Frameworks
@@ -134,6 +135,9 @@ export default async function AINavigatorsPage() {
 
   return (
     <main className="container mx-auto p-4 md:p-6 max-w-7xl min-h-screen bg-[#1a1a1a] text-white">
+      {/* Command Center Navigation */}
+      <CommandCenterNav />
+
       <div className="mb-12 text-center">
         <h1 className="text-4xl font-bold text-white mb-3">
           🧭 AI Navigator 🧭

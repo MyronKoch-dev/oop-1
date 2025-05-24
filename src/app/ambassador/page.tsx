@@ -1,5 +1,6 @@
 import { Award } from "lucide-react";
 import { DiveInSection } from "@/components/ui/DiveInSection";
+import { CommandCenterNav } from "@/components/layout/CommandCenterNav";
 
 export const metadata = {
   title: "Ambassador Path | Andromeda Protocol",
@@ -11,6 +12,9 @@ export default function AmbassadorPage() {
   return (
     <main className="min-h-screen bg-[#1a1a1a] text-white">
       <div className="container mx-auto p-4 md:p-6">
+        {/* Command Center Navigation */}
+        <CommandCenterNav />
+
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold mb-4 text-white flex items-center justify-center gap-2">
             🏆 <Award className="w-8 h-8 text-[#e74c3c]" /> Ambassador 🏆
