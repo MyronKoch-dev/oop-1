@@ -6,6 +6,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { MissionCard } from "@/components/cards/MissionCard";
 import VideoCarousel from "@/components/VideoCarousel";
 import { CampaignModal } from "@/components/CampaignModal";
+import { CommandCenterNav } from "@/components/layout/CommandCenterNav";
 
 export const metadata = {
   title: "Contractor Hub | Andromeda Protocol",
@@ -163,17 +164,8 @@ export default async function ContractorsPage() {
 
   return (
     <main className="container mx-auto p-4 md:p-6 max-w-full min-h-screen bg-[#1a1a1a] text-white">
-      {/* Header Section */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white mb-2">
-          Contractor Command Center
-        </h1>
-        <div className="bg-[#1a1a1a] rounded-lg p-6 mb-12 w-full">
-          <p className="text-gray-400">
-            Hey there! Welcome to our learning dashboard. This is your go-to spot for missions, guides, and docs -- everything you need to dive into Andromeda smoothly.
-          </p>
-        </div>
-      </div>
+      {/* Command Center Navigation */}
+      <CommandCenterNav />
 
       {/* Main Layout: Left Content + Right Sidebar */}
       <div className="flex gap-6">

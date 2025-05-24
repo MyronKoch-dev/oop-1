@@ -3,6 +3,7 @@ import { fetchGitHubIssues } from "@/lib/github";
 import { IssueCard } from "@/components/cards/IssueCard";
 import { IssueCardSkeleton } from "@/components/cards/IssueCardSkeleton";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { CommandCenterNav } from "@/components/layout/CommandCenterNav";
 
 export const metadata = {
   title: "Hacker Hub | Andromeda Protocol",
@@ -33,6 +34,9 @@ export default async function HackersPage() {
 
   return (
     <main className="container mx-auto p-4 md:p-6 max-w-7xl min-h-screen bg-[#1a1a1a] text-white">
+      {/* Command Center Navigation */}
+      <CommandCenterNav />
+
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold text-white mb-2">
           🔥 Hacker Command Center 🔥

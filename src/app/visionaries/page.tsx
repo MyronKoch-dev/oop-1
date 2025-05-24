@@ -7,6 +7,7 @@ import {
   Sparkles,
 } from "lucide-react"; // Added MessageSquare, Sparkles, removed FilePlus2
 import { Button } from "@/components/ui/button";
+import { CommandCenterNav } from "@/components/layout/CommandCenterNav";
 
 export const metadata: Metadata = {
   title: "Visionary Path | Andromeda Protocol",
@@ -20,6 +21,9 @@ export default function VisionariesPage() {
 
   return (
     <main className="container mx-auto p-4 md:p-6 max-w-7xl min-h-screen bg-[#1a1a1a] text-white">
+      {/* Command Center Navigation */}
+      <CommandCenterNav />
+
       {/* Removed redundant inner container div */}
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold mb-4 text-white">💡 Visionary 💡</h1>
