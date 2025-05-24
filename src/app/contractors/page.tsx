@@ -3,7 +3,7 @@ import { fetchGitHubIssues } from "@/lib/github";
 import { IssueCard } from "@/components/cards/IssueCard";
 import { IssueCardSkeleton } from "@/components/cards/IssueCardSkeleton";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
-import { MissionCard } from "@/components/cards/MissionCard";
+import { MissionsPanel } from "@/components/cards/MissionsPanel";
 import VideoCarousel from "@/components/VideoCarousel";
 import { CampaignModal } from "@/components/CampaignModal";
 import { CommandCenterNav } from "@/components/layout/CommandCenterNav";
@@ -172,30 +172,7 @@ export default async function ContractorsPage() {
         {/* Left Content - Main Content Area (3/4 width) */}
         <div className="w-3/4">
           {/* Your Missions Section */}
-          <div className="mb-16">
-            {/* Missions Panel Container */}
-            <div className="bg-[#2a2a2a] rounded-lg p-6 mb-8">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-3xl font-bold text-white">Your Missions</h2>
-                <div className="bg-gray-800/50 px-4 py-2 rounded-full">
-                  <span className="text-[#99a1af] text-sm font-medium">
-                    1 of {missions.length} completed
-                  </span>
-                </div>
-              </div>
-
-              <p className="text-[#99a1af] mb-6">
-                Just starting with Web3? Check out how Andromeda OS (aOS) makes it super easy to launch smart, scalable dApps without needing to code your own smart contracts!
-              </p>
-
-              {/* Scrollable missions container - fixed height to show ~4 tasks */}
-              <div className="h-80 overflow-y-auto space-y-4 pr-2">
-                {missions.map((mission) => (
-                  <MissionCard key={mission.id} mission={mission} />
-                ))}
-              </div>
-            </div>
-          </div>
+          <MissionsPanel missions={missions} />
 
           {/* Videos Section */}
           <div className="mb-16">

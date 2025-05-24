@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle, Clock, CircleDot, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
 interface Mission {
@@ -17,20 +17,8 @@ interface Mission {
 
 interface MissionCardProps {
   mission: Mission;
+  onComplete?: (missionId: number) => void;
 }
-
-const getStatusIcon = (status: Mission["status"]) => {
-  switch (status) {
-    case "completed":
-      return <CheckCircle className="w-5 h-5 text-green-700" />;
-    case "in-progress":
-      return <Clock className="w-5 h-5 text-blue-700" />;
-    case "pending":
-      return <CircleDot className="w-5 h-5 text-gray-700" />;
-    default:
-      return <CircleDot className="w-5 h-5 text-gray-700" />;
-  }
-};
 
 const getStatusText = (status: Mission["status"]) => {
   switch (status) {
@@ -58,16 +46,18 @@ const getCardStyles = (status: Mission["status"]) => {
   }
 };
 
-const getTypeStyles = () => {
-  // All badges now use the same gray styling
-  return "bg-black/20 text-gray-700";
-};
-
-export function MissionCard({ mission }: MissionCardProps) {
+export function MissionCard({ mission, onComplete }: MissionCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
+  };
+
+  const handleMarkComplete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (mission.status !== "completed" && onComplete) {
+      onComplete(mission.id);
+    }
   };
 
   return (
@@ -82,24 +72,12 @@ export function MissionCard({ mission }: MissionCardProps) {
     >
       {/* Main content - always visible */}
       <div className="flex items-center justify-between">
-        {/* Left side - Content */}
-        <div className="flex-1 flex items-center gap-4">
-          {/* Status icon and type badge */}
-          <div className="flex items-center gap-3">
-            {getStatusIcon(mission.status)}
-            <span
-              className={`text-xs px-3 py-1 rounded-full font-semibold uppercase tracking-wide ${getTypeStyles()}`}
-            >
-              {mission.type}
-            </span>
-          </div>
-
-          {/* Title */}
-          <div className="flex-1">
-            <h3 className="text-lg text-gray-900 leading-tight">
-              {mission.title}
-            </h3>
-          </div>
+        {/* Left side - Title */}
+        <div className="flex-1">
+          <h3 className={`text-lg text-gray-900 leading-tight ${mission.status === "completed" ? "line-through" : ""
+            }`}>
+            {mission.title}
+          </h3>
         </div>
 
         {/* Right side - Action button and dropdown */}
@@ -109,12 +87,12 @@ export function MissionCard({ mission }: MissionCardProps) {
               py-2 px-6 rounded-full text-sm font-semibold 
               transition-colors duration-200
               ${mission.status === "completed"
-                ? "bg-green-500 text-white cursor-default"
+                ? "bg-[#00c951] text-white cursor-default"
                 : "bg-black/20 text-black hover:bg-black/30"
               }
             `}
             disabled={mission.status === "completed"}
-            onClick={(e) => e.stopPropagation()}
+            onClick={handleMarkComplete}
           >
             {getStatusText(mission.status)}
           </button>
@@ -145,13 +123,6 @@ export function MissionCard({ mission }: MissionCardProps) {
               🔗 {mission.linkText}
             </a>
           )}
-        </div>
-      )}
-
-      {/* Completion date (if completed) */}
-      {mission.completionDate && (
-        <div className="absolute bottom-2 right-6 text-xs text-gray-700 font-medium">
-          ✓ Completed: {new Date(mission.completionDate).toLocaleDateString()}
         </div>
       )}
     </div>
