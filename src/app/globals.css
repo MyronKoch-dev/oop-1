@@ -270,7 +270,7 @@ div[data-chat-container="main"] {
 }
 
 /* Target the specific container structure */
-main>div[data-chat-container="main"] {
+main > div[data-chat-container="main"] {
   max-width: 80% !important;
   width: 100% !important;
 }

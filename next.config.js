@@ -18,4 +18,3 @@ const nextConfig = {
 
 // Export the configuration object using CommonJS syntax
 module.exports = nextConfig;
-

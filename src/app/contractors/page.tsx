@@ -13,8 +13,9 @@ export const metadata = {
   description:
     "Browse open contractor bidding opportunities and access building tools with Andromeda Protocol",
   other: {
-    "Content-Security-Policy": "img-src 'self' data: https://img.youtube.com https://i.ytimg.com https://*.youtube.com;"
-  }
+    "Content-Security-Policy":
+      "img-src 'self' data: https://img.youtube.com https://i.ytimg.com https://*.youtube.com;",
+  },
 };
 
 // Video data for the carousel
@@ -23,20 +24,22 @@ const generalVideos = [
     id: "1",
     title: "aOS Introduction Video",
     url: "https://youtu.be/RhQfZnurGXo",
-    description: "New to modular Web3 development? Learn about the Andromeda Operating System."
+    description:
+      "New to modular Web3 development? Learn about the Andromeda Operating System.",
   },
   {
     id: "2",
     title: "aOS Core Concepts",
     url: "https://youtu.be/2ktG307EqEA",
-    description: "Understanding the fundamental concepts behind aOS architecture."
+    description:
+      "Understanding the fundamental concepts behind aOS architecture.",
   },
   {
     id: "3",
     title: "Getting Started with aOS",
     url: "https://youtu.be/uvvqX91VFS4",
-    description: "Your first steps into the Andromeda ecosystem."
-  }
+    description: "Your first steps into the Andromeda ecosystem.",
+  },
 ];
 
 const tutorialVideos = [
@@ -44,26 +47,28 @@ const tutorialVideos = [
     id: "4",
     title: "Building Your First App with aOS",
     url: "https://youtu.be/QxMC-cygMaI",
-    description: "Step-by-step tutorial to create your first application on aOS."
+    description:
+      "Step-by-step tutorial to create your first application on aOS.",
   },
   {
     id: "5",
     title: "Advanced aOS Features",
     url: "https://youtu.be/jV9XrStVBog",
-    description: "Explore advanced features and capabilities of the Andromeda OS."
+    description:
+      "Explore advanced features and capabilities of the Andromeda OS.",
   },
   {
     id: "6",
     title: "NFT Marketplace Use Case",
     url: "https://youtu.be/tfY8ni9uJSE",
-    description: "Learn how to build an NFT marketplace using aOS."
+    description: "Learn how to build an NFT marketplace using aOS.",
   },
   {
     id: "7",
     title: "Crowdfunding App",
     url: "https://youtu.be/rOKXu_NNfyk",
-    description: "Create a crowdfunding application with Andromeda tools."
-  }
+    description: "Create a crowdfunding application with Andromeda tools.",
+  },
 ];
 
 // Skeleton grid for loading state
@@ -182,20 +187,18 @@ export default async function ContractorsPage() {
             />
           </div>
 
-
-
-
-
           <div className="mb-8">
             <div className="bg-[#2a2a2a] rounded-lg p-6">
               <h2 className="text-2xl font-bold text-white mb-4">
                 Contractor Bidding
               </h2>
               <p className="text-gray-400 mb-2">
-                Browse these open contractor bidding opportunities with Andromeda Protocol, and apply to any of them.
+                Browse these open contractor bidding opportunities with
+                Andromeda Protocol, and apply to any of them.
               </p>
               <p className="text-gray-400 mb-6">
-                These are tasks designed for skilled contributors to take on contract work.
+                These are tasks designed for skilled contributors to take on
+                contract work.
               </p>
 
               <ErrorBoundary>
@@ -212,9 +215,9 @@ export default async function ContractorsPage() {
                         No Open Contracts Available
                       </h3>
                       <p className="text-gray-400 text-center max-w-md">
-                        There are currently no open contracts available for bidding.
-                        Please check back later or explore other opportunities in the
-                        Andromeda ecosystem.
+                        There are currently no open contracts available for
+                        bidding. Please check back later or explore other
+                        opportunities in the Andromeda ecosystem.
                       </p>
                     </div>
                   )}
@@ -245,7 +248,8 @@ export default async function ContractorsPage() {
           <div className="bg-[#2a2a2a] rounded-lg p-4">
             <h3 className="text-lg font-bold text-white mb-3">Docs</h3>
             <p className="text-gray-400 text-sm mb-3">
-              Want to learn about aOS? Our docs have simple guides for building NFT marketplaces and DAOs. Dive in!
+              Want to learn about aOS? Our docs have simple guides for building
+              NFT marketplaces and DAOs. Dive in!
             </p>
             <a
               href="https://docs.andromedaprotocol.io/guides/guides-and-examples/ado-builder/building-your-first-app"
@@ -262,7 +266,8 @@ export default async function ContractorsPage() {
           <div className="bg-[#2a2a2a] rounded-lg p-4">
             <h3 className="text-lg font-bold text-white mb-3">Builder</h3>
             <p className="text-gray-400 text-sm mb-3">
-              New to Web3? Discover how Andromeda OS (aOS) simplifies launching smart dApps without coding your own contracts!
+              New to Web3? Discover how Andromeda OS (aOS) simplifies launching
+              smart dApps without coding your own contracts!
             </p>
             <a
               href="https://app.andromedaprotocol.io/"
@@ -289,8 +294,9 @@ export default async function ContractorsPage() {
                                radial-gradient(circle at 80% 60%, #7a30a8 1px, transparent 1px),
                                radial-gradient(circle at 50% 10%, #522eaf 1.5px, transparent 1.5px),
                                radial-gradient(circle at 10% 50%, #7a30a8 1px, transparent 1px)`,
-                  backgroundSize: '24px 24px, 32px 32px, 28px 28px, 36px 36px, 20px 20px, 40px 40px',
-                  animationDuration: '117s'
+                  backgroundSize:
+                    "24px 24px, 32px 32px, 28px 28px, 36px 36px, 20px 20px, 40px 40px",
+                  animationDuration: "117s",
                 }}
               ></div>
 
@@ -303,9 +309,10 @@ export default async function ContractorsPage() {
                                radial-gradient(circle at 15% 75%, #7a30a8 1px, transparent 1px),
                                radial-gradient(circle at 85% 65%, #522eaf 2px, transparent 2px),
                                radial-gradient(circle at 55% 15%, #7a30a8 1.5px, transparent 1.5px)`,
-                  backgroundSize: '20px 20px, 28px 28px, 24px 24px, 32px 32px, 16px 16px',
-                  animationDuration: '73s',
-                  animationDirection: 'reverse'
+                  backgroundSize:
+                    "20px 20px, 28px 28px, 24px 24px, 32px 32px, 16px 16px",
+                  animationDuration: "73s",
+                  animationDirection: "reverse",
                 }}
               ></div>
 
@@ -318,9 +325,10 @@ export default async function ContractorsPage() {
                                radial-gradient(circle at 10% 70%, #492ca4 1.5px, transparent 1.5px),
                                radial-gradient(circle at 90% 80%, #7a30a8 1px, transparent 1px),
                                radial-gradient(circle at 60% 10%, #492ca4 1.5px, transparent 1.5px)`,
-                  backgroundSize: '16px 16px, 24px 24px, 20px 20px, 28px 28px, 12px 12px',
-                  animationDuration: '91s',
-                  animationDirection: 'reverse'
+                  backgroundSize:
+                    "16px 16px, 24px 24px, 20px 20px, 28px 28px, 12px 12px",
+                  animationDuration: "91s",
+                  animationDirection: "reverse",
                 }}
               ></div>
 
@@ -332,8 +340,8 @@ export default async function ContractorsPage() {
                                radial-gradient(circle at 70% 30%, #492ca4 1px, transparent 1px),
                                radial-gradient(circle at 20% 80%, #2a2a2a 2px, transparent 2px),
                                radial-gradient(circle at 80% 70%, #492ca4 1px, transparent 1px)`,
-                  backgroundSize: '12px 12px, 20px 20px, 16px 16px, 24px 24px',
-                  animationDuration: '47s'
+                  backgroundSize: "12px 12px, 20px 20px, 16px 16px, 24px 24px",
+                  animationDuration: "47s",
                 }}
               ></div>
 
@@ -345,9 +353,9 @@ export default async function ContractorsPage() {
                                radial-gradient(circle at 65% 15%, #1a1a1a 1.5px, transparent 1.5px),
                                radial-gradient(circle at 35% 75%, #000000 1px, transparent 1px),
                                radial-gradient(circle at 85% 85%, #1a1a1a 1px, transparent 1px)`,
-                  backgroundSize: '18px 18px, 26px 26px, 22px 22px, 30px 30px',
-                  animationDuration: '83s',
-                  animationDirection: 'reverse'
+                  backgroundSize: "18px 18px, 26px 26px, 22px 22px, 30px 30px",
+                  animationDuration: "83s",
+                  animationDirection: "reverse",
                 }}
               ></div>
 
@@ -359,8 +367,8 @@ export default async function ContractorsPage() {
                                radial-gradient(circle at 25% 65%, #1a1a1a 1px, transparent 1px),
                                radial-gradient(circle at 75% 45%, #000000 2px, transparent 2px),
                                radial-gradient(circle at 55% 85%, #1a1a1a 1px, transparent 1px)`,
-                  backgroundSize: '14px 14px, 20px 20px, 16px 16px, 24px 24px',
-                  animationDuration: '39s'
+                  backgroundSize: "14px 14px, 20px 20px, 16px 16px, 24px 24px",
+                  animationDuration: "39s",
                 }}
               ></div>
 
@@ -373,9 +381,10 @@ export default async function ContractorsPage() {
                                radial-gradient(circle at 20% 70%, #1a1a2e 1px, transparent 1px),
                                radial-gradient(circle at 70% 80%, #16213e 1px, transparent 1px),
                                radial-gradient(circle at 50% 30%, #1a1a2e 2px, transparent 2px)`,
-                  backgroundSize: '22px 22px, 30px 30px, 18px 18px, 26px 26px, 34px 34px',
-                  animationDuration: '67s',
-                  animationDirection: 'reverse'
+                  backgroundSize:
+                    "22px 22px, 30px 30px, 18px 18px, 26px 26px, 34px 34px",
+                  animationDuration: "67s",
+                  animationDirection: "reverse",
                 }}
               ></div>
 
@@ -387,8 +396,8 @@ export default async function ContractorsPage() {
                                radial-gradient(circle at 15% 25%, #1f2937 1px, transparent 1px),
                                radial-gradient(circle at 85% 65%, #374151 1px, transparent 1px),
                                radial-gradient(circle at 60% 85%, #1f2937 2px, transparent 2px)`,
-                  backgroundSize: '16px 16px, 24px 24px, 20px 20px, 28px 28px',
-                  animationDuration: '53s'
+                  backgroundSize: "16px 16px, 24px 24px, 20px 20px, 28px 28px",
+                  animationDuration: "53s",
                 }}
               ></div>
 
@@ -401,9 +410,10 @@ export default async function ContractorsPage() {
                                radial-gradient(circle at 45% 75%, #0f172a 2px, transparent 2px),
                                radial-gradient(circle at 85% 45%, #111827 1px, transparent 1px),
                                radial-gradient(circle at 15% 85%, #0f172a 1px, transparent 1px)`,
-                  backgroundSize: '12px 12px, 20px 20px, 16px 16px, 24px 24px, 18px 18px',
-                  animationDuration: '79s',
-                  animationDirection: 'reverse'
+                  backgroundSize:
+                    "12px 12px, 20px 20px, 16px 16px, 24px 24px, 18px 18px",
+                  animationDuration: "79s",
+                  animationDirection: "reverse",
                 }}
               ></div>
 
@@ -415,9 +425,9 @@ export default async function ContractorsPage() {
                                radial-gradient(circle at 75% 25%, #2a2a2a 1.5px, transparent 1.5px),
                                radial-gradient(circle at 25% 75%, #2a2a41 2px, transparent 2px),
                                radial-gradient(circle at 75% 75%, #2a2a2a 1px, transparent 1px)`,
-                  backgroundSize: '8px 8px, 16px 16px, 12px 12px, 20px 20px',
-                  animationDuration: '31s',
-                  animationDirection: 'reverse'
+                  backgroundSize: "8px 8px, 16px 16px, 12px 12px, 20px 20px",
+                  animationDuration: "31s",
+                  animationDirection: "reverse",
                 }}
               ></div>
 
@@ -425,7 +435,8 @@ export default async function ContractorsPage() {
               <div
                 className="absolute top-1/2 left-1/2 w-8 h-8 -translate-x-1/2 -translate-y-1/2 rounded-full animate-pulse"
                 style={{
-                  background: 'radial-gradient(circle, #2a2a2a 0%, transparent 100%)'
+                  background:
+                    "radial-gradient(circle, #2a2a2a 0%, transparent 100%)",
                 }}
               ></div>
 
@@ -438,8 +449,8 @@ export default async function ContractorsPage() {
                           radial-gradient(circle at 60% 40%, #492ca4 1px, transparent 1px),
                           radial-gradient(circle at 40% 80%, #7a30a8 1px, transparent 1px),
                           radial-gradient(circle at 80% 60%, #522eaf 1px, transparent 1px)`,
-                  maskSize: '20px 20px, 24px 24px, 18px 18px, 22px 22px',
-                  animationDuration: '25s'
+                  maskSize: "20px 20px, 24px 24px, 18px 18px, 22px 22px",
+                  animationDuration: "25s",
                 }}
               ></div>
 
@@ -451,21 +462,26 @@ export default async function ContractorsPage() {
                   mask: `radial-gradient(circle at 30% 30%, #522eaf 1.5px, transparent 1.5px),
                           radial-gradient(circle at 70% 50%, #2a2a2a 1.5px, transparent 1.5px),
                           radial-gradient(circle at 50% 70%, #7a30a8 1.5px, transparent 1.5px)`,
-                  maskSize: '16px 16px, 20px 20px, 14px 14px',
-                  animationDuration: '18s',
-                  animationDirection: 'reverse'
+                  maskSize: "16px 16px, 20px 20px, 14px 14px",
+                  animationDuration: "18s",
+                  animationDirection: "reverse",
                 }}
               ></div>
             </div>
 
             {/* Content with relative positioning to stay above background */}
             <div className="relative z-10">
-              <h3 className="text-lg font-bold text-white mb-3">Deploy, Hack and get rewarded!</h3>
+              <h3 className="text-lg font-bold text-white mb-3">
+                Deploy, Hack and get rewarded!
+              </h3>
               <p className="text-gray-300 text-sm mb-3">
-                We&apos;re giving away 1,000 $ANDR for every ADO used in a dApp on aOS!
+                We&apos;re giving away 1,000 $ANDR for every ADO used in a dApp
+                on aOS!
               </p>
               <p className="text-gray-300 text-sm mb-4">
-                Want to dive into coding and tackle some fun challenges with Andromeda Protocol? Check out these open bounties and hacking challenges!
+                Want to dive into coding and tackle some fun challenges with
+                Andromeda Protocol? Check out these open bounties and hacking
+                challenges!
               </p>
               <CampaignModal>
                 <button className="w-full bg-gray-600/40 hover:bg-gray-500/50 text-gray-200 px-4 py-2 rounded-lg text-sm transition-colors mb-3 backdrop-blur-sm">
