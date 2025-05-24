@@ -3,24 +3,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
-  Book,
-  BookOpen,
-  Droplet,
-  Layers,
-  HelpCircle,
   X,
   ExternalLink,
-  Briefcase,
-  Target,
-  Lightbulb,
-  BrainCircuit,
-  Award,
-  Bot,
   ChevronDown,
   ChevronRight,
-  Wrench,
-  Library,
-  Navigation,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
@@ -40,113 +26,79 @@ interface SidebarProps {
   onClose: () => void;
 }
 
-// Split navItems into tools and resources
-const toolNavItems: NavItem[] = [
+const resourceNavItems: NavItem[] = [
+  // Moved from tools section
   {
     href: "https://app.testnet.andromedaprotocol.io/flex-builder",
     label: "Testnet ADO Builder",
-    icon: <Layers className="w-5 h-5" />,
+    icon: <></>,
   },
   {
     href: "https://app.testnet.andromedaprotocol.io/app-builder",
     label: "Testnet App Builder",
-    icon: <Layers className="w-5 h-5" />,
+    icon: <></>,
   },
   {
     href: "https://andromeda-testnet-faucet.vercel.app/",
     label: "ANDR Faucet",
-    icon: <Droplet className="w-5 h-5" />,
+    icon: <></>,
   },
-];
-
-const resourceNavItems: NavItem[] = [
+  // Original resources
   {
     href: "https://docs.andromedaprotocol.io/andromeda",
     label: "Developer Docs",
-    icon: <BookOpen className="w-5 h-5" />,
+    icon: <></>,
   },
   {
     href: "https://docs.andromedaprotocol.io/guides",
     label: "Guides",
-    icon: <Book className="w-5 h-5" />,
+    icon: <></>,
   },
   {
     href: "https://docs.google.com/document/d/11VOKvuXkUryZ5p733af6h0Qgrg0bGl41E9i32QXgLos/edit?usp=sharing",
     label: "ADO Submission FAQ",
-    icon: <HelpCircle className="w-5 h-5" />,
+    icon: <></>,
   },
   {
     href: "https://andromedaprotocol.io",
     label: "Visit our website",
-    icon: <BookOpen className="w-5 h-5" />,
+    icon: <></>,
   },
 ];
 
-// Action items for the bottom section
-const actionItems: NavItem[] = [
-  {
-    href: "/contractors",
-    label: "Contractor",
-    icon: <Briefcase className="w-5 h-5" />,
-  },
-  {
-    href: "/hackers",
-    label: "Hacker",
-    icon: <Target className="w-5 h-5" />,
-  },
-  {
-    href: "/visionaries",
-    label: "Visionary",
-    icon: <Lightbulb className="w-5 h-5" />,
-  },
-  {
-    href: "/ai-navigators",
-    label: "AI Navigator",
-    icon: <BrainCircuit className="w-5 h-5" />,
-  },
-  {
-    href: "/ambassador",
-    label: "Ambassador",
-    icon: <Award className="w-5 h-5" />,
-  },
-  {
-    href: "/explorer",
-    label: "Explorer",
-    icon: <BookOpen className="w-5 h-5" />,
-  },
-];
+
 
 // Agent bots items
 const agentBots: NavItem[] = [
   {
     href: "https://myronkoch-dev.github.io/AndrDocsBot/",
     label: "Docs Bot",
-    icon: <Bot className="w-5 h-5" />,
+    icon: <></>,
   },
   {
     href: "https://myronkoch-dev.github.io/AndrDocsBot/",
     label: "Artist-bot",
-    icon: <Bot className="w-5 h-5" />,
+    icon: <></>,
   },
   {
     href: "https://myronkoch-dev.github.io/AndrDocsBot/",
     label: "Community Catalyst bot",
-    icon: <Bot className="w-5 h-5" />,
+    icon: <></>,
   },
   {
     href: "https://myronkoch-dev.github.io/AndrDocsBot/",
     label: "Dev Advocate bot",
-    icon: <Bot className="w-5 h-5" />,
+    icon: <></>,
   },
   {
     href: "https://myronkoch-dev.github.io/AndrDocsBot/",
     label: "Ecosystem Explorer bot",
-    icon: <Bot className="w-5 h-5" />,
+    icon: <></>,
   },
   {
     href: "https://myronkoch-dev.github.io/AndrDocsBot/",
     label: "Cosmos Helper bot",
-    icon: <Bot className="w-5 h-5" />,
+    icon: <></>,
   },
 ];
 
@@ -166,19 +118,13 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
   }, [isOpen, onClose]);
 
   // State variables for collapsible sections with original logic
-  const [showTools, setShowTools] = useState(false);
   const [showResources, setShowResources] = useState(() =>
     resourceNavItems.some((item) => item.href === pathname),
-  );
-  const [showPath, setShowPath] = useState(() =>
-    actionItems.some((item) => item.href === pathname),
   );
   const [showAgent, setShowAgent] = useState(false);
 
   // Open the section containing the current path on mount
   useEffect(() => {
-    if (actionItems.some((item) => item.href === pathname)) setShowPath(true);
-    if (toolNavItems.some((item) => item.href === pathname)) setShowTools(true);
     if (resourceNavItems.some((item) => item.href === pathname))
       setShowResources(true);
     // If you have agent bots with real links, do the same for showAgent
@@ -224,64 +170,6 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         </div>
 
         <nav className="mt-2 py-2 flex-1 overflow-y-auto">
-          {/* Tools section (collapsible) */}
-          <div>
-            <button
-              className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-white"
-              onClick={() => setShowTools((open) => !open)}
-              aria-expanded={showTools}
-              aria-controls="sidebar-tools-section"
-              tabIndex={0}
-            >
-              <Wrench className="w-4 h-4" /> Tools
-              {showTools ? (
-                <ChevronDown className="w-4 h-4 ml-auto" />
-              ) : (
-                <ChevronRight className="w-4 h-4 ml-auto" />
-              )}
-            </button>
-            <div
-              id="sidebar-tools-section"
-              className={`transition-all duration-400 ease-[cubic-bezier(.4,0,.2,1)] overflow-hidden
-                                ${showTools ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"}`}
-            >
-              {toolNavItems.map((item, index) => {
-                const isActive = item.href === pathname;
-                return (
-                  <a
-                    key={index}
-                    href={item.href}
-                    className={`nav-item flex items-center gap-3 px-4 py-3
-                                            transition-all duration-400 ease-[cubic-bezier(.4,0,.2,1)] rounded-md
-                                            hover:bg-[#232323] hover:text-white hover:scale-105 hover:opacity-90 hover:translate-x-1
-                                            ${isActive ? "bg-[#232323] text-white" : "text-gray-300"}
-                                            ${item.badge ? "cursor-not-allowed opacity-75" : ""}`}
-                    target={item.badge ? undefined : "_blank"}
-                    rel={item.badge ? undefined : "noopener noreferrer"}
-                    onClick={item.badge ? (e) => e.preventDefault() : undefined}
-                  >
-                    {item.icon}
-                    <span>{item.label}</span>
-                    {item.badge ? (
-                      <div className="ml-auto flex items-center gap-1">
-                        <span className="bg-gray-700 text-gray-300 text-[10px] px-1.5 py-0.5 rounded-md flex items-center gap-1">
-                          {item.badge.text}
-                          {item.badge.description && (
-                            <span className="inline-block ml-1 text-[8px] text-gray-400">
-                              {item.badge.description}
-                            </span>
-                          )}
-                        </span>
-                      </div>
-                    ) : (
-                      <ExternalLink className="ml-auto w-4 h-4 opacity-50" />
-                    )}
-                  </a>
-                );
-              })}
-            </div>
-          </div>
-
           {/* Resources section (collapsible) */}
           <div className="mt-4">
             <button
@@ -291,7 +179,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               aria-controls="sidebar-resources-section"
               tabIndex={0}
             >
-              <Library className="w-4 h-4" /> Resources
+              Resources
               {showResources ? (
                 <ChevronDown className="w-4 h-4 ml-auto" />
               ) : (
@@ -325,51 +213,14 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             </div>
           </div>
 
-          {/* Action items section title */}
+          {/* Command Center Link */}
           <div className="mt-4">
-            <button
-              className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-white"
-              onClick={() => setShowPath((open) => !open)}
-              aria-expanded={showPath}
-              aria-controls="sidebar-path-section"
-              tabIndex={0}
+            <a
+              href="/contractors"
+              className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider text-white hover:bg-[#232323] rounded-md transition-colors"
             >
-              <Navigation className="w-4 h-4" /> Command Center
-              {showPath ? (
-                <ChevronDown className="w-4 h-4 ml-auto" />
-              ) : (
-                <ChevronRight className="w-4 h-4 ml-auto" />
-              )}
-            </button>
-            <div
-              id="sidebar-path-section"
-              className={`px-4 space-y-3 mt-2 transition-all duration-400 ease-[cubic-bezier(.4,0,.2,1)] overflow-hidden
-                                ${showPath ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"}`}
-            >
-              {actionItems.map((item, index) => {
-                const isActive = item.href === pathname;
-                return (
-                  <a
-                    key={`action-${index}`}
-                    href={item.href}
-                    className={`block w-full inline-flex items-center justify-start gap-2 px-4 py-2 rounded-md transition-colors
-                                            ${isActive ? "bg-[#333333] text-white" : "bg-[#2a2a2a] text-white hover:bg-[#333333]"}`}
-                    target={item.href.startsWith("/") ? undefined : "_blank"}
-                    rel={
-                      item.href.startsWith("/")
-                        ? undefined
-                        : "noopener noreferrer"
-                    }
-                  >
-                    {item.icon}
-                    <span>{item.label}</span>
-                    {!item.href.startsWith("/") && (
-                      <ExternalLink className="w-4 h-4 opacity-50 ml-auto" />
-                    )}
-                  </a>
-                );
-              })}
-            </div>
+              Command Center
+            </a>
           </div>
         </nav>
 
