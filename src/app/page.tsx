@@ -2,6 +2,7 @@
 "use client"; // REQUIRED: Mark this as a Client Component for state and effects
 
 import React, { useState, useEffect, useMemo } from "react"; // Import React hooks
+import { useRouter } from "next/navigation";
 
 // Import your main ChatContainer component using the correct path alias
 import { ChatContainer } from "@/components/chat/chat-container";
@@ -35,13 +36,50 @@ function useIsSidebarVisible() {
 
 // The main functional component for the home page
 export default function HomePage() {
+  const router = useRouter();
   const isSidebarVisible = useIsSidebarVisible();
+  const [shouldRedirect, setShouldRedirect] = useState<boolean | null>(null);
 
-  // Create a stable instance ID using useMemo to prevent regeneration on re-renders
-  const stableInstanceId = useMemo(
-    () => `andromeda-chat-instance-${Date.now()}`,
-    [],
-  );
+  // Create a truly stable instance ID that only gets set once
+  const stableInstanceId = useMemo(() => {
+    return `andromeda-chat-instance-stable`;
+  }, []);
+
+  // Check if this is a first-time visitor and redirect to welcome page
+  useEffect(() => {
+    // Only run this check on the client side
+    if (typeof window !== "undefined") {
+      const hasVisited = localStorage.getItem("hasVisitedAndromeda");
+
+      if (!hasVisited) {
+        // Mark as visited so they don't see welcome page again
+        localStorage.setItem("hasVisitedAndromeda", "true");
+        setShouldRedirect(true);
+        router.push("/welcome");
+      } else {
+        // User has visited before, don't redirect
+        setShouldRedirect(false);
+      }
+    }
+  }, []); // Remove router dependency to prevent re-runs on navigation
+
+  // Show loading state while checking redirect status
+  if (shouldRedirect === null) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#1a1a1a]">
+        <div className="text-white">Loading...</div>
+      </div>
+    );
+  }
+
+  // Don't render the main content if we're redirecting
+  if (shouldRedirect === true) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#1a1a1a]">
+        <div className="text-white">Redirecting to welcome page...</div>
+      </div>
+    );
+  }
 
   return (
     // Main container with dark theme colors matching Andromeda app - anchored to top on mobile

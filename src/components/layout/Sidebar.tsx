@@ -163,6 +163,19 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         </div>
 
         <nav className="mt-2 py-2 flex-1 overflow-y-auto">
+          {/* Questionnaire Link */}
+          <div className="mt-4">
+            <Link
+              href="/"
+              className={`nav-item flex items-center gap-3 px-4 py-3 ml-4
+                          transition-all duration-400 ease-[cubic-bezier(.4,0,.2,1)] rounded-md
+                          hover:bg-[#232323] hover:text-white hover:scale-105 hover:opacity-90 hover:translate-x-1
+                          ${pathname === "/" ? "bg-[#232323] text-white" : "text-gray-300"}`}
+            >
+              <span>📋 Questionnaire</span>
+            </Link>
+          </div>
+
           {/* Resources section (collapsible) */}
           <div className="mt-4">
             <button

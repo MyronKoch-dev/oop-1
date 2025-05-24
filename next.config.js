@@ -5,7 +5,7 @@
  * This JSDoc comment provides type checking and autocompletion in your editor.
  */
 const nextConfig = {
-  reactStrictMode: true, // This is often enabled by default and recommended. You can uncomment it if needed.
+  reactStrictMode: false, // Temporarily disabled to prevent double mounting during development
   // === Add any other Next.js specific configurations below this line ===
   // Example: images: { domains: ['example.com'] },
   // Example: experimental: { serverActions: true }, // If using Server Actions

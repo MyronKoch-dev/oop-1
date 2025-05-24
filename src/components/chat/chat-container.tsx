@@ -92,6 +92,9 @@ export function ChatContainer({
   // Ref to track if the initial conversation setup has successfully completed
   const hasSuccessfullyStartedConversation = useRef(false);
 
+  // Ref to prevent double initialization during React StrictMode
+  const isInitializing = useRef(false);
+
   // Add a key state to force remount of the ChatInput component
   const [chatInputKey, setChatInputKey] = useState<string>(
     `input-${Date.now()}`,
@@ -123,6 +126,15 @@ export function ChatContainer({
 
   // Load messages from localStorage on mount if conversation is complete
   useEffect(() => {
+    // Prevent double initialization with additional checks
+    if (hasSuccessfullyStartedConversation.current || isInitializing.current) {
+      console.log("Skipping initialization - already started or initializing", {
+        hasStarted: hasSuccessfullyStartedConversation.current,
+        isInitializing: isInitializing.current,
+      });
+      return;
+    }
+
     const savedMessages = localStorage.getItem(
       "andromeda-onboarding-conversation",
     );
@@ -142,6 +154,7 @@ export function ChatContainer({
       console.log(
         "Messages already exist, skipping initialization from localStorage",
       );
+      hasSuccessfullyStartedConversation.current = true; // Mark as started since we have messages
       return;
     }
 
@@ -222,7 +235,39 @@ export function ChatContainer({
   const startConversation = async () => {
     console.log("startConversation called", {
       currentFlagState: hasSuccessfullyStartedConversation.current,
+      isInitializing: isInitializing.current,
     });
+
+    // Check localStorage for session initialization state (persists across remounts)
+    const sessionInitialized = localStorage.getItem("chat-session-initialized");
+    const existingSessionId = localStorage.getItem("onboarding-session-id");
+    const savedMessages = localStorage.getItem(
+      "andromeda-onboarding-conversation",
+    );
+    const savedComplete = localStorage.getItem("andromeda-onboarding-complete");
+
+    // If we have an active session but the conversation isn't complete,
+    // let it continue normally (don't skip API call)
+    if (
+      sessionInitialized &&
+      existingSessionId &&
+      savedComplete === "true" &&
+      savedMessages
+    ) {
+      console.log(
+        "Completed session found in localStorage, conversation already finished",
+      );
+      hasSuccessfullyStartedConversation.current = true;
+      setSessionId(existingSessionId);
+      return;
+    }
+
+    // Prevent double initialization even during StrictMode mounting
+    if (isInitializing.current) {
+      console.log("Already initializing, skipping duplicate call");
+      return;
+    }
+
     if (hasSuccessfullyStartedConversation.current) {
       console.log(
         "Skipping startConversation as it has already successfully started.",
@@ -237,6 +282,9 @@ export function ChatContainer({
       );
       return;
     }
+
+    // Set the initialization lock
+    isInitializing.current = true;
 
     const mounted = { current: true };
     setIsProcessing(true);
@@ -282,6 +330,7 @@ export function ChatContainer({
       // Save sessionId to localStorage
       if (data.sessionId) {
         localStorage.setItem("onboarding-session-id", data.sessionId);
+        // Don't mark as initialized yet - wait until user actually starts answering
       }
       setCurrentQuestionIndex(data.currentQuestionIndex);
 
@@ -329,6 +378,9 @@ export function ChatContainer({
           : "Failed to start the conversation. Please try again.";
       console.error("Error starting conversation:", errorMessage);
     } finally {
+      // Clear the initialization lock
+      isInitializing.current = false;
+
       if (mounted.current) {
         console.log("startConversation complete, clearing isProcessing flag");
         setIsProcessing(false);
@@ -499,9 +551,11 @@ export function ChatContainer({
       return;
     }
 
-    // If answering the name question (index 0), store the name
+    // If answering the name question (index 0), store the name and mark session as active
     if (currentQuestionIndex === 0) {
       setUserName(message.trim());
+      // Mark session as initialized now that user has started answering
+      localStorage.setItem("chat-session-initialized", "true");
     }
 
     // Save current state before proceeding to next question
@@ -769,6 +823,11 @@ export function ChatContainer({
         setConditionalTextVisible(false);
         setShowConditionalInput(false);
         setSelectedButtonValue(value);
+      }
+
+      // Mark session as initialized when user starts answering (first interaction)
+      if (currentQuestionIndex === 0) {
+        localStorage.setItem("chat-session-initialized", "true");
       }
 
       // Save current state before proceeding to next question
@@ -1454,6 +1513,7 @@ export function ChatContainer({
     localStorage.removeItem("andromeda-onboarding-conversation");
     localStorage.removeItem("andromeda-onboarding-complete");
     localStorage.removeItem("onboarding-session-id");
+    localStorage.removeItem("chat-session-initialized"); // Clear session initialization flag
     localStorage.removeItem("andromeda-onboarding-sidebar-opened"); // Clear sidebar state on restart
 
     // Reset all state with a timeout to ensure proper cleanup
@@ -1586,6 +1646,9 @@ export function ChatContainer({
 
       // Reset the conversation started flag to ensure proper initialization if remounted
       hasSuccessfullyStartedConversation.current = false;
+
+      // Reset the initialization lock
+      isInitializing.current = false;
 
       // Update the chatInputKey to ensure a fresh instance if remounted
       setChatInputKey(`input-${Date.now()}`);
