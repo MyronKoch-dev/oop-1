@@ -74,8 +74,11 @@ export function MissionCard({ mission, onComplete }: MissionCardProps) {
       <div className="flex items-center justify-between">
         {/* Left side - Title */}
         <div className="flex-1">
-          <h3 className={`text-lg text-gray-900 leading-tight ${mission.status === "completed" ? "line-through" : ""
-            }`}>
+          <h3
+            className={`text-lg text-gray-900 leading-tight ${
+              mission.status === "completed" ? "line-through" : ""
+            }`}
+          >
             {mission.title}
           </h3>
         </div>
@@ -86,9 +89,10 @@ export function MissionCard({ mission, onComplete }: MissionCardProps) {
             className={`
               py-2 px-6 rounded-full text-sm font-semibold 
               transition-colors duration-200
-              ${mission.status === "completed"
-                ? "bg-[#00c951] text-white cursor-default"
-                : "bg-black/20 text-black hover:bg-black/30"
+              ${
+                mission.status === "completed"
+                  ? "bg-[#00c951] text-white cursor-default"
+                  : "bg-black/20 text-black hover:bg-black/30"
               }
             `}
             disabled={mission.status === "completed"}
@@ -98,8 +102,9 @@ export function MissionCard({ mission, onComplete }: MissionCardProps) {
           </button>
 
           <ChevronDown
-            className={`w-5 h-5 text-gray-700 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""
-              }`}
+            className={`w-5 h-5 text-gray-700 transition-transform duration-200 ${
+              isExpanded ? "rotate-180" : ""
+            }`}
           />
         </div>
       </div>

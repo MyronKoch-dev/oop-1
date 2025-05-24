@@ -2,12 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  X,
-  ExternalLink,
-  ChevronDown,
-  ChevronRight,
-} from "lucide-react";
+import { X, ExternalLink, ChevronDown, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 
@@ -65,8 +60,6 @@ const resourceNavItems: NavItem[] = [
     icon: <></>,
   },
 ];
-
-
 
 // Agent bots items
 const agentBots: NavItem[] = [
