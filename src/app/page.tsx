@@ -56,17 +56,17 @@ export default function HomePage() {
   }
 
   return (
-    // Main container with proper spacing to avoid header collision and prevent bottom cutoff
-    <main className="flex min-h-screen flex-col items-start justify-start p-4 md:p-6 lg:p-8 bg-[#1a1a1a] transition-all pt-20 pb-8">
-      {/* Outer container with proper height calculation to ensure input field is visible */}
+    // Main container optimized for mobile-first design like ChatGPT
+    <main className="flex min-h-screen flex-col items-start justify-start p-2 md:p-4 lg:p-6 bg-[#1a1a1a] transition-all pt-16 pb-2">
+      {/* Chat container with mobile-optimized dimensions */}
       <div
         id="chat-main-container"
-        className="mx-auto h-[75vh] md:h-[80vh] lg:h-[85vh] rounded-xl bg-[#1a1a1a] dark:bg-[#1a1a1a] overflow-hidden mt-4"
+        className="mx-auto h-[85vh] md:h-[88vh] lg:h-[90vh] rounded-lg bg-[#1a1a1a] dark:bg-[#1a1a1a] overflow-hidden mt-2"
         style={{
-          width: "80vw",
-          maxWidth: "80vw",
-          minWidth: "300px",
-          margin: "1rem auto 0 auto",
+          width: "96vw",
+          maxWidth: "96vw",
+          minWidth: "320px",
+          margin: "0.5rem auto 0 auto",
         }}
         data-chat-container="main"
       >

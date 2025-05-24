@@ -247,41 +247,70 @@
   font-weight: 600;
 }
 
-/* Center the chat container now that sidebar is removed */
+/* Center the chat container with mobile-optimized widths like ChatGPT */
 .centered {
-  max-width: 80%;
+  max-width: 96%;
   margin: 0 auto;
   width: 100%;
 }
 
-/* Ensure chat container maintains 80% width even during restarts */
+/* Mobile-first responsive chat container widths */
 [data-chat-container="main"],
-.max-w-\[80\%\] {
-  max-width: 80% !important;
+.max-w-\[96\%\] {
+  max-width: 96% !important;
   width: 100% !important;
 }
 
-/* More aggressive chat container width enforcement */
+/* More aggressive chat container width enforcement with responsive design */
 div[data-chat-container="main"] {
-  max-width: 80% !important;
+  max-width: 96% !important;
   width: 100% !important;
   margin-left: auto !important;
   margin-right: auto !important;
 }
 
-/* Target the specific container structure */
-main > div[data-chat-container="main"] {
-  max-width: 80% !important;
+/* Target the specific container structure with responsive widths */
+main>div[data-chat-container="main"] {
+  max-width: 96% !important;
   width: 100% !important;
 }
 
-/* ID-based targeting for maximum specificity */
+/* ID-based targeting for maximum specificity with mobile-first approach */
 #chat-main-container {
-  width: 80vw !important;
-  max-width: 80vw !important;
-  min-width: 300px !important;
+  width: 96vw !important;
+  max-width: 96vw !important;
+  min-width: 320px !important;
   margin-left: auto !important;
   margin-right: auto !important;
+}
+
+/* Responsive adjustments for larger screens */
+@media (min-width: 768px) {
+  .centered {
+    max-width: 90%;
+  }
+
+  [data-chat-container="main"],
+  div[data-chat-container="main"],
+  main>div[data-chat-container="main"],
+  #chat-main-container {
+    width: 90vw !important;
+    max-width: 90vw !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .centered {
+    max-width: 85%;
+  }
+
+  [data-chat-container="main"],
+  div[data-chat-container="main"],
+  main>div[data-chat-container="main"],
+  #chat-main-container {
+    width: 85vw !important;
+    max-width: 85vw !important;
+  }
 }
 
 /* Removed duplicate HSL-based CSS variables */
