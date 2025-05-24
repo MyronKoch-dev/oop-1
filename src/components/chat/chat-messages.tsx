@@ -145,7 +145,7 @@ export function ChatMessages({
 
       {/* Use Shadcn ScrollArea for the main message list container with dark theme */}
       <ScrollArea
-        className={`h-full w-full px-8 py-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] ${className}`}
+        className={`h-full w-full px-4 md:px-6 lg:px-8 py-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] ${className}`}
       >
         <div className="space-y-4 pb-2 w-full pt-4">
           {/* Map over the messages array to render each message */}
@@ -156,7 +156,7 @@ export function ChatMessages({
                 className={`flex ${message.role === "user" ? "justify-end" : "justify-start"} w-full`}
               >
                 <div
-                  className={`flex gap-3 max-w-[85%] md:max-w-[75%] lg:max-w-[70%] ${message.role === "user" ? "flex-row-reverse" : "flex-row"}`}
+                  className={`flex gap-3 max-w-[95%] md:max-w-[75%] lg:max-w-[70%] ${message.role === "user" ? "flex-row-reverse" : "flex-row"}`}
                 >
                   {/* Avatar only for assistant messages */}
                   {message.role === "assistant" && (
@@ -174,18 +174,18 @@ export function ChatMessages({
                       // Render error/warning messages in red if they match known patterns
                       <Card
                         className={`p-3 border-none ${message.role === "assistant" &&
-                            (message.content
+                          (message.content
+                            .toLowerCase()
+                            .includes("please provide a valid") ||
+                            message.content.toLowerCase().includes("error") ||
+                            message.content
                               .toLowerCase()
-                              .includes("please provide a valid") ||
-                              message.content.toLowerCase().includes("error") ||
-                              message.content
-                                .toLowerCase()
-                                .includes("required") ||
-                              message.content.toLowerCase().includes("sorry"))
-                            ? "bg-red-900/80 text-red-200" // Red style for warnings/errors
-                            : message.role === "user"
-                              ? "bg-[#1a2b4a] text-[#6bbbff]"
-                              : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white"
+                              .includes("required") ||
+                            message.content.toLowerCase().includes("sorry"))
+                          ? "bg-red-900/80 text-red-200" // Red style for warnings/errors
+                          : message.role === "user"
+                            ? "bg-[#1a2b4a] text-[#6bbbff]"
+                            : "bg-[#2a2a2a] dark:bg-[#2a2a2a] text-white"
                           } ${message.isLoading ? "animate-pulse" : ""}`}
                       >
                         {/* Display message content with clickable links and name replacement */}

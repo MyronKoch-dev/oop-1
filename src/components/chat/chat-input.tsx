@@ -53,7 +53,7 @@ export function ChatInput({
   conditionalTextVisible = false,
   setConditionalText,
   onConditionalTextSubmit,
-   
+
   currentQuestionIndex,
   conditionalTextInputLabel,
   showConfirmButton = false,
@@ -324,7 +324,7 @@ export function ChatInput({
 
   return (
     <div
-      className={`px-8 py-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] z-10 ${className}`}
+      className={`px-4 md:px-6 lg:px-8 py-4 bg-[#1a1a1a] dark:bg-[#1a1a1a] z-10 ${className}`}
     >
       {showConfirmButton && (
         <div className="mb-4">
