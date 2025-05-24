@@ -173,9 +173,9 @@ export default async function ContractorsPage() {
       <CommandCenterNav />
 
       {/* Main Layout: Left Content + Right Sidebar */}
-      <div className="flex gap-6">
-        {/* Left Content - Main Content Area (3/4 width) */}
-        <div className="w-3/4">
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Left Content - Main Content Area (3/4 width on desktop, full width on mobile) */}
+        <div className="w-full lg:w-3/4">
           {/* Your Missions Section */}
           <MissionsPanel missions={missions} />
 
@@ -242,8 +242,8 @@ export default async function ContractorsPage() {
           </div>
         </div>
 
-        {/* Right Sidebar (1/4 width) */}
-        <div className="w-1/4 space-y-6">
+        {/* Right Sidebar (1/4 width on desktop, full width on mobile) */}
+        <div className="w-full lg:w-1/4 space-y-6">
           {/* Docs Section */}
           <div className="bg-[#2a2a2a] rounded-lg p-4">
             <h3 className="text-lg font-bold text-white mb-3">Docs</h3>
