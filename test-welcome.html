@@ -1,44 +1,51 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
-<head>
+  <head>
     <title>Test Welcome Flow</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <h1>Test Welcome Flow</h1>
     <p>Click the buttons below to test the welcome page flow:</p>
 
-    <button onclick="clearStorage()">Clear localStorage (Simulate First Visit)</button>
-    <button onclick="setStorage()">Set localStorage (Simulate Return Visit)</button>
+    <button onclick="clearStorage()">
+      Clear localStorage (Simulate First Visit)
+    </button>
+    <button onclick="setStorage()">
+      Set localStorage (Simulate Return Visit)
+    </button>
     <button onclick="checkStorage()">Check localStorage Status</button>
 
     <div id="status"></div>
 
-    <br><br>
+    <br /><br />
 
     <a href="http://localhost:3000" target="_blank">Visit Main Site</a>
 
     <script>
-        function clearStorage() {
-            localStorage.removeItem('hasVisitedAndromeda');
-            document.getElementById('status').innerHTML = '<p style="color: green;">Cleared! Next visit to main site will show welcome page.</p>';
-        }
+      function clearStorage() {
+        localStorage.removeItem("hasVisitedAndromeda");
+        document.getElementById("status").innerHTML =
+          '<p style="color: green;">Cleared! Next visit to main site will show welcome page.</p>';
+      }
 
-        function setStorage() {
-            localStorage.setItem('hasVisitedAndromeda', 'true');
-            document.getElementById('status').innerHTML = '<p style="color: blue;">Set! Next visit to main site will show questionnaire directly.</p>';
-        }
+      function setStorage() {
+        localStorage.setItem("hasVisitedAndromeda", "true");
+        document.getElementById("status").innerHTML =
+          '<p style="color: blue;">Set! Next visit to main site will show questionnaire directly.</p>';
+      }
 
-        function checkStorage() {
-            const hasVisited = localStorage.getItem('hasVisitedAndromeda');
-            const status = hasVisited ? 'Has visited (will see questionnaire)' : 'First time (will see welcome page)';
-            document.getElementById('status').innerHTML = '<p style="color: orange;">Status: ' + status + '</p>';
-        }
+      function checkStorage() {
+        const hasVisited = localStorage.getItem("hasVisitedAndromeda");
+        const status = hasVisited
+          ? "Has visited (will see questionnaire)"
+          : "First time (will see welcome page)";
+        document.getElementById("status").innerHTML =
+          '<p style="color: orange;">Status: ' + status + "</p>";
+      }
 
-        // Check status on page load
-        checkStorage();
+      // Check status on page load
+      checkStorage();
     </script>
-</body>
-
+  </body>
 </html>

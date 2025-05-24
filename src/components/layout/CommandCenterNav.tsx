@@ -92,12 +92,12 @@ export function CommandCenterNav() {
             <>
               {/* Backdrop to close dropdown when clicking outside */}
               <div
-                className="fixed inset-0 z-10"
+                className="fixed inset-0 z-40"
                 onClick={() => setIsDropdownOpen(false)}
               />
 
               {/* Dropdown Content */}
-              <div className="absolute top-full left-0 mt-1 w-48 bg-[#2a2a2a] border border-[#444444] rounded-md shadow-lg z-20">
+              <div className="absolute top-full left-0 mt-1 w-48 bg-[#2a2a2a] border border-[#444444] rounded-md shadow-lg z-50">
                 <div className="py-1">
                   {commandCenterItems.map((item, index) => {
                     const isActive = item.href === pathname;

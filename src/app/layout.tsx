@@ -73,13 +73,17 @@ export default function RootLayout({
           <ThemeProvider>
             {/* Left Sidebar toggle button - visible only on mobile */}
             <button
-              className="sidebar-toggle fixed top-4 left-4 z-50 p-2 rounded-md bg-[#1a1a1a] border border-[#333333] text-white hover:bg-[#333333] transition-colors lg:hidden"
+              className="sidebar-toggle fixed top-4 left-4 z-30 p-2 rounded-md bg-[#1a1a1a] border border-[#333333] text-white hover:bg-[#333333] transition-colors lg:hidden"
               onClick={toggleLeftSidebar}
               aria-label="Toggle left sidebar"
             >
-              <span className="w-5 h-5 text-2xl flex items-center justify-center">
-                🚀
-              </span>
+              <img
+                src="https://avatars.githubusercontent.com/u/86694044"
+                width="20"
+                height="20"
+                alt="Andromeda Logo"
+                className="rounded-full"
+              />
             </button>
 
             <Sidebar isOpen={isLeftSidebarOpen} onClose={toggleLeftSidebar} />

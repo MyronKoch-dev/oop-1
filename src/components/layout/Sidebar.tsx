@@ -176,10 +176,23 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             </Link>
           </div>
 
+          {/* Command Center Link */}
+          <div className="mt-6">
+            <a
+              href="/contractors"
+              className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider text-white hover:bg-[#232323] rounded-md transition-colors"
+            >
+              Command Center
+            </a>
+          </div>
+
+          {/* Separator line */}
+          <div className="mx-4 my-6 border-t border-[#2a2a2a]"></div>
+
           {/* Resources section (collapsible) */}
           <div className="mt-4">
             <button
-              className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider focus:outline-none text-white"
+              className="w-full flex items-center gap-2 px-4 py-2 text-xs font-medium uppercase tracking-wider focus:outline-none text-gray-400"
               onClick={() => setShowResources((open) => !open)}
               aria-expanded={showResources}
               aria-controls="sidebar-resources-section"
@@ -187,9 +200,9 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             >
               Resources
               {showResources ? (
-                <ChevronDown className="w-4 h-4 ml-auto" />
+                <ChevronDown className="w-3 h-3 ml-auto" />
               ) : (
-                <ChevronRight className="w-4 h-4 ml-auto" />
+                <ChevronRight className="w-3 h-3 ml-auto" />
               )}
             </button>
             <div
@@ -203,7 +216,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                   <a
                     key={index}
                     href={item.href}
-                    className={`nav-item flex items-center gap-3 px-4 py-3
+                    className={`nav-item flex items-center gap-3 px-4 py-2.5 text-sm
                                             transition-all duration-400 ease-[cubic-bezier(.4,0,.2,1)] rounded-md
                                             hover:bg-[#232323] hover:text-white hover:scale-105 hover:opacity-90 hover:translate-x-1
                                             ${isActive ? "bg-[#232323] text-white" : "text-gray-300"}`}
@@ -212,21 +225,11 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                   >
                     {item.icon}
                     <span>{item.label}</span>
-                    <ExternalLink className="ml-auto w-4 h-4 opacity-50" />
+                    <ExternalLink className="ml-auto w-3 h-3 opacity-50" />
                   </a>
                 );
               })}
             </div>
-          </div>
-
-          {/* Command Center Link */}
-          <div className="mt-4">
-            <a
-              href="/contractors"
-              className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold uppercase tracking-wider text-white hover:bg-[#232323] rounded-md transition-colors"
-            >
-              Command Center
-            </a>
           </div>
         </nav>
 
