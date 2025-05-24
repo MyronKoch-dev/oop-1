@@ -78,11 +78,11 @@ export function CampaignModal({ children }: CampaignModalProps) {
           `}</style>
 
                     <div className="space-y-4">
-                        <DialogDescription className="text-gray-300 text-sm leading-relaxed text-center">
+                        <DialogDescription className="text-gray-300 text-sm leading-relaxed text-left">
                             For a limited time, we&apos;re rewarding hackers who launch on aOS with 1,000 $ANDR for every ADO used in a completed and approved dApp. Whether you&apos;re creating a token, launching a marketplace, or building a full-on Web3 app, every active ADO you deploy stacks your rewards. Check out the ADOs below and start building.
                         </DialogDescription>
 
-                        <DialogDescription className="text-gray-300 text-sm leading-relaxed text-center">
+                        <DialogDescription className="text-gray-300 text-sm leading-relaxed text-left">
                             Not sure what to build? Complete one of our use cases and earn 2,000 $ANDR
                         </DialogDescription>
 
