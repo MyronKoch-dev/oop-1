@@ -213,32 +213,7 @@ export default async function ContractorsPage() {
             />
           </div>
 
-          <div className="mb-12">
-            <div className="bg-[#232060] rounded-lg border-2 border-[#4D3DF7] p-6 shadow-[0_0_15px_rgba(77,61,247,0.4)]">
-              <h2 className="text-2xl font-bold text-white mb-4 text-center">
-                🚀 Ready to turn your build into $ANDR?
-              </h2>
-              <p className="text-gray-200 mb-4">
-                For a limited time, we&apos;re rewarding builders who launch on aOS
-                with 1,000 $ANDR for every ADO used in a completed and approved
-                dApp. Whether you&apos;re creating a token, launching a marketplace,
-                or building a full-on Web3 app, every active ADO you deploy stacks
-                your rewards. Check out the ADOs below and start building.
-              </p>
-              <p className="text-gray-200 mb-6">
-                Not sure what to build? Complete one of our uses cases and earn
-                2,000 $ANDR
-              </p>
-              <div className="text-center mb-6">
-                <p className="text-gray-200 text-sm">
-                  Check out our video tutorials above to see examples of NFT Marketplaces and Crowdfunding apps!
-                </p>
-              </div>
-              <p className="text-center text-white font-medium text-lg">
-                Start building, start earning.
-              </p>
-            </div>
-          </div>
+
 
           <div className="mb-12">
             <details className="bg-[#1a1a1a] rounded-lg cursor-pointer group">
